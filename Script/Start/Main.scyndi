@@ -1,0 +1,19 @@
+
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Events"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/JCR6"
+
+#use "Script/Use/General/Loading"
+
+global void MainFlow()
+	Cls()
+	if Events.AppTerminate() 
+		Sys.Exit()
+	end
+	Loading.Show()
+	//Mouse.Show()
+End
