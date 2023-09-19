@@ -1,0 +1,22 @@
+Module
+
+#use "Libs/SCI/Graphics"
+
+Var Disk
+
+Void LoadDisk()
+	If (!Disk)
+		Disk = LoadNewImage("GFX/Algemeen/Loading.png","ALGLOAD")
+		Disk.HotCenter()
+	End
+End
+
+Void Show(NoCLS)
+	If (!NoCLS)
+		Cls()
+	End
+	LoadDisk()
+	SetColor(255,255,255)
+	Disk.Draw((Graphics.Width div 2),(Graphics.Height div 2))
+End
+	
