@@ -42,6 +42,8 @@ Script
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/JCR6"
 
+#use "Libs/Rosetta"
+
 readonly var Back = ObtainImage("ALG_BACK")
 readonly var Logo = ObtainImage("ALG_LOGO")
 readonly var Fnt = ObtainFont("BASE")	
@@ -65,7 +67,8 @@ Class MenuItem
 	ReadOnly String LangTag
 	
 	Get String Caption
-		return sprintf("TEMP>> TAG >> %s <<",LangTag)
+		//return sprintf("TEMP>> TAG >> %s <<",LangTag)
+		return Rosetta.GetSTR("MAINMENU",LangTag)
 	End
 	
 	ReadOnly Delegate Allow
@@ -105,5 +108,5 @@ global void MainFlow()
 	for MI in Each(MenuItems)
 		Fnt.Text(MI.Caption,Graphics.Width div 2,MI.Y,2,0)		
 	End
-	
+	Fnt.Text("(c) Jeroen P. Broks",Graphics.width div 2,Graphics.Height-30,2)
 end
