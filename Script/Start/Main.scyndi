@@ -44,6 +44,7 @@ Script
 #use "Libs/SCI/JCR6"
 
 #use "Script/Use/General/Loading"
+#use "Script/Use/Link/MainMenu"
 
 Init
 	// Take note of debug situation!
@@ -63,19 +64,30 @@ Class Litem
 	ReadOnly String File
 	ReadOnly String Tag
 	ReadOnly String ItemType
+	ReadOnly Bool Center = False
 	
-	Constructor(String F,String T,String IT)
+	Constructor(String F,String T,String IT,C)
 		File = F
 		Tag = T
 		ItemType = IT
-		CSayF("%s: %s -> %s",IT,F,T)
-	End		
+		Center = C == true
+		if (IT=="Image" && Center)
+			ItemType="CImage"
+		End
+		CSayF("%s: %s -> %s",IT,F,ITEMTYPE)
+	End
+		 
+End
+
+Void NImg(string I,string T,center)
+	LoadItems[Len(LoadItems)] = New LItem(I,T,"Image",center)
 End
 
 Init
 	LoadItems = NewArray()
-	LoadItems[Len(LoadItems)] = New LItem("GFX/Algemeen/Back.png","ALG_BACK","Image")
-	LoadItems[Len(LoadItems)] = New LItem("FONTS/RYANNA.JFBF/","BASE","Font")
+	NImg("GFX/Algemeen/Back.png","ALG_BACK")
+	NIMG("GFX/Algemeen/Logo.png","ALG_LOGO",true)
+	LoadItems[Len(LoadItems)] = New LItem("FONTS/RYANNA.JFBF","BASE","Font")
 	ItemCount = Len(LoadItems)
 End
 
@@ -92,17 +104,24 @@ global void MainFlow()
 	SetColor(255-G,G,0)
 	Rect(0,Graphics.Height-5,W,5)
 	if ItemPos<ItemCount
-		CSayF("Item %d/%d",ItemPos,ItemCount)
+		CSayF("Item %d/%d",ItemPos+1,ItemCount)
 		Var LI = LoadItems[ItemPos]
 		switch LI.ItemType
 			case "Image" 
+				CSayF("Loading Regular Image: %s",LI.File)
 				LoadImage(LI.File,LI.Tag)
+			case "CImage"
+				CSayF("Loading Centered Image: %s",LI.File)
+				LoadImage(LI.File,LI.Tag).HotCenter()
 			case "Font"
+				CSayF("Linking Image Font: %s",LI.File)
 				LinkFont(LI.File,LI.Tag)
 			default
 				Lua.error(sprintf("How do I load a %s? (%s -> %s)",LI.ItemType,LI.File,LI.Tag))
 		End
 		ItemPos++
+	Else
+		MainMenu.Go()
 	End
 	//Mouse.Show()
 End
