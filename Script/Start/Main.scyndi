@@ -42,13 +42,24 @@ Script
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/JCR6"
+#use "Libs/SCI/GINIE"
+
+#use "Libs/Rosetta"
 
 #use "Script/Use/General/Loading"
 #use "Script/Use/Link/MainMenu"
 
+Var CFG
+
 Init
 	// Take note of debug situation!
 	CSaySetConfig("ALLOW","ALWAYS")
+	// Global config
+	CSay("Loading Global Config")
+	CFG = GINIE.LoadHome("Luna.GlobalConfig.ini","GLOBALCONFIG","Luna.GlobalConfig.ini","Luna's Father - (c) Jeroen P. Broks")
+	CSay("Default config")
+	CFG.NewValue("Rosetta","Language","English")
+	Rosetta.StringsDir="Languages/Game"
 End
 
 
