@@ -1,0 +1,10 @@
+Module
+
+#use "Libs/SCI/Sys"
+
+Void Go()
+	CSay("Going to the main menu!")
+	Sys.LoadNewFlow("MAINMENU","Script/Flow/Flow_MainMenu.lbc")
+	Sys.GoToFlow("MAINMENU")
+End
+	
