@@ -1,0 +1,166 @@
+// License Information:
+// src/Scripts/Script/Flow/Flow_NewGame.scyndi
+// Version: 23.09.22
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Events"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/JCR6"
+
+#use "Libs/Rosetta"
+#use "Libs/MultiPointer"
+
+#use "Script/Use/General/Loading"
+
+readonly var Back = ObtainImage("ALG_BACK")
+readonly var Fnt = ObtainFont("BASE")	
+readonly var Nxt = ObtainImage("ARROW_RIGHT")
+readonly var Prv = ObtainImage("ARROW_LEFT")
+
+
+int Hue
+
+Global Void StartNewGame(Int Plus)
+	gClear()
+	gBool.NewGamePlus=Plus>0
+	CSayF("Starting New Game (%d)",Plus)
+End
+
+Int Stage = 0
+
+void GetSession()
+	SetColor(255,255,255)
+	Fnt.Text(Rosetta.getstr("SESSION","GIVENAME"), Graphics.Width div 2,50,2)
+	SetColor(0,180,255)
+	Fnt.Text(sprintf("%s_",gstring.Session), Graphics.Width div 2,100,2)
+	Var E = FNT.MLBW(Rosetta.getstr("SESSION","EXPLAIN"),Graphics.Width)
+	Int KB=0
+	SetColor(255,255,255)
+	for i,l in ipairs(E)
+		KB = 150+(i*30)
+		Fnt.Text(l, Graphics.Width div 2,KB,2)
+	end
+	KB = KB + 60
+	if len(gstring.session)<6
+		for i=0,25
+			int x
+			int y
+			string c
+			x = ((i%10)*50)+10
+			y = KB+((i/10)*30)
+			c = Chr(65 + i)
+			if gstring.Session!=""
+				c = Chr(97 + i)
+			end
+			if MX>x && MY>y && MX<x+Fnt.Width(c) && MY<y+Fnt.Height(c)
+				SetColorHSV(Hue,1,1)
+				if ML
+					gstring.session = sprintf("%s%s",gstring.session,c)
+				end
+			else
+				SetColor(255,255,255)
+			end
+			Fnt.Text(c,x,y)
+		end
+	end
+	if (gstring.session!="")
+		int x = 10
+		int y 
+		y = KB+120
+		if MY>y && MX<Fnt.Width("<-")+10 && MY<y+Fnt.height("<-")
+			SetColorHSV(Hue,1,1)
+			if ML
+				gstring.session = Left(gstring.session,len(gstring.session)-1)
+			end
+		else
+			SetColor(255,255,255)
+		end
+		Fnt.Text("<-",x,y)		
+	end
+		
+	
+	if (gstring.Session=="")
+		SetCOlor(100,100,100)
+	Else
+		SetColor(255,255,255)
+		If ML && MX>Graphics.Width-(10+Prv.Width) && MY>Graphics.Height-110
+			Stage++
+		End
+	End
+	Nxt.Draw(Graphics.Width-160,Graphics.Height-110)
+End
+
+void GetSkill()
+end
+
+void EnterGame()
+End
+
+var Stages 
+Init
+	Stages = NewArray(GetSession,GetSkill,EnterGame)
+End
+
+Global Void MainFlow()
+	Hue = (Hue+1) % 360
+	Cls()
+	MultiPointer.Rcv()
+	if Events.AppTerminate() 
+		Sys.Exit()
+	end
+	SetColor(255,255,255)
+	Back.Stretch(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,180,0)
+	// Not the cleanest way, but the easiest.
+	if gBool.NewGamePlus
+		Fnt.Text(Rosetta.getstr("MAINMENU","NEWGAMEPLUS"),Graphics.Width div 2,5,2)
+	Else
+		Fnt.Text(Rosetta.getstr("MAINMENU","NEWGAME"),Graphics.Width div 2, 5, 2)
+	End
+	Stages[Stage]()
+	SetColor(255,255,255)
+	Prv.Draw(10,Graphics.Height-110)
+	if ML && MX<10+Prv.Width && MY>Graphics.Height-110
+		Stage--
+		if Stage<0
+			Stage = 0
+			Sys.Gotoflow("MAINMENU")
+		end
+	end
+	MultiPointer.Draw()
+End
