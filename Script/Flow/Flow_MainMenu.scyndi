@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_MainMenu.scyndi
-// Version: 23.09.20
+// Version: 23.09.22
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -43,6 +43,9 @@ Script
 #use "Libs/SCI/JCR6"
 
 #use "Libs/Rosetta"
+#use "Libs/MultiPointer"
+
+#use "Script/Use/General/Loading"
 
 readonly var Back = ObtainImage("ALG_BACK")
 readonly var Logo = ObtainImage("ALG_LOGO")
@@ -87,18 +90,32 @@ Class MenuItem
 	End
 End
 
+Void ReportBugs()
+	Sys.OpenURL("https://github.com/PhantasarProductions/Lunas_Father/issues")
+End
+
+void Config()
+	Loading.Show()
+	Flip()
+	Sys.LoadNewFlow("CONFIG","Script/Flow/Flow_Config.lbc")
+	Sys.GoToFlow("CONFIG")
+End
+
 Init
 	MenuItem.Add("NEWGAME",Always,NYA)
 	MenuItem.Add("LOADGAME",Always,NYA)
-	MenuItem.Add("CONFIG",Always,NYA)
-	MenuItem.Add("BUGREPORT",Always,NYA)
+	MenuItem.Add("CONFIG",Always,Config)
+	MenuItem.Add("BUGREPORT",Always,ReportBugs)
 	MenuItem.Add("JUKEBOX",Always,NYA)
-	MenuItem.Add("QUIT",Always,NYA)
+	MenuItem.Add("QUIT",Always,Sys.Exit)
 End
 
 
-global void MainFlow()
+Int Hue
+global void MainFlow()	
+	Hue = (Hue+1) % 360
 	Cls()
+	MultiPointer.Rcv()
 	if Events.AppTerminate() 
 		Sys.Exit()
 	end
@@ -106,7 +123,15 @@ global void MainFlow()
 	Back.Stretch(0,0,Graphics.Width,Graphics.Height)
 	Logo.Draw(Graphics.Width div 2,LogoY)
 	for MI in Each(MenuItems)
+		If MY>MI.Y && MY<MI.Y+30 
+			SetColorHSV(Hue,1,1)
+			If ML
+				MI.Action()
+			End
+		End
 		Fnt.Text(MI.Caption,Graphics.Width div 2,MI.Y,2,0)		
+		SetColor(255,255,255)
 	End
 	Fnt.Text("(c) Jeroen P. Broks",Graphics.width div 2,Graphics.Height-30,2)
+	MultiPointer.Draw()
 end
