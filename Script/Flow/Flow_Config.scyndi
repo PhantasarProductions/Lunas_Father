@@ -1,0 +1,172 @@
+// License Information:
+// src/Scripts/Script/Flow/Flow_Config.scyndi
+// Version: 23.09.22
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/Events"
+#use "Libs/SCI/GINIE"
+#use "Libs/Rosetta"
+#use "Libs/MultiPointer"
+
+Var CFG
+Void GetCFG()
+	CFG = CFG || GINIE.Obtain("GLOBALCONFIG")
+End
+
+Const Int StartY = 60
+ReadOnly Int MidX = Graphics.Width div 2
+
+readonly var Back = ObtainImage("ALG_BACK")
+readonly var Fnt = ObtainFont("BASE")	
+
+Var Languages = NewArray("English","Dutch")
+int LangIndex
+Init
+	LangIndex = 0
+	for i,l in ipairs(Languages)
+		CSayF("Checking #%d => %s",i,l)
+		if l==Languages
+			LangIndex=i
+		end
+	end
+end
+
+var Items = NewArray()
+
+Class CFGItem
+	static int NextY
+	readonly int Y
+	readonly string LangTag
+	readonly delegate action
+	readonly delegate showvalue
+	readonly string param
+	
+	Constructor(string LT, Act, SV,string PRM)
+		Y = math.max(StartY,NextY)
+		NextY = Y + 30
+		LangTag = LT
+		Action = Act
+		ShowValue = SV
+		Param = PRM		
+		Items[Len(Items)] = Self
+		CSayF("Item #%d added to Config Menu",Len(Items))
+	End
+	
+	Get String Caption
+		//Return SPrintF("CONFIG: %s",LangTag)
+		Return Rosetta.GetSTR("CONFIG",LangTag)
+	End 
+End
+
+Void ChangeLang()
+	GetCFG()
+	LangIndex = (LangIndex+1)%Len(Languages)
+	//CFG.Value("ROSETTA","LANGUAGE",Languages[LangIndex])
+	Rosetta.Lang=Languages[LangIndex]
+	CSayF("Language changed to %s",Languages[LangIndex])
+End
+
+String ShowLang()
+	Return Rosetta.GetSTR("METADATA","LANGUAGENAME")
+End
+
+void GoBack()
+	Sys.GoToFlow("MAINMENU")
+End
+
+String EmptyString()
+	Return "<-"
+End
+
+Void KBSet(I)
+	int NK=0
+	Events.Flush()
+	While NK==0
+		Cls()
+		Events.Poll()
+		Fnt.Text(Rosetta.GetSTR("CONFIG","PRESS"),5,5)
+		Flip()
+		NK=Events.GetKey()
+		If NK==MultiPointer.KLeft || NK==MultiPointer.KRight || NK==MultiPointer.KUp || NK==MultiPointer.KDown
+			NK=0
+		End
+	End
+	CFG.Value("MULTIPOINTER::KEYS",I.Param,Events.KeyName(NK))
+	Events.Flush()
+End
+
+String KBSetOut(I)
+	GetCFG()
+	return CFG.Value("MULTIPOINTER::KEYS",I.Param)
+End
+
+
+Init
+	Plua N
+	N = New CFGItem("LANGUAGE",ChangeLang,ShowLang,"")
+	N = New CFGItem("KEYBOARDACTION",KBSet,KBSetOut,"LEFTBUTTON")
+	N = New CFGItem("KEYBOARDCANCEL",KBSet,KBSetOut,"RIGHTBUTTON")
+	N = New CFGItem("BACK",GoBack,EmptyString,"")
+end
+
+int Hue
+global void MainFlow()	
+	Hue = (Hue+1) % 360
+	Cls()
+	MultiPointer.Rcv()
+	if Events.AppTerminate() 
+		Sys.Exit()
+	end
+	SetColor(255,255,255)
+	Back.Stretch(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,180,0)
+	Fnt.Text(sprintf("* %s *",Rosetta.GetStr("MAINMENU","CONFIG")),Graphics.Width div 2,5,2)
+	For CI in each(Items)
+		SetColor(255,255,255)
+		Fnt.Text(CI.Caption,5,CI.Y)
+		SetColor(0,180,255)
+		if MX>MidX && MY>CI.Y && MY<CI.Y+30
+			SetColorHSV(Hue,1,1)
+			if ML
+				CI.Action(CI)
+			end
+		End
+		Fnt.Text(CI.ShowValue(CI),MidX,CI.Y)
+	End
+	MultiPointer.Draw()
+End
