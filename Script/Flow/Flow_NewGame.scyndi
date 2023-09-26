@@ -41,6 +41,7 @@ Script
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/JCR6"
+#use "Libs/SCI/SString"
 
 #use "Libs/Rosetta"
 #use "Libs/MultiPointer"
@@ -51,6 +52,7 @@ readonly var Back = ObtainImage("ALG_BACK")
 readonly var Fnt = ObtainFont("BASE")	
 readonly var Nxt = ObtainImage("ARROW_RIGHT")
 readonly var Prv = ObtainImage("ARROW_LEFT")
+global int Wait
 
 
 int Hue
@@ -63,6 +65,7 @@ End
 
 Int Stage = 0
 
+#region Session
 void GetSession()
 	SetColor(255,255,255)
 	Fnt.Text(Rosetta.getstr("SESSION","GIVENAME"), Graphics.Width div 2,50,2)
@@ -124,11 +127,65 @@ void GetSession()
 	End
 	Nxt.Draw(Graphics.Width-160,Graphics.Height-110)
 End
+#endregion
+
+#region Skill
+class TSkill
+	Static Int Count
+	Static Var Lijst
+	ReadOnly Int Skill
+	ReadOnly Var Explain
+	
+	Get String Name
+		return Rosetta.GetStr("SKILL",sprintf("SKILL%d",skill))
+	End
+	
+	Get Int Y
+		return 90+(Skill*30)
+	End
+		
+	Constructor
+		Count++
+		Skill = Count
+		Explain = Fnt.MLBW(Rosetta.GetStr("SKILL",sprintf("EXPLAIN%d",Skill)),Graphics.Width)
+	End
+End
+
+Init
+	TSkill.Count = 0
+	TSkill.Lijst = NewArray(New TSkill(),New TSkill(),New TSkill())
+End
 
 void GetSkill()
+	int Hover = 0
+	Fnt.Text(Rosetta.GetStr("SKILL","PICK"),Graphics.Width div 2, 50,2)
+	for i,sk in ipairs(TSkill.Lijst)
+		If MY>sk.Y && MY<sk.Y+30
+			SetColor(255,255,255)
+			for j,ex in ipairs(sk.Explain)
+				Fnt.Text(ex,Graphics.Width div 2,240+(j*30),2)
+			end
+			SetColorHSV(Hue,1,1)
+			Hover=sk.Skill
+		Else
+			SetColor(255,255,255)
+		End
+		Fnt.Text(sk.Name,Graphics.Width div 2, sk.Y,2)							
+	end
+	if ML && Hover>0 && Events.Yes(Replace(Replace(Rosetta.GetSTR("SKILL","WARNING"),"<nl>","\n"),"<skillname>",Rosetta.GetStr("SKILL",sprintf("SKILL%d",Hover))))
+		gint.Skill=Hover
+		Stage++
+		Wait = os.time()
+	end		
 end
+#endregion
 
 void EnterGame()
+	SetColor(255,255,255)
+	Fnt.Text(Rosetta.GetSTR("SESSION","BEGIN"),Graphics.Width div 2,100,2)
+	if math.abs(os.time()-Wait)>5
+		Lua.error("The game itself is not yet present")
+	end
 End
 
 var Stages 
