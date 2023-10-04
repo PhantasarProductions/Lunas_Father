@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.10.03
+// Version: 23.10.04
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -62,9 +62,14 @@ QuickMeta MapScript
 End
 #endregion
 
-Void Load(string Map)
+Void LoadFlowField()
+	Sys.LoadNewFlow("FIELD","Script/Flow/Flow_Field.lbc")
+End
+
+Void Load(string MapBundle)
 	Loading.Show()
-	Kthura.Load("GAMEMAP",Map)
+	LoadFlowField()
+	Sys.Call("FLOW_FIELD","ExeLoadMap",MapBundle)
 end
 
 Get String Layer
@@ -74,6 +79,12 @@ end
 Set String Layer
 	// To do: Kill old player before moving on
 	Kthura.CurrentLayer=Value
+End
+
+Void GoToMap(String MapBundle,String LayerTag,String SpawnSpot="Start")
+	Load(MapBundle)
+	Layer=LayerTag
+	Kthura.Spawn("Player","Start")
 End
 
 QuickMeta Player
