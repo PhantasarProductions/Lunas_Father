@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.03
+// Version: 23.10.04
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,13 +36,172 @@
 // End License Information
 Script
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/SString"
 #use "Libs/SCI/Statistician"
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/General/Dice"
+
+const int expmax = 100000000;
 
 Var _Party
+Var CharDat
+Var BaseStats = NewArray("Strength","Defense","Intelligence","Resistance","Agility","Accuracy","Evasion")
+Var CFG
+var CHT = {}
+	
+
 Init
+	CSay("Creating Statician Data")
 	_Party = Statistician.CreateNew("LUNA_PARTY")
+	CSay("Loading Char Stats Base Data")
+	CharDat = GINIE.LoadNew("Data/General/CharStats.ini","LUN_CHARDAT")
+	CSay("Importing Global Config to Party Sub")
+	CFG = GINIE.Obtain("GLOBALCONFIG")
+	CSay("All initiations for the Party Sub have been accounted for")
+End
+
+int NeedExp(int level)
+	// Original C prototype code
+	// (Part of it. The full code can be found here: 
+	// https://gist.github.com/Tricky1975/dd2a7026e6f08883d92758d5ec56c175)
+    // int lv=1;                                                                              
+    // unsigned char notallmax=1;                                                             
+    // printf("%9s%9s%9s%9s\n","Level",DName[0],DName[1],DName[2]);                           
+    // do{                                                                                    
+    //        printf("%9d",lv++);                                                            
+    //        for(int i=0;i<3;++i) {                                                         
+    //                if (exppnt[i]<expmax) {                                                
+    //                        printf("%9d",exppnt[i]);                                       
+    //                        exppnt[i] += ((int)floor(exppnt[i]*mul[i]));                   
+    //                } else {                                                               
+    //                        printf("\x1b[31m%9s\x1b[0m","MAX!");                           
+    //                }                                                                      
+    //        }                                                                              
+    //        printf("\n");                                                                  
+    //        notallmax=exppnt[0]<expmax || exppnt[1]<expmax || exppnt[2]<expmax;            
+    //} while(notallmax);    
+//}
+	var mul = newarray(0.125,0.25,0.50)
+	int Ski
+	number ret 
+	int lv = 1
+	ret = 10
+	ski = gint.skill - 1
+	while lv<level
+		if ret > expmax
+			return expmax
+		end
+		ret = ret + math.floor(ret*mul[ski])
+	end
+	return math.floor(ret)
+end
+	
+	
+
+Void SetLevel(string CharTag,int lvl)
+	// Please note, this code was adapted from prototype code originally 
+	// coded in C and adapted to Scyndi in order to be usable in this game 
+	// script. A few small differences between C and this in outcome are
+	// possible. (I hope not)
+	
+	// General Stat
+	Var Ch
+	Ch = CHT[CharTag]
+	Ch.Stat.Level=lvl
+	For s in Each(BaseStats)
+		number st
+		st = Ch.Stat[s]
+		Ch.XStat[s].LevelUp = round( (st/30) * (lvl-1))
+	End
+	
+	// Hitpoints
+	int lv1
+	int lv100
+	int verschil
+	int _HP
+	number gain
+	lv1    = Ch.Stat.HP1
+	lv100  = Ch.Stat.HP100
+	verschil = lv100 - lv1
+	gain = (verschil / 99.0)
+	
+	// The prototype output in C. I kept it as a reference.
+	// printf("%s would gain %f HP per level!\n", ch, gain);	
+	// for (int lv = 1; lv <= 125; ++lv) {
+	// int _HP = jround(lv1 + (gain * (lv - 1)));
+	//	printf("- On level %d, %s would have %d HP\n",lv,ch,_HP);
+	// }
+	_HP = round(lv1 + (gain * (lvl - 1)));
+	Ch.Stat.HP = _HP
+	Ch.Points.HP.Have    = Ch.Points.HP.Maximum
+	Ch.Points.VIT.Have   = Ch.Points.VIT.Maximum
+	Ch.Points.SP.Maximum = Lvl	
+	Ch.Stat.Exp = Ch.Stat.Exp + NeedExp(lvl)
+	
 End
 
 Global Void CreateChar(string Tag,int slvl1, int slvl2, int slvl3)
-	
+	String Cat
+	Int StartLevel
+	int VIT
+	Cat = sprintf("Rec:%s",Tag)
+	Switch gint.Skill
+		case 1
+			StartLevel = slvl1
+			VIT=250
+		case 2
+			StartLevel = slvl2
+			VIT=100
+		case 3
+			StartLevel = slvl3
+			VIT=0
+		default
+			Lua.error("Skill error on character creation!")
+	End
+	CSayF("Creating character %s, starting at level %d",Tag,StartLevel)
+	CSayF("Sending hash!")
+	CFG.NewValue("Chars",Tag,MD5(Tag))
+	var Ch 
+	CSayF("NewChar Call")
+	_Party.NewChar(Tag)
+	CSayF("Retrieving character data")
+	Ch = _Party.Char[Tag]
+	Cht[Tag] = Ch
+	CSayF("Setting Character's name")
+	Ch.Name = CharDat.Value(Cat,"Name")
+	CSay("Resetting experience points")
+	Ch.Stat.Experience=0
+	CSayF("Setting base stats")
+	For s in Each(BaseStats)
+		CSayF("= Base Stat: %s = %d",s,CharDat.IntValue(Cat,s))
+		Ch.Stat[s] = CharDat.IntValue(Cat,s)
+	End
+	CSay("Base of HP")
+	Ch.Stat.HP1   = CharDat.IntValue(Cat,"HP")
+	Ch.Stat.HP100 = CharDat.IntValue(Cat,"HP_lv100")
+	Ch.Stat.HP    = 0
+	CSay("Set points configuration right!")
+	Ch.Points.HP .MaxCopy = "HP"
+	Ch.Points.FP .Maximum = 100
+	Ch.Points.VIT.Maximum = VIT
+	CSay("Data!")
+	Ch.Data.Race     = CharDat.Value(Cat,"Race")
+	Ch.Data["Class"] = CharDat.Value(Cat,"Class")
+	Ch.Data.Gender   = CharDat.Value(Cat,"Gender")
+	Ch.Data.Weapon   = CharDat.Value(Cat,"Gender")
+	Ch.Data.Skill1   = CharDat.Value(Cat,"Skill1")
+	Ch.Data.Skill2   = CharDat.Value(Cat,"Skill2")
+	for d in Each(Dice.Types)
+		if d==CharDat.IntValue(Cat,"Die")
+			ch.Stat.BaseDie = CharDat.IntValue(Cat,"Die")
+			ch.Stat[sprintf("d%d",d)] = 1
+		else 
+			ch.Stat[sprintf("d%d",d)] = 0
+		end
+	end
+	Ch.Stat.AtkPlus = 0	
+	Ch.Stat.Upgrades = 0
 End
