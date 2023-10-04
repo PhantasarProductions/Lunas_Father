@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_NewGame.scyndi
-// Version: 23.10.03
+// Version: 23.10.04
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -47,6 +47,8 @@ Script
 #use "Libs/MultiPointer"
 
 #use "Script/Use/General/Loading"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/Map"
 
 readonly var Back = ObtainImage("ALG_BACK")
 readonly var Fnt = ObtainFont("BASE")	
@@ -180,13 +182,20 @@ void GetSkill()
 end
 #endregion
 
+
+#region "Link to the game"
 void EnterGame()
 	SetColor(255,255,255)
 	Fnt.Text(Rosetta.GetSTR("SESSION","BEGIN"),Graphics.Width div 2,100,2)
 	if math.abs(os.time()-Wait)>5
+		Party.NewChar("Myrah",1,1,1)
+		Party.NewChar("Francis",1,1,1)
+		Map.GoToMap("CH1_Town_Vandar","TOWN","Start")
 		Lua.error("The game itself is not yet present")
 	end
 End
+#endregion
+
 
 var Stages 
 Init
