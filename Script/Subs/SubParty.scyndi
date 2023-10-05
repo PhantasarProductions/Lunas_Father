@@ -236,7 +236,7 @@ Global Void PartyBoxes(incombat)
 	int BW
 	SetColor(255,255,255,255)
 	BoxBack.Tile(PBX,PBY,PBW,PBH+50)
-	SetColor(0,0,0,150)
+	SetColor(0,0,0,160)
 	Rect(PBX,Graphics.Height-50,PBW,100)
 	SetColor(255,255,255,255)
 	BW = (PBW-20) div Party.FrontSize
