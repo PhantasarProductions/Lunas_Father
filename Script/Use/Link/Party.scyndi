@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 23.10.04
+// Version: 23.10.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,6 +37,10 @@
 Module
 
 #use "Libs/SCI/Sys" 
+#use "Libs/SCI/Statistician"
+
+plua _Party
+
 
 Init
 	Sys.LoadStateNew("SUB_PARTY","Script/Subs/SubParty.lbc")
@@ -44,4 +48,33 @@ End
 
 Void NewChar(string CH,int lv1,int lv2, int lv3)
 	Sys.Call("SUB_PARTY","CreateChar",Ch,lv1,lv2,lv3)
+End
+
+Void Boxes()
+	Sys.Call("SUB_PARTY","PartyBoxes")
+End
+
+Void StartSet()
+	CSay("Setting party!")
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_Party.Party.Size = 6
+	_Party.Party[0] = "Myrah"
+	_Party.Party[1] = "Francis"
+	For i=0,_Party.Party.Size-1
+		CSayF("Spot %d => %s",i,_Party.Party[i])
+	End
+End
+
+Get Int FullSize	
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	for i=0,5
+		if _Party.Party[i]==""
+			Return i
+		end
+	end
+	return 6
+end
+
+Get Int FrontSize
+	return math.min(3,FullSize)
 End
