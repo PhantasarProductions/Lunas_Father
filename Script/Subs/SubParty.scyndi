@@ -111,10 +111,12 @@ Void SetLevel(string CharTag,int lvl)
 	Var Ch
 	Ch = CHT[CharTag]
 	Ch.Stat.Level=lvl
-	For s in Each(BaseStats)
+	For s in Each(BaseStats)		
 		number st
-		st = Ch.Stat[s]
-		Ch.XStat[s].LevelUp = round( (st/30) * (lvl-1))
+		st = Ch.BStat[s]
+		CSayF("=> %s was %d",s,st)
+		Ch.XStat[s].Buff.LevelUp = round( (st/30) * (lvl-1))
+		CSayF("=> %s has bonus of %d",CharTag,Ch.XStat[s].Buff.LevelUp)
 	End
 	
 	// Hitpoints
@@ -204,4 +206,5 @@ Global Void CreateChar(string Tag,int slvl1, int slvl2, int slvl3)
 	end
 	Ch.Stat.AtkPlus = 0	
 	Ch.Stat.Upgrades = 0
+	SetLevel(Tag,StartLevel)
 End
