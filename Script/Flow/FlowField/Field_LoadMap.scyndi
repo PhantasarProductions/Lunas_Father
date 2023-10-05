@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_LoadMap.scyndi
-// Version: 23.10.04
+// Version: 23.10.05
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -46,6 +46,9 @@ Init
 End
 
 global Void ExeLoadMap(string MapBundle)
+	// Loading the Kthura data must always be first
+	// At the rest the order doesn't really matter!
+	// Music must always be last!
 	Plua MBundle
 	MBundle = sprintf("Kthura/%s",MapBundle)
 	CSayF("Loading map: %s",MapBundle)
@@ -53,6 +56,7 @@ global Void ExeLoadMap(string MapBundle)
 	Kthura.Pick("GAMEMAP")
 	for k,lm in pairs(FField.LMFuncs)
 		CSayF("=> %s",k)
-	end
-	// TO DO: Load Music
+	end	
+	FField.FIELD_MUSIC.MapMusic()
+	
 End
