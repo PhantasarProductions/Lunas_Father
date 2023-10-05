@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.04
+// Version: 23.10.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -40,9 +40,11 @@ Script
 #use "Libs/SCI/SString"
 #use "Libs/SCI/Statistician"
 #use "Libs/SCI/GINIE"
+#use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/General/Dice"
+#use "Script/use/Link/Party"
 
 const int expmax = 100000000;
 
@@ -51,7 +53,17 @@ Var CharDat
 Var BaseStats = NewArray("Strength","Defense","Intelligence","Resistance","Agility","Accuracy","Evasion")
 Var CFG
 var CHT = {}
-	
+Var BoxBack = ObtainImage("BOX_BACK")
+var StatFnt = ObtainFont("METAL")
+var ImgHP   = ObtainImage("BOX_HP")
+var ImgFP   = ObtainImage("BOX_FP")
+var ImgVIT  = ObtainImage("BOX_VIT")
+
+const Int PBX = 0
+const Int PBY = Graphics.Height - 170
+Const int PBW = Graphics.Width
+Const Int PBH = 120
+
 
 Init
 	CSay("Creating Statician Data")
@@ -107,6 +119,7 @@ Void SetLevel(string CharTag,int lvl)
 	// script. A few small differences between C and this in outcome are
 	// possible. (I hope not)
 	
+	CSayF("%s is now level %d",CharTag,lvl)
 	// General Stat
 	Var Ch
 	Ch = CHT[CharTag]
@@ -207,4 +220,84 @@ Global Void CreateChar(string Tag,int slvl1, int slvl2, int slvl3)
 	Ch.Stat.AtkPlus = 0	
 	Ch.Stat.Upgrades = 0
 	SetLevel(Tag,StartLevel)
+End
+
+plua Portret
+Init
+	Portret = {}
+	for i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+		CSayF("SubParty: Obtained portrait for %s",c)
+		Portret[c] = ObtainImage(sprintf("PORTRET_%s",Upper(c)))
+	end
+End
+
+
+Global Void PartyBoxes(incombat)
+	int BW
+	SetColor(255,255,255,255)
+	BoxBack.Tile(PBX,PBY,PBW,PBH+50)
+	SetColor(0,0,0,150)
+	Rect(PBX,Graphics.Height-50,PBW,100)
+	SetColor(255,255,255,255)
+	BW = (PBW-20) div Party.FrontSize
+	For i = 0,Party.FrontSize-1
+		plua Ch
+		plua PImg
+		plua barw
+		barw = BW-150
+		PImg = Portret[_Party.Party[i]]
+		Ch = _Party.Char[_Party.Party[i]]
+		Lua.assert(PIMG,sprintf("Nil received for portrait: (%d/%d) '%s'",i+1,Party.FrontSize,_Party.Party[i]))
+		SetColor(255,255,255)
+		PImg.Draw(BW*i,(PBY+PBH)-PImg.Height)
+		// HP
+		SetColor(100,100,100)
+		Rect((BW*i)+120,PBY+10,barw,10)
+		plua Breuk 
+		plua G
+		breuk=Ch.Points.HP.Have/Ch.Points.HP.Maximum
+		G=math.floor(breuk*255)
+		SetColor(255-G,G,0)
+		Rect((BW*i)+120,PBY+10,math.floor(barw*breuk),10)
+		ImgHP.Draw(BW*i+120,PBY)
+		StatFnt.Text(lua.tostring(Ch.Points.HP.Have),(BW*i)+(BW-10),PBY,1)
+		// FP
+		if !incombat
+			switch gint.skill
+			case 1
+				Ch.Points.FP.Have=math.max(Ch.Points.FP.Have,Ch.Stat.Level)
+			case 2
+				Ch.Points.FP.Have=Ch.Stat.Level
+			case 3
+				Ch.Points.FP.Have=math.min(Ch.Points.FP.Have,Ch.Stat.Level)
+			Default
+				Lua.error("FP Skill Error!")
+			end
+		end
+		breuk=Ch.Points.FP.Have div 25		
+		for j=1,4
+			if j<=breuk
+				setcolor(180,0,255)
+			else
+				setcolor(18,0,25)
+			end
+			Rect(((BW*i)+120)+((j-1)*((barw/4)-3)),PBY+47,barw,3)
+		end
+		breuk=Ch.Points.FP.Have/Ch.Points.FP.Maximum
+		SetColor(100,100,100)
+		Rect((BW*i)+120,PBY+40,barw,5)
+		SetColor(0,180,255)
+		Rect((BW*i)+120,PBY+40,math.floor(barw*breuk),5)
+		ImgFP.Draw(BW*i+120,PBY+30)
+		StatFnt.Text(lua.tostring(Ch.Points.FP.Have),(BW*i)+(BW-10),PBY+30,1)
+		// VIT
+		SetColor(100,100,100)
+		Rect((BW*i)+120,PBY+70,barw,10)
+		breuk=Ch.Points.VIT.Have/Ch.Points.VIT.Maximum
+		SetColor(255,180,0)
+		Rect((BW*i)+120,PBY+70,math.floor(barw*breuk),10)
+		ImgVIT.Draw(BW*i+120,PBY+60)
+		StatFnt.Text(lua.tostring(Ch.Points.VIT.Have),(BW*i)+(BW-10),PBY+60,1)
+		
+	End
 End
