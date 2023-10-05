@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_NewGame.scyndi
-// Version: 23.10.04
+// Version: 23.10.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -190,8 +190,10 @@ void EnterGame()
 	if math.abs(os.time()-Wait)>5
 		Party.NewChar("Myrah",1,1,1)
 		Party.NewChar("Francis",1,1,1)
+		Party.StartSet()
 		Map.GoToMap("CH1_Town_Vandar","TOWN","Start")
-		Lua.error("The game itself is not yet present")
+		//Lua.error("The game itself is not yet present")
+		Sys.GoToFlow("FIELD")
 	end
 End
 #endregion
