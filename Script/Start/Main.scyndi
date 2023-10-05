@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.09.22
+// Version: 23.10.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -100,8 +100,16 @@ Init
 	NIMG("GFX/Algemeen/Logo.png","ALG_LOGO",true)
 	NIMG("GFX/Algemeen/Pointer.png","MOUSEPOINTER")
 	NIMG("GFX/Arrows/Left.png","ARROW_LEFT")
-	NIMG("GFX/Arrows/Right.png","ARROW_RIGHT")
+	NIMG("GFX/Boxes/BoxBack.png","BOX_BACK")
+	NIMG("GFX/Boxes/HP.png","BOX_HP")
+	NIMG("GFX/Boxes/FP.png","BOX_FP")
+	NIMG("GFX/Boxes/VIT.png","BOX_VIT")
+	NIMG("GFX/Arrows/Right.png","ARROW_RIGHT")	
+	for i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+		 NIMG(sprintf("GFX/Portraits/%s/General.png",c),sprintf("PORTRET_%s",upper(c)))
+	end
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/RYANNA.JFBF","BASE","Font")
+	LoadItems[Len(LoadItems)] = New LItem("FONTS/Metal.JFBF","METAL","Font")
 	ItemCount = Len(LoadItems)
 End
 
