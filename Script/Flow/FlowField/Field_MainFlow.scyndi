@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_MainFlow.scyndi
-// Version: 23.10.06
+// Version: 23.10.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -43,6 +43,7 @@ Module
 
 #use "Libs/MultiPointer"
 #use "Libs/Rosetta"
+#use "Libs/GameTime"
 
 
 plua FField
@@ -54,6 +55,7 @@ End
 
 
 Global Void MainFlow()
+	GameTime.Check()
 	Cls()
 	MultiPointer.Rcv()
 	if Events.AppTerminate()

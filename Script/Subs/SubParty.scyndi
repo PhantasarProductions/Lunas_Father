@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.06
+// Version: 23.10.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -206,9 +206,10 @@ Global Void CreateChar(string Tag,int slvl1, int slvl2, int slvl3)
 	Ch.Data.Race     = CharDat.Value(Cat,"Race")
 	Ch.Data["Class"] = CharDat.Value(Cat,"Class")
 	Ch.Data.Gender   = CharDat.Value(Cat,"Gender")
-	Ch.Data.Weapon   = CharDat.Value(Cat,"Gender")
+	Ch.Data.Weapon   = CharDat.Value(Cat,"Weapon")
 	Ch.Data.Skill1   = CharDat.Value(Cat,"Skill1")
 	Ch.Data.Skill2   = CharDat.Value(Cat,"Skill2")
+	Ch.Data.Name     = CharDat.Value(Cat,"Name")
 	for d in Each(Dice.Types)
 		if d==CharDat.IntValue(Cat,"Die")
 			ch.Stat.BaseDie = CharDat.IntValue(Cat,"Die")
@@ -291,13 +292,14 @@ Global Void PartyBoxes(incombat)
 		ImgFP.Draw(BW*i+120,PBY+30)
 		StatFnt.Text(lua.tostring(Ch.Points.FP.Have),(BW*i)+(BW-10),PBY+30,1)
 		// VIT
-		SetColor(100,100,100)
-		Rect((BW*i)+120,PBY+70,barw,10)
-		breuk=Ch.Points.VIT.Have/Ch.Points.VIT.Maximum
-		SetColor(255,180,0)
-		Rect((BW*i)+120,PBY+70,math.floor(barw*breuk),10)
-		ImgVIT.Draw(BW*i+120,PBY+60)
-		StatFnt.Text(lua.tostring(Ch.Points.VIT.Have),(BW*i)+(BW-10),PBY+60,1)
-		
+		if Ch.Points.VIT.Maximum>0
+			SetColor(100,100,100)
+			Rect((BW*i)+120,PBY+70,barw,10)
+			breuk=Ch.Points.VIT.Have/Ch.Points.VIT.Maximum
+			SetColor(255,180,0)
+			Rect((BW*i)+120,PBY+70,math.floor(barw*breuk),10)
+			ImgVIT.Draw(BW*i+120,PBY+60)
+			StatFnt.Text(lua.tostring(Ch.Points.VIT.Have),(BW*i)+(BW-10),PBY+60,1)
+		End
 	End
 End

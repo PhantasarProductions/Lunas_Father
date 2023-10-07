@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_MainMenu.scyndi
-// Version: 23.09.22
+// Version: 23.10.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -48,6 +48,7 @@ Script
 #use "Libs/MultiPointer"
 
 #use "Script/Use/General/Loading"
+#use "Script/Use/Link/SG"
 
 readonly var Back = ObtainImage("ALG_BACK")
 readonly var Logo = ObtainImage("ALG_LOGO")
@@ -129,7 +130,7 @@ end
 Init
 	MenuItem.Add("NEWGAME",Always,NewGame)
 	MenuItem.Add("NEWGAMEPLUS",ANGP,NYA)
-	MenuItem.Add("LOADGAME",Always,NYA)
+	MenuItem.Add("LOADGAME",Always,SG.Load)
 	MenuItem.Add("CONFIG",Always,Config)
 	MenuItem.Add("BUGREPORT",Always,ReportBugs)
 	MenuItem.Add("JUKEBOX",Always,NYA)

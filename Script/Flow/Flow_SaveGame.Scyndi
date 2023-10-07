@@ -1,0 +1,358 @@
+// License Information:
+// src/Scripts/Script/Flow/Flow_SaveGame.Scyndi
+// Version: 23.10.07
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/SGJCR"
+#use "Libs/SCI/SGFile"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Statistician"
+#use "Libs/SCI/SString"
+
+#use "Libs/Rosetta"
+#use "Libs/MultiPointer"
+#use "Libs/GameTime"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Party"
+#use "Script/Use/General/Loading"
+
+Var CFG
+Var PageData
+
+Var Pics 
+Get String LastSession
+	Return CFG.Value("SAVEGAME","LastSession")
+End
+
+
+Get String PageFile	
+	Return sprintf("SaveGames/%s/PageData.ini",LastSession)
+End
+
+
+init
+	CSay("Retrieving Global Config for SaveGames")
+	CFG = GINIE.Obtain("GLOBALCONFIG")
+	
+	CSay("Configuring icon pics")
+	Pics = NewArray(ObtainImage("PORTRET_MYRAH"),ObtainImage("PORTRET_FRANCIS"),ObtainImage("PORTRET_LUNA"),ObtainImage("PORTRET_SCYNDI"),ObtainImage("PORTRET_AZIELLA"),ObtainImage("PORTRET_RACHEL"))
+end
+
+
+
+Const Int ACT_SAVE = 0
+Const Int ACT_LOAD = 1
+Int ACT = 0
+
+Const Int SpotW = 125
+Const Int SpotM = 3
+
+Get Int Page
+	return math.max(1,CFG.IntValue("SAVEGMAE","PAGE"))
+End
+
+Set Int Page
+	CFG.Value("SAVEGAME","PAGE",Value)
+End
+
+Class SlotData
+	ReadOnly String Cat
+	
+	Constructor(String _Cat)
+		Cat = _Cat
+		CSayF("Record created for %s",_Cat)
+	End
+	
+	Get String Location
+		PageData.NewValue(Cat,"Location","Unknown location")
+		return PageData.Value(Cat,"Location")
+	End
+	
+	Set String Location
+		PageData.Value(Cat,"Location",Value)
+	End
+	
+	Get String Myrah
+		PageData.NewValue(Cat,"Myrah","???")
+		return PageData.Value(Cat,"Myrah")
+	End
+	
+	Set String Myrah	
+		PageData.Value(Cat,"Myrah",Value)
+	End
+	
+	void IntMyrah(int v)
+		Myrah = sprintf("%d",v)
+	End
+	
+	Get String Time
+		PageData.NewValue(Cat,"Time","???")
+		return PageData.Value(Cat,"Time")
+	End
+	
+	Set String Time
+		PageData.Value(Cat,"Time",Value)
+	End
+	
+	
+	
+	
+	static Var Reg
+	static Var Obtain(int slot)
+		if !PageData
+			If !SGFile.FileExists(PageFile)
+				CSayF("Creating: %s",PageFile)
+				SGFile.SaveString(PageFile,sprintf("[Creation]\nCreated=%s",os.date()))
+			End
+			CSayF("Loading: %s",PageFile)
+			PageData = GINIE.LoadHome(PageFile,"SAVEGAME_PAGES",PageFile,"Pages for Luna's Father")
+		end	
+		plua cattag
+		cattag = sprintf("PAGE.%08d::SLOT.%02d",Page,slot)
+		Reg = Reg || {}
+		Reg[cattag] = Reg[cattag] || new SlotData(cattag)
+		return Reg[cattag]
+	End
+End
+
+
+ReadOnly Var Back = ObtainImage("BOX_BACK")
+ReadOnly Var Fnt  = ObtainFont("BASE")
+	
+ReadOnly Int SPUR = 25
+ReadOnly Int SPUG = 18
+ReadOnly Int SPUB = 0
+	
+ReadOnly Int SPHR = 255
+ReadOnly Int SPHG = 180
+ReadOnly Int SPHB = 0
+	
+Global Void ComeToSave()
+	ACT = ACT_SAVE
+	CFG.Value("SAVEGAME","LastSession",gstring.session)
+	CSayF("Session: %s",gstring.session)
+	Sys.GoToFlow("SAVEGAME")
+End
+
+Global Void ComeToLoad()
+	ACT = ACT_Load
+	SlotData.Reg = nil
+	PageData = nil
+	Sys.GoToFlow("SAVEGAME")
+End
+
+int Hue = 0
+
+Get Bool CancelRequested
+	string CNCL = Rosetta.GetString("DIALOGBUTTONS","CANCEL")
+	int x 
+	int y 
+	int w 
+	int h 
+	h = Fnt.Height(CNCL)
+	w = Fnt.Width(CNCL)
+	x = (Graphics.Width-5)  - w
+	y = (Graphics.Height-5) - h
+	if MX>x && MY>y && MX<x+w && MY<y+h
+		Hue = (Hue+1) % 360
+		SetColorHSV(360-Hue,1,0.25)
+		Rect(x,y,w,h)
+		SetColorHSV(Hue,1,1)
+		if ML
+			switch ACT
+				Case 0
+					Sys.GoToFlow("FIELD")
+				case 1
+					Sys.GoToFlow("MAINMENU")
+				Default
+					Lua.error("I don't know here I must go!")
+			End
+		End
+	Else
+		SetColor(255,255,255)
+	End
+	Fnt.Text(CNCL,x,y)
+	Return False
+end
+
+Void Action_Save(int Spot)
+	Var S = SGJCR.Create()
+	S.Assign(sprintf("SaveGames/%s/SG_%08d_%02d.jcr",gstring.session,Page,Spot))
+
+	CSay("Unparsing Variables")
+	S.Text["Variables.ini"]=gsource
+
+	
+	CSay("Unparsing playerdata")
+	S.Text["Player.ini"]=sprintf("[map]\nMap=%s\nLayer=%s\n[player]\nx=%d\ny=%d",Kthura.LastLoadedMap,Kthura.CurrentLayer,Player.X,Player.Y)
+	// Note!
+	// I could only use Kthura.LastLoadedMap safely, because Luna's Father was
+	// scripted to only have ONE Kthura map loaded at the time. If you work 
+	// with multiple maps, this can get to you!
+	
+	
+	CSay("Registering party data")
+	S.SetStat("LUNA_PARTY","Luna")
+	
+	CSay("Saving")
+	S.Save()
+	
+	CSay("Updating page data")
+	var d 
+	d = SlotData.Obtain(spot)
+	d.Location = Map.Title
+	d.Myrah    = sprintf("%d",Party.GetLevel("Myrah"))
+	d.Time     = GameTime.FShow
+	
+	CSay("Going back to the field")
+	Sys.GoToFlow("FIELD")
+End
+
+void Action_Load(int Spot)
+	Loading.Show()
+	String F
+	Var S = SGJCR.Create()
+	F = sprintf("SaveGames/%s/SG_%08d_%02d.jcr",Lastsession,Page,Spot)
+	CSayF("Preparing to load: %s",F)
+	S.Assign(F)
+	//S.DoType("TEXT")
+	//S.DoType("STATISTICIAN")	
+	S.SetStat("LUNA_PARTY","Luna")
+	CSayF("Loading: %s",F)
+	S.Load()
+	var PlD
+	CSay("Parsing Map and Player Data")
+	PlD = GINIE.Parse(sprintf("# Well\n\n%s",S.Text["Player.ini"]))
+	CSay("Parsing variables")
+	gSource = S.Text["Variables.ini"]
+	CSay("Loading the map")
+	//print(S.Text["Player.ini"],"\n",PlD.Value("Map","Map"),PlD.Value("Map","Layer"),Pld.IntValue("Player","X"),Pld.IntValue("Player","Y"))
+	//print(S.Text["Variables.ini"])
+	Map.GoToMapXY(StripDir(PlD.Value("Map","Map")),PlD.Value("Map","Layer"),Pld.IntValue("Player","X"),Pld.IntValue("Player","Y"));
+	//Lua.error("Chain to game from a loaded game has not yet been scripted")
+	CSay("All done, time to go to the field")
+	GoToFlow("FIELD")
+End
+
+plua Actions
+init
+	Actions = NewArray(Action_Save,Action_Load)
+end
+
+void Pic(int spot,int x, int y)
+	int w=SPOTW
+	int h=SPOTW
+	plua Pic
+	Pic = Pics[spot%len(Pics)]
+	w = math.min(w,Pic.Width)
+	h = math.min(h,Pic.Height)
+	SetColor(255,255,255)
+	Pic.Tile(x,y+SPOTW-h,w,h)
+end
+
+Void OtherSession()
+	Sys.LoadNewFlow("PICKSESSION","Script/Flow/Flow_PickSession.lbc")
+	Sys.Call("FLOW_PICKSESSION","Refresh")
+	GoToFlow("PICKSESSION")
+End
+
+Global Void MainFlow()	
+	MultiPointer.Rcv()
+	if ACT==ACT_SAVE
+		GameTime.Check()
+	End
+	SetColor(255,255,255)
+	Back.Tile(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,180,0)
+	Fnt.Text(Rosetta.GetSTR("SAVEGAME",sprintf("ACT%d",ACT)),Graphics.Width div 2,5,2)
+	SetColor(255,255,255)
+	Fnt.Text(Rosetta.GetStr("SAVEGAME","SESSION"),Graphics.Width,30,1)
+	SetColor(  0,180,255)
+	if ACT==ACT_LOAD && MX>Graphics.Width-100 && MY>60 && MY<90
+		Rect(Graphics.Width-100,60,100,30)
+		SetColor(0,0,0)
+		if ML
+			OtherSession()
+		end			
+	end
+	//Fnt.Text(gstring.session,Graphics.Width,60,1)
+	Fnt.Text(LastSession,Graphics.Width,60,1)
+	For spot = 0,19
+		int x
+		int y
+		//x = ((spot % 4) + (((spot div 4)+1)*3))*(SpotW+SpotM)
+		//y = ((spot div 4) + ((spot % 4)*3)) * (SpotW+SpotM)
+		x = ((spot %   4)*(SpotW+SpotM)) + (((spot div 4)+1)*3)
+		y = ((spot div 4)*(SpotW+SpotM)) + ((spot % 4)*3) + 50		
+		if MX>=x && MY>=y && MX<=x+SpotW && MY<=y+SpotW
+			if SGFile.FileExists(sprintf("SaveGames/%s/SG_%08d_%02d.jcr",LastSession,Page,Spot))
+				var d = SlotData.Obtain(spot)
+				SetColor(255,255,255)
+				Fnt.Text(Rosetta.GetStr("SAVEGAME","Location"),Graphics.Width,90,1)
+				SetColor(  0,180,255)
+				Fnt.Text(d.Location,Graphics.Width,120,1)
+				SetColor(255,255,255)
+				Fnt.Text(Rosetta.GetStr("SAVEGAME","Myrah"),Graphics.Width,150,1)
+				SetColor(  0,180,255)
+				Fnt.Text(d.Myrah,Graphics.Width,180,1)
+				SetColor(255,255,255)
+				Fnt.Text(Rosetta.GetStr("SAVEGAME","Time"),Graphics.Width,210,1)
+				SetColor(  0,180,255)
+				Fnt.Text(d.Time,Graphics.Width,240,1)
+			End
+			SetColor(SPHR,SPHG,SPHB)
+			if ML
+				Actions[ACT](spot)
+				Return
+			end
+		Else
+			SetColor(SPUR,SPUG,SPUB)
+		End
+		Rect(x,y,SpotW,SpotW)
+		if SGFile.FileExists(sprintf("SaveGames/%s/SG_%08d_%02d.jcr",LastSession,Page,Spot))
+			Pic(spot,x,y)
+		end
+	End
+	if CancelRequested
+		Return
+	End
+	MultiPointer.Draw()
+End

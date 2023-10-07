@@ -1,5 +1,5 @@
 // License Information:
-// src/Scripts/Script/Use/Link/Party.scyndi
+// src/Scripts/Script/Flow/Flow_PickSession.scyndi
 // Version: 23.10.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
@@ -34,57 +34,71 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // End License Information
-Module
+Script
 
-#use "Libs/SCI/Sys" 
-#use "Libs/SCI/Statistician"
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/SGFile"
+#use "Libs/SCI/SString"
+#use "Libs/SCI/GINIE"
 
-plua _Party
+#use "Libs/Rosetta"
+#use "Libs/MultiPointer"
 
-
-Init
-	Sys.LoadStateNew("SUB_PARTY","Script/Subs/SubParty.lbc")
-End
-
-Void NewChar(string CH,int lv1,int lv2, int lv3)
-	Sys.Call("SUB_PARTY","CreateChar",Ch,lv1,lv2,lv3)
-End
-
-Void Boxes()
-	Sys.Call("SUB_PARTY","PartyBoxes")
-End
-
-Void BoxesCombat()
-	Sys.Call("SUB_PARTY","PartyBoxes",true)
-End
+#use "Script/Use/Link/SG"
 
 
-Void StartSet()
-	CSay("Setting party!")
-	_Party = Statistician.CreateNew("LUNA_PARTY")
-	_Party.Party.Size = 6
-	_Party.Party[0] = "Myrah"
-	_Party.Party[1] = "Francis"
-	For i=0,_Party.Party.Size-1
-		CSayF("Spot %d => %s",i,_Party.Party[i])
+ReadOnly Var CFG  = GINIE.Obtain("GLOBALCONFIG")
+
+ReadOnly Var Back = ObtainImage("BOX_BACK")
+ReadOnly Var Fnt  = ObtainFont("BASE")
+
+ReadOnly Int Cols = (Graphics.Width - 10) div 200
+ReadOnly int Rows = (Graphics.Height-120) div 30 
+
+Var Sessions
+
+Global Void Refresh()
+	Sessions = {}
+	plua Dir = SGFile.GetDir()
+	plua Gehad = {}
+	For f In Each(Dir)
+		plua d=ExtractDir(f)
+		plua d1
+		plua d2
+		d1=extractDir(d)
+		d2=StripDir(d)
+		print(f,d,d1,d2,gehad[d2])
+		If Upper(d1)=="SAVEGAMES" && (!Gehad[d2])
+			//CSayF("Added session: %s",d2)
+			Gehad[D2]=true
+			Sessions[len(Sessions)] = d2
+		End
 	End
 End
 
-int GetLevel(string ch)
-	_Party = Statistician.CreateNew("LUNA_PARTY")
-	return _Party.Char[ch].Stat.Level
-end
-
-Get Int FullSize	
-	_Party = Statistician.CreateNew("LUNA_PARTY")
-	for i=0,5
-		if _Party.Party[i]==""
-			Return i
+Global Void MainFlow()
+	MultiPointer.Rcv()
+	SetColor(255,255,255)
+	Back.Tile(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,180,0)
+	Fnt.Text(Rosetta.GetStr("SAVEGAME","PICKSESSION"),Graphics.Width div 2,5,2)
+	For i,ses in ipairs(Sessions)
+		int x
+		int y
+		x = ((i div rows) * 200) +  5
+		y = ((i %   rows) *  30) + 60
+		SetColor(255,255,255)
+		if MX>x && MY>y && MX<x+Fnt.Width(ses) && MY<y+Fnt.Height(ses)
+			SetColorHSV( (os.time()/7) % 360,1,0.2)
+			Rect(x,y,Fnt.Width(ses),Fnt.Height(ses))
+			SetColorHSV( os.time() % 360,1,1)
+			If ML 
+				CFG.Value("SAVEGAME","LastSession",ses)
+				SG.Load()
+			End	
 		end
-	end
-	return 6
-end
-
-Get Int FrontSize
-	return math.min(3,FullSize)
+		Fnt.Text(ses,x,y)
+	End
+	MultiPointer.Draw()
 End

@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.10.06
+// Version: 23.10.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -92,6 +92,12 @@ Void GoToMap(String MapBundle,String LayerTag,String SpawnSpot="Start")
 	Kthura.Spawn("Player","Start")
 End
 
+Void GoToMapXY(String MapBundle,String LayerTag,int X,int y)
+	Load(MapBundle)
+	Layer=LayerTag
+	Kthura.Spawn("Player",X,Y)
+End
+
 Get String Leader
 	if gString.Leader==""
 		plua P
@@ -102,6 +108,10 @@ Get String Leader
 	// printf("Leader: '%s'\n",gString.Leader)
 	return gString.Leader
 End
+
+Get String Title
+	Return Kthura.MetaData.Title
+end
 
 Set String Leader
 	gString.Leader = Value
