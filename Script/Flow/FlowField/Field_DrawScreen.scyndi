@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.10.06
+// Version: 23.10.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -41,14 +41,19 @@ Module
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
+#use "Libs/Rosetta"
+
 #use "Script/use/link/map"
 #use "Script/Use/Link/Party"
+#use "Libs/GameTime"
 
 int ScrollX
 int ScrollY
 
 int HX
 int HY
+
+var MiniFnt = ObtainFont("Mini")
 
 string LastPlayTex = "***"
 
@@ -80,8 +85,38 @@ Void AutoPlayer()
 	// The tex change seems odd, but this is to prevent animation conflicts
 End
 
+int fSy
+int fSx2 = 0
+
+void FSC(string Fld,string value,cnd)
+	if cnd
+		plua sFld
+		sFld = sprintf("%s:",Fld)
+		SetColor(255,255,255,255)
+		MiniFnt.Text(sFld,FsX2,fSY,1)
+		fSx2 = math.max(fSx2,2+MiniFnt.Width(sFld))
+		SetColor(255,180,0,255)
+		MiniFnt.Text(value,fSx2,fSY)
+		//Print(fSx2,fSy,fld,sfld,value)
+		fSy = fSy - 20		
+	end
+end
+
+Void FSD(String Fld,String Value)
+	FSC(Fld,Value,true)
+End
+			
+Void FieldStats()
+	fSY=Graphics.Height-185
+	FSC(Rosetta.GetStr("FieldStats","Cash"),Rosetta.GetStr("FieldStats","1shilder"),gint.cash==1)
+	FSC(Rosetta.GetStr("FieldStats","Cash"),sprintf(Rosetta.GetStr("FieldStats","moreshilder"),gint.cash),gint.cash>1)
+	FSD(Rosetta.GetStr("FieldStats","Location"),Map.Title)
+	FSD(Rosetta.GetStr("FieldStats","Time"),GameTime.FShow)
+End
+
 Void DrawScreen()
 	AutoPlayer()
 	Kthura.Draw(ScrollX,ScrollY)
 	Party.Boxes()
+	FieldStats()
 End
