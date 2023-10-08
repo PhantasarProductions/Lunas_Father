@@ -117,11 +117,20 @@ Set String Leader
 	gString.Leader = Value
 End
 
+void PlayerWalkTo(a,b)
+	Kthura.WalkTo("Player",a,b)
+end
+
 QuickMeta Player
 	newindex
 		Kthura.Obj.PLAYER[key]=value
 	end
 	index
-		return Kthura.Obj.PLAYER[key]
+		switch upper(key)
+		case "WALKTO"
+			return PlayerWalkTo
+		default
+			return Kthura.Obj.PLAYER[key]
+		end
 	end
 end

@@ -67,6 +67,7 @@ Global Void MainFlow()
 		end
 	end
 	FField.FIELD_DRAWSCREEN.DrawScreen()
+	FField.FIELD_WALK.WalkCheck()
 	// Must be the last command!
 	MultiPointer.Draw()
 end

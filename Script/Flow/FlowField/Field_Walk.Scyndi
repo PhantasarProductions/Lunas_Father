@@ -1,0 +1,32 @@
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+
+#use "Libs/MultiPointer"
+
+#use "Script/Use/Link/Map"
+
+const int Area_SX = 0
+const int Area_SY = 0
+const int Area_EX = Graphics.Width
+const int Area_EY = Graphics.Height - 170
+
+
+plua FField
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+End
+
+
+
+Void WalkCheck()
+	if MX>=Area_SX && MX<=Area_EX && MY>=Area_SX && MY<=Area_EY
+		int TX = MX + FField.FIELD_DRAWSCREEN.ScrollX 
+		Int TY = MY + FField.FIELD_DRAWSCREEN.ScrollY
+		If ML
+			CSayF("Request by player to walk to (%d,%d)",TX,TY)
+			Player.WalkTo(TX,TY)
+		End
+	end
+End

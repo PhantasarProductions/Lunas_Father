@@ -39,6 +39,7 @@ Module
 #use "Libs/SCI/Sys"
 
 #use "Script/Use/Link/SG"
+#use "Script/Use/Link/Map"
 
 Global Void FLD_DEBUG_SAVE()
 	print("Savegame Flow activated. Go back to the game, please!")
@@ -46,6 +47,11 @@ Global Void FLD_DEBUG_SAVE()
 	Sys.EndConsole()
 End
 
+Global Void FLD_DEBUG_MYPOS()
+	printf("Player is located on (%d,%d)\n",Player.X,Player.Y)
+end
+
 Init
-	Sys.ConsoleLocal("SAVE","FLD_DEBUG_SAVE")	
+	Sys.ConsoleLocal("SAVE","FLD_DEBUG_SAVE")
+	Sys.ConsoleLocal("MYPOS","FLD_DEBUG_MYPOS")
 End
