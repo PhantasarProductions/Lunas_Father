@@ -1,0 +1,10 @@
+
+global void LoadText(string gtag,string file)
+end
+
+global void BoxText(string gtag,string stag)
+end
+
+global void MapText(string stag)
+	BoxText("MAPTEXT",stag)
+end
