@@ -63,6 +63,9 @@ QuickMeta MapScript
 		return mscallfunc[key]
 	end
 End
+Void ClearMapScript()
+	mscallfunc = {}
+End
 #endregion
 
 Void LoadFlowField()
