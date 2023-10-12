@@ -1,0 +1,83 @@
+Module
+
+#use "Libs/SCI/GINIE"
+
+const var ItemCap = NewArray(100,50,10)
+
+plua _iaareg = {}
+plua _iaameta = {}
+
+plua invclass  = GINIE.LoadNew("Data/IAA/MyData_ClassFile_IAA.ini")
+plua inventory = GINIE.CreateNew("INVENTORY")
+
+plua _giveitem
+bool IAA_GIVE(int i=1)
+	if Inventory.IntValue("Have",_GiveItem)+i>ItemCap
+		Return False
+	End
+	Inventory.Value("Have",_GiveItem,Inventory.IntValue("Have",_GiveItem)+i)
+	Return True
+End
+
+var IAA_IDX(s,string key)
+	string ikey
+	plua idat
+	string rtag
+	ikey = s["*_key_*"]
+	idat = s["*_dat_*"]
+	key = Upper(key)
+	rtag = sprintf("REC:%s",iKey)
+	switch key
+		case "HAVE" "NUM"
+			return math.min(ItemCap,Inventory.IntValue("Have",ikey))
+		case "GIVE"
+			_giveitem = iKey
+			return IAA_GIVE
+		Default
+			switch invclass.Value("Class",Upper(key))
+				case "STRING"
+					return idat.Value(rtag,key)
+				case "INT"
+					return idat.IntValue(rtag,key)
+				case "BOOLEAN"
+					return idat.BoolValue(rtag,key)
+				default
+					Lua.error("Keytype error in IAA (GET)")
+			End
+		// Switch
+	End
+end
+
+void IAA_NEWIDX(s,string key,value)
+	string ikey
+	plua idat
+	string rtag
+	ikey = s["*_key_*"]
+	idat = s["*_dat_*"]
+	key = Upper(key)
+	rtag = sprintf("REC:%s",iKey)
+	switch key
+		case "HAVE" "NUM"
+			Inventory.Value(Inventory.IntValue("Have",ikey,math.min(ItemCap,value)))
+		case "GIVE"
+			_giveitem = iKey
+			IAA_GIVE(iKey)
+			// I'd not recommand to go this way, though.
+		Default
+			idat.Value(rtag,key,Value)
+	End
+end
+
+QuickMeta IAA
+	index
+		key = Upper(key)
+		_iaareg[key] = _iaareg || GINIE.LoadNew(sprintf("Data/IAA/%s.INI",key),sprintf("IAA_%s",key))
+		_iaameta[key] = _iaameta[key] || SetMetaTable({["*_dat_*"]=_iaareg[key],["*_key_*"]=key},{["__index"]=IAA_IDX,["__newindex"]=IAA_NEWIDX})
+		Return _iaameta[key]
+	end
+	
+	newindex
+		Lua.error("IAA's  fields are READ ONLY!")
+	end
+	
+End
