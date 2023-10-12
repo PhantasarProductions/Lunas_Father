@@ -88,3 +88,7 @@ end
 Get Int FrontSize
 	return math.min(3,FullSize)
 End
+
+Void Recover()
+	Sys.Call("SUB_PARTY","Recover")
+End

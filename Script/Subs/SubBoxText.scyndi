@@ -1,0 +1,375 @@
+// License Information:
+// src/Scripts/Script/Subs/SubBoxText.scyndi
+// Version: 23.10.10
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Graphics" 
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/Events" 
+
+#use "Libs/Rosetta"
+#use "Libs/MultiPointer"
+
+
+Const Var CFG = GINIE.Obtain("GLOBALCONFIG")
+Const Var BoxBack = ObtainImage("BOX_BACK")
+Const Var Fnt = ObtainFont("BASE")
+
+Init
+	CFG.NewValue("BoxText","Speed",1)
+End
+
+
+Const Int MarginLeft = 200
+Const Int MarginRight = 25
+
+Get Int MaxLineWidth
+	return (Graphics.Width-MarginRight)-MarginLeft
+End
+
+Get Int TxtSpeed
+	Return CFG.IntValue("Boxtext","Speed")
+End
+
+
+Class T_TextBox
+	Static Bool ClInst=true
+	Static Var PicReg
+	Static Var Scenario 
+	string Header
+	string Portrait
+	string Portrait_Specific
+	var RawLines
+	string _FontFile
+	string _FontTag
+	string _Audio
+	var Font
+	
+	Get String FontTag
+		Return _FontTag
+	End
+	
+	Set String FontTag
+		_FontTag = Value
+		Font = ObtainFont(_FontTag)
+	End
+
+	Get Var Portrait_Img
+		PicReg = PicReg || {}
+		string Tag
+		string File
+		Tag = sprintf("BOXTEXT::%s::%s",Portrait,Portrait_Specific)
+		File = sprintf("GFX/Portraits/%s/%s.png",Portrait,Portrait_Specific)
+		if PicReg[Tag]=="NOTHING"
+			return nil
+		end
+		if !JCR6.EntryExists(File)
+			CSayF("File '%s' not found, so putting this to 'NOTHING'!",File)
+			PicReg[Tag]="NOTHING"
+			return nil
+		End
+		if !PicReg[Tag]
+			PicReg[Tag] = LoadNewImage(File,Tag)
+			PicReg[Tag].Hot(0,PicReg[Tag].Height)
+		End
+		return PicReg[Tag]
+	End
+	
+	Void Portrait_Draw(int x=5, int y=0)
+		Var Img 
+		Img = Portrait_Img
+		if !Img
+			Return
+		end
+		if y<=0
+			y = Graphics.Height
+		End
+		Img.Draw(x,y)
+	end
+	
+	Constructor()
+		Font = Fnt
+	end
+
+End
+	
+Init
+	T_TextBox.Scenario = {}
+End
+
+Global Void T_KillScenario(string Tag)
+	T_TextBox.Scenario[Upper(Tag)] = nil
+End
+
+string s(T,int L=0)
+	string Ret = ""
+	for i = 1,L
+		Ret = sprintf("%s\t",Ret)
+	end	
+	switch Lua.type(T)
+		case "number"
+			Ret = sprintf("%s%f",Ret,T)
+		case "string"
+			Ret = sprintf("%s\"%s\"",ret,T)
+		case "boolean"
+			Ret = sprintf("%s%s",Lua.tostring(T))
+		case "table"
+			ret = sprintf("%s\n",ret)
+			for k,v in spairs(T)
+				for i = 1,L+1
+					Ret = sprintf("%s\t",Ret)
+				end	
+				if (v.ClInst)
+					ret = sprintf("%s%s: <<Class Instance>>\n",ret,k)
+				else
+					ret = sprintf("%s%s: %s\n",ret,k,s(v,L+1))
+				end
+			end
+		default
+			ret = sprintf("%s <<< %s >>>",ret,Lua.type(T))
+	end
+	return ret
+End
+
+Global Void T_LoadScenario(string Tag,string File)
+	Var Scen
+	Var TBox
+	Var Src
+	Var Serie
+	Var FullFile
+	Bool Scentagpassed = False
+	T_TextBox.Scenario[Upper(Tag)] = {}
+	Scen = T_TextBox.Scenario[Upper(Tag)]
+	FullFile = sprintf("Languages/Scenario/%s/%s",Rosetta.Lang,File)
+	Src = JCR6.GetLines(FullFile)
+	For lni,l in ipairs(Src)
+		Plua err
+		err=sprintf(" in line #%d (%s)",lni+1,FullFile)
+		if l=="[scenario]"
+			scentagpassed = true
+		ElseIf l!="" && scentagpassed
+			plua Cmd
+			plua Txt
+			Cmd=Left(l,1)
+			if len(l)==0
+				Txt=""
+			else
+				Txt=Right(l,len(l)-1)
+			end
+			Switch Cmd
+				case "-"
+					// Do nothing! Used for comments!
+				case "@"					
+					Scen[Upper(Txt)] = Scen[Upper(Txt)] || {}
+					TBox = new T_TextBox()
+					Serie = Scen[Upper(Txt)]
+					Serie[Len(Serie)]= TBox
+				case "!"
+					Lua.assert(TBox,sprintf("PicDir cannot be set without starting a new text box first %s",err))
+					TBox.Portrait = Txt
+				case "*"
+					Lua.assert(TBox,sprintf("Header cannot be set without starting a new text box first %s",err))
+					TBox.Header = Txt
+				case ":"
+					Lua.assert(TBox,sprintf("PicSpecific cannot be set without starting a new text box first %s",err))
+					TBox.Portrait_Specific = Txt
+				case "%"
+					Lua.assert(TBox,sprintf("Font cannot be set without starting a new text box first %s",err))
+					if l!="%"
+						TBox._FontFile = Txt
+						if TBox._FontFile==""
+							TBox.FontTag = "BASE"
+						else
+							LinkNewFont(Txt,sprintf("BT:%s",Txt))
+							TBox._FontFile = Txt
+							TBox.FontTag = sprintf("BT:%s",Txt)
+						end
+					End
+				case "$"
+					Lua.assert(TBox,sprintf("Audio cannot be set without starting a new text box first %s",err))
+					TBox._Audio = Txt
+				case "#"
+					Lua.assert(TBox,sprintf("Line cannot be added without starting a new text box first %s",err))
+					TBox.RawLines = TBox.RawLines || {}
+					TBox.RawLines[len(TBox.RawLines)] = Txt
+				default
+					Lua.error(sprintf("Unknown command car (%s) %s",Cmd,err))
+			End
+		End
+	End
+	//print(s(T_TextBox.Scenario))
+End
+
+Var T_PrepareBox(TBox)
+	// Prepare to show!
+	int CLine = 0
+	int TBY
+	string word
+	plua Lines = {}
+	TBY = TBox.Font.Height(TBox.Header)*3
+	Lines.HeadY = TBox.Font.Height(TBox.Header)
+	For il,l in ipairs(TBOX.RawLines)
+		if (l=="") 
+			Lines[Cline]=NewArray(TBY,"")
+			CLine++
+			TBY = TBY + TBox.Font.Height("The quick brown fox jumps over the lazy dog")
+		else
+			for iw=1,len(l)
+				plua C
+				c = Mid(l,iw,1)
+				if C==" "
+					if Word!=""
+						string nline
+						Lines[CLine]=Lines[CLine]||NewArray(TBY,"")
+						nline = Trim(sprintf("%s %s",Lines[Cline][1],Word))
+						//print(il,CLine,Lines[Cline][1],Word,TBox.Font.Width(nline),MaxLineWidth,TBox.Font.Width(nline),MaxLineWidth)
+						if TBox.Font.Width(nline)>MaxLineWidth
+							TBY = TBY + TBox.Font.Height(nline)
+							CLine++							
+							Lines[CLine]=newArray(TBY,Word)
+						else
+							Lines[CLine]=NewArray(TBY,nline)
+						end						
+						Word = ""
+					end
+				else
+					Word = sprintf("%s%s",Word,c)
+					Lines[CLine] = Lines[CLine] || NewArray(TBY,"")
+					if Lines[CLine][1]=="" && TBox.Font.Width(word)>MaxLineWidth						
+						Lines[CLine]=NewArray(TBY,Word)
+						TBY = TBY + TBox.Font.Height(Word)
+						Word=""
+						CLine++
+					end
+				end		
+			end
+		end
+		if Word!=""
+			plua nline
+			nline = Trim(sprintf("%s %s",Lines[Cline][1],Word))
+			Lines[CLine] = Lines[CLine] || NewArray(TBY,"")
+			if TBox.Font.Width(nline)>MaxLineWidth
+				TBY = TBY + TBox.Font.Height(nline)
+				CLine++							
+				Lines[CLine]=newArray(TBY,Word)
+			Else
+				Lines[CLine][1] = nline
+			End
+			Word = ""
+		End
+		CLine++
+		TBY = TBY + TBox.Font.Height("The quick brown fox jumps over the lazy dog")
+	End
+	if Word!=""
+		Lines[CLine] = Lines[CLine] || NewArray(TBY,"")
+		Lines[Cline][1] = Trim(sprintf("%s %s",Lines[Cline][1],Word))
+	End
+	TBY = TBY + TBox.Font.Height("The quick brown fox jumps over the lazy dog")*2
+	Lines.Height = TBY
+	Lines.StartY = Graphics.Height - TBY
+	Return Lines
+End
+
+Void T_ShowBox(TBox,PLines)	
+	Events.Flush()
+	int sTick=0
+	int sX=1
+	int sY=0	
+	Repeat		
+		Cls()
+		Events.Poll()
+		Sys.Call(Sys.CurrentFlow,"BoxText_Background")
+		MultiPointer.Rcv()
+		Bool Complete = true
+		SetColor(255,255,255,255)
+		BoxBack.Tile(0,PLines.StartY,Graphics.Width,PLines.Height)
+		If TBox.Portrait_Img
+			TBox.Portrait_Img.Draw(5,(Graphics.Height-5))
+		End
+		SetColor(255,180,0)
+		Fnt.Text(TBox.Header,MarginLeft,PLines.HeadY+PLines.StartY)
+		For IY,L in iPairs(PLines)
+			If IY<sY || TxtSpeed==0
+				SetColor(255,255,255)
+				TBox.Font.Text(L[1],MarginLeft,L[0]+PLines.StartY)
+			ElseIf IY==SY
+				SetColor(255,255,255)
+				Complete = false
+				TBox.Font.Text(Left(L[1],sX),MarginLeft,L[0]+PLines.StartY)
+				sTick = (sTick+1) % TxtSpeed
+				if sTick==0
+					sX++
+					if sX>Len(L[1])
+						sX=1
+						sY++
+					end
+				End
+			End
+		End
+	MultiPointer.Draw()
+	if ML
+		if Complete
+			Events.Flush()
+			Return
+		else
+			sX=1
+			sY++
+		end
+	end
+	Flip()
+	Forever
+End
+
+Global Void T_Boxes(String MainTag,String ScenTag)
+	Var  Scen		
+	Var  Serie
+	plua Prepared
+	Scen = T_TextBox.Scenario[Upper(MainTag)]
+	Lua.assert(Scen,sprintf("No scenario file loaded on tag '%s'",MainTag))
+	Serie=Scen[Upper(ScenTag)]
+	Lua.assert(Serie,sprintf("No scenario data on %s::%s",MainTag,ScenTag))
+	For i,TBox in ipairs(Serie)
+		CSayF("TextBox %d/%d (%s::%s)",i+1,len(Serie),MainTag,ScenTag)
+		Prepared = T_PrepareBox(TBox)
+		if Prepared
+			T_ShowBox(TBox,Prepared)
+		else
+			Lua.error("Final line parsing of %s::%s must have gone wrong as a nil was returned",MainTag,ScenTag)
+		end
+	End	
+End

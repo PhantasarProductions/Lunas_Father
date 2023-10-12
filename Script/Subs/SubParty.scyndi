@@ -303,3 +303,12 @@ Global Void PartyBoxes(incombat)
 		End
 	End
 End
+
+Global Void Recover()
+	For i=0,Party.FullSize-1
+		plua Ch
+		Ch = _Party.Char[_Party.Party[i]]
+		Ch.Points.HP.Have = Ch.Points.HP.Maximum
+		Ch.Points.VIT.Have = Ch.Points.VIT.Maximum
+	End
+End

@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.10.07
+// Version: 23.10.10
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -78,6 +78,17 @@ Void Load(string MapBundle)
 	Sys.Call("FLOW_FIELD","ExeLoadMap",MapBundle)
 end
 
+void Kill(string Tag,Perma)
+	if (Perma!=false)
+		//Perma=1
+		Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.PermaKill",Tag)
+	else
+		//Perma=0
+		Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.Kill",Tag)
+	End
+	//Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.Kill",Tag,Perma)
+End
+
 Get String Layer
 	String Ret
 	ret = Kthura.CurrentLayer
@@ -92,13 +103,21 @@ End
 Void GoToMap(String MapBundle,String LayerTag,String SpawnSpot="Start")
 	Load(MapBundle)
 	Layer=LayerTag
-	Kthura.Spawn("Player","Start")
+	Kthura.Spawn("Player",SpawnSpot)
 End
 
 Void GoToMapXY(String MapBundle,String LayerTag,int X,int y)
 	Load(MapBundle)
 	Layer=LayerTag
 	Kthura.Spawn("Player",X,Y)
+End
+
+Void GoToLayer(string LayerTag,String SpawnSpot="Start")
+	Kill("Player")
+	CSayF("Goint to Layer %s, spot %s",LayerTag,SpawnSpot)
+	Layer=LayerTag	
+	Kthura.Spawn("Player",SpawnSpot)
+	Sys.Call("FLOW_FIELD","AutoPlayer")
 End
 
 Get String Leader
@@ -132,6 +151,8 @@ QuickMeta Player
 		switch upper(key)
 		case "WALKTO"
 			return PlayerWalkTo
+		case "WALKING" 
+			return Kthura.Walking("Player")
 		default
 			return Kthura.Obj.PLAYER[key]
 		end

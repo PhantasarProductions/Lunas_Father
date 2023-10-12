@@ -96,6 +96,7 @@ End
 
 Init
 	LoadItems = NewArray()
+	NImg("GFX/Algemeen/Needle.png","ALG_Needle",true)
 	NImg("GFX/Algemeen/Back.png","ALG_BACK")
 	NIMG("GFX/Algemeen/Logo.png","ALG_LOGO",true)
 	NIMG("GFX/Algemeen/Pointer.png","MOUSEPOINTER")
@@ -111,6 +112,8 @@ Init
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/RYANNA.JFBF","BASE","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Metal.JFBF","METAL","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Mini.JFBF","MINI","Font")
+	LoadItems[Len(LoadItems)] = New LItem("FONTS/Coolvetica.JFBF","COOL","Font")
+	// In basic you can use this font freely for both commercial and free productions. I do recommend though to download this font from dafont.com to have the full font + license files, altogether
 	ItemCount = Len(LoadItems)
 End
 

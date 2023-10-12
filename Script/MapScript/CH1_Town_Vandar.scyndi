@@ -1,0 +1,89 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/CH1_Town_Vandar.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.10.10
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Textboxes"
+#use "Script/Use/Link/Map"
+
+Init
+	CSay("Welcome to Vandar!")
+End
+
+Global Void ZA_GameStart()
+	If !Done["START_THE_GAME"]
+		MapText("GAME_START")
+		Map.Kill("Start_Francis",1)
+	End
+End
+
+Global Void Bye()
+	If !gbool["DONE_SPOKEN_MARRILONA_VANDAR_GAME_START"]
+		MapText("MARRILONA_FIRST")
+		Return
+	End
+End
+
+Global Void ZA_Up1()
+	Player.Dominance = 30
+End
+
+Global Void ZA_Up2()
+	Player.Dominance = 30
+End
+
+Global Void ZA_Down()
+	Player.Dominance = 20
+End
+
+Global Void NPC_HouseChief()
+	Map.GoToLayer("CHIEF","ENTRANCE")
+End
+
+Global Void ZA_Exit_Chief()
+	Map.GoToLayer("TOWN","EXIT_CHIEF")
+End
+
+Global Void NPC_Marrilona()
+	if !Done.DONE_SPOKEN_MARRILONA_VANDAR_GAME_START
+		MapText("MARRILONA_START")
+	else
+		MapText("MARRILONA_HINT")
+	End
+End

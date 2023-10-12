@@ -1,6 +1,6 @@
 // License Information:
-// src/Scripts/Script/Use/Link/Textboxes.scyndi
-// Version: 23.10.10
+// src/Scripts/Script/Flow/FlowField/Field_Clickables.scyndi
+// Version: 23.10.12
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,28 +37,55 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Kthura"
 
-void LoadBoxTextState()
-	Sys.LoadNewState("SUB_BOXTEXT","Script/Subs/SubBoxtext.lbc")
+
+#use "Script/Use/Link/TextBoxes"
+#use "Script/Use/Link/Map" 
+
+Var Clickables
+
+void LClick(string mapb)
+	CSay("Clickables")
+	string src
+	var func	
+	src = JCR6.GetString(sprintf("Kthura/%s/Clickables.lua",mapb))
+	func = Lua.load(src)
+	Clickables = func()
+end
+
+plua FField
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LClick	
 End
 
-global Void KillText(string gtag)
-	LoadBoxTextState()
-	Sys.Call("SUB_BOXTEXT","T_killScenario",gtag)
+Get Var FWalk
+	Return FField.FIELD_WALK
 End
-	
 
-global void LoadText(string gtag,string file)
-	LoadBoxTextState()
-	Sys.Call("SUB_BOXTEXT","T_LoadScenario",gtag,file)
-end
-
-global void BoxText(string gtag,string stag)
-	LoadBoxTextState()
-	Sys.Call("SUB_BOXTEXT","T_Boxes",gtag,stag)
-end
-
-global void MapText(string stag)
-	CSayF("MapText: %s",stag)
-	BoxText("MAPTEXT",stag)
-end
+Bool CheckClickables(int x, int y)
+	if !Clickables
+		CSayF("\x1b[31mThere do not appear to be any clickables in this field or the Clickables file is faulty" )
+		Return False
+	End
+	if !Clickables[Kthura.CurrentLayer]
+		CSayF("\x1b[31mThere do not appear to be any clickables on layer \x1b[33m'%s'\x1b[31m or the clickable file is not up to date" )
+		Return False
+	end
+	for _tag,_act in pairs(Clickables[Kthura.CurrentLayer])
+		if Kthura.HasObj(_tag) && Kthura.InObj(_tag,x,y)
+			Player.WalkTo(x,y + 32)
+			FWalk.Arrival_X = x
+			FWalk.Arrival_Y = y + 32
+			FWalk.Arrival_TurnNorth = true
+			FWalk.Arrival_Arg = _tag
+			FWalk.Arrival_Action = _act
+			CSayF("Request by player to walk to (%d,%d) to check out object '%s'",x, y + 32,_tag)
+			return True
+		end
+	end
+	return false
+End

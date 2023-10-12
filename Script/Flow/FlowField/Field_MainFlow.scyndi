@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_MainFlow.scyndi
-// Version: 23.10.07
+// Version: 23.10.10
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -56,6 +56,7 @@ End
 
 Global Void MainFlow()
 	GameTime.Check()
+	FField.FIELD_KILL.CheckKills()
 	Cls()
 	MultiPointer.Rcv()
 	if Events.AppTerminate()
@@ -68,6 +69,7 @@ Global Void MainFlow()
 	end
 	FField.FIELD_DRAWSCREEN.DrawScreen()
 	FField.FIELD_WALK.WalkCheck()
+	FField.FIELD_ZONEACTION.Check_ZoneAction()
 	// Must be the last command!
 	MultiPointer.Draw()
 end

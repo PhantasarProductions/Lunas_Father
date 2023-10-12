@@ -1,0 +1,96 @@
+Module
+
+#use "libs/sci/sys"
+#use "libs/sci/ginie"
+#use "libs/sci/kthura"
+#use "libs/sci/graphics"
+
+#use "script/use/link/map"
+
+Var CompassIni
+Var CompassData
+var CFnt   = ObtainFont("COOL")
+Var Needle = ObtainImage("ALG_NEEDLE")
+
+Void LoadCompass(string MP)
+	string MPF
+	MPF = sprintf("Kthura/%s/Compass.ini",MP)
+	CompassIni = GINIE.Load(MPF,"MAP_COMPASSES")
+	CompassData = {}
+End
+
+Class TCompass
+	ReadOnly Int X
+	ReadOnly Int Y
+	
+	Get Int Distance
+		int RHZ1
+		int RHZ2
+		RHZ1 = math.abs(X-Player.X)
+		RHZ2 = math.abs(Y-Player.Y)
+		// Thank you, Pythagoras!
+		Return math.sqrt( (RHZ1*RHZ1) + (RHZ2*RHZ2) )
+	End
+	
+	Get Int ColRed
+		return math.floor( math.min(255, (Distance / 1000) * 255))
+	End
+	
+	Get Int ColGreen
+		Return 255-ColRed
+	End
+	
+	Get Int Angle	
+		int ax
+		int ay
+		int bx
+		int by
+		bx = x
+		by = y
+		ax = Player.X
+		ay = Player.Y
+		Return math.floor(math.deg(sys.atan2(By-Ay,Bx-Ax))) + 90
+	End
+	
+	ReadOnly String Name
+		
+	Constructor(string lay,string tag)
+		string gtag
+		gtag = sprintf("COMPASSSPOT::%s::%s",lay,tag)
+		X = CompassIni.IntValue(gtag,"X")
+		Y = CompassIni.IntValue(gtag,"Y")
+		Name = CompassIni.Value(gtag,"NAME")
+	End
+	
+End
+
+Table SpotsOnThisFloor()
+	plua Lay = Kthura.CurrentLayer
+	plua Ret = {}
+	For spot In Each(CompassIni.List("COMPASSTAGS",Lay))
+		plua s
+		s = new TCompass(Lay,spot)
+		ret[s.Name] = s
+	End
+	return ret
+End
+
+Void DrawCompassSpots()
+	plua Lay = Kthura.CurrentLayer
+	CompassData[Lay] = CompassData[Lay] || SpotsOnThisFloor()
+	Int y = 20
+	int X = Graphics.width - 20
+	For n,dt in spairs(CompassData[Lay])
+		SetColor(dt.ColRed,dt.ColGreen,0)
+		Needle.DrawR(x,y+15,dt.Angle)
+		SetColor(255,255,255)
+		CFnt.Dark(n,x-20,y,1,1)
+		y = y + 40
+	End
+End
+
+Init
+	plua FField
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadCompass
+End

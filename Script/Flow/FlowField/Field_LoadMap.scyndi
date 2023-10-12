@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_LoadMap.scyndi
-// Version: 23.10.05
+// Version: 23.10.10
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,13 +37,32 @@
 Module
 
 #use "Libs/SCI/Sys" 
+#use "Libs/SCI/JCR6" 
 #use "Libs/SCI/Kthura"
+#use "Script/Use/Link/TextBoxes"
+#use "Libs/Rosetta"
 
 plua FField
 
 Init
 	FField = Lua.Scyndi.Globals.FlowField
 End
+
+void LoadMapText(string MP)
+	plua MPF
+	plua MPFull
+	MPF = sprintf("Maps/%s",MP)
+	MPFull = sprintf("Languages/Scenario/%s/%s",Rosetta.Lang,MPF)
+	if !JCR6.EntryExists(MPFull)
+		CSayF("Map Scenario '%s' not found, reverting to 'NONE' in stead!",MPFull)
+		MPF = "Maps/NONE"
+	end
+	LoadText("MAPTEXT",MPF)
+end
+
+init
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadMapText
+end
 
 global Void ExeLoadMap(string MapBundle)
 	// Loading the Kthura data must always be first
@@ -54,8 +73,11 @@ global Void ExeLoadMap(string MapBundle)
 	CSayF("Loading map: %s",MapBundle)
 	Kthura.Load("GAMEMAP",MBundle)
 	Kthura.Pick("GAMEMAP")
+	CSayF("Loading MapScript")
+	Sys.LoadState("MAPSCRIPT",sprintf("Script/MapScript/%s.lbc",MapBundle))
 	for k,lm in pairs(FField.LMFuncs)
 		CSayF("=> %s",k)
+		lm(MapBundle)
 	end	
 	FField.FIELD_MUSIC.MapMusic()
 	

@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_SaveGame.Scyndi
-// Version: 23.10.07
+// Version: 23.10.12
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -228,6 +228,9 @@ Void Action_Save(int Spot)
 	// scripted to only have ONE Kthura map loaded at the time. If you work 
 	// with multiple maps, this can get to you!
 	
+	CSay("Unparsing permakill")	
+	S.Text["PermaKill.ini"] = GINIE.Obtain("PERMAKILLS").Source
+	
 	
 	CSay("Registering party data")
 	S.SetStat("LUNA_PARTY","Luna")
@@ -263,6 +266,9 @@ void Action_Load(int Spot)
 	PlD = GINIE.Parse(sprintf("# Well\n\n%s",S.Text["Player.ini"]))
 	CSay("Parsing variables")
 	gSource = S.Text["Variables.ini"]
+	CSay("Parsing permakill")
+	plua PM = GINIE.CreateNew("PERMAKILLS")
+	PM.Source = S.Text["PermaKill.ini"] 
 	CSay("Loading the map")
 	//print(S.Text["Player.ini"],"\n",PlD.Value("Map","Map"),PlD.Value("Map","Layer"),Pld.IntValue("Player","X"),Pld.IntValue("Player","Y"))
 	//print(S.Text["Variables.ini"])

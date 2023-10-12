@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.10.07
+// Version: 23.10.10
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -56,6 +56,7 @@ int HY
 var MiniFnt = ObtainFont("Mini")
 
 string LastPlayTex = "***"
+string LastLayer = "***"
 
 Init
 	HX = Graphics.Width div 2
@@ -65,9 +66,9 @@ End
 
 Bool Scrolling = true
 
-Void AutoPlayer()
+Global Void AutoPlayer()
 	if !Kthura.HasObj("Player")
-		// CSay("No player! Let's get outta here!")
+		//CSay("No player! Let's get outta here!")
 		Return
 	End
 	If Scrolling
@@ -77,10 +78,11 @@ Void AutoPlayer()
 	
 	string PlayTex = Sprintf("GFX/Player/%s.%s.jpbf",Map.Leader,Player.Wind)
 	//CSayF("Player Tex was '%s' and will be '%s'",LastPlayTex,PlayTex)
-	if PlayTex!=LastPlayTex
+	if PlayTex!=LastPlayTex || Kthura.CurrentLayer!=LastLayer
 		//CSayF("Set player tex to: %s",PlayTex)
 		Player.Texture = PlayTex
 		LastPlayTex=PlayTex
+		LastLayer = Kthura.CurrentLayer
 	end
 	// The tex change seems odd, but this is to prevent animation conflicts
 End
@@ -114,9 +116,16 @@ Void FieldStats()
 	FSD(Rosetta.GetStr("FieldStats","Time"),GameTime.FShow)
 End
 
+// This MUST be global as it's solely called by a different state!
+Global Void BoxText_Background()
+	AutoPlayer()
+	Kthura.Draw(ScrollX,ScrollY)
+End
+
 Void DrawScreen()
 	AutoPlayer()
 	Kthura.Draw(ScrollX,ScrollY)
 	Party.Boxes()
 	FieldStats()
+	Lua.Scyndi.Globals.FlowField.FIELD_COMPASS.DrawCompassSpots()
 End

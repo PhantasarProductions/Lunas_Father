@@ -1,0 +1,36 @@
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Kthura"
+
+#use "Script/Use/Link/SG"
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Party"
+
+void Set_Respawn()
+	gstring.Respawn_Map = Kthura.LastLoadedMap
+	gstring.Respawn_Lay = Kthura.CurrentLayer
+	gint.Respawn_X      = Player.X
+	gint.Respawn_Y      = Player.Y
+end
+
+Global Void Red_SaveSpot()
+	CSay("User activated a red savespot")
+	SG.Save()
+End	
+
+
+
+Global Void Green_SaveSpot()
+	CSay("User activated a Green savespot")
+	Party.Recover()
+	SG.Save()
+End
+
+Global Void Blue_SaveSpot()
+	CSay("User activated a Blue savespot")
+	Party.Recover()
+	Set_Respawn()
+	SG.Save()
+End

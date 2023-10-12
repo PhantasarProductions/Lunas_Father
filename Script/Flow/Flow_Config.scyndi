@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_Config.scyndi
-// Version: 23.09.22
+// Version: 23.10.10
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -135,12 +135,30 @@ String KBSetOut(I)
 	return CFG.Value("MULTIPOINTER::KEYS",I.Param)
 End
 
+Void TBSPDSet()
+	GetCFG()
+	int C = CFG.IntValue("Boxtext","Speed")
+	C = (C+1) % 6
+	CFG.Value("BoxText","Speed",sprintf("%d",C))
+end
+
+String TBSPDSetOut()
+	GetCFG()
+	Return Rosetta.GetStr("TBSPD",sprintf("S%d",CFG.IntValue("Boxtext","Speed")))
+End
+
 
 Init
 	Plua N
+	// Language
 	N = New CFGItem("LANGUAGE",ChangeLang,ShowLang,"")
+	// Keyboard replacing mouse
 	N = New CFGItem("KEYBOARDACTION",KBSet,KBSetOut,"LEFTBUTTON")
 	N = New CFGItem("KEYBOARDCANCEL",KBSet,KBSetOut,"RIGHTBUTTON")
+	// Joypad replacing mouse
+	
+	// Textbox
+	N = New CFGItem("BTXTSPD",TBSPDSet,TBSPDSetOut,"")
 	N = New CFGItem("BACK",GoBack,EmptyString,"")
 end
 

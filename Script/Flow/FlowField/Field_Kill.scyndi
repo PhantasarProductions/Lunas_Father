@@ -1,0 +1,49 @@
+Module
+
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/GINIE" 
+
+Plua PermaKillLayerDoneList
+plua FField
+Plua PermaKills = GINIE.CreateNew("PERMAKILLS")
+
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+End
+
+void NewPerma()
+	PermaKillLayerDoneList = {}
+End
+
+Init
+	FField.LMFuncs.PermaKill = NewPerma
+End
+
+
+void Kill(string Tag,Perma)
+	Kthura.Kill(Tag)
+	if Perma && Perma!=0
+		PermaKills.Add(Kthura.LastLoadedMap,Kthura.CurrentLayer,Tag,True,True)
+	End
+End
+
+Void PermaKill(String Tag)
+	Kthura.Kill(Tag)
+	PermaKills.Add(Kthura.LastLoadedMap,Kthura.CurrentLayer,Tag,True,True)
+End
+
+Void DelauKill(String Tag)	
+	PermaKills.Add(Kthura.LastLoadedMap,Kthura.CurrentLayer,Tag,True,True)
+End
+
+
+Void CheckKills()
+	if PermaKillLayerDoneList[Kthura.CurrentLayer]
+		Return
+	end
+	PermaKillLayerDoneList[Kthura.CurrentLayer] = true
+	For Victim in Each(PermaKills.List(Kthura.LastLoadedMap,Kthura.CurrentLayer))
+		Kthura.Kill(Victim)
+	End
+End

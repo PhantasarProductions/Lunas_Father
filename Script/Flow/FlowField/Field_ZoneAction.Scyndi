@@ -1,0 +1,77 @@
+module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Kthura"
+
+#use "Script/use/Link/Map"
+
+plua ZATable
+plua OldLayer
+plua NowIn = {}
+//plua Chk = NewArray("Enter","Leave","Cycle")
+
+Bool CEnter(a1,a2)
+	return (!a1) && a2
+end
+
+bool CLeave(a1,a2)
+	return a1 && (!a2)
+end
+
+bool CCycle(a1,a2)
+	return a1 && a2
+end
+
+var Chk
+Init
+	Chk = { ["Enter"]=CEnter,["Leave"]=CLeave,["Cycle"]=CCycle}
+End
+
+void LZA(string mapb)
+	CSay("Zone Action")
+	string src
+	var func	
+	src = JCR6.GetString(sprintf("Kthura/%s/ZoneAction.lua",mapb))
+	func = Lua.load(src)
+	ZATable = func()
+	OldLayer = nil
+end
+
+plua FField
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LZA	
+End
+
+void Check_ZoneAction()
+	Int X
+	Int Y
+	X,Y = Player.X,Player.Y
+	if OldLayer!=Kthura.CurrentLayer
+		NowIn.Enter = {}
+		NowIn.Leave = {}
+		NowIn.Cycle = {}
+	End
+	For CT,CF in pairs(Chk)
+		For ObjTag,ActFunc in pairs(ZATable[Upper(CT)][Kthura.CurrentLayer])
+			If Kthura.HasObj(objtag) 
+				If CF(NowIn[ObjTag],Kthura.InObj(ObjTag,x,y))
+					Switch Lua.type(ActFunc)
+						Case "function"
+							ActFunc()
+							Return
+						case "string"
+							MapScript[ActFunc]()
+							Return
+						Default
+							Lua.error("Zone action function error")
+					End
+				End
+				NowIn[ObjTag]=Kthura.InObj(ObjTag,x,y)
+			End
+		End
+		
+	End
+End
