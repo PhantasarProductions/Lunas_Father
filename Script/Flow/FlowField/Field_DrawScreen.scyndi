@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.10.12
+// Version: 23.10.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -111,7 +111,7 @@ End
 Void FieldStats()
 	fSY=Graphics.Height-185
 	FSC(Rosetta.GetStr("FieldStats","Cash"),Rosetta.GetStr("FieldStats","1shilder"),gint.cash==1)
-	FSC(Rosetta.GetStr("FieldStats","Cash"),sprintf(Rosetta.GetStr("FieldStats","moreshilder"),gint.cash),gint.cash>1)
+	FSC(Rosetta.GetStr("FieldStats","Cash"),sprintf(Rosetta.GetStr("FieldStats","moreshilders"),gint.cash),gint.cash>1)
 	FSD(Rosetta.GetStr("FieldStats","Location"),Map.Title)
 	FSD(Rosetta.GetStr("FieldStats","Time"),GameTime.FShow)
 End
