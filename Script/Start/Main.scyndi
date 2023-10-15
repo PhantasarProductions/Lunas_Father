@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.10.12
+// Version: 23.10.15
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,6 +42,7 @@ Script
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/JCR6"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/GINIE"
 
 #use "Libs/Rosetta"
@@ -94,6 +95,11 @@ Void NImg(string I,string T,center)
 	LoadItems[Len(LoadItems)] = New LItem(I,T,"Image",center)
 End
 
+Void NAud(string I,string T)
+	LoadItems[Len(LoadItems)] = New LItem(I,T,"Audio")
+End
+
+
 Init
 	LoadItems = NewArray()
 	NImg("GFX/Algemeen/Needle.png","ALG_Needle",true)
@@ -112,8 +118,12 @@ Init
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/RYANNA.JFBF","BASE","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Metal.JFBF","METAL","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Mini.JFBF","MINI","Font")
-	LoadItems[Len(LoadItems)] = New LItem("FONTS/Coolvetica.JFBF","COOL","Font")
+	LoadItems[Len(LoadItems)] = New LItem("FONTS/Coolvetica.JFBF","COOL","Font")	
 	// In basic you can use this font freely for both commercial and free productions. I do recommend though to download this font from dafont.com to have the full font + license files, altogether
+	
+	NAud("Audio/General/ChaChing.ogg","KASSA")
+	NAud("Audio/General/Jingle.wav","JINGLE")
+	NAud("Audio/General/Buzz.ogg","BUZZ")
 	ItemCount = Len(LoadItems)
 End
 
@@ -139,6 +149,8 @@ global void MainFlow()
 			case "CImage"
 				CSayF("Loading Centered Image: %s",LI.File)
 				LoadImage(LI.File,LI.Tag).HotCenter()
+			case "Audio"
+				Audio.Load(LI.File,LI.Tag)
 			case "Font"
 				CSayF("Linking Image Font: %s",LI.File)
 				LinkFont(LI.File,LI.Tag)
