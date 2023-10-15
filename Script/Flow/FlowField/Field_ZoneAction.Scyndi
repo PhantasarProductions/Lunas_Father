@@ -102,7 +102,7 @@ void Check_ZoneAction()
 							ActFunc()
 							Return
 						case "string"
-							MapScript[ActFunc]()
+							MapScript[ActFunc]()							
 							Return
 						Default
 							Lua.error("Zone action function error")
