@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.10.12
+// Version: 23.10.15
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -34,6 +34,7 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // End License Information
+
 Module
 
 #use "Libs/SCI/Sys"
@@ -79,15 +80,24 @@ Void Load(string MapBundle)
 end
 
 void Kill(string Tag,Perma)
-	if (Perma!=false)
+	//if (Perma!=false)
 		//Perma=1
-		Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.PermaKill",Tag)
-	else
+	//	Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.PermaKill",Tag)
+	//else
 		//Perma=0
 		Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.Kill",Tag)
-	End
+	//End
 	//Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.Kill",Tag,Perma)
 End
+
+void PermaKill(string Tag)
+	Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.PermaKill",Tag)
+end	
+
+void DelayKill(string Tag)
+	Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.DelayKill",Tag)
+end	
+
 
 Get String Layer
 	String Ret
@@ -113,11 +123,17 @@ Void GoToMapXY(String MapBundle,String LayerTag,int X,int y)
 End
 
 Void GoToLayer(string LayerTag,String SpawnSpot="Start")
-	Kill("Player")
-	CSayF("Goint to Layer %s, spot %s",LayerTag,SpawnSpot)
+	Kill("Player",false)
+	CSayF("Going to Layer %s, spot %s",LayerTag,SpawnSpot)
 	Layer=LayerTag	
 	Kthura.Spawn("Player",SpawnSpot)
+	if (!Kthura.HasObj("Player"))
+		CSayF("Spawning player on %s failed",SpawnSpot)
+	Else
+		CSayF("Player standing on (%d,%d) in layer %s",Kthura.Obj.PLAYER.X,Kthura.Obj.Player.Y,Layer)
+	End
 	Sys.Call("FLOW_FIELD","AutoPlayer")
+	CSay("Moving to layer complete")
 End
 
 Get String Leader
@@ -143,11 +159,21 @@ void PlayerWalkTo(a,b)
 	Kthura.WalkTo("Player",a,b)
 end
 
+Get Bool HasPlayer
+	Return Kthura.HasObj("PLAYER")
+End
+
 QuickMeta Player
 	newindex
+		if !HasPlayer
+			Sys.TraceBack()
+		End
 		Kthura.Obj.PLAYER[key]=value
 	end
 	index
+		if !HasPlayer
+			Sys.TraceBack()
+		End
 		switch upper(key)
 		case "WALKTO"
 			return PlayerWalkTo
