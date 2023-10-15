@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_SaveGame.Scyndi
-// Version: 23.10.12
+// Version: 23.10.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -73,7 +73,7 @@ init
 	CFG = GINIE.Obtain("GLOBALCONFIG")
 	
 	CSay("Configuring icon pics")
-	Pics = NewArray(ObtainImage("PORTRET_MYRAH"),ObtainImage("PORTRET_FRANCIS"),ObtainImage("PORTRET_LUNA"),ObtainImage("PORTRET_SCYNDI"),ObtainImage("PORTRET_AZIELLA"),ObtainImage("PORTRET_RACHEL"))
+	Pics = NewArray(ObtainImage("PORTRET_MYRAH"),ObtainImage("PORTRET_FRANCIS"),ObtainImage("PORTRET_LUNA"),ObtainImage("PORTRET_SCYNDI"),ObtainImage("PORTRET_AZIELLA"),ObtainImage("PORTRET_RACHEL"),LoadNewImage("GFX/Portraits/Marrilona/General.png","SG_MARRILONA"))
 end
 
 
@@ -231,6 +231,8 @@ Void Action_Save(int Spot)
 	CSay("Unparsing permakill")	
 	S.Text["PermaKill.ini"] = GINIE.Obtain("PERMAKILLS").Source
 	
+	CSay("Unparsing inventory")
+	s.Text["Inventory.ini"] = GINIE.CreateNew("INVENTORY").Source
 	
 	CSay("Registering party data")
 	S.SetStat("LUNA_PARTY","Luna")
@@ -269,6 +271,9 @@ void Action_Load(int Spot)
 	CSay("Parsing permakill")
 	plua PM = GINIE.CreateNew("PERMAKILLS")
 	PM.Source = S.Text["PermaKill.ini"] 
+	CSay("Parsing inventory")
+	Plua Inv = GINIE.CreateNew("INVENTORY")
+	Inv.Source = S.Text["Inventory.ini"]
 	CSay("Loading the map")
 	//print(S.Text["Player.ini"],"\n",PlD.Value("Map","Map"),PlD.Value("Map","Layer"),Pld.IntValue("Player","X"),Pld.IntValue("Player","Y"))
 	//print(S.Text["Variables.ini"])
