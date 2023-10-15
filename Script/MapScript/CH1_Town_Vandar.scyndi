@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.12
+// version: 23.10.14
 // End License Information
 Script
 
@@ -49,7 +49,7 @@ End
 Global Void ZA_GameStart()
 	If !Done["START_THE_GAME"]
 		MapText("GAME_START")
-		Map.Kill("Start_Francis",1)
+		Map.PermaKill("Start_Francis",1)
 	End
 End
 
@@ -78,6 +78,9 @@ End
 
 Global Void ZA_Exit_Chief()
 	Map.GoToLayer("TOWN","EXIT_CHIEF")
+	if !Map.HasPlayer
+		CSay("Something's wrong!")
+	End
 End
 
 Global Void NPC_Marrilona()
@@ -85,5 +88,18 @@ Global Void NPC_Marrilona()
 		MapText("MARRILONA_START")
 	else
 		MapText("MARRILONA_HINT")
+	End
+End
+
+
+
+Global Void NPC_INN()
+	Map.GoToLayer("INN","ENTRANCE")
+End
+
+Global Void ZA_Exit_Inn()
+	Map.GoToLayer("TOWN","EXIT_INN")
+	if !Map.HasPlayer
+		CSay("Something's wrong!")
 	End
 End
