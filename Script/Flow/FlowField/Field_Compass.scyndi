@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Compass.scyndi
-// Version: 23.10.12
+// Version: 23.10.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -112,6 +112,9 @@ Table SpotsOnThisFloor()
 End
 
 Void DrawCompassSpots()
+	if !Map.HasPlayer
+		Return
+	End
 	plua Lay = Kthura.CurrentLayer
 	CompassData[Lay] = CompassData[Lay] || SpotsOnThisFloor()
 	Int y = 20
