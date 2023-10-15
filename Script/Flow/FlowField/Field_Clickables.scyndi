@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Clickables.scyndi
-// Version: 23.10.12
+// Version: 23.10.15
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -77,13 +77,17 @@ Bool CheckClickables(int x, int y)
 	end
 	for _tag,_act in pairs(Clickables[Kthura.CurrentLayer])
 		if Kthura.HasObj(_tag) && Kthura.InObj(_tag,x,y)
-			Player.WalkTo(x,y + 32)
-			FWalk.Arrival_X = x
-			FWalk.Arrival_Y = y + 32
+			int cx
+			int cy
+			cx = Kthura.Obj[_tag].X
+			cy = Kthura.Obj[_tag].Y
+			Player.WalkTo(cx,cy + 32)
+			FWalk.Arrival_X = cx
+			FWalk.Arrival_Y = cy + 32
 			FWalk.Arrival_TurnNorth = true
 			FWalk.Arrival_Arg = _tag
 			FWalk.Arrival_Action = _act
-			CSayF("Request by player to walk to (%d,%d) to check out object '%s'",x, y + 32,_tag)
+			CSayF("Request by player to walk to (%d,%d) to check out object '%s'",cx, cy + 32,_tag)
 			return True
 		end
 	end
