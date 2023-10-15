@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.12
+// Version: 23.10.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -55,6 +55,7 @@ Var CFG
 var CHT = {}
 Var BoxBack = ObtainImage("BOX_BACK")
 var StatFnt = ObtainFont("METAL")
+var MiniFnt = ObtainFont("MINI")
 var ImgHP   = ObtainImage("BOX_HP")
 var ImgFP   = ObtainImage("BOX_FP")
 var ImgVIT  = ObtainImage("BOX_VIT")
@@ -302,6 +303,7 @@ Global Void PartyBoxes(incombat)
 			StatFnt.Text(lua.tostring(Ch.Points.VIT.Have),(BW*i)+(BW-10),PBY+60,1)
 		End
 	End
+	Lua.Scyndi.Globals.MiniShow()
 End
 
 Global Void Recover()
@@ -312,3 +314,70 @@ Global Void Recover()
 		Ch.Points.VIT.Have = Ch.Points.VIT.Maximum
 	End
 End
+
+#region "Mini Messages"
+
+int MT_Y = Graphics.Height-52
+
+Class MiniText
+	Byte R = 255
+	Byte G = 255
+	Byte B = 255
+	String Msg
+	Int X
+	Var Next
+End
+
+Var MiniLine = {}
+Var MiniLineFirst = nil
+Var MiniLineCurrent = nil
+
+Global Void MiniShow()
+	For i,mt in ipairs(MiniLine)
+		plua mtt = mt
+		While mtt
+			SetColor(mtt.R,mtt.G,mtt.B,255)
+			MiniFnt.Text(Mtt.Msg,Mtt.x,MT_Y+(i*15))
+			mtt = mtt.Next
+		End
+	End
+End
+
+Global Void WriteMini(string msg,byte r,byte g,byte b)
+	if !MiniLineFirst
+		MiniLineFirst = New MiniText()
+		MiniLineCurrent = MiniLineFirst
+		MiniLineCurrent.X = 1
+	else
+		int MX
+		MX = MX + MiniFnt.Width(MiniLineCurrent.Msg) //+ MiniFnt.Width(" ")
+		MiniLineCurrent.Next = New MiniText()
+		MiniLineCurrent = MiniLineCurrent.Next
+		MiniLineCurrent.X = MX
+	End
+	MiniLineCurrent.R = R
+	MiniLineCurrent.G = G
+	MiniLineCurrent.B = B
+	MiniLineCurrent.Msg = msg
+End
+
+Global Void PushMini()
+	If Len(MiniLine)>=3
+		MiniLine[0] = MiniLine[1]
+		MiniLine[1] = MiniLine[2]
+		// MiniLine[2] = nil
+	End
+	MiniLine[2] = nil 
+	MiniLine[3] = nil // Safety precaution, should not be needed.
+	MiniLine[len(MiniLine)]=MiniLineFirst
+	CSayF("Pushing line starting with: %s",MiniLineFirst.Msg)
+	MiniLineFirst = nil
+	MiniLineCurrent = nil
+End
+
+Init
+	WriteMini("Welcome to ",180,0,255)
+	WriteMini("\"Luna's Father\"",255,180,0)
+	PushMini()
+End
+#endregion
