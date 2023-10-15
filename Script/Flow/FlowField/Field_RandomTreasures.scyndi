@@ -1,0 +1,163 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowField/Field_RandomTreasures.scyndi
+// Version: 23.10.15
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+
+Module
+
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Audio"
+
+#use "Script/use/general/Cash"
+#use "Script/use/general/Dice"
+#use "script/Use/General/UseIAA"
+#use "Script/use/Link/Mini"
+#use "script/use/link/alchemy" 
+#use "Script/use/Link/Map"
+
+plua FField
+plua RTDATA
+
+Const Var Jingle = Audio.Obtain("JINGLE")
+
+void Load_Random_Treasure(string mb)
+	RTData = GINIE.Load(sprintf("Kthura/%s/RandomTreasure.ini",mb),"MAP_RANDOMTREASURE")
+end
+
+Get Int TierMin
+	Return RTData.IntValue("Tier","Min")
+End
+
+Get Int TierMax
+	Return RTData.IntValue("Tier","Max")
+End
+
+Get Int CashMin
+	Return RTData.IntValue("Cash","Min")
+End
+
+Get Int CashMax
+	Return RTData.IntValue("Cash","Max")
+End
+
+Bool MIDX(s,MKEY)
+	Return Upper(RTData.Value("Manaments",MKey))=="TRUE"
+End
+
+Void RO()
+	Lua.error("READ-ONLY!!")
+end
+
+Var Manament
+
+Void MoneyTreasure()
+	Int _cash = CashMax
+	for i=1,gint.skill
+		_cash = math.min(_cash,math.random(CashMin,CashMax))
+	end
+	Mini.Write("Found: ",180,0,255)
+	if _cash == 1
+		Mini.WriteLn("1 shilder",255,180,0)
+	Else
+		Mini.WriteLn(sprintf("%d shilders",_cash),255,180,0)
+	End
+	Cash.Have = Cash.Have + _cash
+End
+
+Void AlchemyTreasure()
+	plua choosefrom = {}
+	for m in Each(Alchemy.Manaments)
+		if Manament[m] 
+			choosefrom[len(choosefrom)]=m
+		end
+	end
+	if Len(choosefrom)==0
+		MoneyTreasure()
+		Return
+	End
+	Int m
+	m = math.random(0,len(choosefrom)-1)
+	int tier = 50
+	for i=1,gint.skill^gint.skill
+		tier = math.min(tier,math.random(TierMin,TierMax))
+	end
+	string itag
+	itag = sprintf("INGREDIENT_MANAMENT_%s_TIER_%d",choosefrom[m],tier)
+	if !iaa[itag].Give()
+		CSayF("Failed to give %s, so giving money in stead!")
+		Return
+	End
+	Mini.Write("Found: ",180,0,255)
+	Mini.WriteLn(iaa[itag].Name,255,180,0)
+	Jingle.Play()
+End
+
+
+Global Void Random_Treasure(string OTag)
+	int r = Dice.D3
+	// If Francis is in the lead more chance to an alchemy ingredient
+	if (Map.Leader=="Francis" && r==2) || r == 1
+		AlchemyTreasure()
+	else
+		MoneyTreasure()
+	end
+	switch gint.skill
+		case 1
+			Map.Kill(OTag)
+		case 2
+			plua Roll = Dice.D4
+			CSayF("D4 roll for making kill of treasure bag permanent or not is: %d",roll)
+			If Roll==1
+				Map.PermaKill(OTag)
+			Else
+				Map.Kill(OTag)
+			End
+		case 3
+			Map.PermaKill(OTag)
+		Default
+			Lua.error("Skill error")
+	End
+End
+
+
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = Load_Random_Treasure
+	Manament = SetMetaTable({},{["__newindex"]=RO,["__index"]=MIDX})
+End
