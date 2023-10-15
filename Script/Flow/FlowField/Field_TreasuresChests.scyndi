@@ -1,0 +1,111 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowField/Field_TreasuresChests.scyndi
+// Version: 23.10.15
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Audio"
+
+#use "Script/use/general/Cash"
+#use "Script/use/general/Dice"
+#use "script/Use/General/UseIAA"
+#use "Script/use/Link/Mini"
+#use "script/use/link/alchemy" 
+#use "Script/use/Link/Map"
+
+plua FField
+plua TCDATA
+plua TCDone
+
+Const Var Jingle = Audio.Obtain("JINGLE")
+Const Var Buzz   = Audio.Obtain("BUZZ")
+
+void Load_Treasure_Chests(string mapbundle)
+	TCData = GINIE.Load(sprintf("Kthura/%s/Chests.ini",mapbundle),"MAP_TREASURECHESTS")
+	TCDone = {}
+End
+
+Global Void Open_Chest(string objtag)
+	string Tag 
+	Tag = sprintf("CHEST::%s",objtag)
+	if TCDone[objtag]
+		// Do not open the same chest twice
+		Return
+	end
+	CSayF("Opening box: %s => %s",objtag,Tag)
+	switch Upper(TCData.Value(Tag,"Type"))
+		case ""
+			Lua.error("Typeless treasure chest. Probably not correctly configured!")
+		case "CASH" 
+			Cash.Have = Cash.Have + TCData.IntValue(Tag,"Cash")
+			Mini.Write("Obtained ",180,0,255)
+			if TCData.IntValue(Tag,"Cash")==1
+				Mini.WriteLn("1 shilder",255,255,0)
+			Else
+				Mini.WriteLn(sprintf("%s shilders",TCData.IntValue(Tag,"Cash")),255,255,0)
+			End
+		case "ITEM"
+			Var IT
+			IT = IAA[TCData.Value(Tag,"ITEM")]
+			if (IT.Give())
+				Mini.Write("Obtained ",180,0,255)
+				Mini.WriteLn(IT.Name,255,255,0)
+				Jingle.Play()
+			Else
+				Mini.Write("You can't take any more ",255,25,25)
+				Mini.WriteLn(IT.Name,255,255,0)
+				Buzz.Play()
+				// Return is important! Leave the chest be when overstocked!
+				Return
+			End
+		Default
+			Lua.error(sprintf("I don't know how to handle a treasure chest of type %s", TCData.Value(Tag,"Type")))
+	End
+	Kthura.Obj[ObjTag].AnimFrame = 1
+	TCDone[ObjTag]=true
+	
+End
+
+
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = Load_Treasure_Chests	
+End
