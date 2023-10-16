@@ -56,7 +56,7 @@ global Table __CurSitTab = {}
 global string CurCharTag
 
 Get String CurSitTab
-	__CurSitTab[CurSituation] = __CurSitTab[CurSituation] ||  Situations[CurSituation].order[0].Tag
+	__CurSitTab[CurSituation] = __CurSitTab[CurSituation] ||  Situations[CurSituation].Order[0].Tag
 	return __CurSitTab[CurSituation]
 end
 
@@ -114,18 +114,39 @@ End
 Global Void RIGHT_CLICKED_PARTY(int i, string ch)
 End
 
+int midw = (Graphics.Width-40) div 2
+int midx = 40+midw
+int panh = Graphics.Height-150
+
 Global Void MainFlow()
 	_Hue = (_Hue+1) % 360
 	Multipointer.RCV()
 	Back.Tile(0,0,Graphics.Width,Graphics.Height)
 	For i,d in ipairs(Situations[cursituation].Order)
+		int dy
+		dy = (i*40)+2
 		If d.Tag==CurSitTab
 			SetColorHSV(_Hue,1,1)
-			Rect(2,(i*40)+2,d.IconWidth,d.IconHeight)
+			Rect(2,dy,d.IconWidth,d.IconHeight)
 		End
 		SetColor(255,255,255)
-		d.Icon.Stretch(2,(i*40)+2,d.IconWidth,d.IconHeight)
+		d.Icon.Stretch(2,dy,d.IconWidth,d.IconHeight)
+		If ML && MX>2 && MY>dy && MX<2+d.IconWidth && MX<2+d.IconHeight
+			CurSitTab=d.Tag
+		End
 	end
+	plua stab	
+	stab = Situations[cursituation][CurSitTab]
+	switch stab.NumPanels
+		case 1
+			stab.Panel.Flow(cursituation,CurCharTag,40,0,Graphics.Width-40,panh)
+		case 2
+			stab.PanelLeft.Flow(cursituation,CurCharTag,40,0,midw,panh)
+			stab.PanelRight.Flow(cursituation,CurCharTag,midx,0,midw,panh)
+		default
+			Lua.error(sprintf("Invalid panel num: %d",stab.NumPanels))
+	end
+	
 	Party.Boxes(CurCharTag)
 	if Events.AppTerminate()
 		if Sys.Yes(Rosetta.GetSTR("SYS","QUIT"))
