@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Clickables.scyndi
-// Version: 23.10.15
+// Version: 23.10.16
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -71,11 +71,11 @@ Bool CheckClickables(int x, int y)
 		CSayF("\x1b[31mThere do not appear to be any clickables in this field or the Clickables file is faulty" )
 		Return False
 	End
-	if !Clickables[Kthura.CurrentLayer]
-		CSayF("\x1b[31mThere do not appear to be any clickables on layer \x1b[33m'%s'\x1b[31m or the clickable file is not up to date" )
+	if !Clickables[Upper(Kthura.CurrentLayer)]
+		CSayF("\x1b[31mThere do not appear to be any clickables on layer \x1b[33m'%s'\x1b[31m or the clickable file is not up to date",Kthura.CurrentLayer )
 		Return False
 	end
-	for _tag,_act in pairs(Clickables[Kthura.CurrentLayer])
+	for _tag,_act in pairs(Clickables[Upper(Kthura.CurrentLayer)])
 		if Kthura.HasObj(_tag) && Kthura.InObj(_tag,x,y)
 			int cx
 			int cy
