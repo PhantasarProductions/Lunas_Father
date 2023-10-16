@@ -36,14 +36,65 @@
 // End License Information
 Module
 
+
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
 
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
 
+plua __CharLogos = {}
+plua __CharLogor = {}
 
-Void Flow(string _Situation,string CharTag)
+const var Fnt = ObtainFont("BASE")
+const var _Party = Statistician.CreateNew("LUNA_PARTY")
+
+
+QuickMeta CharLogo
+	newindex
+		Lua.error("CharLogo is read-only!")
+	end
+	
+	index
+		plua ukey; ukey = Upper(key)
+		plua filename; filename = sprintf("GFX/Character Name Logos/%s.png",key)
+		plua logotag; logotag = sprintf("CHARACTER_LOGO_%s",ukey)
+		__CharLogos[ukey] = __CharLogos[ukey] || LoadNewImage(filename,logotag)
+		__CharLogos[ukey].HotCenter()
+		return __CharLogos[ukey]
+	end
+end
+
+
+Void Flow(string _Situation,string CharTag,int x, int y, int w, int h)
+	int ww;ww = w-20;
+	var ch;Ch = _Party.Char[CharTag]
+	//CsayF("%d %d",CharLogo[CharTag].Width,ww)
+	if CharLogo[CharTag].Width>ww
+		__CharLogor[CharTag] = __CharLogor[CharTag] || (ww / CharLogo[CharTag].Width)
+		//int _w; _w = math.floor(__CharLogor[CharTag] * CharLogo[CharTag].Width)
+		int _h; _h = math.floor(__CharLogor[CharTag] * CharLogo[CharTag].Height)
+		CharLogo[CharTag].Stretch(x,(y+50)-(_h div 2),ww,_h)
+	Else
+		CharLogo[CharTag].Draw(x+(w div 2),y+50)
+	End
+	int sy
+	For i,stn in ipairs(Party.BaseStats)
+		sy = (i*30)+100+y
+		SetColor(255,255,255)
+		Fnt.Text(stn,x,sy)
+		SetColor(255,180,0)
+		Fnt.Text(lua.tostring(ch.stat[stn]),(x+w)-5,sy,1)
+	End
+	// Hitpoints
+	sy = sy + 60
+	SetColor(255,255,255)
+	Fnt.Text("Hitpoints",x,sy)
+	SetColor(255,180,0)
+	Fnt.Text(sprintf("%d/%d",ch.Points.HP.Have,ch.points.HP.Maximum),(x+w)-5,sy,1)
+	
+	
 End
