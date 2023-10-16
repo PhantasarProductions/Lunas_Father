@@ -236,6 +236,7 @@ Init
 End
 
 int _Hue = os.time()
+int _Deg = os.time()
 Global Void PartyBoxes(flashchar,incombat)
 	int BW
 	SetColor(255,255,255,255)
@@ -268,9 +269,15 @@ Global Void PartyBoxes(flashchar,incombat)
 		end
 		Lua.assert(PIMG,sprintf("Nil received for portrait: (%d/%d) '%s'",i+1,Party.FrontSize,_Party.Party[i]))
 		SetColor(255,255,255,255)
+		if _Party.Party[i]==flashchar
+			_Deg = (_Deg+1)%360
+			plua _Rad;_Rad = math.rad(_Deg)
+			plua _Sin;_Sin = math.sin(_Rad)
+			SetAlpha(math.floor(math.abs(_sin*255)))
+		End
 		PImg.Draw(BW*i,(PBY+PBH)-PImg.Height)
 		// HP
-		SetColor(100,100,100)
+		SetColor(100,100,100,255)
 		Rect((BW*i)+120,PBY+10,barw,10)
 		plua Breuk 
 		plua G
@@ -334,7 +341,7 @@ End
 
 #region "Mini Messages"
 
-int MT_Y = Graphics.Height-52
+int MT_Y = Graphics.Height-50
 
 Class MiniText
 	Byte R = 255

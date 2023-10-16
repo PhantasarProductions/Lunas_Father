@@ -37,9 +37,12 @@
 Module
 
 #use "Libs/SCI/Sys" 
+#use "Libs/SCI/InterVar"
 #use "Libs/SCI/Statistician"
 
 plua _Party
+
+const Var BaseStats = NewArray("Strength","Defense","Intelligence","Resistance","Agility","Accuracy","Evasion")
 
 
 Init
@@ -102,3 +105,24 @@ End
 Void Recover()
 	Sys.Call("SUB_PARTY","Recover")
 End
+
+
+Var SkillExp(string ch,int idx)
+	plua _ret
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_ret = _Party.Char[ch].Points[sprintf("SKILL_EXP_%d",idx)]
+	if _ret.Maximum==0
+		_ret.Maximum=100^gint.skill
+	end
+	return _ret
+end
+
+Int SkillLvl(string ch,int idx)
+	plua _ret
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	if !_Party.Char[Ch].HaveStat(sprintf("SKILL_LVL_%d",idx))
+		Return 1
+	End
+	_ret = _Party.Char[ch].Stat[sprintf("SKILL_Lvl_%d",idx)]
+	return math.max(_ret,1)
+end
