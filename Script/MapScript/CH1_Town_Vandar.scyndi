@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.14
+// version: 23.10.16
 // End License Information
 Script
 
@@ -41,6 +41,8 @@ Script
 
 #use "Script/Use/Link/Textboxes"
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/WorldMap"
 
 Init
 	CSay("Welcome to Vandar!")
@@ -58,6 +60,11 @@ Global Void Bye()
 		MapText("MARRILONA_FIRST")
 		Return
 	End
+	if !Done["DONE_LEAVING_VANDAR_FOR_THE_FIRST_TIME"]
+		gstring.CampSituation="01_START"
+		MapText("READY2LEAVE")
+	End
+	Delisto()
 End
 
 Global Void ZA_Up1()
@@ -102,4 +109,43 @@ Global Void ZA_Exit_Inn()
 	if !Map.HasPlayer
 		CSay("Something's wrong!")
 	End
+End
+
+Global Void ZA_Exit_Weapons()
+	Map.GoToLayer("TOWN","EXIT_Weapons")
+	if !Map.HasPlayer
+		CSay("Something's wrong!")
+	End
+End
+
+
+Global Void NPC_Weapons()
+	Map.GoToLayer("Weapons","ENTRANCE")
+End
+
+Global Void NPC_Bronn()
+	if !gBool.Done_Meet_Feenalaria
+		MapText("UPGRADE_NOT_YET")
+	Else
+		MapText("UPGRADE")
+		Mini.WriteLn("Hee! Zet die upgrade shop er eens in, lul!",255,100,100)
+	End
+End
+
+Global Void ZA_Exit_Items()
+	Map.GoToLayer("TOWN","EXIT_Items")
+	if !Map.HasPlayer
+		CSay("Something's wrong!")
+	End
+End
+
+
+Global Void NPC_Items()
+	Map.GoToLayer("Items","ENTRANCE")
+End
+
+Global Void NPC_Jaqen()
+	MapText("ITEMS")
+	Mini.Writeln("De itemshop moet er nog ingezet worden!",255,180,0)
+	Mini.WriteLn("See you later, alligator",180,255,0)
 End
