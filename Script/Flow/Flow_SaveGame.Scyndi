@@ -78,6 +78,7 @@ end
 
 
 
+
 Const Int ACT_SAVE = 0
 Const Int ACT_LOAD = 1
 Int ACT = 0
@@ -86,7 +87,7 @@ Const Int SpotW = 125
 Const Int SpotM = 3
 
 Get Int Page
-	return math.max(1,CFG.IntValue("SAVEGMAE","PAGE"))
+	return math.max(1,CFG.IntValue("SAVEGAME","PAGE"))
 End
 
 Set Int Page
@@ -153,6 +154,8 @@ Class SlotData
 	End
 End
 
+ReadOnly Var PgUp = ObtainImage("PAGE_UP")
+ReadOnly Var PgDn = ObtainImage("PAGE_DOWN")
 
 ReadOnly Var Back = ObtainImage("BOX_BACK")
 ReadOnly Var Fnt  = ObtainFont("BASE")
@@ -324,6 +327,18 @@ Global Void MainFlow()
 			OtherSession()
 		end			
 	end
+	SetColor(255,255,255)
+	If Page>1
+		PgUp.Stretch(550,50,40,40)
+		if ML && MX>550 && MX<590 && MY>40 && MY<80
+			Page--
+		End
+	End
+	PgDn.Stretch(550,Graphics.Height-70,40,40)
+	if ML && MX>550 && MX<590 && MY>Graphics.Height-70 && MY<Graphics.Height-30
+		Page++
+	End
+	Fnt.Text(sprintf(Rosetta.GetStr("SAVEGAME","PAGE"),Page),Graphics.Width div 2,Graphics.Height-30,2,0)
 	//Fnt.Text(gstring.session,Graphics.Width,60,1)
 	Fnt.Text(LastSession,Graphics.Width,60,1)
 	For spot = 0,19
