@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.14
+// Version: 23.10.16
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,6 +42,8 @@ Script
 #use "Libs/SCI/GINIE"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
+
+#use "Libs/MultiPointer"
 
 #use "Script/Use/General/Dice"
 #use "Script/use/Link/Party"
@@ -233,8 +235,8 @@ Init
 	end
 End
 
-
-Global Void PartyBoxes(incombat)
+int _Hue = os.time()
+Global Void PartyBoxes(flashchar,incombat)
 	int BW
 	SetColor(255,255,255,255)
 	BoxBack.Tile(PBX,PBY,PBW,PBH+50)
@@ -249,8 +251,23 @@ Global Void PartyBoxes(incombat)
 		barw = BW-150
 		PImg = Portret[_Party.Party[i]]
 		Ch = _Party.Char[_Party.Party[i]]
+		if !incombat
+			MultiPointer.RCV()
+			//print( i,sprintf("Mouse(%d,%d)",MX,MY),MY>PBY , MX>(BW*i) , MX<(BW*(i+1)) , MY<PBY+PBH) 
+			if MY>PBY && MX>(BW*i) && MX<(BW*(i+1)) && MY<PBY+PBH 
+				_Hue = (_Hue+1) % 360
+				SetColorHSV(_Hue,1,1)
+				SetAlpha(100)
+				Rect((BW*i),PBY,BW,PBH)
+				if ML
+					Sys.Call(Sys.CurrentFlow,"Left_Clicked_Party",i,_Party.Party[i])
+				elseif MR
+					Sys.Call(Sys.CurrentFlow,"Right_Clicked_Party",i,_Party.Party[i])
+				end
+			end
+		end
 		Lua.assert(PIMG,sprintf("Nil received for portrait: (%d/%d) '%s'",i+1,Party.FrontSize,_Party.Party[i]))
-		SetColor(255,255,255)
+		SetColor(255,255,255,255)
 		PImg.Draw(BW*i,(PBY+PBH)-PImg.Height)
 		// HP
 		SetColor(100,100,100)
@@ -283,7 +300,7 @@ Global Void PartyBoxes(incombat)
 			else
 				setcolor(18,0,25)
 			end
-			Rect(((BW*i)+120)+((j-1)*((barw/4)-3)),PBY+47,barw,3)
+			Rect(((BW*i)+120)+((j-1)*((barw/4))),PBY+47,(barw/4)-2,3)
 		end
 		breuk=Ch.Points.FP.Have/Ch.Points.FP.Maximum
 		SetColor(100,100,100)
