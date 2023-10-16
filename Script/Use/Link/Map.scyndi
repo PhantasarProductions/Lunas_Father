@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.10.15
+// Version: 23.10.16
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -73,7 +73,7 @@ Void LoadFlowField()
 	Sys.LoadNewFlow("FIELD","Script/Flow/Flow_Field.lbc")
 End
 
-Void Load(string MapBundle)
+Void Load(string MapBundle)	
 	Loading.Show()
 	LoadFlowField()
 	Sys.Call("FLOW_FIELD","ExeLoadMap",MapBundle)
@@ -107,11 +107,11 @@ end
 
 Set String Layer
 	// To do: Kill old player before moving on
-	Kthura.CurrentLayer=Value
+	Kthura.CurrentLayer=Upper(Value)
 End
 
 Void GoToMap(String MapBundle,String LayerTag,String SpawnSpot="Start")
-	Load(MapBundle)
+	Load(MapBundle)	
 	Layer=LayerTag
 	Kthura.Spawn("Player",SpawnSpot)
 End
