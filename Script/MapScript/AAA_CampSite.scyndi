@@ -36,9 +36,17 @@
 // End License Information
 Script
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+#use "SCript/Use/Link/Party"
+#use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/TextBoxes"
+
+Const Var Girls = NewArray("Francis","Luna","Scyndi","Aziella","Rachel")
 
 Void TalkChar(String Ch)
 	MapText(sprintf("AAA_%s_%s",gstring.CampSituation,Ch))
@@ -64,5 +72,20 @@ Global Void NPC_Rachel()
 	TalkChar("RACHEL")
 End
 
+Global Void NPC_Alchemy()
+	if !gbool.Alchemy_Unlocked
+		MapText("NO_ALCHEMY")
+		Return
+	End
+	Mini.Writeln("Alchemy not present yet!")
+End
+	
+
 Global Void ZA_EnterCampSite()
+	For ch in Each(Girls)
+		CSayF("In party %s => %s",Ch,Party.InParty(Ch))
+		If !Party.InParty(Ch)
+			Map.Kill(sprintf("NPC_%s",ch))
+		End
+	End	
 End
