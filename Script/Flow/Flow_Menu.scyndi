@@ -1,0 +1,139 @@
+// License Information:
+// src/Scripts/Script/Flow/Flow_Menu.scyndi
+// Version: 23.10.16
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Events"
+#use "Libs/SCI/Graphics"
+
+#use "Libs/Rosetta"
+#use "Libs/Multipointer"
+
+#use "Script/Use/Link/Party"
+
+int _Hue
+
+
+Var Back = ObtainImage("BOX_BACK")
+
+global const var Situations = { ["FIELD"]={}, ["SHOP"]={}, ["UPGRADE"]={}}
+global string CurSituation
+global Table __CurSitTab = {}
+global string CurCharTag
+
+Get String CurSitTab
+	__CurSitTab[CurSituation] = __CurSitTab[CurSituation] ||  Situations[CurSituation].order[0].Tag
+	return __CurSitTab[CurSituation]
+end
+
+Set String CurSitTab
+	__CurSitTab[CurSituation] = Value
+End
+	
+
+void NewSitTab(string _situation,string _mname, string _module1,string _module2="")
+	plua nTab = {}
+	_Situation = Upper(_Situation)
+	_MName = Upper(_MName)
+	Lua.Scyndi.Use(sprintf("Script/Flow/FlowMenu/Tabs/%s",_module1))
+	if _module2==""
+		nTab.NumPanels = 1
+		ntab.Panel = Lua.Scyndi.Class[_module1]
+	else
+		Lua.Scyndi.Use(sprintf("Script/Flow/FlowMenu/Tabs/%s",_module2))
+		nTab.NumPanels  = 2
+		ntab.PanelLeft  = Lua.Scyndi.Class[_module1]
+		ntab.PanelRight = Lua.Scyndi.Class[_module2]
+	end
+	Situations[_situation].Order = Situations[_situation].Order || {}
+	Situations[_situation].Order[len(Situations[_situation].Order)] = ntab
+	Situations[_situation][_MName] = ntab
+	ntab.Icon = LoadNewImage(sprintf("GFX/Menu Icons/%s.png",_MName),sprintf("MENU_ICON_%s",_MName))
+	ntab.IconWidth = Math.floor( (ntab.Icon.width / ntab.Icon.height) * 32)
+	ntab.IconHeight = 32 // Just here for good manners
+	ntab.Tag = _mname
+	CSayF("Initiation tab %s for menu situation %s",_mname,_situation)
+End
+
+Init
+	NewSitTab("FIELD","STATUS","Char_Stats","Char_Status")
+	NewSitTab("FIELD","INVENTORY","Char_Stats","Inventory")
+	NewSitTab("FIELD","ABILITIES","Char_Stats","Abilities")
+	NewSitTab("FIELD","SKILLS","Skill_Bag","Skill_Equipped")
+	NewSitTab("FIELD","ACHIEVEMENTS","Achievements")
+End
+
+global Void ComeToMe(string _Sit,string _Chr)
+	CurSituation = _Sit
+	CurCharTag = _Chr
+End
+
+
+Global Void LEFT_CLICKED_PARTY(int i, string ch)
+	if CurCharTag == Ch
+		Sys.GoToFlow("FIELD")
+	End
+	CurCharTag = Ch
+End
+
+// Do nothing. This function had to exist to prevent crashes and nothing more!
+Global Void RIGHT_CLICKED_PARTY(int i, string ch)
+End
+
+Global Void MainFlow()
+	_Hue = (_Hue+1) % 360
+	Multipointer.RCV()
+	Back.Tile(0,0,Graphics.Width,Graphics.Height)
+	For i,d in ipairs(Situations[cursituation].Order)
+		If d.Tag==CurSitTab
+			SetColorHSV(_Hue,1,1)
+			Rect(2,(i*40)+2,d.IconWidth,d.IconHeight)
+		End
+		SetColor(255,255,255)
+		d.Icon.Stretch(2,(i*40)+2,d.IconWidth,d.IconHeight)
+	end
+	Party.Boxes(CurCharTag)
+	if Events.AppTerminate()
+		if Sys.Yes(Rosetta.GetSTR("SYS","QUIT"))
+			Sys.Exit()
+			// Please note: Sys.Exit() always finishes the function in which it's called first before terminating 
+			// Scyndi's Creative Interpreter. This will make sure the terminating begins immediately!
+			return
+		end
+	end
+	Multipointer.Draw()
+End
