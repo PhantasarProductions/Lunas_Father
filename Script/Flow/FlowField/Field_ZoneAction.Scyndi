@@ -92,24 +92,30 @@ void Check_ZoneAction()
 		NowIn.Enter = {}
 		NowIn.Leave = {}
 		NowIn.Cycle = {}
+		OldLayer=Kthura.CurrentLayer
 	End
 	For CT,CF in pairs(Chk)
 		Lua.assert(ZATable[Upper(CT)][Upper(Kthura.CurrentLayer)],sprintf("No Zone Action table for %s:%s",Kthura.CurrentLayer,CT))
 		For ObjTag,ActFunc in pairs(ZATable[Upper(CT)][Upper(Kthura.CurrentLayer)])
-			If Kthura.HasObj(objtag) 
-				If CF(NowIn[ObjTag],Kthura.InObj(ObjTag,x,y))
+			If Kthura.HasObj(objtag)
+				//CSayF("%s> (Layer %s; old: %s) (Zone:%s) Now in %s; Play in: %s; CF: %s",CT,Kthura.CurrentLayer,ObjTag,OldLayer,NowIn[CT][ObjTag],Kthura.InObj(ObjTag,x,y),CF(NowIn[CT][ObjTag],Kthura.InObj(ObjTag,x,y)))
+				plua InZone
+				InZone = Kthura.InObj(ObjTag,x,y)				
+				If CF(NowIn[CT][ObjTag],InZone)
 					Switch Lua.type(ActFunc)
 						Case "function"
 							ActFunc()
+							NowIn[CT][ObjTag]=InZone
 							Return
 						case "string"
-							MapScript[ActFunc]()							
+							MapScript[ActFunc]()	
+							NowIn[CT][ObjTag]=InZone
 							Return
 						Default
 							Lua.error("Zone action function error")
-					End
-				End
-				NowIn[ObjTag]=Kthura.InObj(ObjTag,x,y)
+					End					
+				End		
+				NowIn[CT][ObjTag]=InZone
 			End
 		End
 		
