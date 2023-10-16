@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 23.10.14
+// Version: 23.10.16
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -87,6 +87,15 @@ end
 
 Get Int FrontSize
 	return math.min(3,FullSize)
+End
+
+Bool InParty(String Ch)
+	for i=0,5
+		if _Party.Party[i]==Ch
+			Return True
+		End
+	End
+	Return False
 End
 
 Void Recover()
