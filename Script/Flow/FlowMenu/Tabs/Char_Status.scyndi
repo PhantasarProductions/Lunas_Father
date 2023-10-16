@@ -39,11 +39,32 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
 
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
 
+const var Fnt = ObtainFont("BASE")
+const var _Party = Statistician.CreateNew("LUNA_PARTY")
 
-Void Flow(string _Situation,string CharTag)
+
+Void Flow(string _Situation,string CharTag,int x, int y,int w, int h)
+	plua CH;CH=_Party.Char[CharTag]
+	Fnt.Text(sprintf("%s %s",CH.Data["Race"],CH.Data["Gender"]),x,y)
+	Fnt.Text(CH.Data["Class"],x,y+30)
+	Fnt.Text(CH.Data["Weapon"],x,y+60)
+	
+	for i=1,2
+		number _r;_r = Party.SkillExp(CharTag,i).Have / Party.SkillExp(CharTag,i).Maximum
+		int _y;_y=y+90+(i*30)
+		SetColor(100,100,100)
+		Rect(x,_y+10,w,20)
+		SetColor(255,0,0)
+		Rect(x,_y+10,math.floor(w*_r),20)
+		SetColor(255,255,255)
+		Fnt.Text(Ch.Data[sprintf("SKILL%d",i)],x,_y)
+		SetColor(255,180,0)
+		Fnt.Text(Lua.tostring(Party.SkillLvl(CharTag,i)),(x+w)-5,_y,1)
+	end
 End
