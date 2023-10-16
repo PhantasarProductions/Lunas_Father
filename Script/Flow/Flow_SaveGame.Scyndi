@@ -259,6 +259,10 @@ void Action_Load(int Spot)
 	String F
 	Var S = SGJCR.Create()
 	F = sprintf("SaveGames/%s/SG_%08d_%02d.jcr",Lastsession,Page,Spot)
+	if !SGFile.FileExists(F)
+		CSayF("Savegame file '%s' does not exist, so let's skip this request",F)
+		Return
+	end
 	CSayF("Preparing to load: %s",F)
 	S.Assign(F)
 	//S.DoType("TEXT")
