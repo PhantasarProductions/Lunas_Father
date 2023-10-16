@@ -50,12 +50,12 @@ Void NewChar(string CH,int lv1,int lv2, int lv3)
 	Sys.Call("SUB_PARTY","CreateChar",Ch,lv1,lv2,lv3)
 End
 
-Void Boxes()
-	Sys.Call("SUB_PARTY","PartyBoxes")
+Void Boxes(_chr)
+	Sys.Call("SUB_PARTY","PartyBoxes",_chr)
 End
 
-Void BoxesCombat()
-	Sys.Call("SUB_PARTY","PartyBoxes",true)
+Void BoxesCombat(_chr)
+	Sys.Call("SUB_PARTY","PartyBoxes",_chr,1)
 End
 
 
@@ -90,6 +90,7 @@ Get Int FrontSize
 End
 
 Bool InParty(String Ch)
+	_Party = _Party ||Statistician.CreateNew("LUNA_PARTY")
 	for i=0,5
 		if _Party.Party[i]==Ch
 			Return True
