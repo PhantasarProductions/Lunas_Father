@@ -1,0 +1,97 @@
+Script
+
+#use "Libs/SCI/Sys" 
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/MultiPointer"
+#use "Libs/GameTime"
+
+
+#use "Script/Use/Link/WorldMap"
+#use "Script/Use/Link/Map"
+
+Var WMGINIE
+Var WMItems
+Var WMMeta
+
+Var Ball = ObtainImage("BALL")
+Var Fnt  = ObtainFont("BASE")
+
+Init
+	WMGINIE = GINIE.Load("Data/General/WorldMap.ini","WORLDMAP")
+	WMItems = WMGINIE.Categories
+End
+
+var WMIndex(s,key)
+	key=Upper(key)
+	switch Key
+		case "AVAILABLE"
+			return Upper(WMGINIE.Value(s["_rec"],"AvailableFromStart"))=="TRUE" || WM_Unlocked[s["_sred"]]
+		default
+			return WMGINIE.Value(s["_rec"],key)
+	end
+end
+
+quickmeta WMItem
+	index
+		WMMeta = WMMeta || {}
+		if !WMMeta[key]
+			WMMeta[key] = SetMetaTable({["_rec"]=key,["_srec"]=Right(key,len(key)-4)},{["__index"]=WMIndex})
+		end
+		Return WMMeta[key]
+	end
+end
+
+Int Hue
+
+Global Void MainFlow()
+	int x
+	int y
+	MultiPointer.Rcv()
+	GameTime.Check()
+	x,y = 0,0
+	For itemrec in each(WMItems)
+		plua itemtag
+		plua item
+		itemtag = Right(itemrec,len(itemrec)-4)
+		item = WMItem[itemrec]
+		// CSayF("%s> Item Continent: %s; We are on continent: %s => %s", itemrec, item.Continent,gstring.WORLDMAP_LAST, item.Continent==gstring.WORLDMAP_LAST)
+		If (item.Continent=="All" || item.Continent==gstring.WORLDMAP_LAST) && (item.Available)
+			switch item.type
+				case "Camp"
+					SetColor(255,180,0)
+				case "Town" "City"
+					SetColor(0,180,255)
+				case "Dungeon"
+					if TravelerEmblem[item.Kthura]
+						SetColor(0,255,0)
+					else
+						SetColor(255,0,0)
+					end
+				default
+					SetColor(180,0,255)
+			End
+			Ball.Draw(x,y)
+			SetColor(255,255,255)
+			If MX>x && MY>y && MX<x+240 && MY<y+30
+				Hue = (Hue+1)%360
+				SetColorHSV(Hue,1,1)
+				If ML
+					CSayF("Right! The user requested to go to %s",Item.Kthura)
+					Map.GoToMap(Item.Kthura,Item.Layer,Item.ExitPoint)
+					Sys.GoToFlow("FIELD")
+					Return
+				End
+			End
+			Fnt.Text(Item.Name,x+40,y)
+			y = y + 35
+			If y>Graphics.Height-50
+				y = 0
+				x = x + 250
+			End
+		End
+	End
+	MultiPointer.Draw()
+End
