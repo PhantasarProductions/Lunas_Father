@@ -1,0 +1,12 @@
+Module
+
+#use "Libs/SCI/Sys"
+
+Init
+	Sys.LoadStateNew("FLOW_MENU","Script/Flow/Flow_Menu.lbc")
+End
+
+Void Go(string situation,string character)
+	Sys.Call("FLOW_MENU","ComeToMe",situation,character)
+	Sys.GoToFlow("MENU")
+End
