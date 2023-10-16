@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.10.15
+// Version: 23.10.16
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -106,12 +106,15 @@ Init
 	NImg("GFX/Algemeen/Back.png","ALG_BACK")
 	NIMG("GFX/Algemeen/Logo.png","ALG_LOGO",true)
 	NIMG("GFX/Algemeen/Pointer.png","MOUSEPOINTER")
+	NIMG("GFX/Algemeen/Ball.png","BALL")
 	NIMG("GFX/Arrows/Left.png","ARROW_LEFT")
 	NIMG("GFX/Boxes/BoxBack.png","BOX_BACK")
 	NIMG("GFX/Boxes/HP.png","BOX_HP")
 	NIMG("GFX/Boxes/FP.png","BOX_FP")
 	NIMG("GFX/Boxes/VIT.png","BOX_VIT")
 	NIMG("GFX/Arrows/Right.png","ARROW_RIGHT")	
+	NIMG("GFX/Page/Up.png","PAGE_UP")
+	NIMG("GFX/Page/Down.png","PAGE_DOWN")
 	for i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
 		 NIMG(sprintf("GFX/Portraits/%s/General.png",c),sprintf("PORTRET_%s",upper(c)))
 	end
