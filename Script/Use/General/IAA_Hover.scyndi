@@ -39,6 +39,7 @@ Module
 #use "Libs/SCI/Graphics"
 
 #use "Script/Use/General/UseIAA"
+#use "Script/Use/General/Dice"
 
 readonly var bfnt = ObtainFont("BASE")
 readonly var mfnt = ObtainFont("Mini")
@@ -90,12 +91,47 @@ Class HoverIAA
 		W = bfnt.width(Head)
 		W = math.max(W,mfnt.width(Desc))
 		H = bfnt.height(head) + mfnt.height(Desc)
+		
+		// Heal
+		do
+			string ds
+			for d in each(Dice.Types)
+				int dn; dn = item[sprintf("HealD%d",d)]
+				switch dn
+					case 0
+						// Do nothing
+					case 1
+						if ds!=""
+							ds = sprintf("%s%s",ds, " + ")
+						end
+						ds = sprintf("%s d%d",ds,d)
+					default
+						if ds!=""
+							ds = sprintf("%s%s",ds, " + ")
+						end
+						ds = sprintf("%s %dd%d",ds,dn,d)
+				end	// switch		
+			end // for
+			if item.HealPlus>0
+				if ds!=""
+					ds = sprintf("%s%s",ds, " + ")
+				end //if
+				ds = sprintf("%s%d",ds,item.HealPlus)
+			end // if
+			ds = Trim(ds)
+			if ds!=""
+				Lines[len(Lines)] = new HoverLine(sprintf("Heal: %s",ds),180,255,180)
+			End // if
+				
+		end	// do
+		
+		// Calculate sizes
 		For l in each(lines)
 			w = math.max(w,l.W)
 			H = H + l.H
 		End
 	End
-	
+		
 	void Show(int _x,_y)
 		int c;  c  = W div 2
 		int x;  x  = math.max(0,math.min(Graphics.Width-w, _x - c))
@@ -110,8 +146,8 @@ Class HoverIAA
 		MFnt.Text(Desc,cx,dy,2,0); dy = dy + MFnt.Height(Desc)
 		SetColor(255,255,255)
 		For l in each(Lines)
-			SetColor(l.r,l.g,l.n,255)
-			MFnt.Text(l.Text,cx,dy); dy = dy + l.h
+			SetColor(l.r,l.g,l.b,255)
+			MFnt.Text(l.Text,cx,dy,2); dy = dy + l.h
 		End
 	End
 End
