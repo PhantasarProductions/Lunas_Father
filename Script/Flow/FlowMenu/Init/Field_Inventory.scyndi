@@ -1,0 +1,24 @@
+Module
+
+#use "Script/Use/General/UseIAA"
+#use "Script/Flow/FlowMenu/Tabs/Inventory"
+
+
+
+Void _Action(string User,string Item)
+End
+
+
+Bool _Allow(string User,string Item)
+	Return MyItem[Item].Item.Usable_In_Field
+End
+
+Init
+	plua n
+	print("Init",_Action,_Allow)
+	n = new InvSit("FIELD",_Action,_Allow)
+	n.AddFilter("Consumable")
+	n.AddFilter("Source")
+	n.AddFilter("Key")
+	n.AddFilter("All")
+End
