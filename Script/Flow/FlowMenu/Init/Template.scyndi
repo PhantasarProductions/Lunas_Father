@@ -1,0 +1,16 @@
+Module
+
+#use "Script/Use/General/UseIAA"
+#use "Script/Flow/FlowMenu/Tabs/Inventory"
+
+
+// In case of combat "Void" should be bool, in order to return true to end 
+// And the loop will end. As "Void" always returns "nil" boolean checks are
+// always regarded as "false".
+
+Void _Action(string User,string Item)
+End
+
+
+Bool _Allow(string User,string Item)
+End
