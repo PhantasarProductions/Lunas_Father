@@ -32,12 +32,24 @@
 // 
 // **********************************************
 // 
-// version: 23.10.16
+// version: 23.10.18
 // End License Information
 Script
 
 #use "Libs/SCI/Sys"
 
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/General/UseIAA"
+
 Global Void ZA_EnterFirstTime()
-	CSay("First Time Event Not Yet Scripted!")
+	MapText("Jake")
+	Mini.Write("Jake gave you a ",180,0,255)
+	Mini.WriteLn("healing herb",255,180,0)
+	Mini.WriteLn(" as a last gift from a father to his daughter",180,0,255)
+	Mini.WriteLn("before she gets on the road",180,0,255)
+	IAA.ITM_REG_HERB.Give()
+	Map.PermaKill("ZA_EnterFirstTime")
 End
