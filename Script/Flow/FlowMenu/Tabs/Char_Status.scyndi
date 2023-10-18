@@ -51,10 +51,10 @@ const var _Party = Statistician.CreateNew("LUNA_PARTY")
 
 Void Flow(string _Situation,string CharTag,int x, int y,int w, int h)
 	plua CH;CH=_Party.Char[CharTag]
+	SetColor(255,255,255)
 	Fnt.Text(sprintf("%s %s",CH.Data["Race"],CH.Data["Gender"]),x,y)
 	Fnt.Text(CH.Data["Class"],x,y+30)
-	Fnt.Text(CH.Data["Weapon"],x,y+60)
-	
+	Fnt.Text(CH.Data["Weapon"],x,y+60)	
 	for i=1,2
 		number _r;_r = Party.SkillExp(CharTag,i).Have / Party.SkillExp(CharTag,i).Maximum
 		int _y;_y=y+90+(i*30)
