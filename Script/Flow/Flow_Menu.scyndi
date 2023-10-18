@@ -45,6 +45,8 @@ Script
 
 #use "Script/Use/Link/Party"
 
+#use "Script/Flow/FlowMenu/Init/Field_Inventory"
+
 int _Hue
 
 
