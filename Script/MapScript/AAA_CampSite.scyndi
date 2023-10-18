@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.16
+// version: 23.10.18
 // End License Information
 Script
 
@@ -45,6 +45,7 @@ Script
 #use "SCript/Use/Link/Party"
 #use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/TextBoxes"
+
 
 Const Var Girls = NewArray("Francis","Luna","Scyndi","Aziella","Rachel")
 
@@ -88,4 +89,8 @@ Global Void ZA_EnterCampSite()
 			Map.Kill(sprintf("NPC_%s",ch))
 		End
 	End	
+End
+
+Global Void Bye()
+	Worldmap.Go(gstring.WORLDMAP_LAST)
 End
