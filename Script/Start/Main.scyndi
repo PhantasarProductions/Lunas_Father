@@ -115,6 +115,8 @@ Init
 	NIMG("GFX/Arrows/Right.png","ARROW_RIGHT")	
 	NIMG("GFX/Page/Up.png","PAGE_UP")
 	NIMG("GFX/Page/Down.png","PAGE_DOWN")
+	NIMG("GFX/Page/Left.png","PAGE_LEFT")
+	NIMG("GFX/Page/Right.png","PAGE_RIGHT")
 	for i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
 		 NIMG(sprintf("GFX/Portraits/%s/General.png",c),sprintf("PORTRET_%s",upper(c)))
 	end
