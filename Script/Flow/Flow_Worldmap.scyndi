@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_Worldmap.scyndi
-// Version: 23.10.16
+// Version: 23.10.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,12 +38,14 @@ Script
 
 #use "Libs/SCI/Sys" 
 #use "Libs/SCI/GINIE"
+#use "Libs/SCI/Events"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
 #use "Libs/MultiPointer"
 #use "Libs/GameTime"
 
+#use "Script/Use/General/Loading"
 
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/Map"
@@ -116,6 +118,9 @@ Global Void MainFlow()
 				SetColorHSV(Hue,1,1)
 				If ML
 					CSayF("Right! The user requested to go to %s",Item.Kthura)
+					Loading.Show()
+					Events.Flush()
+					Flip()
 					Map.GoToMap(Item.Kthura,Item.Layer,Item.ExitPoint)
 					Sys.GoToFlow("FIELD")
 					Return
