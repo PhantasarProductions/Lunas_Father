@@ -1,6 +1,6 @@
 // License Information:
-// src/Scripts/Script/Flow/FlowMenu/Inventory.scyndi
-// Version: 23.10.16
+// src/Scripts/Script/Flow/FlowMenu/Tabs/Inventory.scyndi
+// Version: 23.10.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,8 +42,150 @@ Module
 
 #use "Libs/MultiPointer"
 
+#use "Script/Use/General/UseIAA"
 #use "Script/Use/Link/Party"
 
+Const Var PLeft  = ObtainImage("PAGE_LEFT")
+Const Var PRight = ObtainImage("PAGE_RIGHT")
+Const Var Fnt    = ObtainFont("BASE")
+Const Var MFnt   = ObtainFont("MINI")
 
-Void Flow(string _Situation,string CharTag)
+Class InvSit
+	Static ReadOnly Var Reg = NewArray()
+	Static ReadOnly Var GetSit(String Key)
+		Lua.assert(Reg[Upper(Key)],sprintf("No situation initiated as %s",key))
+		Return Reg[Upper(Key)]
+	End
+	ReadOnly String NameSituation
+	ReadOnly Delegate Action
+	ReadOnly Delegate Allow
+	ReadOnly Var Filters
+	Int ScrollY = 0
+	Constructor (string _NS, _Act, _Allow)		
+		NameSituation = _NS
+		assert(_Act,sprintf("No ACTION function for inventory situation %s",_NS))
+		Action = _Act
+		assert(_Allow,sprintf("No ALLOW function for inventory situation %s",_NS))
+		Allow = _Allow
+		Filters = {}
+		Reg[Upper(_NS)] = self
+	End
+	
+	Void AddFilter(string F)
+		Filters[len(Filters)] = F
+	End
+	
+	Int __FilterNum = 0
+	Get String Filter
+		Return Filters[__FilterNum]
+	End
+	Get Int FilterNum
+		Return __FilterNum
+	End
+	Set Int FilterNum
+		if Value<0
+			__FilterNum=Len(Filters)-1
+		Else	
+			__FilterNum = Value % Len(Filters)
+		End
+	End
+	
+	Static Var Register(string _NS,Delegate _Act,Delegate _All)
+		_NS = Upper(_NS)
+		Reg[_NS]=New InvSit(_NS,_Act,_All)
+		return Reg[_NS]
+	End
+End
+
+Class InvFilter
+
+	static bool All(string item,data)
+		Return True
+	End
+	
+	static bool Consumable(string item,data)
+		return Upper(data.Type) == "CONSUMABLE"
+	end
+	
+	static bool Source(string item,data)
+		return Upper(data.Type) == "INGREDIENT"
+	end
+	
+	static bool Key(string item,data)
+		return Prefixed(Item,"KEY_")
+	End
+	
+End
+
+Class IItem
+	Var _Item
+	Get Bool Loaded
+		Return _Item
+	End
+	ReadOnly String Tag
+	Get Var Item
+		_Item = _Item || IAA[Tag]
+		return _Item
+	End
+	Constructor(string T)
+		//print(Lua.debug.traceback())
+		CSayF("IItem created tagged \"%s\"",T)
+		Tag = Upper(T)
+	End	
+	
+End
+
+plua _MyItem = {}
+
+QuickMeta MyItem
+	newindex
+		lua.error("My Item is read-only")
+	end
+	index
+		key = upper(key)
+		_MyItem[key] = _MyItem[key] || New IItem(Key)
+		return _MyItem[key]
+	end
+end
+
+Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
+	plua Sit;Sit = InvSit.GetSit(_Situation)
+	Multipointer.Rcv() // This is safe. Mulitpointer needs the Event Poll to be done by the routines itself, so nothing harmfull will happen.
+	SetColor(255,255,255,255)
+	PLeft.Stretch(x,y,32,32)
+	PRight.Stretch(x+w-32,y,32,32)
+	If ML && MX>X && MY>Y && MX<X+32 && MY<Y+32
+		Sit.FilterNum--
+	End
+	If ML && MX<x+W && MY>Y && MX>x+(W-32) && MY<Y+32
+		Sit.FilterNum++
+	End
+	MFnt.Text(Sit.Filter,x+(W/2),16,2,2)
+	Bool ScrollOutBounds = True
+	Bool MayScrollDown   = False
+	Int i=0
+	For _i,itmtag in ipairs(IAA.List)		
+		//Print("FOR: ",_i,itmTag)
+		plua item;item = MyItem[itmTag]	
+		//if Sit.Allow(CharTag,itmTag)
+		if invFilter[sit.Filter](itmtag,Item.Item)
+			plua got;got = item.Loaded		
+			plua sy; sy = (i-Sit.ScrollY)			
+			plua ix = 5
+			plua iy; iy = ((sy*30)+y+40)			
+			ScrollOutBounds = ScrollOutBounds && sy<0
+			MayScrollDown   = MayScrollDown   || iy<y+h-40			
+			If sy>=0 && iy<y+h-40
+				If MX>x && MX<x+w && MY>iy && My<iy+30
+					ix = 20
+				end			
+				SetColor(255,255,255)
+				Fnt.Text(Item.Item.Name,x+ix,iy)
+				//print(_i,i,itmTag,item,"\nLoaded",item.Loaded,"\nsy = ",sy,"ixy = ",ix,iy)
+				SetColor(255,180,0)
+				Fnt.Text(sprintf("%d",Item.Item.Num),(x+(w-32))-ix,iy,1)
+			End
+			i++
+		End
+	End
 End
