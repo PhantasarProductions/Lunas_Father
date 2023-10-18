@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/UseIAA.scyndi
-// Version: 23.10.14
+// Version: 23.10.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -66,7 +66,7 @@ var IAA_IDX(s,string key)
 	rtag = sprintf("REC:%s",iKey)
 	switch key
 		case "HAVE" "NUM"
-			return math.min(ItemCap,Inventory.IntValue("Have",ikey))
+			return math.min(ItemCap[gint.skill],Inventory.IntValue("Have",ikey))
 		case "GIVE"
 			_giveitem = iKey
 			return IAA_GIVE
@@ -79,7 +79,7 @@ var IAA_IDX(s,string key)
 				case "BOOLEAN"
 					return idat.BoolValue(rtag,key)
 				default
-					Lua.error("Keytype error in IAA (GET)")
+					Lua.error(sprintf("Keytype error in IAA (GET) (%s %s)",invclass.Value("Class",Upper(key)),key))
 			End
 		// Switch
 	End
@@ -95,7 +95,8 @@ void IAA_NEWIDX(s,string key,value)
 	rtag = sprintf("REC:%s",iKey)
 	switch key
 		case "HAVE" "NUM"
-			Inventory.Value(Inventory.IntValue("Have",ikey,math.min(ItemCap,value)))
+			//Inventory.Value(Inventory.IntValue("Have",ikey,math.min(ItemCap,value)))
+			Inventory.Value("Have",ikey,Lua.tostring(math.min(ItemCap[gint.skill],value)))
 		case "GIVE"
 			_giveitem = iKey
 			IAA_GIVE(iKey)
@@ -108,9 +109,14 @@ end
 QuickMeta IAA
 	index
 		key = Upper(key)
-		_iaareg[key] = _iaareg[key] || GINIE.LoadNew(sprintf("Data/IAA/%s.INI",key),sprintf("IAA_%s",key))
-		_iaameta[key] = _iaameta[key] || SetMetaTable({["*_dat_*"]=_iaareg[key],["*_key_*"]=key},{["__index"]=IAA_IDX,["__newindex"]=IAA_NEWIDX})
-		Return _iaameta[key]
+		switch Key
+			Case "LIST"
+				return Inventory.Values("Have")
+			Default
+				_iaareg[key] = _iaareg[key] || GINIE.LoadNew(sprintf("Data/IAA/%s.INI",key),sprintf("IAA_%s",key))
+				_iaameta[key] = _iaameta[key] || SetMetaTable({["*_dat_*"]=_iaareg[key],["*_key_*"]=key},{["__index"]=IAA_IDX,["__newindex"]=IAA_NEWIDX})
+				Return _iaameta[key]
+		End		
 	end
 	
 	newindex
