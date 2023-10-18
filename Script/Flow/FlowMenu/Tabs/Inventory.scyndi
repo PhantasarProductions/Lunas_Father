@@ -43,6 +43,7 @@ Module
 #use "Libs/MultiPointer"
 
 #use "Script/Use/General/UseIAA"
+#use "Script/Use/General/IAA_Hover"
 #use "Script/Use/Link/Party"
 
 Const Var PLeft  = ObtainImage("PAGE_LEFT")
@@ -148,6 +149,9 @@ QuickMeta MyItem
 	end
 end
 
+
+plua _hvr
+plua _hvrold
 Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 	plua Sit;Sit = InvSit.GetSit(_Situation)
 	Multipointer.Rcv() // This is safe. Mulitpointer needs the Event Poll to be done by the routines itself, so nothing harmfull will happen.
@@ -164,6 +168,7 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 	Bool ScrollOutBounds = True
 	Bool MayScrollDown   = False
 	Int i=0
+	bool Hovering = false
 	For _i,itmtag in ipairs(IAA.List)		
 		//Print("FOR: ",_i,itmTag)
 		plua item;item = MyItem[itmTag]	
@@ -178,6 +183,11 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 			If sy>=0 && iy<y+h-40
 				If MX>x && MX<x+w && MY>iy && My<iy+30
 					ix = 20
+					if _hvrold!=itmtag
+						_hvr = new HoverIAA(itmtag)
+						_hvrold = itmtag						
+					end
+					Hovering = true
 				end			
 				SetColor(255,255,255)
 				Fnt.Text(Item.Item.Name,x+ix,iy)
@@ -187,5 +197,8 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 			End
 			i++
 		End
+	End
+	if Hovering && _hvr
+		_hvr.show(MX,MY+40)
 	End
 End
