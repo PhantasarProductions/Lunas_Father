@@ -2,6 +2,7 @@ Module
 
 #use "Libs/SCI/Sys"
 
+
 Init
 	Sys.LoadStateNew("FLOW_MENU","Script/Flow/Flow_Menu.lbc")
 End
