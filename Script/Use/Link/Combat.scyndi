@@ -1,5 +1,5 @@
 // License Information:
-// src/Scripts/Script/Flow/FlowField/Field_MainFlow.scyndi
+// src/Scripts/Script/Use/Link/Combat.scyndi
 // Version: 23.10.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
@@ -36,41 +36,13 @@
 // End License Information
 Module
 
-#use "Libs/SCI/Sys"
-#use "Libs/SCI/SString"
-#use "Libs/SCI/Graphics"
-#use "Libs/SCI/Events"
-
-#use "Libs/MultiPointer"
-#use "Libs/Rosetta"
-#use "Libs/GameTime"
-
-
-plua FField
-
-Init
-	FField = Lua.Scyndi.Globals.FlowField
+void PrepareCombat(string Head,string Name,byte EFR,Byte EFG, Byte EFB)
 End
-
-
-
-Global Void MainFlow()
-	GameTime.Check()
-	FField.FIELD_KILL.CheckKills()
-	Cls()
-	MultiPointer.Rcv()
-	if Events.AppTerminate()
-		if Sys.Yes(Rosetta.GetSTR("SYS","QUIT"))
-			Sys.Exit()
-			// Please note: Sys.Exit() always finishes the function in which it's called first before terminating 
-			// Scyndi's Creative Interpreter. This will make sure the terminating begins immediately!
-			return
-		end
-	end
-	FField.FIELD_DRAWSCREEN.DrawScreen()
-	FField.FIELD_WALK.WalkCheck()
-	FField.FIELD_ZONEACTION.Check_ZoneAction()
-	Lua.Scyndi.Globals.FlowField.FIELD_RENC.UpdateGauge()
-	// Must be the last command!
-	MultiPointer.Draw()
-end
+	
+Void Prepare()
+	PrepareCombat("","",0,180,255)
+End
+	
+Void Boss(string Head,string Name, Byte EFR=255, Byte EFG=0, Byte EFB=0)
+	PrepareCombat(Head,Name,EFR,EFG,EFB)
+End

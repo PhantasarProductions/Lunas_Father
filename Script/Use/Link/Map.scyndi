@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.10.16
+// Version: 23.10.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -47,9 +47,22 @@ Module
 
 
 
+
 #region MapScript
 // Dirty, but should work
 plua mscallfunc
+
+
+QuickMeta FoundTravelerEmblem
+	index
+		return gbool[sprintf("TRAVELER_EMBLEM_%s",key)]
+	end
+	
+	newindex
+		gbool[sprintf("TRAVELER_EMBLEM_%s",key)] = value!=false
+	end
+end
+
 
 	
 QuickMeta MapScript
@@ -64,6 +77,11 @@ QuickMeta MapScript
 		return mscallfunc[key]
 	end
 End
+
+Get Bool AllowEncOff
+	Return FoundTravelerEmblem[Kthura.CurrentMap]
+End
+
 Void ClearMapScript()
 	mscallfunc = {}
 End
