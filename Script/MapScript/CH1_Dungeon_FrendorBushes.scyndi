@@ -41,8 +41,14 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
 #use "Script/Use/Link/TextBoxes"
+#use "Script/Use/Link/WorldMap"
 
 #use "Script/Use/General/UseIAA"
+
+
+Global Void ZA_Delisto()
+	WorldMap.Delisto()
+End
 
 Global Void ZA_EnterFirstTime()
 	MapText("Jake")
