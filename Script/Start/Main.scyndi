@@ -125,6 +125,8 @@ Init
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Metal.JFBF","METAL","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Mini.JFBF","MINI","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Coolvetica.JFBF","COOL","Font")	
+	LoadItems[Len(LoadItems)] = New LItem("Fonts/Coolvetica.Big.jfbf","BIGTEXT","Font")
+	LoadItems[Len(LoadItems)] = New LItem("Fonts/Coolvetica.VeryBig.jfbf","VBGTEXT","Font")
 	// In basic you can use this font freely for both commercial and free productions. I do recommend though to download this font from dafont.com to have the full font + license files, altogether
 	
 	NAud("Audio/General/ChaChing.ogg","KASSA")
