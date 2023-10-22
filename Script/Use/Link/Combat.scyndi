@@ -36,7 +36,109 @@
 // End License Information
 Module
 
-void PrepareCombat(string Head,string Name,byte EFR,Byte EFG, Byte EFB)
+#use "libs/sci/sys"
+#use "libs/sci/audio"
+#use "libs/sci/events"
+#use "libs/sci/graphics"
+
+#use "libs/xmath"
+#use "libs/music"
+
+#use "script/use/general/loading"
+
+
+plua BossAudio
+plua BHF = ObtainFont("BIGTEXT")
+plua BBF = ObtainFont("VBGTEXT")
+
+QuickMeta CombatData
+	index
+		lua.error("CombatData is Write-Only!")
+	end
+	newindex
+		Sys.Call("FLOW_COMBAT","DefineStartValue",key,value)
+	end
+end
+
+Const Number PLineInt=0.50
+	
+Get Int MidX
+	Return Graphics.Width div 2
+End
+Get Int MidY
+	Return Graphics.Height div 2
+End
+Get Int Radius
+	Return math.max(Graphics.Width,Graphics.Height)
+End
+
+void PrepareCombat(string BossHead,string BossName,byte R,Byte G, Byte B)
+		Number AlphaH=0
+		Number AlphaB=0
+		//Static Var BossAudio
+		//Static Var BHF = ImageFont.Obtain("BIGTEXT")
+		//Static Var BBF = ImageFont.Obtain("VBGTEXT")
+		//Bool BossPlaying()
+		//	If BossHead==""
+		//		Return False
+		//	End
+		//	Return AlphaH<1 && AlphaB<1 && BossAudio && BossAudio.Playing
+		//	//lua.error("No music timing for boss yet!")
+		//End
+		Int Time = 45
+		Int m = 360-math.random(0,125)
+		If BossHead!=""
+			Time = 250
+			Music.Push()
+			BossAudio = BossAudio || Audio.LoadNew("Audio/Combat/Boss Intro.ogg","BOSS_INTRO")
+			Lua.Neil.Globals.Music.Stop()
+			BossAudio.Play()			
+		End
+		
+		Bool BossPlaying
+		Repeat	
+			BossPlaying=False
+			Graphics.Cls()
+			For li = 0,360,PLineInt
+				//number ci = math.abs(xmath.Cos(li+((FPS.Ticks div 10) % 360)))
+				number ci;ci = math.abs(xmath.Cos(li+Time+m))
+				Graphics.Color(math.floor(R*ci),math.floor(G*ci),math.floor(B*ci))
+				Graphics.Line(MidX,MidY,MidX+math.floor(xmath.sin(li)*Radius),MidY+math.floor(xmath.cos(li)*radius))
+			End
+			Time--
+			if BossHead!=""
+				BossPlaying = AlphaH<1 && AlphaB<1
+				Graphics.Color(255,255,255)
+				AlphaH = math.min(1,AlphaH+0.1)
+				if AlphaH==1
+					AlphaB = math.min(1,AlphaB+0.009)
+				end
+				Graphics.SetAlpha(math.floor(AlphaH*255))
+				If AlphaH>=1
+					BHF.DarkText(BossHead,Graphics.Width div 2, (Graphics.Height div 2) - 20 , 2, 1)
+				Else
+					BHF.Text(BossHead,Graphics.Width div 2, (Graphics.Height div 2) - 20 , 2, 1)
+				End
+				Graphics.SetAlpha(math.floor(AlphaB*255))
+				If AlphaB>=1
+					BBF.DarkText(BossName,Graphics.Width div 2, (Graphics.Height div 2) + 20 , 2, 0)
+				Else
+					BBF.Text(BossName,Graphics.Width div 2, (Graphics.Height div 2) + 20 , 2, 0)
+				End
+				Graphics.SetAlpha(255)
+			End
+			Flip()
+			Events.Poll()
+			//FPS.WaitMinTicks()
+		LoopWhile Time>0 || BossPlaying
+		Loading.Show()
+		Sys.LoadNewState("FLOW_COMBAT","Script/Flow/FlowCombat.lbc")
+		If BossHead!=""
+			//ISSet("BOOL","FLOW_COMBAT","FlowCombat.Start.Music_DontPush",true)
+			CombatData.Music_DontPush = 1
+		End
+		Sys.Call("FLOW_COMBAT","FlowCombat.Start.StartPreparation")
+		CombatData.StartEvent=""	
 End
 	
 Void Prepare()

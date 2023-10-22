@@ -1,0 +1,8 @@
+Module
+
+plua _Combat = Lua.Scyndi.Globals.Flow_Combat
+plua _Start  = Lua.Scyndi.Globals.Flow_Combat.Start
+
+global void DefineStartValue(Key,Value)
+	_Start[key] = Value
+End
