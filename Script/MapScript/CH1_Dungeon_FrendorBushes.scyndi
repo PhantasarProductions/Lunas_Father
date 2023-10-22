@@ -47,7 +47,7 @@ Script
 
 
 Global Void ZA_Delisto()
-	WorldMap.Delisto()
+	Delisto()
 End
 
 Global Void ZA_EnterFirstTime()
