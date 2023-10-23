@@ -1,8 +1,42 @@
 Module
 
-plua _Combat = Lua.Scyndi.Globals.Flow_Combat
-plua _Start  = Lua.Scyndi.Globals.Flow_Combat.Start
+#use "Libs/SCI/Graphics"
+
+plua _Combat
+plua _Start
+
+Class InitFoe
+	String Foe
+	Int X
+	Int Y
+End
+
+
+
+String Arena = ""
+String Music = ""
+String Lose = "ERROR"
+String StartEvent = ""
+Var LastFoe = Nil
+Var Enemies
+
+Set String NewEnemy
+	int X; X = ((Len(Enemies) div 3) * 100) + ((Len(Enemies) % 3) * 5)
+	int Y; Y = ((Len(Enemies) % 3) * 64) + (Graphics.Height div 2)
+	LastFoe = New InitFoe()
+	LastFoe.X = X
+	LastFoe.Y = Y
+	LastFoe.Foe = Value
+End
+
+global void StartPreparations()
+	LastFoe = Nil
+	Enemies = {}	
+end
+	
 
 global void DefineStartValue(Key,Value)
+	_Combat = _Combat || Lua.Scyndi.Globals.Flow_Combat
+	_Start = _Start || Lua.Scyndi.Globals.Flow_Combat.Start
 	_Start[key] = Value
 End

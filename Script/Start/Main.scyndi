@@ -118,9 +118,18 @@ Init
 	NIMG("GFX/Page/Down.png","PAGE_DOWN")
 	NIMG("GFX/Page/Left.png","PAGE_LEFT")
 	NIMG("GFX/Page/Right.png","PAGE_RIGHT")	
-	for i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+	For i=1,26 
+		NIMG(sprintf("GFX/COMBAT/DIAMONDS/FOE_%02d.PNG",i) ,sprintf("COMBATDIAMOND_FOE_%02d",i))
+		NIMG(sprintf("GFX/COMBAT/DIAMONDS/BOSS_%02d.PNG",i),sprintf("COMBATDIAMOND_BOSS_%02d",i))
+	End
+	for ch In Each(NewArray("MYRAH","FRANCIS","SCYNDI","AZIELLA","RACHEL"))
+		NIMG(sprintf("GFX/COMBAT/DIAMONDS/HERO_%s.PNG",ch),sprintf("COMBATDIAMOND_HERO_%s",ch))
+	End
+	For i,c In Pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
 		 NIMG(sprintf("GFX/Portraits/%s/General.png",c),sprintf("PORTRET_%s",upper(c)))
-	end
+	End
+	NIMG("GFX/COMBAT/DIAMONDS/JOKER.PNG","COMBATDIAMOND_JOKER")
+	NIMG("GFX/COMBAT/DIAMONDS/BACK.PNG","COMBATDIAMOND_BACK")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/RYANNA.JFBF","BASE","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Metal.JFBF","METAL","Font")
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Mini.JFBF","MINI","Font")
@@ -135,7 +144,7 @@ Init
 	ItemCount = Len(LoadItems)
 End
 
-global void MainFlow()
+Global Void MainFlow()
 	Cls()
 	if Events.AppTerminate() 
 		Sys.Exit()

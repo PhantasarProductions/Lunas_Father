@@ -12,7 +12,7 @@ plua _TRUEFLOWCOMBAT
 Var Idx(s,string key)
 	Key = Upper(Key)
 	if !_TRUEFLOWCOMBAT[key]
-		Lua.error(sprintf("No combat script tagged %d",key))
+		Lua.error(sprintf("No combat script tagged %s",key))
 		return nil
 	end
 	return _TRUEFLOWCOMBAT[Key]
@@ -22,18 +22,25 @@ Void ThisIsReadOnly(s,k,v)
 	error("Flow_Combat is read-only!")
 End
 
-ReadOnly Global Var Flow_Combat = SetMetaTable({},{["__index"]=Idx,["__newindex"]=ThisIsReadOnly})
+Global Var Flow_Combat 
+Init
+	Flow_Combat = SetMetaTable({},{["__index"]=Idx,["__newindex"]=ThisIsReadOnly})
+End
 
 	
 Init
+	_TRUEFLOWCOMBAT = {}
 	Plua Stuff
 	Stuff = JCR6.Dir("Script/Flow/FlowCombat")
 	CSayF("Entries for FlowCombat Found: %d",Len(Stuff))
 	Loading.Show()
 	Flip()
 	for i,m in ipairs(Stuff)
-		CSayF("FlowCombat import: %d => %s",i,m)
+		CSayF("FlowCombat import: %s => %s (%s)",i,m,Upper(StripAll(m)))
 		Lua.Scyndi.Use(StripExt(m))
 		_TRUEFLOWCOMBAT[Upper(StripAll(m))] = Lua.Scyndi["Class"][StripAll(m)]
+	end
+	for m,_ in spairs(_TRUEFLOWCOMBAT)
+		CSayF("Got> %s",m)
 	end
 End

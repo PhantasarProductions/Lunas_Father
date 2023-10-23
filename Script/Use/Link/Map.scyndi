@@ -45,7 +45,7 @@ Module
 #use "Script/Use/General/Loading"
 
 
-
+plua __Niks();end
 
 
 #region MapScript
@@ -197,6 +197,9 @@ QuickMeta Player
 			return PlayerWalkTo
 		case "WALKING" 
 			return Kthura.Walking("Player")
+		case "STOPWALKING"
+			Kthura.StopWalking("Player")
+			return __Niks
 		default
 			return Kthura.Obj.PLAYER[key]
 		end

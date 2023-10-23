@@ -190,21 +190,21 @@ module
 		//if not suffixed(arena,".png") then arena = arena..".png" end
 		num = math.min(num,max)
 		Combat.Prepare()
-		Combat.Arena = arena
-		Combat.Lose = "Respawn"
+		CombatData.Arena = arena
+		CombatData.Lose = "Respawn"
 		pLua aet = Kthura.MetaData.AltEncounterTune
 		If aet && aet!=""
 			if ! suffixed(lower(aet),".ogg") 
 				aet=sprintf("%s.ogg",aet) //aet += ".ogg" 
 			end 
 			CSayF("= Alt combat tune: %s (%s)",aet,Lua.type(aet))
-			Combat.Music = aet
+			CombatData.Music = aet
 		Else
-			Combat.Music = "*RANDOM"
+			CombatData.Music = "*RANDOM"
 		End
 		Lua.assert(Len(Enemies)>0,"I cannot run a Random Encounter without any monsters set")
 		For i=1,num 
-			Combat.NewEnemy = Enemies[math.random(1,Len(Enemies))]
+			CombatData.NewEnemy = Enemies[math.random(1,Len(Enemies))]
 		end
 		Player.StopWalking()
 		Combat.Start()

@@ -56,6 +56,7 @@ QuickMeta CombatData
 		lua.error("CombatData is Write-Only!")
 	end
 	newindex
+		CSayF("Setting combat start value %s to %s",key,value)
 		Sys.Call("FLOW_COMBAT","DefineStartValue",key,value)
 	end
 end
@@ -70,6 +71,10 @@ Get Int MidY
 End
 Get Int Radius
 	Return math.max(Graphics.Width,Graphics.Height)
+End
+
+Set String Arena
+	CombatData.Arena = value
 End
 
 void PrepareCombat(string BossHead,string BossName,byte R,Byte G, Byte B)
@@ -132,12 +137,12 @@ void PrepareCombat(string BossHead,string BossName,byte R,Byte G, Byte B)
 			//FPS.WaitMinTicks()
 		LoopWhile Time>0 || BossPlaying
 		Loading.Show()
-		Sys.LoadNewState("FLOW_COMBAT","Script/Flow/FlowCombat.lbc")
+		Sys.LoadNewState("FLOW_COMBAT","Script/Flow/Flow_Combat.lbc")
 		If BossHead!=""
 			//ISSet("BOOL","FLOW_COMBAT","FlowCombat.Start.Music_DontPush",true)
 			CombatData.Music_DontPush = 1
 		End
-		Sys.Call("FLOW_COMBAT","FlowCombat.Start.StartPreparation")
+		Sys.Call("FLOW_COMBAT","StartPreparations")
 		CombatData.StartEvent=""	
 End
 	
