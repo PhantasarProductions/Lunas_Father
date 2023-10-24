@@ -1,0 +1,67 @@
+Module
+
+#use "libs/sci/GINIE"
+#use "libs/sci/Graphics"
+#use "libs/sci/InterVar"
+#use "libs/sci/statistician"
+
+#use "script/use/link/party"
+
+plua LoadedFoes
+plua FParty = Statistician.Obtain("LUNA_PARTY")
+
+plua minifnt = ObtainFont("MINI")
+
+Class Foe
+	ReadOnly String Tag
+	ReadOnly Int IDNum
+	ReadOnly Int CardAlphaNum
+	ReadOnly Var RawData
+	ReadOnly Var Char
+	ReadOnly Var Stat
+	Int X
+	Int Y
+		
+	Get Int HP
+		Return Char.Points.HP.Have
+	End
+	Set Int HP
+		Char.Points.HP.Have = Value
+	End
+	Get Int MaxHP
+		Return Char.Points.HP.Maximum
+	End
+	
+	Void Icon(int x, int y)
+		minifnt.Text(Chr(64-CardAlphaNum),x,y)
+	End
+	
+	Constructor(int _IDNum,_RawData)
+		IDNum = _IDNum
+		CardAlphaNum = (_IDNum % 26) + 1
+		Tag = sprintf("FOE_%03d",_IDNum)
+		RawData = _RawData
+		Char = FParty.NewChar(Tag,RawData.Value("METADATA","NAME"))
+		plua StatTag=sprintf("STAT%d",gint.Skill)
+		For st in Each(Party.BaseStats)
+			Char.Stat[st] = RawData.Value(StatTag,st)
+		End
+		Stat = Char.Stat
+		Char.Points.MaxCopy = "HP"
+		Char.Points.HP.Have = Char.Points.HP.Maximum
+	End
+End
+
+
+Void CompileFoe(int FID,FoeData)
+	string FoeFile; FoeFile=FoeData.Foe
+	string UFoeFile; UFoeFile=Upper(FoeFile)
+	string EntryFile; EntryFile = sprintf("Data/Combat/Foes/%s.ini",FoeFile)
+	LoadedFoes = LoadedFoes || {}
+	LoadedFoes[UFoeFile] = LoadedFoes[UFoeFile] || GINIE.Load(EntryFile,"FOE_"..UFoeFile)
+	PLUA Raw;Raw = LoadedFoes[UFoeFile]
+	Raw.Value("INGAME","FoeFile",FoeFile)
+	PLUA NF; NF = new Foe(FID,Raw)
+	NF.X = FoeData.X
+	NF.Y = FoeData.Y
+End
