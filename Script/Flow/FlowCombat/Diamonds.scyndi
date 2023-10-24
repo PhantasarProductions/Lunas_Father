@@ -1,2 +1,185 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
+// Version: 23.10.24
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
 Module
 
+#use "libs/sci/graphics"
+
+plua Scyndi = Lua.Scyndi
+Var Slots
+
+Class TDiamond
+	Static Var _Images
+	Int X
+	Int ToX
+	String _Type
+	Get String Type
+		return _Type
+	end
+	Set String Type
+		_Type=Upper(Value)
+	End
+	String ImgTag
+	
+	Get Var Img
+		_Images = _Images || {}
+		_Images[ImgTag] = _Images[ImgTag] || ObtainImage(ImgTag)
+		return _Images[ImgTag]
+	End
+		
+	String FighterTag
+	String Action
+	Table ActionTargets
+	Table ActionParameters
+	
+End
+
+Get Int MaxNum
+	If !Slots
+		Return 0
+	End
+	Int ret = 0
+	For i,_ in pairs(Slots)
+		ret = math.max(ret,i)
+	End
+	Return ret
+End
+
+Int InitialPos(int pos)
+	Int ret 
+	If (pos==0)
+		Return Graphics.width - 32
+	End
+	ret = Graphics.Width - (pos*32) - 50
+	Return ret
+End
+
+Bool Empty(int position)
+	If Slots[position]
+		Return true
+	End
+	Return Slots[position].Type=="BACK"
+End
+
+Var NewJoker(int position)
+	var Ret;Ret = New TDiamond()
+	Ret.ToX = InitialPos(position)
+	Ret.Type = "JOKER"
+	Ret.ImgTag = "COMBATDIAMOND_JOKER"
+	if Slots[position]
+		ret.X = Slots[position].X
+	End
+	Return ret
+End
+
+Var DeleteDiamond(int position)
+	var Ret;Ret = New TDiamond()
+	Ret.ToX = InitialPos(position)
+	Ret.Type = "BACK"
+	Ret.ImgTag = "COMBATDIAMOND_BACK"
+	if Slots[position]
+		ret.X = Slots[position].X
+	End
+	Return ret
+End
+
+bool Forced(string tag1,diamond,force)
+	If (!force) || (!diamond) || diamond.Type=="BACK"
+		Return False
+	End
+	string tag2;tag2=diamond.FighterTag
+	Switch force
+		Case True 1 "ALWAYS"
+			return True
+		Case 2 "ENEMYONLY"
+			plua f1;f1 = Scyndi.Class.Fighter.ByTag[tag1]
+			plua f2;f2 = Scyndi.Class.Fighter.ByTag[tag2]
+			If (!f1) || (!f2)
+				Return True
+			End
+			Return f1.Team!=f2.Team
+		Default
+			Lua.error("Unknown force type for diamond replacement !")
+	End
+End
+
+Var NewPlayer(int position,string tag,force)
+	var Ret;Ret = New TDiamond()
+	While (!Empty(position)) && (!Forced(tag,Slots[position],force))
+		position++
+	End
+	Ret.ToX = InitialPos(position)
+	Ret.Type = "PLAYER"
+	Ret.ImgTag = "COMBATDIAMOND_"..Upper(Tag)
+	Ret.FighterTag=Tag
+	if Slots[position]
+		ret.X = Slots[position].X
+	End
+	Return ret
+End
+
+Var NewFoe(int position,string tag,force)
+	var Ret;Ret = New TDiamond()
+	While (!Empty(position)) && (!Forced(tag,Slots[position],force))
+		position++
+	End
+	Ret.ToX = InitialPos(position)
+	Ret.Type = "FOE"
+	Ret.ImgTag = "COMBATDIAMOND_"..Upper(Tag)
+	Ret.FighterTag=Tag
+	if Slots[position]
+		ret.X = Slots[position].X
+	End
+	Return ret
+End
+
+Var NewAction(position,string Tag,string act,targets,force,parameters)
+	var Ret;Ret = New TDiamond()
+	While (!Empty(position)) && (!Forced(tag,Slots[position],force))
+		position++
+	End
+	Ret.ToX = InitialPos(position)
+	Ret.Type = "FOE"
+	Ret.ImgTag = "COMBATDIAMOND_EXTRA"
+	Ret.FighterTag=Tag
+	Ret.Action=Act
+	Ret.ActTargets=targets
+	Ret.ActParameters=Parameters
+	if Slots[position]
+		ret.X = Slots[position].X
+	End
+	Return ret
+End
