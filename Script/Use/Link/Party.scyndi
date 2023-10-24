@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 23.10.18
+// Version: 23.10.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -93,7 +93,7 @@ Get Int FrontSize
 End
 
 Bool InParty(String Ch)
-	_Party = _Party ||Statistician.CreateNew("LUNA_PARTY")
+	_Party = _Party || Statistician.CreateNew("LUNA_PARTY")
 	for i=0,5
 		if _Party.Party[i]==Ch
 			Return True
@@ -101,6 +101,17 @@ Bool InParty(String Ch)
 	End
 	Return False
 End
+
+Int PosInParty(String Ch)
+	_Party = _Party || Statistician.CreateNew("LUNA_PARTY")
+	for i=0,5
+		if _Party.Party[i]==Ch
+			Return i
+		End
+	End
+	Return -1
+End
+
 
 Void Recover()
 	Sys.Call("SUB_PARTY","Recover")
