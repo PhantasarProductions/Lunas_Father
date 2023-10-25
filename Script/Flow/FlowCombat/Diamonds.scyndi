@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,10 +36,14 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
 #use "libs/sci/graphics"
+
+#use "Script/Use/General/Dice"
 
 plua Scyndi = Lua.Scyndi
 Var Slots
+Var Order
 
 Class TDiamond
 	Static Var _Images
@@ -88,7 +92,7 @@ Int InitialPos(int pos)
 End
 
 Bool Empty(int position)
-	If Slots[position]
+	If !Slots[position]
 		Return true
 	End
 	Return Slots[position].Type=="BACK"
@@ -117,7 +121,7 @@ Var DeleteDiamond(int position)
 End
 
 bool Forced(string tag1,diamond,force)
-	If (!force) || (!diamond) || diamond.Type=="BACK"
+	If (!force) || (!diamond) || diamond.Type=="BACK" || diamond.Type=="JOKER"
 		Return False
 	End
 	string tag2;tag2=diamond.FighterTag
@@ -131,6 +135,8 @@ bool Forced(string tag1,diamond,force)
 				Return True
 			End
 			Return f1.Team!=f2.Team
+		Case 0 "NONE"
+			Return False
 		Default
 			Lua.error("Unknown force type for diamond replacement !")
 	End
@@ -178,8 +184,37 @@ Var NewAction(position,string Tag,string act,targets,force,parameters)
 	Ret.Action=Act
 	Ret.ActTargets=targets
 	Ret.ActParameters=Parameters
-	if Slots[position]
+	If Slots[position]
 		ret.X = Slots[position].X
 	End
 	Return ret
+End
+
+Void OrderFighterDiamonds()
+	plua f; f = Scyndi.Class.Fighter
+	plua tmp = {}
+	Order = {}
+	for k,v in pairs(f.ByTag)
+		tmp[sprintf("%05d::%03d::%03d::%03d",99999-v.Stat.Agility,Dice.D100,Dice.D100,Dice.D100)]=v
+		// Now only Agility should matter. Those 3d100 rolls are merely for tie breaking.
+	end
+	for k,v in spairs(tmp)
+		plua p=Len(Order)+1
+		v.DOrder = p
+		Order[Len(Order)] = v
+		CSayF("Ordering '%s' => '%s' onto position #%d",k,v.Tag,p)
+	end
+End
+
+Void InitialDiamonds()
+	for i,ch in ipairs(Order)
+		switch ch.Team
+			case "Hero"
+				NewPlayer((i+1)*4,ch.Tag,ch.Force)
+			case "Foe"
+				NewFoe((i+1)*4,ch.Tag,ch.Force)
+			default
+				Lua.error("InitialDiamonds: Unknown team ("..ch.Team..")")
+		end
+	end
 End

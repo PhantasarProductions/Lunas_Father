@@ -153,3 +153,8 @@ End
 Void Boss(string Head,string Name, Byte EFR=255, Byte EFG=0, Byte EFB=0)
 	PrepareCombat(Head,Name,EFR,EFG,EFB)
 End
+
+Void Start()
+	Sys.Call("FLOW_COMBAT","StartCombat")
+	GoToFlow("COMBAT")
+End

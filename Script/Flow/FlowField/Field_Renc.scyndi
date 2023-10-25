@@ -204,7 +204,7 @@ module
 		End
 		Lua.assert(Len(Enemies)>0,"I cannot run a Random Encounter without any monsters set")
 		For i=1,num 
-			CombatData.NewEnemy = Enemies[math.random(1,Len(Enemies))]
+			CombatData.NewEnemy = Enemies[math.random(0,Len(Enemies)-1)]
 		end
 		Player.StopWalking()
 		Combat.Start()
@@ -295,9 +295,10 @@ module
 				End
 			end
 		End
+		MapHasEnc=Len(Enemies)>0
 		For l In Each(__LayData.Categories)
 			NEnc[l] = __LayData.IntValue(l,"MAXENCOUNTERS")
-			If Upper(__LayData.Value(l,"BLOCKENCOUNTER"))=="TRUE"
+			If Upper(__LayData.Value(l,"BLOCKENCOUNTER"))=="TRUE" || (!MapHasEnc)
 				NEnc[l] = False
 				CSayF("Layer %s has no encounters!",l)
 			Else

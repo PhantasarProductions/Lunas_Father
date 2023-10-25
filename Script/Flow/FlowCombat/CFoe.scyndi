@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,6 +36,7 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
 #use "libs/sci/GINIE"
 #use "libs/sci/Graphics"
 #use "libs/sci/InterVar"
@@ -54,7 +55,16 @@ Class Foe
 	ReadOnly Int CardAlphaNum
 	ReadOnly Var RawData
 	ReadOnly Var Char
-	ReadOnly Var Stat
+	ReadOnly Var Stat	
+	ReadOnly String Team = "Foe"
+		
+	Get Int Force
+		// Actual code will come later when skills have been added
+		return 0
+	End
+		
+	Int DOrder
+		
 	Int X
 	Int Y
 		
@@ -75,21 +85,23 @@ Class Foe
 	Constructor(int _IDNum,_RawData)
 		IDNum = _IDNum
 		CardAlphaNum = (_IDNum % 26) + 1
-		Tag = sprintf("FOE_%03d",_IDNum)
+		Tag = sprintf("FOE_%03d",_IDNum); CSayF("Created Foe record '%s' at %d",Tag,IDNum)
 		RawData = _RawData
-		Char = FParty.NewChar(Tag,RawData.Value("METADATA","NAME"))
+		FParty.NewChar(Tag,RawData.Value("METADATA","NAME"))
+		Char = FParty.Char[Tag]
 		plua StatTag=sprintf("STAT%d",gint.Skill)
 		For st in Each(Party.BaseStats)
-			Char.Stat[st] = RawData.Value(StatTag,st)
+			Char.Stat[st] = RawData.IntValue(StatTag,st)
 		End
 		Stat = Char.Stat
-		Char.Points.MaxCopy = "HP"
+		Char.Points.HP.MaxCopy = "HP"
 		Char.Points.HP.Have = Char.Points.HP.Maximum
 	End
 End
 
 
 Void CompileFoe(int FID,FoeData)
+	CSayF("Compiling Foe #%d",FID)
 	string FoeFile; FoeFile=FoeData.Foe
 	string UFoeFile; UFoeFile=Upper(FoeFile)
 	string EntryFile; EntryFile = sprintf("Data/Combat/Foes/%s.ini",FoeFile)
@@ -100,4 +112,5 @@ Void CompileFoe(int FID,FoeData)
 	PLUA NF; NF = new Foe(FID,Raw)
 	NF.X = FoeData.X
 	NF.Y = FoeData.Y
+	Lua.Scyndi.Class.Fighter.ByTag[NF.Tag] = NF
 End

@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Right_Clicked_Party.scyndi
-// Version: 23.10.18
+// Version: 23.10.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,10 +37,18 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/SString"
 
 #use "Script/Use/Link/Menu"
+#use "Script/Use/Link/Map"
 
 Global Void Right_Clicked_Party(int idx,string chtag)
+	if StripDir(Upper(Kthura.LastLoadedMap))=="AAA_CAMPSITE"
+		Map.Leader="Myrah"
+	Else
+		Map.Leader=chtag
+	End
 End
 
 Global Void Left_Clicked_Party(int idx,string chtag)

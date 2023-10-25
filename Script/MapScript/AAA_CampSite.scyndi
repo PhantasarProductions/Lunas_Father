@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.18
+// version: 23.10.24
 // End License Information
 Script
 
@@ -83,6 +83,7 @@ End
 	
 
 Global Void ZA_EnterCampSite()
+	Map.Leader = "Myrah"
 	For ch in Each(Girls)
 		CSayF("In party %s => %s",Ch,Party.InParty(Ch))
 		If !Party.InParty(Ch)

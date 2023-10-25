@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,6 +36,7 @@
 // End License Information
 Module
 
+#use "libs/sci/sys"
 #use "libs/sci/GINIE"
 #use "libs/sci/Graphics"
 #use "libs/sci/InterVar"
@@ -47,25 +48,76 @@ const Int MidY = Graphics.Height div 2
 const Int OndH = MidY - 150
 const Int OndS = OndH div 4
 
+plua HParty = Statistician.Obtain("LUNA_PARTY")
+
 Class Hero
 	ReadOnly String Tag
 	ReadOnly Var Char
 	ReadOnly Var Stat
+	ReadOnly String Team = "Hero"
+		
+	Get Int Force
+		// Actual code will come later when skills have been added
+		return 0
+	End
+		
+	Int DOrder
 	
 	Get Int PartyPos
 		Return Party.PosInParty(Tag)
 	End
 	
+	Bool AltCoords = False
+	int _AltX
+	Int _AltY
+	
 	Get Int X
+		If AltCoords
+			Return _AltX
+		End
 		return math.floor((Graphics.Width*0.75)+(PartyPos*20))
 	End
 	
+	Set Int X
+		AltCoords=True
+		_AltX=Value
+	End
+	
 	Get Int Y
+		If AltCoords
+			Return _AltY
+		End
 		return math.floor(MidY+(OndS*PartyPos))
+	End
+	
+	Set Int _Y
+		AltCoords=True
+		_AltY=Value
+	End
+	
+	Get Int HP
+		Return Char.Points.HP.Have
+	End
+	Set Int HP
+		Char.Points.HP.Have = Value
+	End
+	Get Int MaxHP
+		Return Char.Points.HP.Maximum
+	End
+	
+	Void Icon(int x, int y)
 	End
 	
 	Constructor(string _Tag)
 		Tag = _Tag
+		Char = HParty.Char[_Tag]
+		Stat = Char.Stat
 	End
 	
+End
+
+Void CompileHero(string Tag)
+	CSayF("Compiling hero: %s",Tag)
+	plua NH; NH = New Hero(Tag)
+	Lua.Scyndi.Class.Fighter.ByTag[Tag] = NH
 End

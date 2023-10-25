@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Fighter.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -34,7 +34,10 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // End License Information
+
 Module
+
+#use "Libs/SCI/Sys"
 
 Var Team
 Var ByTag
@@ -45,6 +48,7 @@ Void IndexFighters()
 	Team.Hero = {}
 	Team.Foe  = {}
 	For Tag,Fghtr in Pairs(ByTag)
+		CSayF("Indexing> %s to team %s",Tag,Fghtr.Team)
 		Team[Fghtr.Team][Tag]=Fghtr
 	End
 	DrawOrder = {}

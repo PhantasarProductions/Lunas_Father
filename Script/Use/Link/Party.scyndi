@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -71,6 +71,11 @@ Void StartSet()
 	For i=0,_Party.Party.Size-1
 		CSayF("Spot %d => %s",i,_Party.Party[i])
 	End
+End
+
+String Char(int i,nch)
+	if nch; _Party.Party[i]=nch; end
+	Return _Party.Party[i]
 End
 
 int GetLevel(string ch)

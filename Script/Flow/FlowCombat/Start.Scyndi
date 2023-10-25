@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Start.Scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,7 +36,10 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
+
+#use "script/use/link/party"
 
 plua _Combat
 plua _Start
@@ -63,6 +66,7 @@ Set String NewEnemy
 	LastFoe.X = X
 	LastFoe.Y = Y
 	LastFoe.Foe = Value
+	Enemies[Len(Enemies)]=LastFoe
 End
 
 global void StartPreparations()
@@ -75,4 +79,27 @@ global void DefineStartValue(Key,Value)
 	_Combat = _Combat || Lua.Scyndi.Globals.Flow_Combat
 	_Start = _Start || Lua.Scyndi.Globals.Flow_Combat.Start
 	_Start[key] = Value
+End
+
+global void StartCombat()
+	
+	// Init 
+	_Combat.Fighter.ByTag = {}
+	_Combat.Diamonds.Slots = {}
+	
+	// Compile Foes
+	For i,f In iPairs(Enemies)
+		Lua.Scyndi.Class.CFoe.CompileFoe(i,f)
+	End
+	
+	// Compile Heroes
+	For i = 0,Party.FullSize-1
+		Lua.Scyndi.Class.CHero.CompileHero(Party.Char(i))
+	End
+	
+	// Index
+	_Combat.Fighter.IndexFighters()
+	_Combat.Diamonds.OrderFighterDiamonds()
+	_Combat.Diamonds.InitialDiamonds()
+	
 End
