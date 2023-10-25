@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Combat.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -56,8 +56,14 @@ QuickMeta CombatData
 		lua.error("CombatData is Write-Only!")
 	end
 	newindex
-		CSayF("Setting combat start value %s to %s",key,value)
-		Sys.Call("FLOW_COMBAT","DefineStartValue",key,value)
+		switch Upper(key)
+			case "MUSIC"
+				CSayF("Music for combat: %s",value)
+				Sys.Call("FLOW_COMBAT","DefineStartValue","CMusic",value)
+			default
+				CSayF("Setting combat start value %s to %s",key,value)
+				Sys.Call("FLOW_COMBAT","DefineStartValue",key,value)
+		end
 	end
 end
 
