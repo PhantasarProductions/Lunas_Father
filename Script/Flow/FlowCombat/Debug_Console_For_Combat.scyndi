@@ -40,7 +40,7 @@ Module
 
 
 Global Void CMBT_DEBUG_DIAMONDS()
-	for i,v in pairs(Lua.Scyndi.Class.Diamonds.Slots)
+	for i,v in spairs(Lua.Scyndi.Class.Diamonds.Slots)
 		printf("Slot #%05d> X=%d; ToX=%d; Type=%s; ",i,v.X,v.ToX,v.Type)
 		switch(v.Type)
 			case "PLAYER" "FOE"
