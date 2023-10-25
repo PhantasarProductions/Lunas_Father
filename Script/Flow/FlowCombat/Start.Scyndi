@@ -39,7 +39,10 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 
+#use "Libs/Music"
+
 #use "script/use/link/party"
+#use "script/use/link/mini"
 
 plua _Combat
 plua _Start
@@ -53,7 +56,7 @@ End
 
 
 String Arena = ""
-String Music = ""
+String CMusic = ""
 String Lose = "ERROR"
 String StartEvent = ""
 Var LastFoe = Nil
@@ -102,4 +105,14 @@ global void StartCombat()
 	_Combat.Diamonds.OrderFighterDiamonds()
 	_Combat.Diamonds.InitialDiamonds()
 	
+	// Music (best to be last)
+	switch Upper(CMusic)
+		case "*NOCHANGE*"
+			// Do nothing
+		default
+			Music.Play(CMusic)
+	End
+	
+	// Let's get ready to rumble
+	Mini.WriteLn("The battle has begun!",255,0,0)
 End
