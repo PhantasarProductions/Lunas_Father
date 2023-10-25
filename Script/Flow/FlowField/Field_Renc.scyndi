@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Renc.scyndi
-// Version: 23.10.24
+// Version: 23.10.25
 // Copyright (C) 2021, 2022, 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -192,16 +192,17 @@ module
 		Combat.Prepare()
 		CombatData.Arena = arena
 		CombatData.Lose = "Respawn"
-		pLua aet = Kthura.MetaData.AltEncounterTune
-		If aet && aet!=""
-			if ! suffixed(lower(aet),".ogg") 
-				aet=sprintf("%s.ogg",aet) //aet += ".ogg" 
-			end 
-			CSayF("= Alt combat tune: %s (%s)",aet,Lua.type(aet))
-			CombatData.Music = aet
-		Else
-			CombatData.Music = "*RANDOM"
-		End
+		//pLua aet = Kthura.MetaData.AltEncounterTune
+		//If aet && aet!=""
+		//	if ! suffixed(lower(aet),".ogg") 
+		//		aet=sprintf("%s.ogg",aet) //aet += ".ogg" 
+		//	end 
+		//	CSayF("= Alt combat tune: %s (%s)",aet,Lua.type(aet))
+		//	CombatData.Music = aet
+		//Else
+		//	CombatData.Music = "*RANDOM"
+		//End
+		CombatData.Music = RencData.Music
 		Lua.assert(Len(Enemies)>0,"I cannot run a Random Encounter without any monsters set")
 		For i=1,num 
 			CombatData.NewEnemy = Enemies[math.random(0,Len(Enemies)-1)]
