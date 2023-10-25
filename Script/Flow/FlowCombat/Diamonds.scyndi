@@ -47,7 +47,7 @@ Var Order
 
 Class TDiamond
 	Static Var _Images
-	Int X
+	Int X = -1000
 	Int ToX
 	String _Type
 	Get String Type
@@ -85,9 +85,9 @@ End
 Int InitialPos(int pos)
 	Int ret 
 	If (pos==0)
-		Return Graphics.width - 32
+		Return Graphics.width - 64
 	End
-	ret = Graphics.Width - (pos*32) - 50
+	ret = Graphics.Width - (pos*32) - 127
 	Return ret
 End
 
@@ -106,6 +106,7 @@ Var NewJoker(int position)
 	if Slots[position]
 		ret.X = Slots[position].X
 	End
+	Slots[position]=ret
 	Return ret
 End
 
@@ -117,6 +118,7 @@ Var DeleteDiamond(int position)
 	if Slots[position]
 		ret.X = Slots[position].X
 	End
+	Slots[position]=ret
 	Return ret
 End
 
@@ -149,11 +151,12 @@ Var NewPlayer(int position,string tag,force)
 	End
 	Ret.ToX = InitialPos(position)
 	Ret.Type = "PLAYER"
-	Ret.ImgTag = "COMBATDIAMOND_"..Upper(Tag)
+	Ret.ImgTag = "COMBATDIAMOND_HERO_"..Upper(Tag)
 	Ret.FighterTag=Tag
 	if Slots[position]
 		ret.X = Slots[position].X
 	End
+	Slots[position]=ret
 	Return ret
 End
 
@@ -164,11 +167,12 @@ Var NewFoe(int position,string tag,force)
 	End
 	Ret.ToX = InitialPos(position)
 	Ret.Type = "FOE"
-	Ret.ImgTag = "COMBATDIAMOND_"..Upper(Tag)
+	Ret.ImgTag = sprintf("COMBATDIAMOND_FOE_%02d",Lua.Scyndi.Class.Fighter.ByTag[Tag].CardAlphaNum)
 	Ret.FighterTag=Tag
 	if Slots[position]
 		ret.X = Slots[position].X
 	End
+	Slots[position]=ret
 	Return ret
 End
 
@@ -207,14 +211,30 @@ Void OrderFighterDiamonds()
 End
 
 Void InitialDiamonds()
-	for i,ch in ipairs(Order)
-		switch ch.Team
-			case "Hero"
+	For i=100,2000,100
+		Slots[i] = NewJoker(i)
+	End
+	For i,ch in ipairs(Order)
+		Switch ch.Team
+			Case "Hero"
 				NewPlayer((i+1)*4,ch.Tag,ch.Force)
-			case "Foe"
+			Case "Foe"
 				NewFoe((i+1)*4,ch.Tag,ch.Force)
-			default
+			Default
 				Lua.error("InitialDiamonds: Unknown team ("..ch.Team..")")
-		end
-	end
+		End
+	End
+End
+
+Void DrawDiamonds()
+
+	For i=0,25
+		Slots[i] = Slots[i] || DeleteDiamond(i)
+		plua CS;CS = Slots[i]
+		If (CS.X<CS.ToX)
+			CS.X = math.min(CS.ToX,CS.X+math.max(1,math.ceil((CS.ToX-CS.X)/10)))
+		End
+		SetColor(255,255,255)
+		CS.IMG.Draw(CS.X,5)
+	End
 End
