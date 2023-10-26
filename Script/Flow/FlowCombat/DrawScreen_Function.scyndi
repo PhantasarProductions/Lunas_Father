@@ -52,5 +52,6 @@ Global String InputChar=""
 Global Void DrawScreen()
 	_Combat.Arena.Current.Draw()
 	_Combat.Diamonds.DrawDiamonds()
+	_Combat.Fighter.DrawFighters()
 	Party.BoxesCombat(InputChar)
 End
