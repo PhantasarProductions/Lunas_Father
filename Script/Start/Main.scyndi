@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.10.24
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -142,6 +142,7 @@ Init
 	NAud("Audio/General/ChaChing.ogg","KASSA")
 	NAud("Audio/General/Jingle.wav","JINGLE")
 	NAud("Audio/General/Buzz.ogg","BUZZ")
+	NAud("Audio/Combat/RemoveDiamond.wav","COMBAT_REMOVE")
 	ItemCount = Len(LoadItems)
 End
 
