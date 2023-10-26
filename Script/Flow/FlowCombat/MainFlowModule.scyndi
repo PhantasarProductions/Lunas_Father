@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/MainFlowModule.scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -69,6 +69,9 @@ Global Void MainFlow()
 	
 	// Actual action
 	Lua.Scyndi.Globals.DrawScreen()
+	
+	// Stage
+	Stage.Current.Cycle()
 	
 	// Last
 	MultiPointer.Draw()
