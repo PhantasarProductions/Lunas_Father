@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,11 +37,20 @@
 Module
 
 #use "Script/Flow/FlowCombat/Stage"
+#use "Script/Flow/FlowCombat/Diamonds"
 
 Void Arrive()
 End
 
 Void Cycle()
+	If !Diamonds.Slots[0]
+		Diamonds.RemoveFirst()
+		Return
+	End
+	Switch Diamonds.Slots[0].Type
+		case "BACK" "EMPTY"
+			Diamonds.RemoveFirst()
+	End
 End
 
 
