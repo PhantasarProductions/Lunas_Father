@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,6 +37,7 @@
 Module
 
 #use "libs/sci/sys"
+#use "libs/sci/JCR6"
 #use "libs/sci/GINIE"
 #use "libs/sci/Graphics"
 #use "libs/sci/InterVar"
@@ -46,7 +47,7 @@ Module
 
 const Int MidY = Graphics.Height div 2
 const Int OndH = MidY - 150
-const Int OndS = OndH div 4
+const Int OndS = (OndH div 4)
 
 plua HParty = Statistician.Obtain("LUNA_PARTY")
 
@@ -55,6 +56,11 @@ Class Hero
 	ReadOnly Var Char
 	ReadOnly Var Stat
 	ReadOnly String Team = "Hero"
+	ReadOnly Bool ShowHPBar = True
+	ReadOnly Var Images
+		
+	String Pose = "IDLE"
+	Int Frame = 0
 		
 	Get Int Force
 		// Actual code will come later when skills have been added
@@ -75,7 +81,7 @@ Class Hero
 		If AltCoords
 			Return _AltX
 		End
-		return math.floor((Graphics.Width*0.75)+(PartyPos*20))
+		return math.floor((Graphics.Width*0.70)+(PartyPos*64))
 	End
 	
 	Set Int X
@@ -87,10 +93,10 @@ Class Hero
 		If AltCoords
 			Return _AltY
 		End
-		return math.floor(MidY+(OndS*PartyPos))
+		return math.floor(MidY+(OndS*(PartyPos+1)))
 	End
 	
-	Set Int _Y
+	Set Int Y
 		AltCoords=True
 		_AltY=Value
 	End
@@ -105,13 +111,51 @@ Class Hero
 		Return Char.Points.HP.Maximum
 	End
 	
+	Get Bool TargetablePlayer
+		Return True
+	End
+	
+	Get Bool TargetableFoe
+		Return HP>0
+	End
+
+	
 	Void Icon(int x, int y)
+	End
+	
+	Get Var GetImage
+		// GFX/Combat/Heroes/Myrah.Idle.png
+		String GITag; GITag = sprintf("COMBAT::HERO::%s::%s",Tag,Pose)
+		if !Images[GITag]
+			string PNG; PNG = sprintf("GFX/Combat/Heroes/%s.%s.png",Tag,Pose)
+			string BUN; BUN = sprintf("GFX/Combat/Heroes/%s.%s.jpbf",Tag,Pose)
+			if JCR6.EntryExists(PNG)
+				CSayF("Loading Hero Combat Image: %s",PNG)
+				Images[GITag] = LoadNewImage(PNG,GITag)
+			else
+				CSayF("Loading Hero Combat Image Bundle: %s",BUN)
+				Images[GITag] = LoadNewImage(BUN,GITag)
+			end
+			Images[GITag].Hot(Images[GITag].Width div 2,Images[GITag].Height)
+		end
+		Return Images[GITag]
+	End
+		
+	
+	Void Draw()
+		pLua Img; Img = GetImage
+		Frame=math.min(Frame,Img.Frames-1)
+		SetScale(1.5)
+		Img.Draw(X,Y,Frame)
+		SetScale(1)
+		// TODO: Target information when applicable
 	End
 	
 	Constructor(string _Tag)
 		Tag = _Tag
 		Char = HParty.Char[_Tag]
 		Stat = Char.Stat
+		Images = {}
 	End
 	
 End
