@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage.scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -39,6 +39,8 @@ Module
 #use "libs/sci/sys"
 
 plua _truestages
+plua _currenttag
+plua _current
 
 QuickMeta Stages
 	index
@@ -59,6 +61,23 @@ void Register(string key,_Stage)
 	lua.assert(!_truestages[key],"There is already a stage named: "..key)
 	_truestages[key]=_Stage
 	CSayF("Stage registered: %s",key)
+End
+
+Get String CurrentTag
+	return _currenttag || ""
+end
+
+Set String CurrentTag
+	_currenttag = upper(Value)
+	_current=Stages[Value]
+	_current.Arrive()
+End
+
+Get Var Current
+	If !_current
+		CurrentTag="IDLE"
+	End
+	Return _current
 End
 
 Init
