@@ -38,6 +38,12 @@ Module
 
 Bool Always(); Return True; End
 
+Void Guard()
+End
+
+Void Items()
+End
+
 Class PIMI
 	ReadOnly Delegate Allow
 	ReadOnly Delegate Act
@@ -48,4 +54,30 @@ Class PIMI
 		Act = _Act; assert(Act,"PIMI without action delegate")
 		Caption = _Caption
 	End
+End
+
+Class PIM
+	Static Var Char = {}
+	ReadOnly String CharTag
+	
+	Var Items
+	
+	Void Add(string _c,_act,_all)
+		Items[Len(Items)] = New PIMI(_c,_act,_all)
+	End
+	
+	Void ItemGuard()
+		Add("Items",Items,Always)
+		Add("Guard",Guard,Always)
+	End
+		
+	Constructor(string _T)
+		CharTag=_T
+		Items = {}
+	End
+End
+
+Var CreatePIM(string ch)
+	Char[ch]=new PIM(ch)
+	return Char[ch]
 End
