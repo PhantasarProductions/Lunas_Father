@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,6 +38,7 @@ Module
 
 #use "Libs/SCI/Sys"
 #use "libs/sci/GINIE"
+#use "libs/sci/SString"
 #use "libs/sci/Graphics"
 #use "libs/sci/InterVar"
 #use "libs/sci/statistician"
@@ -48,6 +49,20 @@ plua LoadedFoes
 plua FParty = Statistician.Obtain("LUNA_PARTY")
 
 plua minifnt = ObtainFont("MINI")
+	
+Const Int DrawTypes_Neg = 0
+Const Int DrawTypes_Flp = 1
+Const Int DrawTypes_Ani = 2
+
+plua FoeImageRegister 
+
+plua FoeImage(string pic)
+	plua T;T = "COMBAT_FOE::"..Upper(pic)
+	FoeImageRegister = FoeImageRegister || {}
+	FoeImageRegister[T] = FoeImageRegister[T] || LoadNewImage(Pic,T)
+	Return FoeImageRegister[T]
+End
+	
 
 Class Foe
 	ReadOnly String Tag
@@ -57,6 +72,51 @@ Class Foe
 	ReadOnly Var Char
 	ReadOnly Var Stat	
 	ReadOnly String Team = "Foe"
+		
+	Get Int DrawType
+		Return RawData.IntValue("MetaData","DrawType")
+	End
+	
+	Get Int Red; Return RawData.IntValue("Color","Red"); end
+	Get Int Green; Return RawData.IntValue("Color","Green"); end
+	Get Int Blue; Return RawData.IntValue("Color","Blue"); end
+	
+	Bool Gone = False
+	Bool Killed = False 
+		
+	Get Bool Drawable
+		// TODO: When removed due to kill there must also be a thing here
+		Return !Gone
+	End
+		
+	Get Bool TargetablePlayer
+		Return HP>0 && (!Gone)
+	End
+	
+	Get Bool TargetableFoe
+		Return TargetablePlayer
+	End
+		
+	Get String FoeFile
+		return RawData.Value("INGAME","FoeFile")
+	End
+	
+	Get String ImageFile
+		Return RawData.Value("MetaData","Image")
+	End
+		
+	Get Bool ShowHPBar
+		Switch gint.skill
+			case 1
+				return true
+			case 2
+				return gint[sprintf("Killed.%s",FoeFile)]>0
+			case 3
+				return false
+			default
+				return false
+		end
+	End
 		
 	Get Int Force
 		// Actual code will come later when skills have been added
@@ -77,6 +137,36 @@ Class Foe
 	Get Int MaxHP
 		Return Char.Points.HP.Maximum
 	End
+	
+	Bool Flipped = False
+	Int Frame = 0
+	Var Images
+	
+	Void Draw()		
+		If !Drawable
+			Return
+		End
+		RawData.NewValue("XIMG","Scale","1000")
+		SetScale(RawData.IntValue("XIMG","Scale")/1000)
+		SetColor(Red,Green,Blue)
+		Switch DrawType
+			Case 0
+				Images = Images || {}
+				Images[true] = Images[true] || FoeImage(StripExt(ImageFile)..".Negative.png")
+				Images[false] = Images[false] || FoeImage(ImageFile)
+				Images[Flipped].Draw(X,Y)
+			Case 1
+				Images = Images || {}
+				Images[true] = Images[true] || FoeImage(StripExt(ImageFile)..".Flipped.png")
+				Images[false] = Images[false] || FoeImage(ImageFile)
+				Images[Flipped].Draw(X,Y)
+			case 3
+				Lua.error("Fully animated not yet supported")
+			default
+				Lua.error(sprintf("DrawType #4 not (yet?) known",DrawType))
+		End
+	End
+
 	
 	Void Icon(int x, int y)
 		minifnt.Text(Chr(64-CardAlphaNum),x,y)
