@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,6 +37,7 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "libs/sci/audio"
 #use "libs/sci/graphics"
 
 #use "Script/Use/General/Dice"
@@ -44,6 +45,8 @@ Module
 plua Scyndi = Lua.Scyndi
 Var Slots
 Var Order
+
+Var Audio_Remove = Audio.Obtain("COMBAT_REMOVE")
 
 Class TDiamond
 	Static Var _Images
@@ -227,7 +230,6 @@ Void InitialDiamonds()
 End
 
 Void DrawDiamonds()
-
 	For i=0,25
 		Slots[i] = Slots[i] || DeleteDiamond(i)
 		plua CS;CS = Slots[i]
@@ -238,3 +240,16 @@ Void DrawDiamonds()
 		CS.IMG.Draw(CS.X,5)
 	End
 End
+
+plua popchannel={[true]=1,[false]=2}
+plua poptoggle
+
+Void RemoveFirst()
+	poptoggle = !poptoggle
+	Audio_Remove.Play(popchannel[poptoggle])
+	plua max;max = MaxNum
+	for i=0,max
+		Slots[i]=Slots[i+1]
+		if Slots[i]; Slots[i].ToX = InitialPos(i); end
+	end
+end
