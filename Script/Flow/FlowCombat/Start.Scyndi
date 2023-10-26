@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Start.Scyndi
-// Version: 23.10.25
+// Version: 23.10.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -104,6 +104,12 @@ global void StartCombat()
 	_Combat.Fighter.IndexFighters()
 	_Combat.Diamonds.OrderFighterDiamonds()
 	_Combat.Diamonds.InitialDiamonds()
+	
+	// Arena
+	_Combat.Arena.Load(Arena)
+	
+	// Stage Reset
+	_Combat.Stage.CurrentTag = "IDLE"
 	
 	// Music (best to be last)
 	switch Upper(CMusic)
