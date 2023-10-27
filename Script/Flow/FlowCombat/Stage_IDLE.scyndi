@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.10.26
+// Version: 23.10.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -50,6 +50,8 @@ Void Cycle()
 	Switch Diamonds.Slots[0].Type
 		case "BACK" "EMPTY"
 			Diamonds.RemoveFirst()
+		case "PLAYER" "HERO"
+			Stage.CurrentTag = "PMM"
 	End
 End
 
