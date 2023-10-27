@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/PIMI/PIMI_Class.scyndi
-// Version: 23.10.26
+// Version: 23.10.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,23 +36,44 @@
 // End License Information
 Module
 
+#use "libs/sci/sys"
+#use "libs/sci/graphics"
+
+#use "libs/rosetta"
+
+#use "script/use/link/mini"
+#use "Script/flow/flowcombat/fighter"
+
+plua Scyndi = Lua.Scyndi
+
 Bool Always(); Return True; End
 
-Void Guard()
+Void Guard(string chTag)	
+	Mini.Write(chTag,255,180,0)
+	Mini.WriteLn(" is guarding",0,180,255)
+	Scyndi.Class.Fighter.ByTag[chTag].Guarding=True
+	Scyndi.Class.Diamonds.RemoveFirst()
+	Scyndi.Class.Stage.CurrentTag="IDLE"
 End
 
-Void Items()
+Void ItemsAct()
 End
 
+// Player Input Menu Item
 Class PIMI
 	ReadOnly Delegate Allow
 	ReadOnly Delegate Act
-	ReadOnly String Caption
+	ReadOnly String TrueCaption
+		
+	Get String Caption
+		return Rosetta.GetStr("PIMI",TrueCaption)
+	End
 	
-	Constructor(string _caption,delegate _Act,delegate _Allow)
+	Constructor(string _caption, _Act, _Allow)
+		CSayF("PIMI CONSTRUCTOR> %s -> %s, %s",_caption,_act,_allow)
 		Allow = _Allow || Always
-		Act = _Act; assert(Act,"PIMI without action delegate")
-		Caption = _Caption
+		Act = _Act; assert(Act,"PIMI without action delegate (".._caption..")")
+		TrueCaption = _Caption
 	End
 End
 
@@ -61,23 +82,28 @@ Class PIM
 	ReadOnly String CharTag
 	
 	Var Items
+	Var Portrait
 	
 	Void Add(string _c,_act,_all)
+		CSayF("PIMI: %s> %s -> %s, %s",CharTag,_c,_act,_all)
 		Items[Len(Items)] = New PIMI(_c,_act,_all)
 	End
 	
-	Void ItemGuard()
-		Add("Items",Items,Always)
-		Add("Guard",Guard,Always)
+	Void ItemsGuard()
+		Self.Add("Items",ItemsAct,Always)
+		Self.Add("Guard",Guard,Always)
 	End
 		
 	Constructor(string _T)
 		CharTag=_T
 		Items = {}
+		Portrait = LoadNewImage(sprintf("GFX/Portraits/%s/General.png",_T),sprintf("COMBAT_PORTRAIT_%s",Upper(_T)))
+		Portrait.Hot(0,Portrait.Height)
+		// TODO: Rachel's hair will require some adjustments
 	End
 End
 
-Var CreatePIM(string ch)
-	Char[ch]=new PIM(ch)
-	return Char[ch]
+Global Var CreatePIM(string ch)
+	PIM.Char[ch]=new PIM(ch)
+	return PIM.Char[ch]
 End
