@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.10.26
+// Version: 23.10.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -185,7 +185,7 @@ Var NewAction(position,string Tag,string act,targets,force,parameters)
 		position++
 	End
 	Ret.ToX = InitialPos(position)
-	Ret.Type = "FOE"
+	Ret.Type = "ACTION"
 	Ret.ImgTag = "COMBATDIAMOND_EXTRA"
 	Ret.FighterTag=Tag
 	Ret.Action=Act
