@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.26
+// version: 23.10.27
 // End License Information
 Module
 
@@ -53,9 +53,10 @@ End
 Bool AllowAlchemy(); Return gbool.AllowFrancisAlchemy; End
 Bool AllowForce(); Return gbool.AllowFrancisForce; End
 
+//Global Void Init_PIMI_Francis()
 Init
-	plua _Francis = PIM.CreatePIM("Francis")
-	_Francis.Add("Shoot",Shoot)
+	plua _Francis = CreatePIM("Francis")
+	_Francis.Add("Attack",Shoot)
 	_Francis.Add("Alchemy",Alchemy,AllowAlchemy)
 	_Francis.Add("Force",Force,AllowForce)
 	_Francis.ItemsGuard()
