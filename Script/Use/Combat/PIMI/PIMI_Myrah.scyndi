@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.26
+// version: 23.10.27
 // End License Information
 Module
 
@@ -53,8 +53,10 @@ End
 Bool AllowMagic(); Return gbool.AllowMyrahMagic; End
 Bool AllowForce(); Return gbool.AllowMyrahForce; End
 
+//Global Void Init_PIMI_Myrah()
 Init
-	plua _Myrah = PIM.CreatePIM("Myrah")
+	plua _Myrah = CreatePIM("Myrah")
+	print("Shoot",Shoot)
 	_Myrah.Add("Shoot",Shoot)
 	_Myrah.Add("Magic",Magic,AllowMagic)
 	_Myrah.Add("Force",Force,AllowForce)
