@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.26
+// Version: 23.10.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -61,7 +61,9 @@ Class Hero
 		
 	String Pose = "IDLE"
 	Int Frame = 0
-		
+	
+	Bool Guarding = False
+	
 	Get Int Force
 		// Actual code will come later when skills have been added
 		return 0
