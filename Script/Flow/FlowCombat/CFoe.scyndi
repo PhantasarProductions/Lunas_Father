@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.10.27
+// Version: 23.10.28
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -60,6 +60,7 @@ plua FoeImage(string pic)
 	plua T;T = "COMBAT_FOE::"..Upper(pic)
 	FoeImageRegister = FoeImageRegister || {}
 	FoeImageRegister[T] = FoeImageRegister[T] || LoadNewImage(Pic,T)
+	FoeImageRegister[T].Hot(FoeImageRegister[T].Width div 2, FoeImageRegister[T].Height)
 	Return FoeImageRegister[T]
 End
 	
@@ -162,12 +163,38 @@ Class Foe
 				Images[false] = Images[false] || FoeImage(ImageFile)
 				Images[Flipped].Draw(X,Y)
 			case 3
+				Images[false] = Images[false] || FoeImage(ImageFile)
 				Lua.error("Fully animated not yet supported")
 			default
 				Lua.error(sprintf("DrawType #4 not (yet?) known",DrawType))
 		End
 	End
+	
+	Get Number Scale
+		return RawData.IntValue("XIMG","Scale")/1000
+	End
+	
+	Get Int W
+		Images[false] = Images[false] || FoeImage(ImageFile)
+		return math.floor(Images[false].Width * Scale)
+	End
+	
+	Get Int H
+		return math.floor(Images[false].Height * Scale)
+	End
+	
+	Get Int TarX
+		return X - (W div 2)
+	End
+	
+	Get Int TarY
+		return Y - H
+	End
 
+	Get String Name
+		Return RawData.Value("MetaData","Name")
+	End
+	
 	
 	Void Icon(int x, int y)
 		minifnt.Text(Chr(64-CardAlphaNum),x,y)

@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.27
+// Version: 23.10.28
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -75,6 +75,10 @@ Class Hero
 		Return Party.PosInParty(Tag)
 	End
 	
+	Get String Name
+		Return Char.Data.Name
+	End
+	
 	Bool AltCoords = False
 	int _AltX
 	Int _AltY
@@ -102,6 +106,7 @@ Class Hero
 		AltCoords=True
 		_AltY=Value
 	End
+			
 	
 	Get Int HP
 		Return Char.Points.HP.Have
@@ -143,7 +148,22 @@ Class Hero
 		Return Images[GITag]
 	End
 		
+	Get Int W
+		return math.floor(GetImage.Width * 1.5)
+	End
 	
+	Get Int H
+		return math.floor(GetImage.Height * 1.5)
+	End
+	
+	Get Int TarX
+		return X - (W div 2)
+	End
+	
+	Get Int TarY
+		return Y - H
+	End
+
 	Void Draw()
 		pLua Img; Img = GetImage
 		Frame=math.min(Frame,Img.Frames-1)

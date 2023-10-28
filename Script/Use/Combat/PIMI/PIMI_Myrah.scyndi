@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.27
+// version: 23.10.28
 // End License Information
 Module
 
@@ -40,8 +40,11 @@ Module
 #use "libs/sci/intervar"
 
 #use "Script/Use/Combat/PIMI/PIMI_Class"
+#use "Script/Flow/FlowCombat/Action_Class"
 
 Void Shoot()
+	plua a = new Action("Myrah","HERO_MYRAH_SHOOT")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Myrah",a)
 End
 
 Void Magic()

@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.27
+// version: 23.10.28
 // End License Information
 Module
 
@@ -41,7 +41,7 @@ Module
 
 #use "Script/Use/Combat/PIMI/PIMI_Class"
 
-Void Shoot()
+Void Attack()
 End
 
 Void Alchemy()
@@ -56,7 +56,7 @@ Bool AllowForce(); Return gbool.AllowFrancisForce; End
 //Global Void Init_PIMI_Francis()
 Init
 	plua _Francis = CreatePIM("Francis")
-	_Francis.Add("Attack",Shoot)
+	_Francis.Add("Attack",Attack)
 	_Francis.Add("Alchemy",Alchemy,AllowAlchemy)
 	_Francis.Add("Force",Force,AllowForce)
 	_Francis.ItemsGuard()

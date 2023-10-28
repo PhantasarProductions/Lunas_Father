@@ -1,1 +1,139 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectTarget.scyndi
+// Version: 23.10.28
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+
+Module
+
+#use "libs/sci/sys"
+#use "libs/sci/audio"
+#use "libs/sci/events"
+#use "libs/sci/graphics"
+
+#use "libs/Rosetta"
+#use "libs/multipointer"
+
+#use "Script/Flow/FlowCombat/Stage"
+#use "Script/Flow/FlowCombat/Diamonds"
+#use "Script/Flow/FlowCombat/Fighter"
+
+#use "script/use/combat/pimi/pimi_class"
+
+Const Var BFnt = ObtainFont("BASE")
+Const Var MFnt = ObtainFont("MINI")
+
+String CharTag
+plua WorkChar
+plua WorkAct
+
+Void Arrive()
+End
+
+Void Cycle()
+	If MR
+		Stage.CurrentTag = "IDLE"
+	End
+	SetColor(255,180,0)
+	BFnt.Text(WorkChar.Name,5,65)
+	SetColor(255,255,255)
 	BFnt.Text(WorkAct.Act.Name,10+BFnt.Width(WorkChar.Name),65)
+	MFnt.Text(Rosetta.GetStr("TARGET",WorkAct.Target),5,95)
+	plua Targets; Targets = {}
+	For TKey,TChr in sPairs(Fighter.ByTag)
+		Bool AddMe=False
+		Switch WorkAct.Target
+			Case "OS"
+				AddMe = TKey==CharTag
+			Case "EV"
+				AddMe = True
+			Case "AF" 
+				AddMe = MX<Graphics.Width div 2 && TChr.Team=="Foe"
+				AddMe = MX>Graphics.Width div 2 && TChr.Team=="Hero"
+				If WorkAct.Act.Discrimminate
+					AddMe = AddMe && TChr.Team=="Foe"
+				End
+			Case "AA" 
+				AddMe = MX<Graphics.Width div 2 && TChr.Team=="Foe"
+				AddMe = MX>Graphics.Width div 2 && TChr.Team=="Hero"
+				If WorkAct.Act.Discrimminate
+					AddMe = AddMe && TChr.Team=="Hero"
+				End
+			Case "1A"
+				AddMe = Len(Targets) == 0
+				If WorkAct.Act.Discrimminate
+					AddMe = AddMe && TChr.Team=="Hero"
+				End
+				AddMe = AddMe && MX > TChr.TarX && MY > TChr.TarY && MX < TChr.TarX + TChr.W && MY < TChr.TarY + TChr.H
+			Case "1F"
+				AddMe = Len(Targets) == 0
+				If WorkAct.Act.Discrimminate
+					AddMe = AddMe && TChr.Team=="Foe"
+				End
+				AddMe = AddMe && MX > TChr.TarX && MY > TChr.TarY && MX < TChr.TarX + TChr.W && MY < TChr.TarY + TChr.H
+			Default
+				Lua.error("Unknown target type: " ..WorkAct.Target)
+		End
+		If AddMe
+			plua ax
+			plua ay
+			plua bw; bw = 20 + BFnt.Width(TChr.Name)
+			ax,ay = TChr.X+5,TChr.TarY+(TChr.H div 2)
+			ax = math.max(0,math.min( ax, (Graphics.Width-5)-bw))
+			Targets[len(Targets)] = TChr			
+			TChr.Icon(ax,ay)
+			SetColor(255,255,255)
+			BFnt.Text(TChr.Name,ax+20,ay)
+			If TChr.ShowHPBar
+				plua ratio; ratio = TChr.HP / TChr.MaxHP
+				plua g;g = math.floor(ratio*255)
+				SetColor(100,100,100)
+				Rect(ax,ay+10,bw,5)
+				SetColor(255-g,g,0)
+				Rect(ax,ay+10,math.floor(bw*ratio),5)
+			End
+		End
+	End	
+End
+
+Global Void PlayerSelectTarget(string ch,_Act)
+	WorkAct          = _Act
+	CharTag          = ch
+	WorkChar         = Fighter.ByTag[ch]
+	Stage.CurrentTag = "PTAR"
+End
+
+Init
+	Stage.Register("PTAR",Stage_PlayerSelectTarget)
+End

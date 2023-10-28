@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Action_Class.Scyndi
-// Version: 23.10.27
+// Version: 23.10.28
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -50,6 +50,14 @@ Class Action
 	
 	Get Var Executor
 		Return Fighter.ByTag[ExeTag]
+	End
+	
+	Get String Target
+		if Extended
+			return Act.Extended
+		else
+			return Act.Regular
+		end
 	End
 	
 		

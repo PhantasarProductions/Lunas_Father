@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/UseIAA.scyndi
-// Version: 23.10.18
+// Version: 23.10.28
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -78,6 +78,8 @@ var IAA_IDX(s,string key)
 					return idat.IntValue(rtag,key)
 				case "BOOLEAN"
 					return idat.BoolValue(rtag,key)
+				case ""
+					Lua.error("Non-existent IAA field (GET) (%s",key)
 				default
 					Lua.error(sprintf("Keytype error in IAA (GET) (%s %s)",invclass.Value("Class",Upper(key)),key))
 			End
