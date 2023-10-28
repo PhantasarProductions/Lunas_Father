@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.10.27
+// Version: 23.10.28
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -125,6 +125,10 @@ Init
 	for ch In Each(NewArray("MYRAH","FRANCIS","SCYNDI","AZIELLA","RACHEL"))
 		NIMG(sprintf("GFX/COMBAT/DIAMONDS/HERO_%s.PNG",ch),sprintf("COMBATDIAMOND_HERO_%s",ch))
 	End
+	For ch In Each(NewArray("MYRAH","FRANCIS"))
+		NIMG(sprintf("GFX/Combat/PlayerIcons/%s.png",ch),sprintf("COMBATHEROICON_%s",Upper(ch)))
+	End
+
 	For i,c In Pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
 		 NIMG(sprintf("GFX/Portraits/%s/General.png",c),sprintf("PORTRET_%s",upper(c)))
 	End
