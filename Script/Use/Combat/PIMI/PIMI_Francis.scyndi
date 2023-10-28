@@ -42,6 +42,8 @@ Module
 #use "Script/Use/Combat/PIMI/PIMI_Class"
 
 Void Attack()
+	plua a = new Action("Francis","HERO_FRANCIS_ATTACK")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Francis",a)
 End
 
 Void Alchemy()
