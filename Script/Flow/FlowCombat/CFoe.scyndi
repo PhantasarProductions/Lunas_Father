@@ -196,8 +196,9 @@ Class Foe
 	End
 	
 	
-	Void Icon(int x, int y)
-		minifnt.Text(Chr(64-CardAlphaNum),x,y)
+	Void Icon(int _x, int _y)
+		SetColor(255,0,0)
+		minifnt.Text(Chr(64+CardAlphaNum),_x,_y)
 	End
 	
 	Constructor(int _IDNum,_RawData)
