@@ -64,6 +64,10 @@ End
 Void Cycle()
 	If MR
 		Stage.CurrentTag = "IDLE"
+		Return
+	End
+	If ML
+		Lua.Scyndi.Globals.Execute(CharTag,WorkAct)
 	End
 	SetColor(255,180,0)
 	BFnt.Text(WorkChar.Name,5,65)
@@ -108,20 +112,20 @@ Void Cycle()
 		If AddMe
 			plua ax
 			plua ay
-			plua bw; bw = 20 + BFnt.Width(TChr.Name)
+			plua bw; bw = 20 + MFnt.Width(TChr.Name)
 			ax,ay = TChr.X+5,TChr.TarY+(TChr.H div 2)
 			ax = math.max(0,math.min( ax, (Graphics.Width-5)-bw))
 			Targets[len(Targets)] = TChr			
 			TChr.Icon(ax,ay)
 			SetColor(255,255,255)
-			BFnt.Text(TChr.Name,ax+20,ay)
+			MFnt.Text(TChr.Name,ax+20,ay)
 			If TChr.ShowHPBar
 				plua ratio; ratio = TChr.HP / TChr.MaxHP
 				plua g;g = math.floor(ratio*255)
 				SetColor(100,100,100)
-				Rect(ax,ay+10,bw,5)
+				Rect(ax,ay+15,bw,5)
 				SetColor(255-g,g,0)
-				Rect(ax,ay+10,math.floor(bw*ratio),5)
+				Rect(ax,ay+15,math.floor(bw*ratio),5)
 			End
 		End
 	End	
