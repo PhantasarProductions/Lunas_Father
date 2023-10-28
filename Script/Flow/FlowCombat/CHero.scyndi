@@ -58,6 +58,7 @@ Class Hero
 	ReadOnly String Team = "Hero"
 	ReadOnly Bool ShowHPBar = True
 	ReadOnly Var Images
+	ReadOnly Var ImgIcon
 		
 	String Pose = "IDLE"
 	Int Frame = 0
@@ -127,7 +128,8 @@ Class Hero
 	End
 
 	
-	Void Icon(int x, int y)
+	Void Icon(int icx, int icy)
+		ImgIcon.Draw(icx,icy+10)
 	End
 	
 	Get Var GetImage
@@ -178,6 +180,8 @@ Class Hero
 		Char = HParty.Char[_Tag]
 		Stat = Char.Stat
 		Images = {}
+		ImgIcon = ObtainImage(sprintf("COMBATHEROICON_%s",Upper(_Tag)))
+		ImgIcon.Hot(0,ImgIcon.Height)
 	End
 	
 End
