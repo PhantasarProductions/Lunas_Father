@@ -1,0 +1,1 @@
+	BFnt.Text(WorkAct.Act.Name,10+BFnt.Width(WorkChar.Name),65)
