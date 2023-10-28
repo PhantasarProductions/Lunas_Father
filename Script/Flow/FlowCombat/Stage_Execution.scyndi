@@ -1,0 +1,88 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
+// Version: 23.10.28
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+
+#use "Script/Flow/FlowCombat/Stage"
+#use "Script/Flow/FlowCombat/Diamonds"
+
+Const Var Fnt = ObtainFont("BASE")
+
+Const Int YMsgBar = 70
+Const Int HMsgBar = 40
+Get Int MYMsgBar; Return HMsgBar Div 2; End
+
+Const Var HeadBack = ObtainImage("BOX_BACK")
+Const Int HeadCDReset = 250
+Int HeadCD
+
+String ChrTag
+Var Char
+Var Act
+
+Void ExeHead()
+	If HeadCD>0
+		SetColor(255,255,255)
+		HeadCD--
+		HeadBack.Tile(0,YMsgBar,Graphics.Width,HMsgBar)
+		Diamonds.Slots[0].Img.Draw(5,YMsgBar+MYMsgBar-(Diamonds.Slots[0].Img.Height div 2))
+		SetColor(255,180,0)
+		Fnt.Text(Act.Act.Name, Graphics.Width div 2, YMsgBar+MYMsgBar, 2, 2)
+		SetColor(255,255,255)
+	End
+End
+
+Void Arrive()
+	HeadCD = HeadCDReset
+End
+
+Void Cycle()
+	ExeHead()
+End
+
+Global Void Execute(string _Chr,_Act)
+	Chrtag = _Chr
+	Char = Lua.Scyndi.Class.Fighter.ByTag[_Chr]
+	Act = _Act
+	Stage.CurrentTag = "Execution"
+End
+
+Init 
+	Stage.Register("Execution",Stage_Execution)
+End
