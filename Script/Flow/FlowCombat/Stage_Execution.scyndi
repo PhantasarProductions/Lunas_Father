@@ -51,11 +51,96 @@ Get Int MYMsgBar; Return HMsgBar Div 2; End
 Const Var HeadBack = ObtainImage("BOX_BACK")
 Const Int HeadCDReset = 250
 Int HeadCD
+Int ShortWaitReset = 5
+Int ShortWait 
 
 String ChrTag
 Var Char
 Var Act
 
+Get Var Executor
+	Return Char
+End
+
+
+
+#region "Execution Stages"
+Delegate _CES // Current Execution Stage
+Table _CESTABLE = {}
+Get Var CES
+	Return _CES
+End
+Set Var CES
+	switch Lua.type(Value)
+		case "string"
+			Value=upper(Value)
+			Lua.assert(_CESTABLE[Value],"No Execution Stage Registered as: "..Value)
+			_CES=_CESTable[Value]
+		case "function"
+			_CES=Value
+		default
+			Lua.error("CES may not be of type "..Lua.type(Value).." ("..Lua.tostring(Value)..")")
+	End
+End
+Void EsReg(string K,func)
+	_CESTABLE[upper(k)]=func
+End
+	
+Void ES_ShortWait()
+	ShortWait--
+	If ShortWait<=0
+		CES="JumpToTarget"
+	End
+End
+
+Table ToTarget = nil
+Int ToTargetFrame
+Const Int ToTargetMaxFrames = 25
+Void ES_JumpToTarget()
+	// print("Jump to enemy = ",Act.Act.JumpToEnemy," num of targets = ",Len(Act.Targets))
+	If (!Act.Act.JumpToEnemy) || Len(Act.Targets)!=1
+		CES="Pose"
+		Return
+	End
+	if (!ToTarget)
+		// Bresenham be damned!
+		Var Tar;Tar=Act.Targets[0]
+		Int DisX; DisX = Tar.AtkX-Executor.X
+		Int DisY; DisY = Tar.Y-Executor.Y
+		Number IncX;IncX = DisX / ToTargetMaxFrames
+		Number IncY;IncY = DisY / ToTargetMaxFrames
+		ToTarget = {}
+		For i=0,ToTargetMaxFrames-1
+			ToTarget[i]={}
+			ToTarget[i].X = Executor.X+(Math.floor(IncX*i))
+			ToTarget[i].Y = Executor.Y+(Math.floor(IncY*i))
+		End
+		ToTarget[ToTargetmaxFrames] = Tar.AtkX
+		ToTarget[ToTargetmaxFrames] = Tar.Y
+		ToTargetFrame = -1
+		Return
+	End
+	ToTargetFrame++
+	If (ToTargetFrame>=ToTargetMaxFrames)
+		CES="Pose"
+		Return
+	End
+	Executor.X = ToTarget[ToTargetFrame].X
+	Executor.Y = ToTarget[ToTargetFrame].Y
+End
+
+Void ES_Pose()
+	if Executor.DoPose(Act.Act.Pose)
+		CES="Effect"
+	End
+End
+
+void ES_Effect()
+End
+	
+#endregion
+
+#region "Execution Manager"
 Void ExeHead()
 	If HeadCD>0
 		SetColor(255,255,255)
@@ -74,15 +159,25 @@ End
 
 Void Cycle()
 	ExeHead()
+	CES()
 End
+#endregion
 
+#region "Execution init"
 Global Void Execute(string _Chr,_Act)
 	Chrtag = _Chr
 	Char = Lua.Scyndi.Class.Fighter.ByTag[_Chr]
 	Act = _Act
 	Stage.CurrentTag = "Execution"
+	ShortWait = ShortWaitReset
+	CES=ES_ShortWait
+	ToTarget = nil
 End
 
 Init 
 	Stage.Register("Execution",Stage_Execution)
+	EsReg("JumpToTarget",ES_JumpToTarget)
+	EsReg("Pose",ES_Pose)
+	EsReg("Effect",ES_Effect)
 End
+#endregion

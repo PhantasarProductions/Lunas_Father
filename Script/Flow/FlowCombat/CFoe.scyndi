@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.10.28
+// Version: 23.10.29
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -127,8 +127,36 @@ Class Foe
 		
 	Int DOrder
 		
-	Int X
-	Int Y
+	Bool AltCoords = False
+	int _AltX
+	Int _AltY
+	int _X
+	int _Y
+	
+	Get Int X
+		If AltCoords
+			Return _AltX
+		End
+		return _X
+	End
+	
+	Set Int X
+		AltCoords=True
+		_AltX=Value
+	End
+	
+	Get Int Y
+		If AltCoords
+			Return _AltY
+		End
+		return _Y
+	End
+	
+	Set Int Y
+		AltCoords=True
+		_AltY=Value
+	End
+	
 		
 	Get Int HP
 		Return Char.Points.HP.Have
@@ -143,6 +171,10 @@ Class Foe
 	Bool Flipped = False
 	Int Frame = 0
 	Var Images
+	
+	Bool DoPose(string pose)
+		Return True
+	End
 	
 	Void Draw()		
 		If !Drawable
@@ -190,15 +222,20 @@ Class Foe
 	Get Int TarY
 		return Y - H
 	End
+	
+	Get Int AtkX 
+		Return X+W
+	End
+
 
 	Get String Name
 		Return RawData.Value("MetaData","Name")
 	End
 	
 	
-	Void Icon(int _x, int _y)
+	Void Icon(int _ix, int _iy)
 		SetColor(255,0,0)
-		minifnt.Text(Chr(64+CardAlphaNum),_x,_y)
+		minifnt.Text(Chr(64+CardAlphaNum),_ix,_iy)
 	End
 	
 	Constructor(int _IDNum,_RawData)
@@ -229,7 +266,7 @@ Void CompileFoe(int FID,FoeData)
 	PLUA Raw;Raw = LoadedFoes[UFoeFile]
 	Raw.Value("INGAME","FoeFile",FoeFile)
 	PLUA NF; NF = new Foe(FID,Raw)
-	NF.X = FoeData.X
-	NF.Y = FoeData.Y
+	NF._X = FoeData.X
+	NF._Y = FoeData.Y
 	Lua.Scyndi.Class.Fighter.ByTag[NF.Tag] = NF
 End

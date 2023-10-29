@@ -1,0 +1,18 @@
+Module
+// All effect scripts MUST be prefixed with "EFFECT_" 
+
+
+// Will take on all targets in once (I need this for Rachel's blunderbus
+// but perhaps some other effects are possible here too.
+// This is void, as returning values won't work on multiple targets.
+// Effect script will have to denote misses by itself.
+Void WideEffect(Executor,Targets,String Param)
+End
+
+
+// Effect for single target (when there are multiple targets this function
+// will be called once for each target). 'True' denotes the effect was 
+// succesful and 'False' will denote a miss.
+Bool Effect(Executor,Target,String Param)
+	Return True
+End

@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.28
+// Version: 23.10.29
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -164,6 +164,21 @@ Class Hero
 	
 	Get Int TarY
 		return Y - H
+	End
+	
+	Get Int AtkX 
+		Return X-W
+	End
+	
+	const Int PoseSkip = 4
+	Int PoseSkipI = 0
+	Bool DoPose(string __pose)
+		Pose = __Pose
+		PoseSkipI = (PoseSkipI+1)%PoseSkip
+		if PoseSkipI==0
+			Frame++
+		End
+		Return Frame>=GetImage.Frames
 	End
 
 	Void Draw()

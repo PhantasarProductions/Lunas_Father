@@ -1,0 +1,9 @@
+Module
+
+#use "Script/Use/General/Dice"
+
+// If no specific function is set, this one will be called.
+// Return value must be the damage caused.
+Int ATKBonus(executor,target,string param)
+	return Dice.D6
+End

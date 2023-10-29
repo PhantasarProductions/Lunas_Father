@@ -1,0 +1,4 @@
+Module
+
+Void KillEffect(Executor,Target,string param)
+End

@@ -66,9 +66,6 @@ Void Cycle()
 		Stage.CurrentTag = "IDLE"
 		Return
 	End
-	If ML
-		Lua.Scyndi.Globals.Execute(CharTag,WorkAct)
-	End
 	SetColor(255,180,0)
 	BFnt.Text(WorkChar.Name,5,65)
 	SetColor(255,255,255)
@@ -127,8 +124,13 @@ Void Cycle()
 				SetColor(255-g,g,0)
 				Rect(ax,ay+15,math.floor(bw*ratio),5)
 			End
-		End
+		End		
 	End	
+	If ML
+		WorkAct.Targets=Targets
+		Lua.Scyndi.Globals.Execute(CharTag,WorkAct)
+	End
+
 End
 
 Global Void PlayerSelectTarget(string ch,_Act)

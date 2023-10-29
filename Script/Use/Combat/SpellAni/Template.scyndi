@@ -1,0 +1,16 @@
+Module
+// Note! All filenames of SpellAni scripts MUST be prefixed with "SPELLANI_" 
+
+// Will be called when SpellAni is started
+// To make sure all data the SpellAni needs is properly 
+// dealt with
+Void Start(Executor,Targets,string Param)
+End
+
+// Well be called while the SpellAni is running
+// When 'False' is returned the system will assume the SpellAni has ended
+// and move on the next execution stage
+Bool Cycle()
+	Return False
+End
+
