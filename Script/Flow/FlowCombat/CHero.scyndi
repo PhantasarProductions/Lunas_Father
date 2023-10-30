@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.29
+// Version: 23.10.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -188,6 +188,18 @@ Class Hero
 		Img.Draw(X,Y,Frame)
 		SetScale(1)
 		// TODO: Target information when applicable
+	End
+	
+	Int Resistance(string Element)
+		// To do: Alter resistance when equipping skills
+		return 0
+	End
+	
+	Number NResistance(string Element)
+		number Ret			  
+		Ret = Self.Resistance(Element)
+		Ret = Ret / 100
+		Return Ret
 	End
 	
 	Constructor(string _Tag)
