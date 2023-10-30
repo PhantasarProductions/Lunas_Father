@@ -1,0 +1,97 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/AttackBonus/ATKBONUS_Attack_Hero.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.10.30
+// End License Information
+
+Module
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/General/Dice"
+#use "Script/Flow/FlowCombat/CharMsg"
+
+// If no specific function is set, this one will be called.
+// Return value must be the damage caused.
+Int ATKBonus(executor,target,Act,string param="")
+	Int Ret = 0
+	For Die in Each(Dice.Types)
+		For i=1,executor.char["D"..die]
+			Ret = Ret + Dice["d"..die]
+		End
+	End
+	Return Ret
+End
+
+Int Myrah(executor,target,Act,string param="")
+	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
+	If Dice.D100<12 - ( gint.skill * 3)
+		Ret = Ret * Dice.D6
+		CharMsg("Myrah","Critical",255,180,90)
+	End
+	Return Ret
+End
+
+Int Francis(executor,target,Act,string param="") 
+	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
+	If Dice.D100<8 - ( gint.skill * 2)
+		Ret = Ret * Dice.D6
+		CharMsg("Myrah","Critical",255,180,90)
+	End
+End
+
+Int Luna(executor,target,Act,string param="") 
+	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
+	If Dice.D100<30 / gint.skill
+		Ret = Ret * Dice.D6
+		CharMsg("Myrah","Critical",255,180,90)
+	End
+End
+
+Int Scyndi(executor,target,Act,string param="") 
+	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
+	If Dice.D100<4 - ( gint.skill )
+		Ret = Ret * Dice.D6
+		CharMsg("Myrah","Critical",255,180,90)
+	End
+End
+
+Int Aziella(executor,target,Act,string param="")
+	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
+	If Dice.D100<15 - ( gint.skill * 3)
+		Ret = Ret * Dice.D6
+		CharMsg("Myrah","Critical",255,180,90)
+	End
+	Return Ret
+End

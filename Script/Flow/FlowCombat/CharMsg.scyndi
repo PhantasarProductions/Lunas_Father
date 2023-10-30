@@ -1,5 +1,5 @@
 // License Information:
-// src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
+// src/Scripts/Script/Flow/FlowCombat/CharMsg.scyndi
 // Version: 23.10.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
@@ -36,86 +36,97 @@
 // End License Information
 Module
 
-#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Graphics"
 
-#use "Script/Use/General/Dice"
+#use "Script/Flow/FlowCombat/Fighter"
 
-#use "Script/Flow/FlowCombat/CharMsg"
+ReadOnly Var Fnt = ObtainFont("MINI")
+plua register
 
-Bool Effect_Hit(executor,target,act)
-	Int Accuracy = Dice.D20
-	Int Evasion = Dice.D20
-	if Accuracy==20
-		Return True
+Init
+	register = {}
+End
+	
+
+Class TCharMsg
+	Int X
+	Int y
+	Readonly Int StartY
+	ReadOnly Byte R
+	ReadOnly Byte G
+	ReadOnly Byte B
+	Int Alpha = 255
+	Int ACD = 20
+	ReadOnly String Message
+	ReadOnly String Tag	
+	
+	Void Draw(noalterations)
+		SetColor(R,G,B,math.max(0,Alpha))
+		if ALpha==255
+			Fnt.Dark(Message,X,Y,2,1)
+		Else
+			Fnt.Text(Message,X,Y,2,1)
+		End
+		If noalterations
+			Return
+		End
+		Y--
+		If ACD==0
+			Alpha--			
+		Else
+			ACD--
+		End			
 	End
-	if Evasion==20
-		Return False
+	
+	Constructor(Executor,String _Message,Byte _R,Byte _G,Byte _B)
+		R = _R
+		G = _G
+		B = _B
+		Message = _Message
+		X = Executor.X
+		Y = Executor.Y - 10
+		StartY = Y
+		Tag = Executor.Tag
 	End
-	Int Acc; Acc = Executor.Char.Stat[Act.Act.Accuracy_Stat]
-	Int Eva; Eva = Target.Char.Stat[Act.Act.Evasion_Stat ]
-	Return Acc+Accuracy>=Eva+Evasion	
+	
+End
+	
+
+Void Put(ch,msg,Byte R=255, Byte G=255, Byte B=255)
+	plua ncm
+	plua tag
+	Switch Lua.type(ch)
+		Case "string"
+			ncm = New TCharMessage(Fighter.ByTag[ch],Lua.tostring(msg),R,G,B)
+			tag = ch
+		Default
+			ncm = New TCharMessage(ch,Lua.tostring(msg),R,G,B)
+			tag = ch.Tag
+	End
+	register[tag] = register[tag] || {}
+	plua ereg;ereg = register[tag]
+	ereg[len(ereg)] = ncm
 End
 
-Bool Effect_Attack(executor,target,act)
-	// Start with 0
-	Int Atk = 0
-	
-	// Base cacluation
-	If Act.Act.StatBase
-		Atk = math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk-Target.Char.Stat[Act.Act.AtkStatDef]])
-	End
-	
-	// Plus
-	Atk = Atk + Act.Act.ATKPlus
-	
-	// Dice
-	For Die in Each(Dice.Types)
-		For i=1,Act.Act[sprintf("AtkD%d",Die)]
-			Atk = Atk + Dice[sprintf("d%d",die)]
-			// A normal multiplication count won't do. Then it will only roll one die an multiply its result and that is NOT what we want!
+Void Draw(noalterations)
+	For _,reglist in pairs(register)
+		Bool Allow = True
+		Table Kill = {}
+		For i,cm in spairs(reglist)
+			If Allow
+				cm.Draw()
+				Allow = cm.StartY - cm.Y > 16
+			End
+			If cm.Alpha<=0
+				Kill[len(Kill)]=i
+			End
+		End
+		For i in Each(Kill)
+			reglist[i]=nil
 		End
 	End
-	
-	// Any Additional Scripts
-	If Act.Act.AtkUserBonusScript!=""
-		Lua.Scyndi.Use(sprintf("Script/Use/Combat/AttackBonus/ATKBONUS_%s",Act.Act.AtkUserBonusScript))
-		plua atks;atks = Lua.Scyndi.Class["ATKBONUS_"..Act.Act.AtkUserBonusScript]
-		plua atkf;atkf = Act.Act.AtkUserBonusFunc 
-		If atkf==""; atkf="AtkBonus"; end
-		atks[atkf](executor,target,act)
-	End
-	
-	// Elemental Resistances
-	
-	// Substract Damage From Target's HP
-	
-	// If this is a killer blow, are there any kill scripts?
-	
-	// If any damage was done, return True
-	Return Atk>0
 End
 
-
-
-
-Void Go(executor,target,act)
-	Bool Hit = False
-	
-	if Effect_Hit(executor,target,act)
-		// Cure status if applicable (must be first)
-	
-		// Handle attacks
-		Hit = Effect_Attack(executor,target,act) || Hit
-		
-		// Scripts
-	
-		// Cause status if applicable (must be last)
-	End
-	
-	// When it's all done, but no effects took place show "miss"
-	If !Hit
-		CharMsg.Put(target,"Miss",127,127,127)
-	End
-	
-	// All done!
+Void Clear()
+	register = {}
 End
