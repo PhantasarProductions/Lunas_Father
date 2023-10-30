@@ -85,11 +85,38 @@ Bool Effect_Attack(executor,target,act)
 		atks[atkf](executor,target,act)
 	End
 	
-	// Elemental Resistances
+	// Elemental Resistances and showing damage
+	if Target.Team=="Foe" && Target.Fatal(Act.Act.AtkElement)
+		Atk = Target.MaxHP
+		CharMsg.Put(Target,"Death",255,0,0)
+	Else
+		int modifier; modifier = math.floor(Atk*Target.NResistance(Act.Act.AtkElement))
+		Atk = Atk - Modifier
+		if Target.Resistance(Act.Act.AtkElement)==100
+			CharMsg.Put("Target","Immune",255,180,0)
+		elseif Target.Resistance(Act.Act.AtkElement)>0
+			CharMsg.Put("Target",Atk,255,180,0)
+		elseif Target.Resistance(Act.Act.AtkElement)==0
+			CharMsg.Put("Target",Atk,255,255,255)
+		else
+			CharMsg.Put("Target",Atk,255,0,0)
+		End
+		If Target.Guarding && Atk>0
+			Atk = math.max(1, Atk div 2)
+		End
+	End
+			
 	
 	// Substract Damage From Target's HP
+	Target.HP = Target.HP - Atk
 	
 	// If this is a killer blow, are there any kill scripts?
+	If Target.HP<=0
+		if Act.Act.KillScript!=""
+			Lua.Scyndi.Use("Script/Use/Combat/Kill/KILL_"..Act.Act.KillScript)
+			Lua.Scyndi.Class["KILL_..Act.Act.KillScript"].KillEffect(Executor,Target,Act.Act.KillParam)
+		End
+	End
 	
 	// If any damage was done, return True
 	Return Atk>0
