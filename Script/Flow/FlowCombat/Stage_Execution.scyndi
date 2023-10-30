@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
-// Version: 23.10.29
+// Version: 23.10.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -136,6 +136,13 @@ Void ES_Pose()
 End
 
 void ES_Effect()
+	// TODO: Wide effect script! (Needed for Rachel's Blunderbus)
+	For Target in Each(Act.Targets) 
+		Lua.Scyndi.Class.Effect.Go(Executor,target,act)
+	End
+	Executor.AltCoords = False
+	Diamonds.RemoveFirst()
+	Stage.CurrentTag = "IDLE"
 End
 	
 #endregion
