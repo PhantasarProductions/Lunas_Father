@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Fighter.scyndi
-// Version: 23.10.26
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -44,6 +44,22 @@ Module
 Var Team
 Var ByTag
 Var DrawOrder
+
+
+QuickMeta Defeated
+	NewIndex
+		Lua.error("All elements of Class \"Defeated\" are READ-ONLY!")
+	End
+	
+	Index
+		Bool ret = True
+		For _,f In Pairs(Team[Key])
+			ret = ret && f.Defeated
+		End
+		Return ret
+	End
+End
+
 
 Void IndexFighters()
 	Team = {}
