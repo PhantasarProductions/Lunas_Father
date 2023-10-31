@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.10.27
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,13 +36,23 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
+
 #use "Script/Flow/FlowCombat/Stage"
+#use "Script/Flow/FlowCombat/Fighter"
 #use "Script/Flow/FlowCombat/Diamonds"
 
 Void Arrive()
 End
 
 Void Cycle()
+	If Defeated.Hero
+		Stage.CurrentTag="WIPED"
+		Return
+	ElseIf Defeated.Foe
+		Stage.CurrentTag="VICTORY"
+		Return
+	End
 	If !Diamonds.Slots[0]
 		Diamonds.RemoveFirst()
 		Return
@@ -52,7 +62,12 @@ Void Cycle()
 			Diamonds.RemoveFirst()
 		case "PLAYER" "HERO"
 			Stage.CurrentTag = "PMM"
+		Case "FOE" "ENEMY"
+			print("\x1b[31mENEMY TURN, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()
+		Case "JOKER"
+			print("\x1b[31mJOKER, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()			
 	End
+	Diamonds.Check()
 End
 
 
