@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.18
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -367,14 +367,15 @@ Global Void MiniShow()
 	End
 End
 
+
 Global Void WriteMini(string msg,byte r,byte g,byte b)
 	if !MiniLineFirst
 		MiniLineFirst = New MiniText()
 		MiniLineCurrent = MiniLineFirst
 		MiniLineCurrent.X = 1
 	else
-		int MX
-		MX = MX + MiniFnt.Width(MiniLineCurrent.Msg) //+ MiniFnt.Width(" ")
+		Int MX
+		MX = MiniLineCurrent.X + MiniFnt.Width(MiniLineCurrent.Msg) //+ MiniFnt.Width(" ")
 		MiniLineCurrent.Next = New MiniText()
 		MiniLineCurrent = MiniLineCurrent.Next
 		MiniLineCurrent.X = MX
