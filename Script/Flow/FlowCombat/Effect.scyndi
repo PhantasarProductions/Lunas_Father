@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.10.30
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,6 +36,7 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/General/Dice"
@@ -61,8 +62,11 @@ Bool Effect_Attack(executor,target,act)
 	Int Atk = 0
 	
 	// Base cacluation
-	If Act.Act.StatBase
-		Atk = math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk-Target.Char.Stat[Act.Act.AtkStatDef]])
+	If Act.Act.StatBase!=""
+		Atk = math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk]-Target.Char.Stat[Act.Act.AtkStatDef])
+		CSayF("Attack:  %9s = %3d",Act.Act.AtkStatAtk,Executor.Char.Stat[Act.Act.AtkStatAtk])
+		CSayF("Defense: %9s = %3d",Act.Act.AtkStatDef,Target.Char.Stat[Act.Act.AtkStatDef])
+		CSayF("%d - %d = %d (never lower than 1)",Executor.Char.Stat[Act.Act.AtkStatAtk],Target.Char.Stat[Act.Act.AtkStatDef],math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk]-Target.Char.Stat[Act.Act.AtkStatDef]))
 	End
 	
 	// Plus
@@ -82,7 +86,7 @@ Bool Effect_Attack(executor,target,act)
 		plua atks;atks = Lua.Scyndi.Class["ATKBONUS_"..Act.Act.AtkUserBonusScript]
 		plua atkf;atkf = Act.Act.AtkUserBonusFunc 
 		If atkf==""; atkf="AtkBonus"; end
-		atks[atkf](executor,target,act)
+		atk = atk + atks[atkf](executor,target,act)
 	End
 	
 	// Elemental Resistances and showing damage
@@ -93,13 +97,13 @@ Bool Effect_Attack(executor,target,act)
 		int modifier; modifier = math.floor(Atk*Target.NResistance(Act.Act.AtkElement))
 		Atk = Atk - Modifier
 		if Target.Resistance(Act.Act.AtkElement)==100
-			CharMsg.Put("Target","Immune",255,180,0)
+			CharMsg.Put(Target,"Immune",255,180,0)
 		elseif Target.Resistance(Act.Act.AtkElement)>0
-			CharMsg.Put("Target",Atk,255,180,0)
+			CharMsg.Put(Target,Atk,255,180,0)
 		elseif Target.Resistance(Act.Act.AtkElement)==0
-			CharMsg.Put("Target",Atk,255,255,255)
+			CharMsg.Put(Target,Atk,255,255,255)
 		else
-			CharMsg.Put("Target",Atk,255,0,0)
+			CharMsg.Put(Target,Atk,255,0,0)
 		End
 		If Target.Guarding && Atk>0
 			Atk = math.max(1, Atk div 2)
@@ -112,9 +116,9 @@ Bool Effect_Attack(executor,target,act)
 	
 	// If this is a killer blow, are there any kill scripts?
 	If Target.HP<=0
-		if Act.Act.KillScript!=""
-			Lua.Scyndi.Use("Script/Use/Combat/Kill/KILL_"..Act.Act.KillScript)
-			Lua.Scyndi.Class["KILL_..Act.Act.KillScript"].KillEffect(Executor,Target,Act.Act.KillParam)
+		if Act.Act.Kill_Script!=""
+			Lua.Scyndi.Use("Script/Use/Combat/Kill/KILL_"..Act.Act.Kill_Script)
+			Lua.Scyndi.Class["KILL_"..Act.Act.Kill_Script].KillEffect(Executor,Target,Act.Act.Kill_Param)
 		End
 	End
 	
