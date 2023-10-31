@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CharMsg.scyndi
-// Version: 23.10.30
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -97,16 +97,20 @@ Void Put(ch,msg,Byte R=255, Byte G=255, Byte B=255)
 	plua tag
 	Switch Lua.type(ch)
 		Case "string"
-			ncm = New TCharMessage(Fighter.ByTag[ch],Lua.tostring(msg),R,G,B)
+			Lua.assert(Fighter.ByTag[ch],sprintf("CharMsg.Put(\"%s\",%d,%d,%d): Fighter not found!",ch,R,G,B))
+			ncm = New TCharMsg(Fighter.ByTag[ch],Lua.tostring(msg),R,G,B)
 			tag = ch
 		Default
-			ncm = New TCharMessage(ch,Lua.tostring(msg),R,G,B)
+			ncm = New TCharMsg(ch,Lua.tostring(msg),R,G,B)
 			tag = ch.Tag
 	End
 	register[tag] = register[tag] || {}
 	plua ereg;ereg = register[tag]
 	ereg[len(ereg)] = ncm
 End
+
+Get Var Go; return Put; End
+
 
 Void Draw(noalterations)
 	For _,reglist in pairs(register)
