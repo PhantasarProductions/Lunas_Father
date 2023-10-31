@@ -32,22 +32,35 @@
 // 
 // **********************************************
 // 
-// version: 23.10.30
+// version: 23.10.31
 // End License Information
 
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/General/Dice"
 #use "Script/Flow/FlowCombat/CharMsg"
+
+Void FPUp(executor)
+	Switch gint.skill
+		Case 1
+			executor.char.points.FP.Have = executor.char.points.FP.Have + 16
+		Case 2
+			executor.char.points.FP.Have = executor.char.points.FP.Have + 6
+		Default
+			executor.char.points.FP.Have = executor.char.points.FP.Have + 3
+	End
+End
 
 // If no specific function is set, this one will be called.
 // Return value must be the damage caused.
 Int ATKBonus(executor,target,Act,string param="")
 	Int Ret = 0
 	For Die in Each(Dice.Types)
-		For i=1,executor.char["D"..die]
+		CSayF("D%d x %d",die,executor.char.stat["D"..die])
+		For i=1,executor.char.stat["D"..die]
 			Ret = Ret + Dice["d"..die]
 		End
 	End
@@ -58,40 +71,48 @@ Int Myrah(executor,target,Act,string param="")
 	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
 	If Dice.D100<12 - ( gint.skill * 3)
 		Ret = Ret * Dice.D6
-		CharMsg("Myrah","Critical",255,180,90)
+		CharMsg.Go(Target,"Critical",255,180,90)
 	End
+	FPUp(executor,target,Act,param)
 	Return Ret
 End
 
 Int Francis(executor,target,Act,string param="") 
 	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
 	If Dice.D100<8 - ( gint.skill * 2)
-		Ret = Ret * Dice.D6
-		CharMsg("Myrah","Critical",255,180,90)
+		Ret = Ret * Dice.D4
+		CharMsg.Go(Target,"Critical",255,180,90)
 	End
+	FPUp(executor,target,Act,param)
+	Return Ret
 End
 
 Int Luna(executor,target,Act,string param="") 
 	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
 	If Dice.D100<30 / gint.skill
-		Ret = Ret * Dice.D6
-		CharMsg("Myrah","Critical",255,180,90)
+		Ret = Ret * Dice.D20
+		CharMsg.Go(Target,"Critical",255,180,90)
 	End
+	FPUp(executor,target,Act,param)
+	Return Ret
 End
 
 Int Scyndi(executor,target,Act,string param="") 
 	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
 	If Dice.D100<4 - ( gint.skill )
-		Ret = Ret * Dice.D6
-		CharMsg("Myrah","Critical",255,180,90)
+		Ret = Ret * Dice.D3
+		CharMsg.Go(Target,"Critical",255,180,90)
 	End
+	FPUp(executor,target,Act,param)
+	Return Ret
 End
 
 Int Aziella(executor,target,Act,string param="")
 	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
 	If Dice.D100<15 - ( gint.skill * 3)
 		Ret = Ret * Dice.D6
-		CharMsg("Myrah","Critical",255,180,90)
+		CharMsg(Target,"Critical",255,180,90)
 	End
+	FPUp(executor,target,Act,param)
 	Return Ret
 End
