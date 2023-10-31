@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.10.30
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -43,6 +43,10 @@ Module
 #use "libs/sci/InterVar"
 #use "libs/sci/statistician"
 
+#use "script/use/general/useiaa"
+#use "script/use/general/dice"
+#use "script/use/general/cash"
+#use "script/use/link/mini"
 #use "script/use/link/party"
 
 plua LoadedFoes
@@ -74,6 +78,15 @@ Class Foe
 	ReadOnly Var Stat	
 	ReadOnly String Team = "Foe"
 		
+	Get String AudName
+		plua ret;ret = RawData.Value("MetaData","AudName")
+		If ret == ""
+			ret = "AnyFoe"
+		End
+		Return ret
+	End
+	
+		
 	Get Int DrawType
 		Return RawData.IntValue("MetaData","DrawType")
 	End
@@ -85,12 +98,7 @@ Class Foe
 	Bool Gone = False
 	Bool Killed = False 
 	Bool Guarding = False
-		
-	Get Bool Drawable
-		// TODO: When removed due to kill there must also be a thing here
-		Return !Gone
-	End
-		
+				
 	Get Bool TargetablePlayer
 		Return HP>0 && (!Gone)
 	End
@@ -191,12 +199,57 @@ Class Foe
 		Return Ret
 	End
 	
+	int KillScaleX
+	Int KillScaleY
+	
+	Get Bool Drawable
+		Return (!Gone) && KillScaleXX>0
+	End
+
+	
+	Void Drop(string itag)
+		If iaa[itag].Give()
+			Mini.Write(Name,255,0,0)
+			Mini.Write("drops ",255,180,0)
+			Mini.WriteLn(iaa[itag],0,180,255)
+		End
+	End
+	
 	Void Draw()		
 		If !Drawable
 			Return
 		End
-		RawData.NewValue("XIMG","Scale","1000")
-		SetScale(RawData.IntValue("XIMG","Scale")/1000)
+		If HP>0
+			RawData.NewValue("XIMG","Scale","1000")
+			SetScale(RawData.IntValue("XIMG","Scale")/1000)
+			KillScaleX = RawData.IntValue("XIMG","Scale")/1000
+			KillScaleY = KilScaleY
+		Else
+			If !Killed
+				Killed = True
+				For i=0,party.FullSize-1
+					CSay("Experience system not yet operational! So no points yet for "..Party.Char(i))
+				End				
+				If Dice.D100<RawData.IntValue("DROP1","RATE") 
+					Drop(RawData.value("DROP1","ITEM"))
+				ElseIf Dice.D100<RawData.IntValue("DROP2","RATE")
+					Drop(RawData.value("DROP2","ITEM"))
+				Elseif RawData.IntValue("KILL","CASH")>0
+					plua getcash;getcash=RawData.IntValue("KILL","CASH")
+					Mini.Write(Name,255,0,0)
+					Mini.Write("drops ",255,180,0)
+					Mini.Write(Lua.tostring(getcash),0,180,255)
+					if (getcash==1)
+						Mini.WriteLn(" Shilder",255,180,0)
+					Else
+						Mini.WriteLn(" Shilders",255,180,0)
+					End
+					Cash.Have = Cash.Have + GetCash
+				End
+			End
+			KillScaleX--
+			KillScaleY++
+		End
 		SetColor(Red,Green,Blue)
 		Switch DrawType
 			Case 0
@@ -253,6 +306,11 @@ Class Foe
 		minifnt.Text(Chr(64+CardAlphaNum),_ix,_iy)
 	End
 	
+	Get Bool Defeated
+		Return HP<=0 || Gone
+	End
+
+	
 	Constructor(int _IDNum,_RawData)
 		IDNum = _IDNum
 		CardAlphaNum = (_IDNum % 26) + 1
@@ -264,6 +322,7 @@ Class Foe
 		For st in Each(Party.BaseStats)
 			Char.Stat[st] = RawData.IntValue(StatTag,st)
 		End
+		Char.Stat.HP = RawData.IntValue(StatTag,"HP")
 		Stat = Char.Stat
 		Char.Points.HP.MaxCopy = "HP"
 		Char.Points.HP.Have = Char.Points.HP.Maximum
