@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectTarget.scyndi
-// Version: 23.10.29
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -78,31 +78,35 @@ Void Cycle()
 			Case "OS"
 				AddMe = TKey==CharTag
 			Case "EV"
-				AddMe = True
+				AddMe = tChr.TargetablePlayer
 			Case "AF" 
 				AddMe = MX<Graphics.Width div 2 && TChr.Team=="Foe"
 				AddMe = MX>Graphics.Width div 2 && TChr.Team=="Hero"
 				If WorkAct.Act.Discrimminate
 					AddMe = AddMe && TChr.Team=="Foe"
 				End
+				AddMe = AddMe && tChr.TargetablePlayer
 			Case "AA" 
 				AddMe = MX<Graphics.Width div 2 && TChr.Team=="Foe"
 				AddMe = MX>Graphics.Width div 2 && TChr.Team=="Hero"
 				If WorkAct.Act.Discrimminate
 					AddMe = AddMe && TChr.Team=="Hero"
 				End
+				AddMe = AddMe && tChr.TargetablePlayer
 			Case "1A"
 				AddMe = Len(Targets) == 0
 				If WorkAct.Act.Discrimminate
 					AddMe = AddMe && TChr.Team=="Hero"
 				End
 				AddMe = AddMe && MX > TChr.TarX && MY > TChr.TarY && MX < TChr.TarX + TChr.W && MY < TChr.TarY + TChr.H
+				AddMe = AddMe && tChr.TargetablePlayer
 			Case "1F"
 				AddMe = Len(Targets) == 0
 				If WorkAct.Act.Discrimminate
 					AddMe = AddMe && TChr.Team=="Foe"
 				End
 				AddMe = AddMe && MX > TChr.TarX && MY > TChr.TarY && MX < TChr.TarX + TChr.W && MY < TChr.TarY + TChr.H
+				AddMe = AddMe && tChr.TargetablePlayer
 			Default
 				Lua.error("Unknown target type: " ..WorkAct.Target)
 		End
