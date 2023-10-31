@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/DrawScreen_Function.scyndi
-// Version: 23.10.26
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -53,5 +53,6 @@ Global Void DrawScreen()
 	_Combat.Arena.Current.Draw()
 	_Combat.Diamonds.DrawDiamonds()
 	_Combat.Fighter.DrawFighters()
+	_Combat.CharMsg.Draw()
 	Party.BoxesCombat(InputChar)
 End
