@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.10.30
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -70,10 +70,14 @@ Class Hero
 		return 0
 	End
 		
-	Int DOrder
+	Int DOrder = 0
 	
 	Get Int PartyPos
 		Return Party.PosInParty(Tag)
+	End
+	
+	Get String AudName
+		Return Tag
 	End
 	
 	Get String Name
@@ -82,7 +86,7 @@ Class Hero
 	
 	Bool AltCoords = False
 	int _AltX
-	Int _AltY
+	Int _AltY		
 	
 	Get Int X
 		If AltCoords
@@ -125,6 +129,10 @@ Class Hero
 	
 	Get Bool TargetableFoe
 		Return HP>0
+	End
+	
+	Get Bool Defeated
+		Return HP<=0
 	End
 
 	
