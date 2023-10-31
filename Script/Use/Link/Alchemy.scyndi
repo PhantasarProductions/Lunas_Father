@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Alchemy.scyndi
-// Version: 23.10.14
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,4 +36,61 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
+
+#use "Script/Use/Link/Party"
+
+
 const var Manaments = NewArray("Earth","Wood","Water","Frost","Wind","Lightning","Fire","Lava","Light","Darkness")
+
+const var ManaCol = {}
+Void ColIni(string n,byte r,byte g,byte b)
+	ManaCol[n] = {}
+	ManaCol[n].r = r
+	ManaCol[n].g = g
+	ManaCol[n].b = b
+End
+Init
+	ColIni("Fire",255,106,0)
+	ColIni("Wind",100,255,100)
+	ColIni("Water",0,0,255)
+	ColIni("Earth",127,51,0)
+	ColIni("Wood",0,255,0)
+	ColIni("Frost",0,180,255)
+	ColIni("Lightning",127,180,255)
+	ColIni("Lava",255,126,0)
+	ColIni("Light",255,255,255)
+	ColIni("Darkness",180,0,255)
+End
+	
+
+plua _Party
+plua _Francis
+
+Init
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_Francis = _Party.Char.Francis
+End
+
+
+QuickMeta Mana
+	Index
+		Return _Francis.Points["MANAMENT_"..Key].Have
+	End
+	
+	NewIndex
+		Switch gint.Skill
+			case 1
+				_Francis.Points["MANAMENT_"..Key].Maximum = 250
+			case 2
+				_Francis.Points["MANAMENT_"..Key].Maximum = 100
+			case 3
+				_Francis.Points["MANAMENT_"..Key].Maximum = 50
+			default
+				_Francis.Points["MANAMENT_"..Key].Maximum = 0
+		End
+		_Francis.Points["MANAMENT_"..Key].Have = Value
+	End
+End
