@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.10.27
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -237,6 +237,10 @@ Void DrawDiamonds()
 			CS.X = math.min(CS.ToX,CS.X+math.max(1,math.ceil((CS.ToX-CS.X)/10)))
 		End
 		SetColor(255,255,255)
+		//if (CS.Type=="PLAYER" || CS.Type=="FOE" || CS.Type=="ACTION") && Lua.Scyndi.Class.Fighter.ByTag[CS.FighterTag].HP<=0
+		if (CS.Type=="PLAYER" || CS.Type=="FOE" || CS.Type=="ACTION") && Lua.Scyndi.Class.Fighter.ByTag[CS.FighterTag].Defeated
+			SetColor(100,100,100)
+		End
 		CS.IMG.Draw(CS.X,5)
 	End
 End
@@ -253,3 +257,34 @@ Void RemoveFirst()
 		if Slots[i]; Slots[i].ToX = InitialPos(i); end
 	end
 end
+
+
+Void Check()
+	For FTag,FDat in PAIRS(Lua.Scyndi.Class.Fighter.ByTag)
+			Bool Found = False
+			If FDat.HP>0
+				For _,C in PAIRS(Slots)
+					Found = Found || ( (C.Type!="JOKER") && (C.Type!="ACTION") && C.FighterTag==FTag )  
+				End
+				If !Found
+					//if !Cards.Order.tagorder[FTag]					
+					//	CSay("No order for '"..FTAG.."'. Regenerating order!")
+					//	Cards.CreateOrder()
+					//End
+					
+					//Int spot = ( 25 + (Cards.Order.tagorder[FTag] * 2)+ (math.floor(math.random(1,Cards.Order.tagorder[FTag])/2)) )
+					Int spot;spot = (25 + (FDat.DOrder*2) + math.random(1,math.max(1,FDat.Dorder div 2)))
+					//Cards.Add(Spot,FTag)
+					Switch FDat.Team
+						Case "Hero"
+							NewPlayer(spot,FTag,FDat.force)
+						Case "Foe"
+							NewFoe(spot,FTag,FDat.force)
+						Default
+							Lua.error("Diamonds.Check(): Unknown Team ("..FDat.Team..") for fighter: "..FTag)
+					End
+					CSayF("No cards for %s so automatically added one on spot #%d",FTag,Spot)
+				End
+			End
+		End
+	End
