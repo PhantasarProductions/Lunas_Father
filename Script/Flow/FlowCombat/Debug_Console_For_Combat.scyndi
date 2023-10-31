@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Debug_Console_For_Combat.scyndi
-// Version: 23.10.26
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,6 +38,8 @@ Module
 
 #use "Libs/SCI/Sys"
 
+#use "Script/Flow/FlowCombat/Fighter"
+
 
 Global Void CMBT_DEBUG_DIAMONDS()
 	for i,v in spairs(Lua.Scyndi.Class.Diamonds.Slots)
@@ -55,7 +57,23 @@ Global Void CMBT_DEBUG_DIAMONDS()
 	end
 End
 
+Global Void CMBT_DEBUG_HP()
+	plua f;f=Lua.Scyndi.Class.Fighter
+	For t,tl in pairs(f.Team)
+		printf("\x1b[38;5;11m\x1b[44m%s\x1b[0m\n",t)
+		For ft,fd in spairs(tl)
+			printf("%9s has %4d/%4d hitpoints\n",ft,fd.HP,fd.MaxHP)
+			If fd.Defeated
+				print("==> Is Defeated!")
+			End
+		End
+		If Defeated[t]
+			print("==> This entire team has been defeated!")
+		End
+	End
+End
 
 Init
-	Sys.ConsoleLocal("DIAMONDS","CMBT_DEBUG_DIAMONDS")	
+	Sys.ConsoleLocal("DIAMONDS","CMBT_DEBUG_DIAMONDS")
+	Sys.ConsoleLocal("HP","CMBT_DEBUG_HP")
 End
