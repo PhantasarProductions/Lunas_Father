@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
-// Version: 23.10.30
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,6 +37,8 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/Graphics"
 
 #use "Script/Flow/FlowCombat/Stage"
@@ -130,7 +132,14 @@ Void ES_JumpToTarget()
 End
 
 Void ES_Pose()
-	if Executor.DoPose(Act.Act.Pose)
+	If Executor.DoPose(Act.Act.Pose)
+		String S = sprintf("AUDIO/COMBAT/HEROPOSE/%s.%s.END.MP3",Executor.AudName,Act.Act.Pose)
+		//print(s,"Exist: ",JCR6.EntryExists(S))
+		If JCR6.EntryExists(S)
+			//print("Play: ",S)
+			plua au;au = Audio.LoadNew(s,"POSE_END_%s_%s",Executor.AudName,Act.Act.Pose)
+			au.Play()
+		End
 		CES="Effect"
 	End
 End
@@ -141,6 +150,7 @@ void ES_Effect()
 		Lua.Scyndi.Class.Effect.Go(Executor,target,act)
 	End
 	Executor.AltCoords = False
+	Executor.Pose = "IDLE"
 	Diamonds.RemoveFirst()
 	Stage.CurrentTag = "IDLE"
 End
