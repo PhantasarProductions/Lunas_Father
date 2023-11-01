@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.10.21
+// Version: 23.11.01
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,10 +42,11 @@ Module
 #use "Libs/SCI/InterVar"
 
 #use "Libs/Rosetta"
+#use "Libs/GameTime"
 
 #use "Script/use/link/map"
 #use "Script/Use/Link/Party"
-#use "Libs/GameTime"
+#use "Script/use/link/worldmap"
 
 int ScrollX
 int ScrollY
@@ -112,6 +113,8 @@ Void FieldStats()
 	fSY=Graphics.Height-185
 	FSC(Rosetta.GetStr("FieldStats","Cash"),Rosetta.GetStr("FieldStats","1shilder"),gint.cash==1)
 	FSC(Rosetta.GetStr("FieldStats","Cash"),sprintf(Rosetta.GetStr("FieldStats","moreshilders"),gint.cash),gint.cash>1)
+	FSD(Rosetta.GetStr("FieldStats","LevelCap"),Lua.tostring(gint.LevelCap),gint.LevelCap>0)
+	FSD(Rosetta.GetStr("FieldStats","REnc"),Lua.Scyndi.Class.Field_Renc.rOnOff,Map.AllowEncOff)
 	FSD(Rosetta.GetStr("FieldStats","Location"),Map.Title)
 	FSD(Rosetta.GetStr("FieldStats","Time"),GameTime.FShow)
 End
