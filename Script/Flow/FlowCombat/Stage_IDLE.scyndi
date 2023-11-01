@@ -51,6 +51,7 @@ Void Cycle()
 		Return
 	ElseIf Defeated.Foe
 		Stage.CurrentTag="VICTORY"
+		//Lua.Scyndi.Class.STAGE_VICTORY.Victory()
 		Return
 	End
 	If !Diamonds.Slots[0]
