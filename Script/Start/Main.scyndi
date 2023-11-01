@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.10.28
+// Version: 23.11.01
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -108,16 +108,19 @@ Init
 	NIMG("GFX/Algemeen/Gauge.png","RENCGAUGE")
 	NIMG("GFX/Algemeen/Pointer.png","MOUSEPOINTER")
 	NIMG("GFX/Algemeen/Ball.png","BALL")
+	NIMG("GFX/Algemeen/LevelUp.png","LEVELUP")
 	NIMG("GFX/Arrows/Left.png","ARROW_LEFT")
 	NIMG("GFX/Boxes/BoxBack.png","BOX_BACK")
 	NIMG("GFX/Boxes/HP.png","BOX_HP")
 	NIMG("GFX/Boxes/FP.png","BOX_FP")
 	NIMG("GFX/Boxes/VIT.png","BOX_VIT")
+	NIMG("GFX/Boxes/LV.png","BOX_LV")
 	NIMG("GFX/Arrows/Right.png","ARROW_RIGHT")	
 	NIMG("GFX/Page/Up.png","PAGE_UP")
 	NIMG("GFX/Page/Down.png","PAGE_DOWN")
 	NIMG("GFX/Page/Left.png","PAGE_LEFT")
 	NIMG("GFX/Page/Right.png","PAGE_RIGHT")	
+	NIMG("GFX/Combat/End/Victory.png","COMBAT_END_VICTORY")
 	For i=1,26 
 		NIMG(sprintf("GFX/COMBAT/DIAMONDS/FOE_%02d.PNG",i) ,sprintf("COMBATDIAMOND_FOE_%02d",i))
 		NIMG(sprintf("GFX/COMBAT/DIAMONDS/BOSS_%02d.PNG",i),sprintf("COMBATDIAMOND_BOSS_%02d",i))
@@ -147,6 +150,8 @@ Init
 	NAud("Audio/General/Jingle.wav","JINGLE")
 	NAud("Audio/General/Buzz.ogg","BUZZ")
 	NAud("Audio/Combat/RemoveDiamond.wav","COMBAT_REMOVE")
+	NAud("AUDIO/GENERAL/TRAVELEMBLEM.OGG","TRAVEMB")
+	NAud("AUDIO/GENERAL/LevelUp.OGG","LEVELUP")
 	For n in each(NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel"))
 		NAud(sprintf("Audio/Combat/Names/%s.ogg",n),sprintf("COMBAT_HERO_NAME_%s",Upper(n)))
 	End
