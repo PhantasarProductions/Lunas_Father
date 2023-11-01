@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Start.Scyndi
-// Version: 23.10.28
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -61,6 +61,7 @@ String Lose = "ERROR"
 String StartEvent = ""
 Var LastFoe = Nil
 Var Enemies
+Int Music_DontPush = 0
 
 Set String NewEnemy
 	int X; X = ((Len(Enemies) div 3) * 100) + ((Len(Enemies) % 3) * 5) + 64
@@ -75,6 +76,7 @@ End
 global void StartPreparations()
 	LastFoe = Nil
 	Enemies = {}	
+	Music_DontPush = 0
 end
 	
 
@@ -116,6 +118,9 @@ global void StartCombat()
 		case "*NOCHANGE*"
 			// Do nothing
 		default
+			If Music_DontPush==0
+				Music.Push()
+			End
 			Music.Play(CMusic)
 	End
 	
