@@ -110,6 +110,7 @@ int NeedExp(int level)
 			return expmax
 		end
 		ret = ret + math.floor(ret*mul[ski])
+		lv++
 	end
 	return math.floor(ret)
 end
