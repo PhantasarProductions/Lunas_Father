@@ -32,15 +32,18 @@
 // 
 // **********************************************
 // 
-// version: 23.10.31
+// version: 23.11.01
 // End License Information
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
 #use "Libs/SCI/Statistician"
 
 #use "Script/Use/Link/Alchemy"
 #use "Script/Use/Link/Mini"
+
+#use "Script/Use/General/Dice"
 
 
 Void KillEffect(Executor,Target,string param="")
@@ -54,6 +57,23 @@ Void KillEffect(Executor,Target,string param="")
 				mini.WriteLn(" manament",255,180,0)
 			Else 
 				mini.WriteLn(" manaments",255,180,0)
+			End
+			Switch gint.skill
+				Case 1
+					if Dice.D4==1
+						Executor.IRate++
+					End
+				Case 2
+					if Dice.D6==1
+						Executor.IRate++
+					End
+				Case 3
+					if Dice.D20==1
+						Executor.IRate++
+					End
+				Default
+					// THAT shall teach you to cheat the system :P
+					Executor.IRate--
 			End
 		End		
 	End
