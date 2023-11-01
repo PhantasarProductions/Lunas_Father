@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.24
+// version: 23.11.01
 // End License Information
 Script
 
@@ -58,4 +58,9 @@ Global Void ZA_EnterFirstTime()
 	Mini.WriteLn("before she gets on the road",180,0,255)
 	IAA.ITM_REG_HERB.Give()
 	Map.PermaKill("ZA_EnterFirstTime")
+End
+
+Global Void ZA_Exit_Frendor()
+	WM_Unlocked.FRENDOR = True
+	Delisto()
 End
