@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.31
+// version: 23.11.01
 // End License Information
 
 Module
@@ -40,6 +40,7 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
+#use "Script/Use/Link/Party"
 #use "Script/Use/General/Dice"
 #use "Script/Flow/FlowCombat/CharMsg"
 
@@ -72,8 +73,10 @@ Int Myrah(executor,target,Act,string param="")
 	If Dice.D100<12 - ( gint.skill * 3)
 		Ret = Ret * Dice.D6
 		CharMsg.Go(Target,"Critical",255,180,90)
+		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
+	Party.SkillExpUp("Myrah",1)
 	Return Ret
 End
 
@@ -82,8 +85,10 @@ Int Francis(executor,target,Act,string param="")
 	If Dice.D100<8 - ( gint.skill * 2)
 		Ret = Ret * Dice.D4
 		CharMsg.Go(Target,"Critical",255,180,90)
+		executor.irate = executor.irate + (4-gint.skill) 
 	End
 	FPUp(executor,target,Act,param)
+	Party.SkillExpUp("Francis",1)
 	Return Ret
 End
 
@@ -92,8 +97,10 @@ Int Luna(executor,target,Act,string param="")
 	If Dice.D100<30 / gint.skill
 		Ret = Ret * Dice.D20
 		CharMsg.Go(Target,"Critical",255,180,90)
+		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
+	Party.SkillExpUp("Luna",1,6)
 	Return Ret
 End
 
@@ -102,8 +109,10 @@ Int Scyndi(executor,target,Act,string param="")
 	If Dice.D100<4 - ( gint.skill )
 		Ret = Ret * Dice.D3
 		CharMsg.Go(Target,"Critical",255,180,90)
+		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
+	Party.SkillExpUp("Scyndi",1)
 	Return Ret
 End
 
@@ -112,7 +121,9 @@ Int Aziella(executor,target,Act,string param="")
 	If Dice.D100<15 - ( gint.skill * 3)
 		Ret = Ret * Dice.D6
 		CharMsg(Target,"Critical",255,180,90)
+		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
+	Party.SkillExpUp("Aziella",1)
 	Return Ret
 End
