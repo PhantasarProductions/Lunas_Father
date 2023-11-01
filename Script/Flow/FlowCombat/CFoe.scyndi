@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.10.31
+// Version: 23.11.01
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -199,23 +199,25 @@ Class Foe
 		Return Ret
 	End
 	
-	int KillScaleX
-	Int KillScaleY
+	Number KillScaleX
+	Number KillScaleY
+	Readonly int KillSkipReset = 2
+	Int KillSkip
 	
 	Get Bool Drawable
-		Return (!Gone) && KillScaleXX>0
+		Return (!Gone) && (KillScaleX>0 || HP>0)
 	End
 
 	
 	Void Drop(string itag)
 		If iaa[itag].Give()
 			Mini.Write(Name,255,0,0)
-			Mini.Write("drops ",255,180,0)
-			Mini.WriteLn(iaa[itag],0,180,255)
+			Mini.Write(" drops ",255,180,0)
+			Mini.WriteLn(iaa[itag].Name,0,180,255)
 		End
 	End
 	
-	Void Draw()		
+	Void Draw()
 		If !Drawable
 			Return
 		End
@@ -223,21 +225,34 @@ Class Foe
 			RawData.NewValue("XIMG","Scale","1000")
 			SetScale(RawData.IntValue("XIMG","Scale")/1000)
 			KillScaleX = RawData.IntValue("XIMG","Scale")/1000
-			KillScaleY = KilScaleY
+			KillScaleY = KillScaleX
 		Else
 			If !Killed
+				For i=0,Party.FullSize-1
+					Var h;h = Lua.Scyndi.Class.Fighter.ByTag[Party.Char(i)]
+					Int e;e = Round(RawData.IntValue("Kill","Experience")*h.rate)
+					If h.stat.Level<gint.levelcap
+						h.stat.EXP = h.stat.EXP - e
+						If (i<3)
+							Lua.Scyndi.Class.CharMsg.Put(h.Tag,sprintf("Gains %d experience",e),255,180,0)
+						End
+					End
+				End
+				gint[sprintf("Killed.%s",FoeFile)]++
+				KillScaleX = RawData.IntValue("XIMG","Scale")/1000
+				KillScaleY = KillScaleX
 				Killed = True
 				For i=0,party.FullSize-1
 					CSay("Experience system not yet operational! So no points yet for "..Party.Char(i))
 				End				
 				If Dice.D100<RawData.IntValue("DROP1","RATE") 
-					Drop(RawData.value("DROP1","ITEM"))
+					Self.Drop(RawData.value("DROP1","ITEM"))
 				ElseIf Dice.D100<RawData.IntValue("DROP2","RATE")
-					Drop(RawData.value("DROP2","ITEM"))
+					Self.Drop(RawData.value("DROP2","ITEM"))
 				Elseif RawData.IntValue("KILL","CASH")>0
 					plua getcash;getcash=RawData.IntValue("KILL","CASH")
 					Mini.Write(Name,255,0,0)
-					Mini.Write("drops ",255,180,0)
+					Mini.Write(" drops ",255,180,0)
 					Mini.Write(Lua.tostring(getcash),0,180,255)
 					if (getcash==1)
 						Mini.WriteLn(" Shilder",255,180,0)
@@ -247,9 +262,15 @@ Class Foe
 					Cash.Have = Cash.Have + GetCash
 				End
 			End
-			KillScaleX--
-			KillScaleY++
+			//KillSkip = (KillSkip+1)%KillSkipReset
+			//If KillSkip==0
+				KillScaleX = KillScaleX - 0.006 
+				KillScaleY = KillScaleY + 0.011
+				//print(KillScaleX,KillScaleY)
+			//End
+			SetScale(KillScaleX,KilLScaleY)
 		End
+
 		SetColor(Red,Green,Blue)
 		Switch DrawType
 			Case 0
@@ -268,6 +289,7 @@ Class Foe
 			default
 				Lua.error(sprintf("DrawType #4 not (yet?) known",DrawType))
 		End
+		SetScale(1)
 	End
 	
 	Get Number Scale
@@ -326,6 +348,10 @@ Class Foe
 		Stat = Char.Stat
 		Char.Points.HP.MaxCopy = "HP"
 		Char.Points.HP.Have = Char.Points.HP.Maximum
+	End
+	
+	Destructor		
+		CSayF("Cleaning old unlinked instance data for: %s",Tag)
 	End
 End
 
