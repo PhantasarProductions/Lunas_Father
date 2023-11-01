@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Renc.scyndi
-// Version: 23.10.25
+// Version: 23.11.01
 // Copyright (C) 2021, 2022, 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -57,6 +57,7 @@
 #use "script/use/link/map"
 #use "script/use/link/party"
 #use "script/use/link/combat"
+#use "script/use/link/worldmap"
 
 
 module
