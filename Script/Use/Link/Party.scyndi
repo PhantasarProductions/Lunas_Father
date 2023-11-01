@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 23.10.25
+// Version: 23.10.31
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -60,6 +60,12 @@ End
 Void BoxesCombat(_chr)
 	Sys.Call("SUB_PARTY","PartyBoxes",_chr,1)
 End
+
+Void SkillExpUp(String Ch, int skill, int experience=5)
+	//print("Skill: ",Ch,skill,experience)
+	Sys.Call("SUB_PARTY","CharSkillExpUp",Ch,skill,experience||5)
+End
+	
 
 
 Void StartSet()
