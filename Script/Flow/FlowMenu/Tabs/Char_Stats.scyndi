@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Char_Stats.scyndi
-// Version: 23.10.18
+// Version: 23.11.01
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -95,6 +95,22 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w, int h)
 	Fnt.Text("Hitpoints",x,sy)
 	SetColor(255,180,0)
 	Fnt.Text(sprintf("%d/%d",ch.Points.HP.Have,ch.points.HP.Maximum),(x+w)-5,sy,1)
-	
-	
+	// Experience
+	sy = sy + 60
+	SetColor(255,255,255)
+	Fnt.Text("Experience",x,sy)
+	if Ch.Stat.Level<gint.LevelCap
+		SetColor(255,180,0)
+		Fnt.Text(lua.tostring(ch.stat.Exp),(x+w)-5,sy,1)
+	Else
+		SetColor(255,0,0)
+		Fnt.Text("---",(x+w)-5,sy,1)
+	End
+	sy=sy+30
+	If Ch.Stat.Level==gint.LevelCap
+		SetColor(180,255,0)
+	End
+	Fnt.Text(lua.tostring(ch.stat.Level),(x+w)-5,sy,1)
+	SetColor(255,255,255)
+	Fnt.Text("Level",x,sy)
 End
