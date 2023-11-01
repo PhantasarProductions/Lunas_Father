@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.10.31
+// Version: 23.11.01
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -48,6 +48,7 @@ Script
 
 #use "Script/Use/General/Dice"
 #use "Script/use/Link/Party"
+#use "Script/use/Link/Mini"
 
 const int expmax = 100000000;
 
@@ -64,6 +65,7 @@ var ImgFP   = ObtainImage("BOX_FP")
 var ImgVIT  = ObtainImage("BOX_VIT")
 var ImgLV   = ObtainImage("BOX_LV")
 var AudLvUp = Audio.Obtain("LEVELUP")
+var ImgLvUp = ObtainImage("LEVELUP") 
 
 const Int PBX = 0
 const Int PBY = Graphics.Height - 170
@@ -162,6 +164,7 @@ Void SetLevel(string CharTag,int lvl)
 	Ch.Points.HP.Have    = Ch.Points.HP.Maximum
 	Ch.Points.VIT.Have   = Ch.Points.VIT.Maximum
 	Ch.Points.SP.Maximum = Lvl	
+	CSayF("%d: %d + %d = %d",Lvl,Ch.Stat.Exp ,NeedExp(lvl), Ch.Stat.Exp + NeedExp(lvl))
 	Ch.Stat.Exp = Ch.Stat.Exp + NeedExp(lvl)
 	
 End
@@ -242,6 +245,9 @@ End
 
 int _Hue = os.time()
 int _Deg = os.time()
+int _lvcd = 0
+int _lvalpha = 0
+
 Global Void PartyBoxes(flashchar,incombat)
 	int BW
 	SetColor(255,255,255,255)
@@ -331,6 +337,35 @@ Global Void PartyBoxes(flashchar,incombat)
 			ImgVIT.Draw(BW*i+120,PBY+60)
 			StatFnt.Text(lua.tostring(Ch.Points.VIT.Have),(BW*i)+(BW-10),PBY+60,1)
 		End
+		// Level
+		if Ch.Stat.Level<=gint.LevelCap
+			SetColor(255,255,255)
+			ImgLv.Draw(BW*i,(PBY+PBH)-ImgLv.Height)
+			if Ch.Stat.Level==gint.LevelCap
+				SetColor(180,255,0)
+			Else
+				SetColor(255,180,0)
+			End
+			StatFnt.Text(lua.tostring(Ch.Stat.Level),(BW*i)+ImgLv.Width+5,(PBY+PBH),0,1)
+		End
+		// Level Up
+		if Ch.Stat.Level<=gint.LevelCap && Ch.Stat.Exp<=0
+			Mini.Write(Ch.Data.Name,255,180,0)
+			Mini.WriteLn(" has gained a level!",180,0,255)
+			SetLevel(_Party.Party[i],Ch.Stat.Level+1)
+			AudLvUp.Play()
+			_LvAlpha=255
+			_LvCD=255
+		End
+		if  _LvAlpha>0 || _LvCD>0
+			_LvCD--
+			if _LvCD<=0
+				_LvAlpha--
+			end
+		end
+		SetAlpha(_LvAlpha)
+		ImgLvUp.Draw(BW*i,(PBY+PBH)-ImgLvUp.Height)
+		SetAlpha(255)
 	End
 	Lua.Scyndi.Globals.MiniShow()
 End
@@ -342,6 +377,30 @@ Global Void Recover()
 		Ch.Points.HP.Have = Ch.Points.HP.Maximum
 		Ch.Points.VIT.Have = Ch.Points.VIT.Maximum
 	End
+End
+
+Global Void CharSkillExpUp(string chTag,int skill,int experience)
+	Switch gint.skill
+		Case 1
+			If Party.SkillLvl(chTag,Skill)>=500; return; end
+		Case 2
+			If Party.SkillLvl(chTag,Skill)>=250; return; end
+		Case 3
+			If Party.SkillLvl(chTag,Skill)>=100; return; end
+		Default
+			Return
+	End
+	plua sk; sk = Party.SkillExp(chTag,skill)
+	plua g = Lua.Scyndi.Globals
+	sk.have = sk.Have + experience
+	if sk.Have>=sk.Maximum
+		G.WriteMini(_Party.Char[chTag].Data.Name,180,0,255)
+		G.WriteMini(" has gained a skill level: ",255,180,0)
+		G.Writemini(_Party.Char[chTag].Data["Skill"..skill])
+		G.PushMini()
+		sk.have = 0
+		_Party.Char[chTag].Stat[sprintf("SKILL_Lvl_%d",Skill)] = Party.SkillLvl(chTag,Skill)+1
+	End		
 End
 
 #region "Mini Messages"
