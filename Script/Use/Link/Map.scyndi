@@ -39,6 +39,7 @@ Module
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/SString"
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/Statistician"
 
@@ -79,7 +80,7 @@ QuickMeta MapScript
 End
 
 Get Bool AllowEncOff
-	Return FoundTravelerEmblem[Kthura.CurrentMap]
+	Return FoundTravelerEmblem[Map.MapFile]
 End
 
 Void ClearMapScript()
@@ -126,6 +127,10 @@ end
 Set String Layer
 	// To do: Kill old player before moving on
 	Kthura.CurrentLayer=Upper(Value)
+End
+
+Get String MapFile
+	Return StripDir(Kthura.LastLoadedMap)
 End
 
 Void GoToMap(String MapBundle,String LayerTag,String SpawnSpot="Start")
