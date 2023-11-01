@@ -125,7 +125,8 @@ Void SetLevel(string CharTag,int lvl)
 	CSayF("%s is now level %d",CharTag,lvl)
 	// General Stat
 	Var Ch
-	Ch = CHT[CharTag]
+	//Ch = CHT[CharTag]
+	Ch = _Party.Char[CharTag]
 	Ch.Stat.Level=lvl
 	For s in Each(BaseStats)		
 		number st
