@@ -37,6 +37,7 @@
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/SString"
 #use "Libs/SCI/Statistician"
 #use "Libs/SCI/GINIE"
@@ -61,6 +62,8 @@ var MiniFnt = ObtainFont("MINI")
 var ImgHP   = ObtainImage("BOX_HP")
 var ImgFP   = ObtainImage("BOX_FP")
 var ImgVIT  = ObtainImage("BOX_VIT")
+var ImgLV   = ObtainImage("BOX_LV")
+var AudLvUp = Audio.Obtain("LEVELUP")
 
 const Int PBX = 0
 const Int PBY = Graphics.Height - 170
