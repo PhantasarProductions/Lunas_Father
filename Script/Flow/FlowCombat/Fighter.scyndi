@@ -38,8 +38,10 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Statistician"
 
 #use "Script/Use/Link/Party"
+
 
 Var Team
 Var ByTag
@@ -83,4 +85,14 @@ Void DrawFighters()
 	For f in Each(DrawOrder)
 		f.Draw()
 	End
+End
+
+Void KillFoes()
+	plua FParty;FParty = Statistician.Obtain("LUNA_PARTY")
+	For FT,_ in pairs(Team.Foe)
+		ByTag[FT]=nil
+		CSayF("Unlinking foe: %s",FT)
+		FParty.KillChar(FT)
+	End
+	Team.Foe={}
 End
