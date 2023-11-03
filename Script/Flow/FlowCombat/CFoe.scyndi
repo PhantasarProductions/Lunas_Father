@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.11.01
+// Version: 23.11.03
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -239,6 +239,7 @@ Class Foe
 					End
 				End
 				gint[sprintf("Killed.%s",FoeFile)]++
+				gint.Kills++
 				KillScaleX = RawData.IntValue("XIMG","Scale")/1000
 				KillScaleY = KillScaleX
 				Killed = True
