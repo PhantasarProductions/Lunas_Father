@@ -32,15 +32,50 @@
 // 
 // **********************************************
 // 
-// version: 23.11.01
+// version: 23.11.03
 // End License Information
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Mini"
+#use "Script/Use/Link/WorldMap" 
 #use "Script/Use/Link/TextBoxes"
+
+Init
+	CSay("Welcome to Frendor!")
+	Awarded.SCEN_FRENDOR = true
+End
+
+Global Void NPC_Fandalora()
+	MapText("FANDALORA_"..Map.Leader)
+End
+
+Global Void NPC_Irravonia()
+	MapText("IRRA_"..Map.Leader)
+End
+
+Global Void Bye()
+	WorldMap.Delisto()
+End
+
+Global Void NPC_Feenalaria()
+	if !Done.Feenalaria_FirstTime
+		gstring.CampSituation = "02_CAVE"
+		MapText("FEENA_1ST")
+		WM_Unlocked.TutorialCave = True
+		Awarded.SCEN_FEENALARIA = True
+		Return
+	End
+	if !gBool.Exam_Done
+		MapText("FEENA_WAITCAVE")
+		Return
+	End
+	Lua.error("This passage for Feenalaria has not yet been scripted")
+End
 
 Global Void ZA_Irravonia()
 	Map.PermaKill("ZA_Irravonia")
