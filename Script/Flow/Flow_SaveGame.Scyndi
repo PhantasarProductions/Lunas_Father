@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_SaveGame.Scyndi
-// Version: 23.10.18
+// Version: 23.11.03
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -75,6 +75,9 @@ init
 	CSay("Configuring icon pics")
 	Pics = NewArray(ObtainImage("PORTRET_MYRAH"),ObtainImage("PORTRET_FRANCIS"),ObtainImage("PORTRET_LUNA"),ObtainImage("PORTRET_SCYNDI"),ObtainImage("PORTRET_AZIELLA"),ObtainImage("PORTRET_RACHEL"),LoadNewImage("GFX/Portraits/Marrilona/General.png","SG_MARRILONA"),LoadNewImage("GFX/Portraits/Tai/Small.png","SG_TAI"))
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Jake/General.png","SG_JAKE")
+	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Irravonia/CutSG.png","SG_IRRAVONIA")
+	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Fandalora/General.png","SG_FANDALORA")
+	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Feenalaria/General.png","SG_FEENALARIA")
 end
 
 
