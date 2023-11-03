@@ -1,0 +1,240 @@
+// License Information:
+// src/Scripts/Script/Subs/SubAchievements.scyndi
+// Version: 23.11.03
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/Medals"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/MultiPointer"
+
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Mini"
+
+ReadOnly Var PgUp = ObtainImage("PAGE_UP")
+ReadOnly Var PgDn = ObtainImage("PAGE_DOWN")
+ReadOnly Var BFnt = ObtainFont("BASE")
+ReadOnly Var SFnt = ObtainFont("MINI")
+ReadOnly Var Achs = GINIE.Load("Data/General/Achievements.ini","DATA_ACHIEVEMENTS")
+plua Reg
+
+Class TAch
+	ReadOnly string Key
+	Get String Cat;return "REC:"..Key;End
+		
+	Get Bool WantBool
+		return Upper(Achs.Value(Cat,"WANTTRUE"))=="TRUE"
+	End
+	Get Bool WantInt
+		return Upper(Achs.Value(Cat,"WANTINT"))=="TRUE"
+	End
+	Get String Name
+		Return Achs.Value(Cat,"Name")
+	End
+	Get String Desc
+		Return Achs.Value(Cat,"Description")
+	End
+	Get Bool Skill1
+		Return Upper(Achs.Value(Cat,"AVAILABLE1"))=="TRUE"
+	End
+	Get Bool Skill2
+		Return Upper(Achs.Value(Cat,"AVAILABLE2"))=="TRUE"
+	End
+	Get Bool Skill3
+		Return Upper(Achs.Value(Cat,"AVAILABLE3"))=="TRUE"
+	End
+	Get Bool NewGame
+		Return Upper(Achs.Value(Cat,"NEWGAME"))=="TRUE"
+	End
+	Get Bool NewGamePlus
+		Return Upper(Achs.Value(Cat,"NEWGAMEPLUS"))=="TRUE"
+	End
+	Get Bool HiddenUntilAchieved
+		Return Upper(Achs.Value(Cat,"HIDDENUNTILACHIEVED"))=="TRUE"
+	End
+	Get Bool Available
+		Bool Ret
+		If gbool.NewGamePlus
+			Ret = NewGamePlus
+		Else 
+			Ret = Newgame
+		End
+		Return Ret && Upper(Achs.Value(Cat,sprintf("AVAILABLE%d",gint.Skill)))=="TRUE"
+	End
+	Get Table MustBeTrue		
+		plua want;want = Split(Achs.Value(Cat,"WantTrueVars")," ")
+		return want
+	End
+	Get Table WantedInts
+		plua cnt = 0
+		plua wantvars;wantvars = Split(Achs.Value(Cat,"WantIntVars")," ")
+		plua wantvals;wantvals = Split(Achs.Value(Cat,"WantIntValues")," ")
+		plua ret = {}
+		Lua.assert(Len(Wantvars)==Len(wantvals),sprintf("Wanted int vars and values do not match in numbers %d != %d",Len(Wantvars),Len(wantvals)))
+		For i,k in ipairs(wantvars)
+			ret[k] = Lua.tonumber(wantvals[i]) || 0
+			cnt++
+		End
+		ret["*cnt*"]=cnt
+		Return ret
+	End
+	
+	Get Bool ConditionsMet
+		Bool Ret;Ret = WantBool || WantInt
+		if (!Available)
+			Return False
+		End
+		if WantBool
+			For b in Each(MustBeTrue)
+				Ret = ret && gbool[b]
+			End
+		End
+		if WantInt
+			CSayF("Integer check: %d",WantedInts["*cnt*"])
+			For ik,iv in pairs(WantedInts)				
+				if ik!="*cnt*"
+					//CSayF("Check %s:   %d>=%d = %s (%s)",ik,gint[ik],iv, gint[ik]>=iv,Ret)
+					Ret = Ret && gint[ik]>=iv
+				End
+			End
+		End
+		Return Ret
+	End
+		
+		
+	Constructor(string _k)
+		Key = _k
+		CSayF("Created object for achievement: %s",_k)
+	End
+End
+
+Var GetAch(string k)
+	k = Upper(k)
+	Reg = Reg || {}
+	Reg[k] = Reg[k] || new TAch(k)
+	return Reg[k]
+End
+
+Const Int MaxScore = 32000
+Get Number CrudeRate
+	return Medals.FullScore / MaxScore
+End
+Get Int Rate
+	return math.min(100,CrudeRate*100)
+End
+
+Global Void GetRate()
+	if (!Medals.Active)
+		gint.MedalRate = 0
+	else 
+		gint.MedalRate = Rate
+	end
+End
+
+Global Void AwardWorkout(string A)
+	Mini.Write("Achievement obtained: ")
+	Mini.WriteLn(GetAch(A).Name,255,0,255)
+	If Medals.Active
+		Medals.Award(A)
+	End	
+End
+
+Global Void DoAutoAward()
+	For Cat In Each(Achs.Categories)
+		if Prefixed(Cat,"REC:")
+			String ATag;ATag = Right(Cat,Len(Cat)-4)
+			Awarded[ATag] = Awarded[ATag] || GetAch(ATag).ConditionsMet
+		End
+	End
+End
+
+Int ScrollY = 0
+Global Void Overview(int bx, int by, int bw, int bh)
+	int Y; Y=-ScrollY;
+	MultiPointer.RCV()
+	For Cat In Each(Achs.Categories)
+		If Prefixed(Cat,"REC:")
+			String ATag;ATag = Right(Cat,Len(Cat)-4)
+			Var A;A = GetAch(ATag)
+			If A.Available
+				Int DY;DY=Y*50
+				If Y>0 && (DY+50)<bh
+					If Awarded[ATag]
+						SetColor(180,255,0)
+					Else
+						SetColor(255,255,255)
+					End
+					If (!A.HiddenUntilAchieved) || Awarded[ATag] 
+						BFnt.Text(A.Name,bx,by+DY)
+						SFnt.Text(A.Desc,bx,by+DY+30)
+					Else
+						SetColor(100,100,100)
+						BFnt.Text("???",bx,by+DY)
+					End
+				End
+				Y++
+			End
+		End
+	End
+	SetColor(255,255,255)
+	if ScrollY>0
+		PGUP.Stretch(bx+bw-40,by,40,40)
+		If MX>bx+bw-40 && MY>by && MY<by+40 && MX<bx+BW && ML
+			ScrollY--
+		End
+	End
+	If Y*50>bh
+		PGDN.Stretch(bx+bw-40,by+bh-60,40,40)
+		If MX>bx+bw-40 && MY>by+bh-60 && MY<by+bh && MX<bx+BW && ML
+			ScrollY++
+		End
+	End		
+End
+
+Init
+	CSay("Achievement sub loaded!")
+	gbool.MedalActive = Medals.Active
+	if (Medals.Active)
+		Medals.Game = "Lunas_Father"
+		CSayF("Max medal score: %d",Medals.FullScore)
+		CSayF("Rate %f -> %d",CrudeRate,Rate)
+	Else
+		CSay("Medals are not active!")
+	End	
+End
