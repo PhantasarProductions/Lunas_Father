@@ -82,3 +82,16 @@ Global Void ZA_Irravonia()
 	MapText("IRRAVONIA_1ST")
 	Mini.WriteLn("Welcome to the Fairy Town of Frendor")
 End
+
+
+Global Void NPC_Inn(); Map.GoToLayer("INN","START"); End
+Global Void ZA_ExitInn(); Map.GoToLayer("TOWN","EXIT_INN"); End
+	
+Global Void NPC_Items(); Map.GoToLayer("Items","START"); End
+Global Void ZA_Exit_Items(); Map.GoToLayer("TOWN","EXIT_Items"); End
+	
+Global Void NPC_Weapons(); Map.GoToLayer("Weapons","START"); End
+Global Void ZA_Exit_Weapons(); Map.GoToLayer("TOWN","EXIT_Weapons"); End
+	
+Global Void NPC_Wands(); Map.GoToLayer("Wands","START"); End
+Global Void ZA_Exit_Wands(); Map.GoToLayer("TOWN","EXIT_Wands"); End
