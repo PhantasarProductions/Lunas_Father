@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.11.01
+// Version: 23.11.05
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -310,6 +310,10 @@ Global Void PartyBoxes(flashchar,incombat)
 			Default
 				Lua.error("FP Skill Error!")
 			end
+			If Ch.Points.HP.Have<Ch.Points.HP.Maximum && Ch.Points.VIT.Have>0
+				Ch.Points.VIT.Have--
+				Ch.Points.HP.Have = Ch.Points.HP.Have + math.max(1,Ch.Points.HP.Maximum Div 100)
+			End
 		end
 		breuk=Ch.Points.FP.Have div 25		
 		for j=1,4
