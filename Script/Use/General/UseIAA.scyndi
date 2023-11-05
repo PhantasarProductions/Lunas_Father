@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/UseIAA.scyndi
-// Version: 23.10.31
+// Version: 23.11.05
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -114,6 +114,8 @@ QuickMeta IAA
 		switch Key
 			Case "LIST"
 				return Inventory.Values("Have")
+			Case "FIELDS" 
+				return invclass.Values("Class")				
 			Default
 				_iaareg[key] = _iaareg[key] || GINIE.LoadNew(sprintf("Data/IAA/%s.INI",key),sprintf("IAA_%s",key))
 				_iaameta[key] = _iaameta[key] || SetMetaTable({["*_dat_*"]=_iaareg[key],["*_key_*"]=key},{["__index"]=IAA_IDX,["__newindex"]=IAA_NEWIDX})
