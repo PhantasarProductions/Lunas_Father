@@ -1,0 +1,130 @@
+// License Information:
+// src/Scripts/Script/Use/Combat/AI/AI_Default.scyndi
+// Version: 23.11.05
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+
+#use "Script/Use/General/UseIAA" 
+
+#use "Script/Flow/FlowCombat/Fighter"
+#use "Script/Flow/FlowCombat/Action_Class"
+
+
+
+// Should return the Act the enemy is about to perform.
+Var EnenmyAct(Executor,string param="")
+	int rAct; rAct = math.random(0,len(Executor.Actions)-1)
+	var dAct; dAct = Executor.Actions[rAct]
+	// printf("rAct = %d; dAct = %s\n",ract,dact); for i,v in spairs(Executor.Actions); printf("=> %2d/%d -> %s\n",i,len(Executor.Actions),v); end
+	var aAct; aAct = new Action(Executor.Tag,dAct.Action)
+	//for i,k in sPairs(IAA.Fields);	printf("%9s %9s = %s\n",i,k,aAct.Act[k]); end
+	Switch aAct.Act.Regular
+		Case "OS"
+			aAct.Targets = {Executor}
+		Case "EV"
+			aAct.Targets = {}
+			For _,F in pairs(Fighter.ByTag)
+				If F.TargetableFoe
+					aAct.Targets[aAct.Targets] = F
+				End
+			End
+		Case "AA"
+			aAct.Targets = {}
+			For _,F in pairs(Fighter.Team.Foe)
+				If F.TargetableFoe
+					aAct.Targets[aAct.Targets] = F
+				End
+			End
+		Case "AF"
+			aAct.Targets = {}
+			For _,F in pairs(Fighter.Team.Hero)
+				If F.TargetableFoe
+					aAct.Targets[aAct.Targets] = F
+				End
+			End
+		Case "1A"
+			Table Available = {}
+			Var Weakest = nil
+			Var Strongest = nil
+			For _,F in Pairs(Fighter.Team.Foe)
+				If F.TargetableFoe
+					Weakest   = Weakest   || F
+					Strongest = Strongest || F
+					If Weakest.HP  >F.HP; Weakest  = F; End
+					If Strongest.HP<F.HP; Strongest= F; End
+					Available[len(Available)]=F
+				End
+				Switch dAct.Target
+					Case "" "Random" 
+						aAct.Targets = { Available[math.random(0,len(Available)-1)] }
+					Case "Strongest"
+						aAct.Targets = { Strongest }
+					Case "Weakest"
+						aAct.Targets = { Weakest }
+					Default
+						Lua.error(sprintf("AI Default: Target type (%s/%s) unknown!",aAct.Act.Regular,dAct.Target))
+				End
+			End
+		Case "1F"
+			Table Available = {}
+			Var Weakest = nil
+			Var Strongest = nil
+			For _,F in Pairs(Fighter.Team.Hero)
+				If F.TargetableFoe
+					Weakest   = Weakest   || F
+					Strongest = Strongest || F
+					If Weakest.HP  >F.HP; Weakest  = F; End
+					If Strongest.HP<F.HP; Strongest= F; End
+					Available[len(Available)]=F
+				End
+				Switch dAct.Target
+					Case "" "Random" 
+						aAct.Targets = NewArray( Available[math.random(0,len(Available)-1)] )
+					Case "Strongest"
+						aAct.Targets = NewArray( Strongest )
+					Case "Weakest"
+						aAct.Targets = NewArray( Weakest )
+					Default
+						Lua.error(sprintf("AI Default: Target type (%s/%s) unknown!",aAct.Act.Regular,dAct.Target))
+				End
+			End
+			CSayF("%s will use ability %s on %s",Executor.Tag,aAct.Act.Name,aAct.Targets[0].Tag)
+		Default
+			Lua.error(sprintf("AI Default: Target type (%s) unknown!",aAct.Act.Act.Regular))
+	End
+	Return aAct
+End
