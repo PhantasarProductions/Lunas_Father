@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.11.03
+// Version: 23.11.05
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -217,6 +217,8 @@ Class Foe
 		End
 	End
 	
+	String Pose = "IDLE"
+	
 	Void Draw()
 		If !Drawable
 			Return
@@ -332,6 +334,9 @@ Class Foe
 	Get Bool Defeated
 		Return HP<=0 || Gone
 	End
+		
+	
+	ReadOnly Table Actions
 
 	
 	Constructor(int _IDNum,_RawData)
@@ -349,6 +354,13 @@ Class Foe
 		Stat = Char.Stat
 		Char.Points.HP.MaxCopy = "HP"
 		Char.Points.HP.Have = Char.Points.HP.Maximum
+		Actions = {}
+		For i in Each(_RawData.List("IAA","HaveIAA") )
+			plua mItem; mItem = { ["Action"] = i, ["Target"] = RawData.Value("ACTION::"..i,"TRGT_SKILL"..gint.skill) }
+			For j = 1,_RawData.IntValue("ACTION::"..i,"RATE_SKILL"..gint.skill)
+				Actions[Len(Actions)] = mItem
+			End
+		End
 	End
 	
 	Destructor		
