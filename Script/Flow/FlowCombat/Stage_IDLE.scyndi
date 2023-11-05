@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.10.31
+// Version: 23.11.05
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -64,7 +64,12 @@ Void Cycle()
 		case "PLAYER" "HERO"
 			Stage.CurrentTag = "PMM"
 		Case "FOE" "ENEMY"
-			print("\x1b[31mENEMY TURN, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()
+			//print("\x1b[31mENEMY TURN, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()
+			plua __foe;__foe=Fighter.ByTag[Diamonds.Slots[0].FighterTag]
+			If __foe.HP==0
+				Diamonds.RemoveFirst()
+			end
+			Lua.Scyndi.Class.AI.DoAI(__foe)
 		Case "JOKER"
 			print("\x1b[31mJOKER, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()			
 	End
