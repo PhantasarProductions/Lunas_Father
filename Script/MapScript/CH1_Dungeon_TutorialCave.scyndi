@@ -32,16 +32,87 @@
 // 
 // **********************************************
 // 
-// version: 23.11.05
+// version: 23.11.06
 // End License Information
 Script
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
 
+// #000
+Global Void ZA_Medal()
+	If !gbool.Done_TutCaves
+		gbool.TutorialMedals=true
+		MapText("TUTORIALMEDALS")
+		MapText("NOTIMEFORMEDALS")
+	Else
+		If !Done.TutorialMedals
+			MapText("TUTORIALMEDALS")
+		End
+		If Ach.MedalRate>=10
+			Map.Kill("Hek")
+		End
+	End
+End
+
 Global Void Bye()
+	Delisto()
 End
 
 Global Void HekWeg()
 	Map.Kill("Hek")
+	Map.Kill("NPC_Feena_000")
+End
+
+Global Void NPC_Feena_000()
+	MapText("FEENA_000")
+	Map.Kill("DOOR_000")
+End
+
+Global Void ZA_RemoveFeena()
+	If gbool.Done_TutCaves
+		Map.Kill("NPC_Feena_000")
+	Else
+		CSay("Since the caves have not yet been completed Feena should stay")
+	End
+End
+
+
+// #001
+Global Void ZA_Feena_001()
+	If !Done.TutCave_Feena_001
+		MapText("FEENA_001")
+	End
+End
+
+// #002
+Global Void ZA_Feena_002()
+	If !Done.TutCave_Feena_002
+		MapText("FEENA_002")
+	End
+End
+
+// #004
+Global Void ZA_Feena_003()
+	If !Done.TutCave_Feena_003_Uitleg
+		MapText("FEENA_003_Uitleg")
+	End
+End
+
+Global Void ZA_Remove_Hek()
+	Map.Kill("Travel_Hek")
+End
+
+Global Void NPC_Feena_003()
+	If TravelerEmblem.CH1_DUNGEON_TUTORIALCAVE
+		MapText("FEENA_003")
+		Map.Kill("DOOR_Next_003")
+	Else
+		MapText("FEENA_003_Uitleg")
+	End
 End
