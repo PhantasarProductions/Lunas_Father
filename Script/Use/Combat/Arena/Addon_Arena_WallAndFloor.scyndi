@@ -1,0 +1,90 @@
+// License Information:
+// src/Scripts/Script/Use/Combat/Arena/Addon_Arena_WallAndFloor.scyndi
+// Version: 23.11.06
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+
+#use "Script/Flow/FlowCombat/Quake"
+
+Int WallY = Graphics.Height div 3
+Int WallH = 128
+int WallW = 64
+
+Class Addon_WallAndFloor
+	ReadOnly Var ImgWall
+	ReadOnly Var ImgFloor
+		
+	ReadOnly Int WR
+	ReadOnly Int WG
+	ReadOnly Int WB
+
+	ReadOnly Int FR
+	ReadOnly Int FG
+	ReadOnly Int FB
+		
+	Int _FA = 255
+	Get Int FA
+		Return _FA
+	End
+	Set Int FA
+		_FA = Value % 256
+	End
+	
+		
+	Constructor(string TexWall,string TexFloor,Int _WR=255,Int _WG=255, Int _WB=255,int _FR=255,Int _FG=255,Int _FB=255)
+		ImgWall  = LoadNewImage(TexWall, Upper("ARENA_WAF::"..TexWall))
+		ImgFloor = LoadNewImage(TexFloor,Upper("ARENA_WAF::"..TexFloor))
+		WR = _WR
+		WG = _WG
+		WB = _WB
+		FR = _FR
+		FG = _FG
+		FB = _FB
+	End
+	
+	Void Draw()
+		Cls()
+		SetColor(FR,FG,FB,FA)
+		ImgFloor.Tile(0-Quake.X,WallY+(WallH div 2)+Quake.Y,Graphics.Width+Quake.X,Graphics.Height-WallY+Quake.Y)
+		SetColor(WR,WG,FB,255)
+		for x=-Quake.X,Graphics.Width+Quake.X,WallW
+			ImgWall.Stretch(x,WallY+Quake.Y,WallW,WallH)
+		End
+	End
+End
