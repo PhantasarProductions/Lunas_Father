@@ -116,3 +116,10 @@ Global Void NPC_Feena_003()
 		MapText("FEENA_003_Uitleg")
 	End
 End
+
+// #004
+Global Void ZA_Feena_004()
+	If !Done.TutCave_Feena_004
+		MapText("FEENA_004")
+	End
+End
