@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.11.05
+// Version: 23.11.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -322,7 +322,7 @@ Global Void PartyBoxes(flashchar,incombat)
 			else
 				setcolor(18,0,25)
 			end
-			Rect(((BW*i)+120)+((j-1)*((barw/4))),PBY+47,(barw/4)-2,3)
+			Rect(math.floor(((BW*i)+120)+((j-1)*((barw/4)))),PBY+47,math.floor((barw/4)-2),3)
 		end
 		breuk=Ch.Points.FP.Have/Ch.Points.FP.Maximum
 		SetColor(100,100,100)
