@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.11.01
+// Version: 23.11.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -185,6 +185,15 @@ end
 Get Bool HasPlayer
 	Return Kthura.HasObj("PLAYER")
 End
+
+Void AddCyclePre(string ms)
+	Sys.Call("FLOW_FIELD","AddCyclePre",ms)
+End
+
+Void AddCyclePost(string ms)
+	Sys.Call("FLOW_FIELD","AddCyclePost",ms)
+End
+
 
 QuickMeta Player
 	newindex
