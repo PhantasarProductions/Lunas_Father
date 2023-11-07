@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.06
+// version: 23.11.07
 // End License Information
 Script
 
@@ -41,6 +41,7 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
 
@@ -121,5 +122,33 @@ End
 Global Void ZA_Feena_004()
 	If !Done.TutCave_Feena_004
 		MapText("FEENA_004")
+	End
+End
+
+// #005
+Global Void ZA_Feena_005()
+	If !Done.TutCave_Feena_005
+		MapText("FEENA_005")
+	End
+	Awarded.Scen_Tutorial = true
+End
+
+Global Void NPC_Feena_005(); MapText("FEENA_005"); End
+	
+Global Void NPC_Myrah()
+	If Map.Leader=="Myrah"
+		Party.Char(1,"")
+		Party.Char(0,"Myrah")
+		Map.Leader="Myrah"
+		Map.GoToMap("CH1_Dungeon_MagicTest","#001","Start")
+	Else
+		MapText("NOT_FRANCIS")
+	End
+End
+
+Global Void NPC_Francis()
+	If Map.Leader=="Francis"
+	Else
+		MapText("NOT_MYRAH")
 	End
 End
