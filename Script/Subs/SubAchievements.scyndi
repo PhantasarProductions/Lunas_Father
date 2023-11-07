@@ -227,6 +227,14 @@ Global Void Overview(int bx, int by, int bw, int bh)
 	End		
 End
 
+Global Void AchDebug()
+	printf("Active          = %s\n",Medals.Active); if !Medals.Active; return; end
+	printf("Full Score      = %9d\n",Medals.FullScore)
+	printf("Max Score       = %9d\n",MaxScore)
+	printf("Crude rate      =         %1.9f\n",CrudeRate)
+	printf("Lua rate        = %9d%%\n",Rate)
+End
+
 Init
 	CSay("Achievement sub loaded!")
 	gbool.MedalActive = Medals.Active

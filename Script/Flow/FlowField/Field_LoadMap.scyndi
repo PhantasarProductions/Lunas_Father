@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_LoadMap.scyndi
-// Version: 23.11.02
+// Version: 23.11.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -49,6 +49,8 @@ plua FField
 
 Init
 	FField = Lua.Scyndi.Globals.FlowField
+	Sys.ConsoleLocal("MEDAL","ADebug")
+	Sys.ConsoleLocal("MEDALS","ADebug")
 End
 
 void LoadMapText(string MP)
