@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 23.10.31
+// Version: 23.11.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -80,17 +80,18 @@ Void StartSet()
 End
 
 String Char(int i,nch)
+	_Party = _Party || Statistician.CreateNew("LUNA_PARTY")
 	if nch; _Party.Party[i]=nch; end
 	Return _Party.Party[i]
 End
 
 int GetLevel(string ch)
-	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_Party = _Party ||  Statistician.CreateNew("LUNA_PARTY")
 	return _Party.Char[ch].Stat.Level
 end
 
 Get Int FullSize	
-	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_Party = _Party ||  Statistician.CreateNew("LUNA_PARTY")
 	for i=0,5
 		if _Party.Party[i]==""
 			Return i
