@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Ach.scyndi
-// Version: 23.11.03
+// Version: 23.11.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -63,6 +63,11 @@ Get Int MedalRate
 	return gint.MedalRate
 End
 
-Init	
+Global Void ADebug()
+	Sys.Call("SUB_ACH","AchDebug")
+End
+
+Init
+	CSayF("ACH loaded in state: %s",Sys.StateName)
 	Sys.LoadStateNew("SUB_ACH","Script/Subs/SubAchievements.lbc")
 End
