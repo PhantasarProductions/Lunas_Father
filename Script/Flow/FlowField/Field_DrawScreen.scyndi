@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.11.06
+// Version: 23.11.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -59,10 +59,32 @@ var MiniFnt = ObtainFont("Mini")
 string LastPlayTex = "***"
 string LastLayer = "***"
 
+Var PreDrawScreenMapScriptCyclesFunctions
+Var PostDrawScreenMapScriptCyclesFunctions
+
+plua FField
+
+Void ClearCycleFunctions()
+	PreDrawScreenMapScriptCyclesFunctions = {}
+	PostDrawScreenMapScriptCyclesFunctions = {}
+End
+
+Global Void AddCyclePre(string ms)
+	PreDrawScreenMapScriptCyclesFunctions[len(PreDrawScreenMapScriptCyclesFunctions)] = ms
+End
+
+Global Void AddCyclePost(string ms)
+	PostDrawScreenMapScriptCyclesFunctions[len(PreDrawScreenMapScriptCyclesFunctions)] = ms
+End
+
+
 Init
 	HX = Graphics.Width div 2
 	HY = Graphics.Height div 2
 	CSayF("Center (%d,%d)",HX,HY)
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = 
+	ClearCycleFunctions()
 End
 
 Bool Scrolling = true
@@ -123,12 +145,16 @@ End
 // This MUST be global as it's solely called by a different state!
 Global Void BoxText_Background()
 	AutoPlayer()
+	for ms in each(PreDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Kthura.Draw(ScrollX,ScrollY)
+	for ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 End
 
 Void DrawScreen()
 	AutoPlayer()
+	for ms in each(PreDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Kthura.Draw(ScrollX,ScrollY)
+	for ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Party.Boxes()
 	FieldStats()
 	//print("CallGauge"); 
