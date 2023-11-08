@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.11.01
+// Version: 23.11.08
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -121,6 +121,10 @@ Init
 	NIMG("GFX/Page/Left.png","PAGE_LEFT")
 	NIMG("GFX/Page/Right.png","PAGE_RIGHT")	
 	NIMG("GFX/Combat/End/Victory.png","COMBAT_END_VICTORY")
+	NIMG("GFX/PFA/Button.png","PFA_BUTTON")
+	For ch In Each(NewArray("MYRAH","FRANCIS"))
+		NIMG("GFX/PFA/"..ch..".png","PFA_"..ch)
+	End
 	For i=1,26 
 		NIMG(sprintf("GFX/COMBAT/DIAMONDS/FOE_%02d.PNG",i) ,sprintf("COMBATDIAMOND_FOE_%02d",i))
 		NIMG(sprintf("GFX/COMBAT/DIAMONDS/BOSS_%02d.PNG",i),sprintf("COMBATDIAMOND_BOSS_%02d",i))
