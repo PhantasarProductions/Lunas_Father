@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.05
+// version: 23.11.08
 // End License Information
 Module
 
@@ -43,7 +43,7 @@ Void DoAI(Executor)
 	_ai_reg = _ai_reg || {}
 	if (!_ai_reg[FoeAI])
 		Lua.Scyndi.Use("Script/Use/Combat/AI/AI_"..FoeAI)
-		_ai_reg[FoeAI] = Lua.Scyndi.Class["AI_"..FoeAI].EnenmyAct
+		_ai_reg[FoeAI] = Lua.Scyndi.Class["AI_"..FoeAI].EnemyAct
 	End
 	Lua.Scyndi.Globals.Execute(Executor.Tag,_ai_reg[FoeAI](Executor,""))
 End
