@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerMainMenu.scyndi
-// Version: 23.10.28
+// Version: 23.11.08
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -110,7 +110,5 @@ End
 
 
 Init
-	Stage.Register("PMM",Stage_PlayerMainMenu)
-	//Init_PIMI_Myrah()
-	//Init_PIMI_Francis()
+	Stage.Register("PMM",Stage_PlayerMainMenu)	
 End
