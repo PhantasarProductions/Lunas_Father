@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/AI/Template.scyndi
 // Template AI
-// version: 23.11.05
+// version: 23.11.08
 // Copyright (C) 2023 Jeroen P. Broks
 // This software is provided 'as-is', without any express or implied
 // warranty.  In no event will the authors be held liable for any damages
@@ -23,6 +23,6 @@ Module
 #use "Script/Flow/FlowCombat/Action_Class"
 
 // Should return the Act the enemy is about to perform.
-Var EnenmyAct(Executor,string param="")
+Var EnemyAct(Executor,string param="")
 	Return Nil
 End
