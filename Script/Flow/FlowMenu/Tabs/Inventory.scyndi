@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Inventory.scyndi
-// Version: 23.10.18
+// Version: 23.11.08
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -188,6 +188,9 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 						_hvrold = itmtag						
 					end
 					Hovering = true
+					If ML && Sit.Allow(CharTag,itmtag)
+						Sit.Action(CharTag,itmtag)
+					End	
 				end			
 				SetColor(255,255,255)
 				Fnt.Text(Item.Item.Name,x+ix,iy)
