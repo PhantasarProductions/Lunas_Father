@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/PIMI/PIMI_Class.scyndi
-// Version: 23.10.27
+// Version: 23.11.08
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,6 +42,8 @@ Module
 #use "libs/rosetta"
 
 #use "script/use/link/mini"
+
+
 #use "Script/flow/flowcombat/fighter"
 
 plua Scyndi = Lua.Scyndi
@@ -56,7 +58,8 @@ Void Guard(string chTag)
 	Scyndi.Class.Stage.CurrentTag="IDLE"
 End
 
-Void ItemsAct()
+Void ItemsAct(string Pltag)
+	Scyndi.Globals.PlayerToUseItem(PlTag)
 End
 
 // Player Input Menu Item
