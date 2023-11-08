@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.07
+// version: 23.11.08
 // End License Information
 Script
 
@@ -72,5 +72,31 @@ Global Void ZA_Welcome()
 		MapText("Welcome")
 	End
 End
+
+
+Global Void Target_Floor003()
+	CSay("Target Hit!")
+	For i=1,4
+		plua o = Kthura.Obj["P"..i]
+		print(i,i<3)
+		o.Visible=True
+		o.ForcePassible = i<3
+		gbool.MagicTest_Target003 = true
+	End
+	Kthura.Remap()
+End
+
+Global Void ZA_ShootTutorial()
+	If !Done.Allow_Field_Myrah
+		MapText("SHOOTTUTORIAL")
+	End
+	If gbool.MagicTest_Target003
+		Target_Floor003()
+	End
+End
+
+
+Global Void Target4_1(); Map.PermaKill("Hek_4_1"); End
+Global Void Target4_2(); Map.PermaKill("Hek_4_2"); End
 
 Global Void NPC_Feenalaria(); MapText("GOODLUCK"); End
