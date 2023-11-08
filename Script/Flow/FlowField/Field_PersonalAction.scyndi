@@ -1,0 +1,181 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowField/Field_PersonalAction.scyndi
+// Version: 23.11.08
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
+
+#use "Libs/MultiPointer"
+
+#use "Script/Use/Link/Map"
+
+ReadOnly Var Button = ObtainImage("PFA_BUTTON")
+//ReadOnly Var West   = ObtainImage("PAGE_LEFT")
+//ReadOnly Var East   = ObtainImage("PAGE_RIGHT")
+//ReadOnly Var North  = ObtainImage("PAGE_UP")
+//ReadOnly Var South  = ObtainImage("PAGE_DOWN")
+ReadOnly Int BS     = 100
+ReadOnly Int WS     = 32
+ReadOnly Int BY     = 34
+ReadOnly Int BX     = 34
+Int Hue = os.time()
+pLua __Pass
+pLua FField
+//ReadOnly Int BX = Graphics.Width - WS - BS
+	
+Class FDA_Dir
+	Static ReadOnly Table _Tab = {}
+	Static ReadOnly Int SZ = 30
+	ReadOnly Var Icon
+	ReadOnly Var X
+	ReadOnly Var Y
+	ReadOnly String Wind
+	
+	Static Var W(String W); return _Tab[Upper(W)] || Lua.error("Wind '"..W.." doesn't exist!"); End
+	
+	Constructor(String W,String I, Int _X, int _Y)
+		Icon = ObtainImage("PAGE_"..Upper(I))
+		Wind = W
+		X = _X
+		Y = _Y
+		_Tab[Upper(W)]=Self
+	End
+	
+	Bool Draw()	
+		//MulitPointer.RCV()
+		Bool Ret = False
+		if MX>=X && MY>=Y && MX<=X+SZ && MY<=Y+SZ
+			Ret = ML
+			Hue = (Hue+1)%360
+			SetColorHSV(Hue,1,1)
+		Else
+			SetColor(255,255,255)
+		End
+		Icon.Stretch(X,Y,SZ,SZ)
+		Return Ret
+	End
+End
+
+Init
+	PLUA F
+	F = New FDA_Dir("East","Right",BX+BS+1,BY+(BS div 2)-(FDA_Dir.SZ div 2))
+	F = New FDA_Dir("West","Left",BX-WS-1,BY+(BS div 2)-(FDA_Dir.SZ div 2))
+	F = New FDA_Dir("South","Down",BX+(BS div 2)-(WS div 2),BY+BS+1)
+	F = New FDA_Dir("North","Up",BX+(BS div 2)-(WS div 2),BY-WS-1)
+End
+		
+
+
+plua __ALWAYS();return true; End
+plua __PFA_Reg
+plua __Going
+
+Class FieldAbility
+	ReadOnly String CharTag
+	ReadOnly Delegate Allow
+	// If there is direction support, a string parameter which will contain the wind direction will be required
+	ReadOnly Delegate Action
+	ReadOnly Delegate Cycle
+	ReadOnly Var Icon
+	Bool Directions
+		
+	Constructor(string CT,_Allow,_Action,_Cycle,_directions)
+		CharTag    = CT
+		Allow      = _Allow || __ALWAYS
+		Action     = _Action || Lua.error("No action for Field Ability for "..CharTag)
+		Cycle      = _Cycle || Lua.error("No cycle for Field Ability for "..CharTag)
+		Directions = _directions==true
+		Icon       = ObtainImage("PFA_"..Upper(CharTag))
+	End
+End
+
+
+Global Void PFA_Reg(string CT,_Allow,_Action,_Cycle,_directions)
+	// PFA = Personal Field Action or Personal Field Ability. Whatever you like.
+	__PFA_Reg = __PFA_Reg || {}
+	__PFA_Reg[CT] = new FieldAbility(CT,_Allow,_Action,_Cycle,_directions==true)
+End
+
+Void LoadPFAPass(string MapBundle)
+	CSay("Can Myrah's arrow and Scyndi's whip pass?")
+	string src
+	var func	
+	src = JCR6.GetString(sprintf("Kthura/%s/Pass.lua",mapbundle))
+	func = Lua.load(src)
+	__Pass = func()
+End
+
+Global Bool PFA_Pass(Int X,Int Y)
+	int _X; _X = X div 32
+	int _Y; _Y = Y div 32
+	plua ___Pass = __Pass[Kthura.CurrentLayer]
+	//CSayF("Pass(%d,%d) => (%d,%d) => X:%s",X,Y,_X,_Y,___Pass[_X])
+	if (!___Pass[_X]); Return False; End
+	Return ___Pass[_X][_Y]==True
+End
+
+Bool Act()
+	If !__PFA_Reg; Return False; End
+	If !__PFA_Reg[Map.Leader]; Return False; End
+	plua __P; __P=__PFA_Reg[Map.Leader]
+	if !__P.Allow(); Return False; End
+	if !__Going
+		SetColor(255,255,255)
+		Button.Stretch(BX,BY,BS,BS)
+		__P.Icon.Stretch(BX,BY,BS,BS)
+		If __P.Directions
+			For _,DB in Pairs(FDA_Dir._Tab)
+				If DB.Draw() 
+					//DB.Icon.Stretch(DB.X,DB.Y,DB.SZ,DB.SZ)
+					CSayF("PFA.%s.%s requested",Map.Leader,DB.Wind)
+					__Going = __P.Action(DB.Wind)
+				End
+			End
+		Else
+		End
+	Else
+		__Going = __P.Cycle()
+	End
+	Return __Going
+End
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadPFAPass
+End

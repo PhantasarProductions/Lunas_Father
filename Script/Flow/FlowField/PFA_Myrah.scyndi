@@ -1,0 +1,139 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Flow/FlowField/PFA_Myrah.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.11.08
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+
+#use "Script/Flow/FlowField/Field_PersonalAction"
+
+plua FField
+
+
+Int ArrowX1
+Int ArrowX2
+Int ArrowY1
+Int ArrowY2
+Int ArrowXM
+Int ArrowYM
+pLua Targets
+
+
+Bool PFA_Myrah_Allow(); return gbool.Allow_Field_Myrah; End
+
+Bool PFA_Myrah_Action(String Wind)
+	ArrowX1 = Player.X
+	ArrowY1 = Player.Y
+	Switch Upper(Wind)
+		Case "NORTH" 
+			ArrowX2 = ArrowX1
+			ArrowY2 = ArrowY1+64
+			ArrowXM = 0
+			ArrowYM = -4
+		Case "SOUTH"
+			ArrowX2 = ArrowX1
+			ArrowY2 = ArrowY1-64
+			ArrowXM = 0
+			ArrowYM = 4
+		Case "EAST" 
+			ArrowX2 = ArrowX1-64
+			ArrowY2 = ArrowY1
+			ArrowXM = 4
+			ArrowYM = 0
+		Case "WEST" 
+			ArrowX2 = ArrowX1+64
+			ArrowY2 = ArrowY1
+			ArrowXM = -4
+			ArrowYM = 0
+		Default
+			Lua.error("Myrah shoots into an unknown direction: "..Wind)
+	End
+	CSayF("(%04d,%04d)::> Myrah shoots an arrow (%d,%d)(%d,%d)! Dir(%d,%d)",Player.X,Player.Y,ArrowX1,ArrowY2,ArrowX2,ArrowY2,ArrowXM,ArrowYM)
+	Return True
+End
+
+Bool PFA_Myrah_Cycle()
+	Int SX = FField.FIELD_DRAWSCREEN.ScrollX
+	Int SY = FField.FIELD_DRAWSCREEN.ScrollY
+	ArrowX1=ArrowX1+ArrowXM
+	ArrowX2=ArrowX2+ArrowXM
+	ArrowY1=ArrowY1+ArrowYM
+	ArrowY2=ArrowY2+ArrowYM
+	//CSayF("Myrah's arrow flies: (%d,%d)(%d,%d)  (Block:%5s; Pass:%4s)",ArrowX1,ArrowY1,ArrowX2,ArrowY2,Kthura.Block(ArrowX1 div 32,ArrowY1 div 32),PFA_Pass(ArrowX1,ArrowY1))
+	Graphics.Line(ArrowX1-SX,ArrowY1-SY,ArrowX2-SX,ArrowY2-SY)
+	For _tag,_func in pairs(Targets[Kthura.CurrentLayer])
+		If Kthura.HasObj(_tag)
+			plua o;o=Kthura.Obj[_tag]
+			plua z1;  z1  = (ArrowX1-o.X)^2
+			plua z2;  z2  = (ArrowY1-O.Y)^2
+			plua hyp; hyp = math.sqrt(z1+z2)
+			//CSayF("%d + %d || H = %f",z1,z2,hyp)
+			If hyp<40
+				If Upper(o.Texture)=="GFX/TARGET/UNHIT.PNG"
+					_func(_tag)
+					o.Texture="GFX/TARGET/HIT.PNG"
+					Map.DelayKill(_Tag)
+				End
+				Return False
+			End	
+		End	
+	End
+	If Kthura.Block(ArrowX1 div 32,ArrowY1 div 32)
+		Return PFA_Pass(ArrowX1,ArrowY1)
+	End
+	Return True
+End
+
+Void LoadTargets(String MapBundle)
+	CSay("Myrah's Targets")
+	string src
+	var func	
+	src = JCR6.GetString(sprintf("Kthura/%s/Targets.lua",mapbundle))
+	func = Lua.load(src)
+	Targets = func()
+End
+
+Init
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
+	PFA_Reg("Myrah",PFA_Myrah_Allow,PFA_Myrah_Action,PFA_Myrah_Cycle,true)
+End
