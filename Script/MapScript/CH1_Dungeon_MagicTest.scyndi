@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.08
+// version: 23.11.09
 // End License Information
 Script
 
@@ -98,5 +98,10 @@ End
 
 Global Void Target4_1(); Map.PermaKill("Hek_4_1"); End
 Global Void Target4_2(); Map.PermaKill("Hek_4_2"); End
+	
+Global Void HekjesWeg6()
+	Map.PermaKill("Hek_I")
+	Map.PermaKill("Hek_II")
+End
 
 Global Void NPC_Feenalaria(); MapText("GOODLUCK"); End
