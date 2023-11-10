@@ -61,11 +61,16 @@ Class Action
 	End
 	
 		
-	Constructor(string _ExeTag,string _IAATag,Params)
+	Constructor(string _ExeTag,__IAA,Params)	
 		Fighter = Fighter || Lua.Scyndi.Class.Fighter
 		For k,v in pairs(Params || {})
 			self[k]=v
 		End
-		Act = IAA[_IAATag]
+		if Lua.type(__IAA)=="string"
+			plua _IAATag;_IAATag = __IAA
+			Act = IAA[_IAATag]
+		Else
+			Act = __IAA
+		End
 	End
 End
