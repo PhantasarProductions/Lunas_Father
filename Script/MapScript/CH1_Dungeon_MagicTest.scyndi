@@ -43,6 +43,7 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/ManaOrb"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
 
@@ -104,4 +105,18 @@ Global Void HekjesWeg6()
 	Map.PermaKill("Hek_II")
 End
 
+Global Void ZA_ManaOrbBarrier()
+	If gbool.AllowMyrahMagic
+		Kthura.Obj.ManaOrbBarrier.Alpha = 255
+		Kthura.Obj.ManaOrbBarrier.ForcePassible = True
+		Kthura.Remap()
+	End
+End
+
 Global Void NPC_Feenalaria(); MapText("GOODLUCK"); End
+	
+Global Void ZA_MyrahCanDoMagicNow()
+	If Done.Myrah_TutMagic
+		MapText("TUT_MAGIC")
+	End
+End
