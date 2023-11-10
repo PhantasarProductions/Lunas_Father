@@ -1,0 +1,21 @@
+Module
+
+#use "Script/Use/General/UseIAA"
+
+Bool ObtAlways();return True; End
+
+Class CharAbility
+	ReadOnly String IAATag
+	ReadOnly Var IAAData
+	ReadOnly Delegate Obtained
+	Get String Name; Return IAAData.Name; End
+	ReadOnly Int ReqFP
+	Var Hover
+	
+	Constructor(string Tag,Int _FP,Obt)
+		IAATag = Tag
+		IAAData = IAA[Tag]
+		Obtained = Obt || ObtAlways
+		ReqFP = _FP
+	End
+End
