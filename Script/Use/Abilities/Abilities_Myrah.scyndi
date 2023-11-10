@@ -1,0 +1,36 @@
+Module
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Abilities/Abilities_Class"
+
+// This one MUST be present!
+Var Abl 
+
+
+
+Bool Allow_Fire();       return gbool.MYRAH_MAGIC_FIRE;  End
+Bool Allow_Wind();       return gbool.MYRAH_MAGIC_WIND;  End
+Bool Allow_Water();      return gbool.MYRAH_MAGIC_WATER; End
+Bool Allow_Earth();      return gbool.MYRAH_MAGIC_EARTH; End
+Bool Allow_Lava();       return gbool.MYRAH_MAGIC_FIRE && gbool.MYRAH_MAGIC_EARTH; End
+Bool Allow_Lightning();  return gbool.MYRAH_MAGIC_FIRE && gbool.MYRAH_MAGIC_WIND; End
+Bool Allow_Frost();      return gbool.MYRAH_MAGIC_WIND && gbool.MYRAH_MAGIC_WATER; End
+Bool Allow_Wood();       return gbool.MYRAH_MAGIC_EARTH && gbool.MYRAH_MAGIC_WATER; End
+
+Void Assist(String E,Int F)
+	Abl[len(Abl)] = new CharAbility(sprintf("HERO_MYRAH_ABL_ASS_%s",Upper(E)),F,Abilities_Myrah[sprintf("Allow_%s",E)])
+End
+
+Init
+	Abl = {}
+	
+	For _,Atk in pairs{"Fire","Wind","Water","Earth","Frost","Lava","Lightning"}
+		Abl[len(Abl)] = new CharAbility(sprintf("HERO_MYRAH_ABL_ATK_%s",Upper(Atk)),16,Abilities_Myrah[sprintf("Allow_%s",Atk)])
+	End
+	Assist("Fire",30)
+	Assist("Wind",95)
+	Assist("Water",10)
+	Assist("Earth",30)
+	Abl[len(Abl)] = new CharAbility("HERO_MYRAH_ABL_ASS_WOOD",256,Abilities_Myrah.Allow_Wood)
+End
