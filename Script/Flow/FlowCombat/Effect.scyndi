@@ -109,7 +109,22 @@ Bool Effect_Attack(executor,target,act)
 			Atk = math.max(1, Atk div 2)
 		End
 	End
-			
+	
+	// FP+
+	if Target.Team=="Hero"
+		Number Rate; Rate = Atk / Target.MaxHP
+		Switch gint.skill
+			case 1
+				Target.Char.Points.FP.Have = Target.Char.Points.FP.Have + math.ceil(50*Rate)
+			case 2
+				Target.Char.Points.FP.Have = Target.Char.Points.FP.Have + math.ceil(25*Rate)
+			case 3
+				Target.Char.Points.FP.Have = Target.Char.Points.FP.Have + math.ceil(12*Rate)
+			Default
+				Target.Char.Points.FP.Have = 0
+				// PUNISHMENT FOR CHEATING THE SYSTEM!
+		End
+	End
 	
 	// Substract Damage From Target's HP
 	Target.HP = Target.HP - Atk
