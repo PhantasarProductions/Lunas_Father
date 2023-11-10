@@ -39,11 +39,67 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
 
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
 
+#use "Script/Use/General/IAA_Hover"
 
-Void Flow(string _Situation,string CharTag)
+
+pLua ChAbl
+const var Fnt = ObtainFont("BASE")
+const var _Party = Statistician.CreateNew("LUNA_PARTY")
+
+
+Init 
+	ChAbl = {}
+	For _,ch in pairs{"Myrah"}
+		CSayF("Getting the abilities for: %s",ch)
+		Lua.Scyndi.Use("Script/Use/Abilities/Abilities_"..ch)
+		ChAbl[Ch] = Lua.Scyndi.Class["Abilities_"..ch].Abl
+	End
+End
+
+Void Flow(string _Situation,string CharTag,int bx, int by, int bw,int bh)
+	pLua Ch;ch=_Party.Char[CharTag]
+	If CharTag=="Francis"
+		// TO DO: Link to quick alchemy page
+		Return
+	End
+	bool Hovering = false
+	int  HoverIdx = -1
+	For i,Abl In iPairs(ChAbl[CharTag])
+		int iy; iy = i * 30
+		int  y;  y = iy+by
+		int  x;  x = bx
+		if Abl.Obtained()
+			if MX>bx && MY>y && MX<bx+bw && MY<y+30
+				x = bx + 10
+				Hovering=true
+				HoverIdx=i
+			end
+			if Ch.Points.FP.Have>=Abl.ReqFP 
+				SetColor(255,255,255)			
+			Else
+				SetColor(100,100,100)
+			End
+			Fnt.Text(Abl.IAAData.Name,x,y)
+			if Ch.Points.FP.Have>=Abl.ReqFP 
+				SetColor(  0,180,255)			
+			Else
+				SetColor(  0, 75,100)
+			End
+			Fnt.Text(sprintf("%d",Abl.ReqFP),bx+bh,y,1,0);
+		Else
+			SetColor(100,100,100)
+			Fnt.Text("???",x,y)
+		End
+	End
+	If Hovering
+		pLua Abl;Abl = ChAbl[CharTag][HoverIdx]		
+		Abl.Hover = Abl.Hover || new HoverIAA(Abl.IAATag)
+		Abl.Hover.show(MX,MY+40)
+	End
 End
