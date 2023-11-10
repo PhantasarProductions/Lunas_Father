@@ -1,0 +1,135 @@
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/MultiPointer"
+
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+
+Const Int Height=60
+plua Element
+Int Hue = os.time()
+
+ReadOnly Var Fnt = ObtainFont("BASE")
+
+Class ManaElement
+	ReadOnly Int Y
+	ReadOnly Int X
+	ReadOnly Int H = Height
+	ReadOnly Int W 
+	ReadOnly Var Banner
+	ReadOnly String Element
+	String Spell1
+	String Spell2
+	String SpellCombi1
+	String ElemCombi1
+	String SpellCombi2
+	String ElemCombi2
+	
+	Get Bool Have
+		plua chk;chk = sprintf("MYRAH_MAGIC_%s",Upper(Element));
+		CSayF("Does Myrah already have the element %s? -> %s -> %s",Element,Chk,gbool[chk])
+		Return gbool[chk]
+	End
+		
+	//Constructor(String E,string S1,string S2,String SC, String EC,Int _Y)
+	Constructor(String E,_Y)
+		CSayF("Elem: %s",E)
+		Element = E
+		Banner = LoadNewImage(sprintf("GFX/Mana Orb/%s.png",E),"MANAORB_ELEMENT_"..upper(E))
+		//Spell1 = S1
+		//Spell2 = S2
+		//SpellCombi = SC
+		//ElemCombi  = EC
+		Y = _Y
+		W = math.floor(Banner.Width * (Banner.Height / Height))
+		X = (Graphics.Width div 2) - (W div 2)
+	End
+End
+
+
+Init
+	Element = {}
+	
+	For i,E in Pairs{"Fire","Wind","Water","Earth"}
+		Element[E] = New ManaElement(E,i*Height)
+	End
+	
+	// Fire
+	Element.Fire.Spell1 = "Burn"
+	Element.Fire.Spell2 = "Might"
+	Element.Fire.SpellCombi1   = "Kaboom!"
+	Element.Fire.ElemCombi1    = "Earth"
+	Element.Fire.SpellCombi2   = "Zap!"
+	Element.Fire.ElemCombi2    = "Wind"
+	
+	// Wind
+	Element.Wind.Spell1 = "Breeze"
+	Element.Wind.Spell2 = "Accelerator"
+	Element.Wind.SpellCombi1   = "Chill"
+	Element.Wind.ElemCombi1    = "Water"
+	Element.Wind.SpellCombi2   = "Zap!"
+	Element.Wind.ElemCombi2    = "Fire"
+	
+	// Water
+	Element.Water.Spell1 = "Splash"
+	Element.Water.Spell2 = "Heal"
+	Element.Water.SpellCombi1   = "Chill"
+	Element.Water.ElemCombi1    = "Wind"
+	Element.Water.SpellCombi2   = "Bio"
+	Element.Water.ElemCombi2    = "Earth"
+	
+	// Earth
+	Element.Earth.Spell1 = "Rock"
+	Element.Earth.Spell2 = "Shield"
+	Element.Earth.SpellCombi1   = "Kaboom!"
+	Element.Earth.ElemCombi1    = "Fire"
+	Element.Earth.SpellCombi2   = "Bio"
+	Element.Earth.ElemCombi2    = "Water"
+End
+
+
+Global Void MainFlow()
+	MultiPointer.RCV()
+	SetColor(255,180,0)
+	Fnt.Text("Myrah found a new mana egg!",5,5)
+	For W,EData in pairs(Element)
+		If EData.Have
+			SetColor(80,80,80)
+		ElseIf MY>EData.Y && MY<EData.Y+Height
+			Hue = (Hue+1) % 360
+			SetColorHSV(Hue,1,1)
+			If ML
+				gbool[sprintf("MYRAH_MAGIC_%s",Upper(W))] = True
+				Mini.Write("Myrah ",255,180,0)
+				Mini.Write("learned ",255,0,255)
+				Mini.WriteLn(sprintf("\"%s\"",EData.Spell1))
+				Mini.Write("Myrah ",255,180,0)
+				Mini.Write("learned ",255,0,255)
+				Mini.WriteLn(sprintf("\"%s\"",EData.Spell2))
+				If Element[EData.ElemCombi1].Have
+					Mini.Write("Myrah ",255,180,0)
+					Mini.Write("learned ",255,0,255)
+					Mini.WriteLn(sprintf("\"%s\"",EData.SpellCombi1))
+				End
+				If Element[EData.ElemCombi2].Have
+					Mini.Write("Myrah ",255,180,0)
+					Mini.Write("learned ",255,0,255)
+					Mini.WriteLn(sprintf("\"%s\"",EData.SpellCombi2))
+				End
+				Awarded[sprintf("ELEMENT_MYRAH_%s",Upper(W))] = true
+				Ach.AutoAward()
+				Sys.GoToFlow("FIELD")
+				Map.PermaKill("NPC_ManaOrb")
+			End
+		Else
+			SetColor(255,255,255)
+		End
+		EData.Banner.Stretch(EData.X,EData.Y,EData.W,EData.H)
+	End
+	MultiPointer.Draw()
+End

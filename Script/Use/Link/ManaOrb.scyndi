@@ -1,0 +1,22 @@
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/TextBoxes"
+
+Global Void NPC_ManaOrb()
+	If Map.Leader!="Myrah"
+		Mini.WriteLn("Only a Fairy can touch a mana orb safely!",255,0,0)
+		Return
+	End
+	If !Done.AllowMyrahMagic
+		MapText("TUT_MANAORB")
+		MapScript.ZA_ManaOrbBarrier()
+		// This should be safe, since this can only happen in the Mana Exam.
+	End
+	Sys.LoadStateNew("FLOW_MANAORB","Script/Flow/Flow_ManaOrb.lbc")
+	Sys.GoToFlow("MANAORB")
+End
