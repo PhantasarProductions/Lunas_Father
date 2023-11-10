@@ -118,6 +118,10 @@ Class HoverIAA
 				end //if
 				ds = sprintf("%s%d",ds,item.HealPlus)
 			end // if
+			If item.HealUserBonusScript!=""
+				if ds != "";ds = ds .. " + "; end
+				ds = ds .. "ChrBns"
+			End
 			ds = Trim(ds)
 			if ds!=""
 				Lines[len(Lines)] = new HoverLine(sprintf("Heal: %s",ds),180,255,180)
@@ -125,6 +129,49 @@ Class HoverIAA
 				
 		end	// do
 		
+		// Attack
+		do
+			string ds
+			for d in each(Dice.Types)
+				int dn; dn = item[sprintf("AtkD%d",d)]
+				switch dn
+					case 0
+						// Do nothing
+					case 1
+						if ds!=""
+							ds = sprintf("%s%s",ds, " + ")
+						end
+						ds = sprintf("%s d%d",ds,d)
+					default
+						if ds!=""
+							ds = sprintf("%s%s",ds, " + ")
+						end
+						ds = sprintf("%s %dd%d",ds,dn,d)
+				end	// switch		
+			end // for
+			if item.AtkPlus>0
+				if ds!=""
+					ds = sprintf("%s%s",ds, " + ")
+				end //if
+				ds = sprintf("%s%d",ds,item.HealPlus)
+			end // if
+			If item.AtkUserBonusScript!=""
+				if ds != "";ds = ds .. " + "; end
+				ds = ds .. "ChrBns"
+			End
+			if ds!=""
+				Lines[len(Lines)] = new HoverLine(sprintf("Attack: %s",ds),255,180,180)
+				If Item.StatBase
+					Lines[len(Lines)] = new HoverLine(sprintf("%s vs %s",Item.AtkStatAtk,Item.AtkStatDef),255,180,180)
+				End
+				if Item.AtkElement!="" && Item.AtkElement!="None"
+					Lines[len(Lines)] = new HoverLine(sprintf("%s based",Item.AtkStatAtk,Item.AtkElement),255,180,180)
+				End
+			End // if
+		End
+		if Item.Accuracy_Check
+			Lines[len(lines)] = new HoverLine(sprintf("Aim: %s vs %s",Item.Accuracy_Stat,Item.Evasion_Stat),255,255,180)
+		End
 		// Calculate sizes
 		For l in each(lines)
 			w = math.max(w,l.W)
