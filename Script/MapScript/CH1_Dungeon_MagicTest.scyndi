@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.12
+// version: 23.11.13
 // End License Information
 Script
 
@@ -43,6 +43,7 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Link/ManaOrb"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
@@ -133,4 +134,24 @@ End
 Global Void ZA_BossKilled()
 	Awarded.Kill_Boss_Managuard = true
 	Map.PermaKill("ZA_BossKilled")
+End
+
+Global Void NPC_Feena_End()
+	Awarded.VOLTOOID_MAGICTEST = True
+	MapText("END")
+	Tutorial("FORCE")
+	gbool.Test_Magic_Done = True
+	gbool.AllowMyrahForce = True
+	if gbool.Test_Alchemy_Done
+		Party.Char(0,"Myrah")
+		Party.Char(1,"Francis")
+		Map.Leader="Myrah"
+		gbool.TutorDone = true
+		Map.GotoMap("CH1_TOWN_Frendor","TOWN","Front_Feena")
+	Else
+		Party.Char(0,"Francis")
+		Party.Char(1,"")
+		Map.Leader="Francis"		
+		Map.GotoMap("CH1_Dungeon_TutorialCave","#005","Front_Feena")
+	End
 End
