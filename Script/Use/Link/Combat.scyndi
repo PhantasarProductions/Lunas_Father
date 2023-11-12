@@ -96,15 +96,16 @@ void PrepareCombat(string BossHead,string BossName,byte R,Byte G, Byte B)
 		//	Return AlphaH<1 && AlphaB<1 && BossAudio && BossAudio.Playing
 		//	//lua.error("No music timing for boss yet!")
 		//End
-		Int Time = 45
+		Int Time = 20
 		Int m = 360-math.random(0,125)
+		Int BossChan 
 		If BossHead!=""
-			Time = 250
+			Time = 150
 			Music.Push()
 			BossAudio = BossAudio || Audio.LoadNew("Audio/Combat/Boss Intro.ogg","BOSS_INTRO")
 			//Lua.Scyndi.Globals.Music.Stop()
 			Music.Stop()
-			BossAudio.Play()			
+			BossChan = BossAudio.Play()			
 		End
 		
 		Bool BossPlaying
@@ -138,10 +139,14 @@ void PrepareCombat(string BossHead,string BossName,byte R,Byte G, Byte B)
 					BBF.Text(BossName,Graphics.Width div 2, (Graphics.Height div 2) + 20 , 2, 0)
 				End
 				SetAlpha(255)
+				//If !Audio.Playing(BossChan)
+				//	Time = 0
+				//End
 			End
 			Flip()
 			Events.Poll()
 			//FPS.WaitMinTicks()
+			//printf("Time:%03d; BossPlaying: %s; ChannelPlaying(%d): %s\n",Time,BossPlaying,BossChan,Audio.Playing(BossChan))	
 		LoopWhile Time>0 || BossPlaying
 		Loading.Show()
 		Sys.LoadNewState("FLOW_COMBAT","Script/Flow/Flow_Combat.lbc")
