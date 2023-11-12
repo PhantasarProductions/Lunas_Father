@@ -99,6 +99,10 @@ Class Foe
 	Bool Gone = False
 	Bool Killed = False 
 	Bool Guarding = False
+	
+	Get Bool IsBoss
+		return Upper(RawData.Value("MetaData","Boss"))=="TRUE"
+	End
 				
 	Get Bool TargetablePlayer
 		Return HP>0 && (!Gone)

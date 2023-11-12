@@ -165,12 +165,17 @@ End
 
 Var NewFoe(int position,string tag,force)
 	var Ret;Ret = New TDiamond()
+	var wfoe;wfoe = Lua.Scyndi.Class.Fighter.ByTag[Tag]
 	While (!Empty(position)) && (!Forced(tag,Slots[position],force))
 		position++
 	End
 	Ret.ToX = InitialPos(position)
 	Ret.Type = "FOE"
-	Ret.ImgTag = sprintf("COMBATDIAMOND_FOE_%02d",Lua.Scyndi.Class.Fighter.ByTag[Tag].CardAlphaNum)
+	If wfoe.IsBoss
+		Ret.ImgTag = sprintf("COMBATDIAMOND_BOSS_%02d",wfoe.CardAlphaNum)
+	Else
+		Ret.ImgTag = sprintf("COMBATDIAMOND_FOE_%02d",wfoe.CardAlphaNum)
+	End
 	Ret.FighterTag=Tag
 	if Slots[position]
 		ret.X = Slots[position].X
