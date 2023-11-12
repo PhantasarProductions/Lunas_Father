@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.10.31
+// Version: 23.11.11
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -44,6 +44,7 @@ Module
 #use "Script/Flow/FlowCombat/CharMsg"
 
 Bool Effect_Hit(executor,target,act)
+	If !Act.Act.Accuracy_Check; return true; End
 	Int Accuracy = Dice.D20
 	Int Evasion = Dice.D20
 	if Accuracy==20
