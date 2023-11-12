@@ -53,10 +53,11 @@ plua LoadedFoes
 plua FParty = Statistician.Obtain("LUNA_PARTY")
 
 plua minifnt = ObtainFont("MINI")
-	
-Const Int DrawTypes_Neg = 0
-Const Int DrawTypes_Flp = 1
-Const Int DrawTypes_Ani = 2
+
+Const Int DrawTypes_Non = 0
+Const Int DrawTypes_Neg = 1
+Const Int DrawTypes_Flp = 2
+Const Int DrawTypes_Ani = 3
 
 plua FoeImageRegister 
 
@@ -277,11 +278,16 @@ Class Foe
 		SetColor(Red,Green,Blue)
 		Switch DrawType
 			Case 0
+				//Images = Images || {}
+				//Images[false] = Images[false] || FoeImage(ImageFile)
+				Images = Images || FoeImage(ImageFile)
+				Images.Draw(X,Y)
+			Case 1
 				Images = Images || {}
 				Images[true] = Images[true] || FoeImage(StripExt(ImageFile)..".Negative.png")
 				Images[false] = Images[false] || FoeImage(ImageFile)
 				Images[Flipped].Draw(X,Y)
-			Case 1
+			Case 2
 				Images = Images || {}
 				Images[true] = Images[true] || FoeImage(StripExt(ImageFile)..".Flipped.png")
 				Images[false] = Images[false] || FoeImage(ImageFile)
@@ -300,12 +306,25 @@ Class Foe
 	End
 	
 	Get Int W
-		Images[false] = Images[false] || FoeImage(ImageFile)
-		return math.floor(Images[false].Width * Scale)
+		Switch DrawType
+		case 0
+			Images = Images || FoeImage(ImageFile)
+			return math.floor(Images.Width * Scale)
+		Default
+			Images[false] = Images[false] || FoeImage(ImageFile)
+			return math.floor(Images[false].Width * Scale)
+		End
 	End
 	
 	Get Int H
-		return math.floor(Images[false].Height * Scale)
+		Switch DrawType
+		case 0
+			Images = Images || FoeImage(ImageFile)
+			return math.floor(Images.Height * Scale)
+		Default
+			Images[false] = Images[false] || FoeImage(ImageFile)
+			return math.floor(Images[false].Height * Scale)
+		End
 	End
 	
 	Get Int TarX
