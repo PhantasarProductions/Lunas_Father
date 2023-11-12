@@ -156,6 +156,7 @@ Init
 	NAud("Audio/Combat/RemoveDiamond.wav","COMBAT_REMOVE")
 	NAud("AUDIO/GENERAL/TRAVELEMBLEM.OGG","TRAVEMB")
 	NAud("AUDIO/GENERAL/LevelUp.OGG","LEVELUP")
+	NAud("Audio/Combat/Boss intro.ogg","BOSS_INTRO")
 	For n in each(NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel"))
 		NAud(sprintf("Audio/Combat/Names/%s.ogg",n),sprintf("COMBAT_HERO_NAME_%s",Upper(n)))
 	End
