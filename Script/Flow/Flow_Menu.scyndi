@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_Menu.scyndi
-// Version: 23.10.18
+// Version: 23.11.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -46,6 +46,7 @@ Script
 #use "Script/Use/Link/Party"
 
 #use "Script/Flow/FlowMenu/Init/Field_Inventory"
+#use "Script/Flow/FlowMenu/Init/Field_Abilities_Init"
 
 int _Hue
 
