@@ -1,0 +1,73 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/AttackBonus/ATKBONUS_Attack_Myrah_Magic.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.11.11
+// End License Information
+Module
+
+#use "libs/sci/sys"
+#use "libs/sci/intervar"
+
+#use "script/use/general/dice"
+
+#use "script/use/link/party"
+
+Int AtkBonus(executor,target,act)
+	int ret
+	int lv;lv  = Party.SkillLvl(executor.tag,2)
+	Party.SkillExpUp(executor.tag,2,Dice.D20*Dice.D4)
+	for i,d in pairs(Dice.Types)
+		int factor
+		switch gint.skill
+			case 1
+				factor = math.max(1,i)
+			case 2
+				factor = math.ceil(d*3.9)
+			case 3
+				factor = math.max(10+i,I*D)
+			default
+				factor = 10000
+		end
+		int rolls;rolls = lv div factor
+		printf("d%d x %d --> ",d,rolls)
+		for j=1,rolls,1
+			int r;r = Dice["D"..d];
+			ret = ret + 
+			if j>1; printf(" + "); end
+			printf("%d",r)
+		end
+		printf(" = %d\n",ret)
+	end
+	Return ret
+End
