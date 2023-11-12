@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.10
+// version: 23.11.11
 // End License Information
 Script
 
@@ -55,7 +55,7 @@ End
 Int Deg=0
 
 Global Void Cycle()
-	If Map.Layer!="#001"
+	If Map.Layer!="#001" && Map.Layer!="#010" 
 		BlopPlasma.Draw()
 	End
 	If Kthura.HasObj("TransPic")
@@ -119,4 +119,18 @@ Global Void ZA_MyrahCanDoMagicNow()
 	If Done.Myrah_TutMagic
 		MapText("TUT_MAGIC")
 	End
+End
+
+Global Void ZA_Boss()
+	Player.StopWalking()
+	
+	MapText("BOSS")
+	Map.Boss("MANAGUARDIAN")
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill("Boss")
+End
+
+Global Void ZA_BossKilled()
+	Awarded.Kill_Boss_Managuard = true
+	Map.PermaKill("ZA_BossKilled")
 End
