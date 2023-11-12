@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.07
+// version: 23.11.13
 // End License Information
 Script
 
@@ -44,6 +44,8 @@ Script
 #use "Script/Use/Link/Party"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
+
+
 
 // #000
 Global Void ZA_Medal()
@@ -148,6 +150,10 @@ End
 
 Global Void NPC_Francis()
 	If Map.Leader=="Francis"
+		Party.Char(1,"")
+		Party.Char(0,"Francis")
+		Map.Leader="Francis"
+		Map.GoToMap("CH1_Dungeon_AlchemyTest","#001","Start")
 	Else
 		MapText("NOT_MYRAH")
 	End
