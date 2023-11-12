@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_LoadMap.scyndi
-// Version: 23.11.07
+// Version: 23.11.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -78,10 +78,12 @@ global Void ExeLoadMap(string MapBundle)
 	CSayF("Loading map: %s",MapBundle)
 	Kthura.Load("GAMEMAP",MBundle)
 	Kthura.Pick("GAMEMAP")
+	CSay("Clearing Cycles")
+	FField.FIELD_DRAWSCREEN.ClearCycleFunctions()
 	CSayF("Loading MapScript")
 	Sys.LoadState("MAPSCRIPT",sprintf("Script/MapScript/%s.lbc",MapBundle))
 	for k,lm in pairs(FField.LMFuncs)
-		CSayF("=> %s",k)
+		CSayF("LoadMap: => %s (%s)",k,lm)
 		lm(MapBundle)
 	end
 	CSay("Music!")
