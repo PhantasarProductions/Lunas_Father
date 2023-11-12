@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/PIMI/PIMI_Class.scyndi
-// Version: 23.11.08
+// Version: 23.11.11
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,6 +38,7 @@ Module
 
 #use "libs/sci/sys"
 #use "libs/sci/graphics"
+#use "libs/sci/intervar"
 
 #use "libs/rosetta"
 
@@ -56,6 +57,7 @@ Void Guard(string chTag)
 	Scyndi.Class.Fighter.ByTag[chTag].Guarding=True
 	Scyndi.Class.Diamonds.RemoveFirst()
 	Scyndi.Class.Stage.CurrentTag="IDLE"
+	Scyndi.Class.Fighter.ByTag[chTag].Char.Points.FP.Have = Scyndi.Class.Fighter.ByTag[chTag].Char.Points.FP.Have + (12 - (gint.skill*3)) 
 End
 
 Void ItemsAct(string Pltag)
