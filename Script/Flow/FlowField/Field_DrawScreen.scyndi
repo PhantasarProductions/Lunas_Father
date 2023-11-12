@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.11.07
+// Version: 23.11.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,6 +37,7 @@
 Module
 
 #use "Libs/SCI/SYS"
+#use "Libs/SCI/JCR6"
 #use "Libs/SCI/Kthura"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
@@ -64,6 +65,71 @@ Var PostDrawScreenMapScriptCyclesFunctions
 
 plua FField
 
+Class MWelcome
+	Static Int Cnt = 0
+	Static Var First
+	Var Next
+	ReadOnly Var Img
+	ReadOnly Var Tag
+	Int Alpha
+	Int Time = 200
+	
+	Constructor(string File)
+		Tag = sprintf("WELCOME_%d",Cnt); Cnt++
+		Img = LoadImage(File,Tag)
+		Img.HotCenter()
+		CSayF("Created welcome \"%s\" on tag \"%s\"",File,Tag)
+	End
+	
+	Destructor
+		CSay("Destroyed welcome tag: %s",Tag)
+	End
+End
+
+Global Void NewWelcome(string file)
+	plua NW; NW=New MWelcome(file)
+	if (!MWelcome.First)
+		MWelcome.First = NW
+	else
+		plua it;it=mwelcome.First
+		plua last; last = it
+		repeat			
+			it=it.Next
+			last=it || last
+		loopwhile it
+		last.Next = NW
+	End
+End
+
+Void DrawWelcome()
+	if MWelcome.First
+		SetAlpha(MWelcome.First.Alpha)
+		MWelcome.First.Img.Draw(Graphics.Width div 2, Graphics.Height div 2)
+		If MWelcome.First.Time>0 && MWelcome.First.Alpha<255
+			MWelcome.First.Alpha++
+		ElseIf MWelcome.First.Time>0
+			MWelcome.First.Time--
+		Elseif MWelcome.First.Alpha>0
+			MWelcome.First.Alpha--
+		Else
+			MWelcome.First = MWelcome.First.Next
+		End
+	End
+End
+
+Void LoadWelcome(string mp)
+	String f;f="Kthura/"..mp.."/Welcome.png"
+	If !Done["Welcome__"..mp]
+		If JCR6.EntryExists(f)
+			NewWelcome(f)
+		Else
+			CSay("No welcome.png for this map")
+		End
+	Else
+		CSay("Welcomed here before! Not doing it again!")
+	End
+End
+
 Void ClearCycleFunctions()
 	PreDrawScreenMapScriptCyclesFunctions = {}
 	PostDrawScreenMapScriptCyclesFunctions = {}
@@ -83,8 +149,9 @@ Init
 	HY = Graphics.Height div 2
 	CSayF("Center (%d,%d)",HX,HY)
 	FField = Lua.Scyndi.Globals.FlowField
-	FField.LMFuncs[len(FField.LMFuncs)] = 
-	ClearCycleFunctions()
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadWelcome
+	//FField.LMFuncs[len(FField.LMFuncs)] = ClearCycleFunctions
+	//FField.ClearCycle = ClearCycleFunctions
 End
 
 Bool Scrolling = true
@@ -147,6 +214,7 @@ Global Void BoxText_Background()
 	AutoPlayer()
 	for ms in each(PreDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Kthura.Draw(ScrollX,ScrollY)
+	DrawWelcome()
 	for ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 End
 
@@ -154,7 +222,7 @@ Void DrawScreen()
 	AutoPlayer()
 	for ms in each(PreDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Kthura.Draw(ScrollX,ScrollY)
-	for ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
+	For ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Party.Boxes()
 	FieldStats()
 	//print("CallGauge"); 
