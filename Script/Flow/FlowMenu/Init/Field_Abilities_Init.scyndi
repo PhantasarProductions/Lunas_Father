@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Init/Field_Abilities_Init.scyndi
-// Version: 23.11.11
+// Version: 23.11.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -41,7 +41,8 @@ Module
 Void _Action();End
 
 Init	
-	plua n
+	//plua n
 	//print("Init Abl",_Action,_Allow)
-	n = new AblSit("FIELD",_Action)
+	//n = new AblSit("FIELD",_Action)
+	Lua.Scyndi.Class.AblSit.Register("FIELD", _Action)
 End
