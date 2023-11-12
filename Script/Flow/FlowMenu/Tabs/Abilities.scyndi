@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Abilities.scyndi
-// Version: 23.11.10
+// Version: 23.11.11
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -52,6 +52,55 @@ pLua ChAbl
 const var Fnt = ObtainFont("BASE")
 const var _Party = Statistician.CreateNew("LUNA_PARTY")
 
+Class AblSit
+	Static ReadOnly Var Reg = NewArray()
+	Static ReadOnly Var GetSit(String Key)
+		Lua.assert(Reg[Upper(Key)],sprintf("No situation initiated as %s",key))
+		Return Reg[Upper(Key)]
+	End
+	ReadOnly String NameSituation
+	ReadOnly Delegate Action
+	//ReadOnly Delegate Allow
+	//ReadOnly Var Filters
+	//Int ScrollY = 0
+	Constructor (string _NS, _Act)		
+		NameSituation = _NS
+		assert(_Act,sprintf("No ACTION function for inventory situation %s",_NS))
+		Action = _Act
+		//assert(_Allow,sprintf("No ALLOW function for inventory situation %s",_NS))
+		//Allow = _Allow
+		//Filters = {}
+		//Reg[Upper(_NS)] = self
+	End
+	
+	//Void AddFilter(string F)
+	//	Filters[len(Filters)] = F
+	//End
+	
+	//Int __FilterNum = 0
+	//Get String Filter
+	//	Return Filters[__FilterNum]
+	//End
+	//Get Int FilterNum
+	//	Return __FilterNum
+	//End
+	//Set Int FilterNum
+	//	if Value<0
+	//		__FilterNum=Len(Filters)-1
+	//	Else	
+	//		__FilterNum = Value % Len(Filters)
+	//	End
+	//End
+	
+	Static Var Register(string _NS, _Act) //,Delegate _All)
+		CSayF("Registering ability situation: %s",_NS)
+		_NS = Upper(_NS)
+		Reg[_NS]=New AblSit(_NS,_Act) //,_All)
+		return Reg[_NS]
+	End
+End
+
+
 
 Init 
 	ChAbl = {}
@@ -64,6 +113,7 @@ End
 
 Void Flow(string _Situation,string CharTag,int bx, int by, int bw,int bh)
 	pLua Ch;ch=_Party.Char[CharTag]
+	pLua Sit; Sit = AblSit.GetSit(_Situation)
 	If CharTag=="Francis"
 		// TO DO: Link to quick alchemy page
 		Return
@@ -79,9 +129,12 @@ Void Flow(string _Situation,string CharTag,int bx, int by, int bw,int bh)
 				x = bx + 10
 				Hovering=true
 				HoverIdx=i
-			end
+			End
 			if Ch.Points.FP.Have>=Abl.ReqFP 
 				SetColor(255,255,255)			
+				if ML && Hoveridx==i && Hovering
+					Sit.Action(CharTag,Abl)
+				End
 			Else
 				SetColor(100,100,100)
 			End
