@@ -155,7 +155,7 @@ Bool Effect_Healing(executor,target,act)
 		CharMsg.Put(Target,"No effect",255,180,0)
 		Return True
 	End
-	If Target.Zombie && HL>0
+	If Target.Undead && HL>0
 		CharMsg.Put(Target,HL,255,0,0)
 		Target.HP = Target.HP - HL
 		Return True
