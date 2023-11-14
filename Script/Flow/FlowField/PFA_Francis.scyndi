@@ -108,7 +108,7 @@ Void CheckCrystals()
 		If Kthura.HasObj(otag)
 			If Upper(dat.Element)=="RANDOM"
 				plua m=Alchemy.Manaments
-				otag.Element = m[math.random(0,len(m)-1)]
+				dat.Element = m[math.random(0,len(m)-1)]
 			End
 			plua o;o=Kthura.Obj[otag]
 			plua c;c=Alchemy.ManaCol[dat.Element]
