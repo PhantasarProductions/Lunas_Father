@@ -1,0 +1,68 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Flow/FlowField/Field_Recipe.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.11.14
+// End License Information
+Module
+
+#use "Libs/SCI/Audio"
+
+#use "Script/Use/General/Dice"
+#use "Script/Use/General/UseIAA"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
+#use "Script/Use/Link/TextBoxes"
+
+ReadOnly Var AudRecipe = Audio.Obtain("ALCHEMY_RECIPE")
+
+Global Void GetRecipe(string T)
+	if Map.Leader=="Francis"
+		Map.PermaKill(T)
+		Recipe[T] = True
+		Mini.Write("Francis ",255,180,0)
+		Mini.Write("has found the recipe for ",180,0,255)
+		Mini.WriteLn(IAA["ITM_ALC_"..T].Name,180,255,0)
+		AudRecipe.Play()
+		// Please note, the minimal level only decides whether or not Francis can create or initize an item.
+		// It does NOT affect if she can actually copy the recipe into her mystic album.
+		For i=1,IAA["ITM_ALC_"..T].Alchemy_Minimal_Level
+			Party.SkillExpUp("Francis",2,Dice.D20)
+		End
+	Else
+		Tutorial("NORECIPE_"..Upper(Map.Leader))
+	End
+End
