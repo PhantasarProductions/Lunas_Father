@@ -135,6 +135,15 @@ Class Hero
 		Return HP<=0
 	End
 	
+	Get Bool BlockHeal
+		Return False
+	End
+	
+	Get Bool Undead
+		Return False
+	End
+
+	
 	Int IRate = 1000
 	Get Number Rate
 		Switch gint.skill

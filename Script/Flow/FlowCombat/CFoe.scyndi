@@ -222,6 +222,14 @@ Class Foe
 		End
 	End
 	
+	Get Bool BlockHeal
+		Return False
+	End
+	
+	Get Bool Undead
+		Return False
+	End
+	
 	String Pose = "IDLE"
 	
 	Void Draw()
