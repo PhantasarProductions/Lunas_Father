@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Alchemy.scyndi
-// Version: 23.10.31
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -40,6 +40,7 @@ Module
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/Statistician"
 
+#use "Script/Use/Link/Menu"
 #use "Script/Use/Link/Party"
 
 
@@ -74,6 +75,34 @@ Init
 	_Francis = _Party.Char.Francis
 End
 
+Get Int Level
+	Return Party.SkillLvl("Francis",2)
+End
+
+
+Get Int EXP
+	Return Party.SkillExp("Francis",2).Have
+End
+
+Set Int EXP
+	Party.SkillExp("Francis",2).Have = Value
+End
+
+
+
+
+Get Int MaxMana
+	Switch gint.Skill
+		case 1
+			return 250
+		case 2
+			return 100
+		case 3
+			Return 50
+		default
+			Return 1
+	End
+End
 
 QuickMeta Mana
 	Index
@@ -81,16 +110,33 @@ QuickMeta Mana
 	End
 	
 	NewIndex
-		Switch gint.Skill
-			case 1
-				_Francis.Points["MANAMENT_"..Key].Maximum = 250
-			case 2
-				_Francis.Points["MANAMENT_"..Key].Maximum = 100
-			case 3
-				_Francis.Points["MANAMENT_"..Key].Maximum = 50
-			default
-				_Francis.Points["MANAMENT_"..Key].Maximum = 0
-		End
+		_Francis.Points["MANAMENT_"..Key].Maximum = MaxMana
 		_Francis.Points["MANAMENT_"..Key].Have = Value
 	End
+End
+
+QuickMeta Recipe
+	Index
+		Return gbool["RECIPE_"..key]
+	End
+	
+	NewIndex
+		gbool["RECIPE_"..key] = Value
+	End
+End
+
+QuickMeta Initiated
+	Index
+		Return gbool["INITIATED_"..key]
+	End
+	
+	NewIndex
+		gbool["INITIATED_"..key] = Value
+	End
+End
+
+
+Global Void GoAlchemy()
+	CSay("Going to alchemy")
+	Menu.Go("ALCHEMY","Francis")
 End
