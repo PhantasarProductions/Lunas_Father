@@ -143,7 +143,29 @@ Bool Effect_Attack(executor,target,act)
 End
 
 Bool Effect_Healing(executor,target,act)
-
+	Int HL; HL = Act.Act.HealPlus
+	For d in Each(Dice.Types)
+		String Tag;Tag = sprintf("HealD%d",d)
+		for i=1,Act.Act[Tag]
+			HL = HL + Dice[sprintf("D%d",d)]
+		End
+	End
+	// TODO: Script
+	If (Target.BlockHeal && HL>0) || Target.HP==0 
+		CharMsg.Put(Target,"No effect",255,180,0)
+		Return True
+	End
+	If Target.Zombie && HL>0
+		CharMsg.Put(Target,HL,255,0,0)
+		Target.HP = Target.HP - HL
+		Return True
+	End
+	IF HL>0
+		CharMsg.Put(Target,HL,180,255,0)
+		Target.HP = Target.HP + HL
+		Return True
+	End
+	Return False
 End
 
 
