@@ -44,7 +44,7 @@ Script
 #use "Script/Use/General/Loading"
 
 
-Global ReadOnly Var FlowField = { ["LMFuncs"] = {}}
+Global ReadOnly Var FlowField = { ["LMFuncs"] = {}, ["UDFuncs"] = {}}
 	
 Init
 	Plua Stuff
