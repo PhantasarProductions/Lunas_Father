@@ -36,6 +36,8 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
 #use "Libs/SCI/Kthura" 
 #use "Libs/SCI/InterVar"
 
