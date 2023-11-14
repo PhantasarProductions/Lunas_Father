@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Inventory.scyndi
-// Version: 23.11.08
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -177,7 +177,8 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 			plua got;got = item.Loaded		
 			plua sy; sy = (i-Sit.ScrollY)			
 			plua ix = 5
-			plua iy; iy = ((sy*30)+y+40)			
+			plua iy; iy = ((sy*30)+y+40)
+			plua __Allow;__Allow = Sit.Allow(CharTag,itmtag) && Item.Item.Num>0
 			ScrollOutBounds = ScrollOutBounds && sy<0
 			MayScrollDown   = MayScrollDown   || iy<y+h-40			
 			If sy>=0 && iy<y+h-40
@@ -188,14 +189,22 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 						_hvrold = itmtag						
 					end
 					Hovering = true
-					If ML && Sit.Allow(CharTag,itmtag)
+					If ML && __Allow
 						Sit.Action(CharTag,itmtag)
 					End	
 				end			
-				SetColor(255,255,255)
+				if __Allow
+					SetColor(255,255,255)
+				Else
+					SetColor(100,100,100)
+				End
 				Fnt.Text(Item.Item.Name,x+ix,iy)
 				//print(_i,i,itmTag,item,"\nLoaded",item.Loaded,"\nsy = ",sy,"ixy = ",ix,iy)
-				SetColor(255,180,0)
+				if __Allow
+					SetColor(255,180,0)
+				Else
+					SetColor(100,60,0)
+				End
 				Fnt.Text(sprintf("%d",Item.Item.Num),(x+(w-32))-ix,iy,1)
 			End
 			i++
