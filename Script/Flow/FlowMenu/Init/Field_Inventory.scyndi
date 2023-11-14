@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Init/Field_Inventory.scyndi
-// Version: 23.10.18
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,8 +36,13 @@
 // End License Information
 Module
 
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Alchemy"
+#use "Script/Use/General/Dice"
 #use "Script/Use/General/UseIAA"
 #use "Script/Flow/FlowMenu/Tabs/Inventory"
+
 
 
 
@@ -49,6 +54,26 @@ Bool _Allow(string User,string Item)
 	Return MyItem[Item].Item.Usable_In_Field
 End
 
+Bool _AllowExtract(string User, string Item)
+	int alTier = math.max(1,Alchemy.Level/(gint.skill^2))	
+	return IAA[Item].Mana_Tier<=alTier
+End
+
+Void _Extract(string User,string Item)
+	Bool Consume = False
+	plua it;it=IAA[Item]
+	For mnmnt in Each(Alchemy.Manaments)
+		string tag;tag="Mana_"..mnmnt		
+		Consume = Consume || (it[Tag]>0 && Mana[mnmnt]<Alchemy.MaxMana) 
+		Mana[mnmnt] = Mana[mnmnt] + it[Tag]  
+	End
+	if Consume
+		it.Have--
+		Alchemy.EXP = Alchemy.EXP + (it.Mana_Tier*Dice.d3) 
+	End
+End
+
+
 Init
 	plua n
 	print("Init",_Action,_Allow)
@@ -57,4 +82,6 @@ Init
 	n.AddFilter("Source")
 	n.AddFilter("Key")
 	n.AddFilter("All")
+	n = new InvSit("ALCHEMY",_Extract,_AllowExtract)
+	n.AddFilter("Source")
 End
