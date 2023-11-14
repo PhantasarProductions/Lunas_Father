@@ -36,9 +36,15 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Kthura" 
 #use "Libs/SCI/InterVar"
 
 #use "Script/Flow/FlowField/Field_PersonalAction"
+
+#use "Script/Use/Link/Alchemy"
+
+plua Crystal
+plua FField
 
 Bool PFA_Francis_Allow(); return gbool.Allow_Field_Francis; End
 
@@ -50,8 +56,36 @@ Bool PFA_Francis_Cycle()
 	Return False
 End
 
+
+Void LoadCrystals(String Bundle)
+	CSay("Crystals")
+	string src
+	var func	
+	src = JCR6.GetString(sprintf("Kthura/%s/Crystal.lua",mapb))
+	func = Lua.load(src)
+	Crystal = func()
+End
+
+Void CheckCrystals()
+	plua LCrystal = Crystal[Kthura.CurrentLayer] || {}
+	For otag,dat in pairs(LCrystal)
+		If Kthura.HasObj(otag)
+			plua o;o=Kthura.Obj(otag)
+			plua c;c=ManaCol[dat.Element]
+			if o.r>c.r; o.r--; end
+			if o.g>c.g; o.g--; end
+			if o.b>c.b; o.b--; end
+			if o.r<c.r; o.r++; end
+			if o.g<c.g; o.g++; end
+			if o.b<c.b; o.b++; end
+		End
+	End
+End
+
+
 Init
-	//FField = Lua.Scyndi.Globals.FlowField
-	//FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadCrystals
+	FField.UDFuncs[len(FField.LMFuncs)] = CheckCrystals
 	PFA_Reg("Francis",PFA_Francis_Allow,PFA_Francis_Action,PFA_Francis_Cycle,false)
 End
