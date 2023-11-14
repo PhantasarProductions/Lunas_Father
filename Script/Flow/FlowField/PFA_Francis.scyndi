@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.08
+// version: 23.11.14
 // End License Information
 Module
 
@@ -57,7 +57,7 @@ Bool PFA_Francis_Allow(); return gbool.Allow_Field_Francis; End
 
 Bool PFA_Francis_Action(String Wind)
 	AudEx.Play()
-	For otag,dat in pairs(LCrystal)
+	For otag,dat in pairs(Crystal)
 		//print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
 		If Kthura.HasObj(otag)
 			For X=Player.X-MaxRadius,Player.X+MaxRadius,1
