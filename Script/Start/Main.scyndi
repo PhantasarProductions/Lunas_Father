@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.11.12
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -121,6 +121,8 @@ Init
 	NIMG("GFX/Page/Left.png","PAGE_LEFT")
 	NIMG("GFX/Page/Right.png","PAGE_RIGHT")	
 	NIMG("GFX/Combat/End/Victory.png","COMBAT_END_VICTORY")
+	NIMG("GFX/Alchemy/Tube.png","ALCHEMY_TUBE")
+	NIMG("GFX/Alchemy/Liquid.png","ALCHEMY_LIQUID")
 	NIMG("GFX/PFA/Button.png","PFA_BUTTON")
 	For ch In Each(NewArray("MYRAH","FRANCIS"))
 		NIMG("GFX/PFA/"..ch..".png","PFA_"..ch)
@@ -157,6 +159,7 @@ Init
 	NAud("AUDIO/GENERAL/TRAVELEMBLEM.OGG","TRAVEMB")
 	NAud("AUDIO/GENERAL/LevelUp.OGG","LEVELUP")
 	NAud("Audio/Combat/Boss intro.ogg","BOSS_INTRO")
+	NAud("audio/alchemy/recipe.mp3","ALCHEMY_RECIPE")
 	For n in each(NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel"))
 		NAud(sprintf("Audio/Combat/Names/%s.ogg",n),sprintf("COMBAT_HERO_NAME_%s",Upper(n)))
 	End
