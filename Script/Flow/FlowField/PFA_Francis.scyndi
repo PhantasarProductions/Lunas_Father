@@ -56,7 +56,7 @@ plua FField
 
 Bool PFA_Francis_Allow(); return gbool.Allow_Field_Francis; End
 
-Bool PFA_Francis_Action(String Wind)
+Bool PFA_Francis_Action()
 	AudEx.Play()
 	For otag,dat in pairs(Crystal)
 		//print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
@@ -68,10 +68,10 @@ Bool PFA_Francis_Action(String Wind)
 					Number HYP;Hyp = math.sqrt((RZ1^2)+(RZ2^2))
 					If Hyp<=MaxRadius && Kthura.InObj(otag,x,y)
 						Map.PermaKill(otag)
-						Mana[odat.Element] = Mana[odat.Element] + dat.Num
+						Mana[dat.Element] = Mana[dat.Element] + dat.Num
 						Mini.Write("Francis ",180,0,255)
-						Mini.Write(sprintf("extacted %d ", dat.Num,255,180,0)
-						Mini.Write(mm,Alchemy.ManaCol[mm].r,Alchemy.ManaCol[mm].g,Alchemy.ManaCol[mm].b)
+						Mini.Write(sprintf("extacted %d ", dat.Num),255,180,0)
+						Mini.Write(otag,Alchemy.ManaCol[otag].r,Alchemy.ManaCol[otag].g,Alchemy.ManaCol[otag].b)
 						If dat.Num==1
 							mini.WriteLn(" manament",255,180,0)
 						Else
