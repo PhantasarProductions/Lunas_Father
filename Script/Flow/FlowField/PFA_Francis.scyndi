@@ -37,13 +37,18 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/JCR6"
 #use "Libs/SCI/Kthura" 
 #use "Libs/SCI/InterVar"
 
 #use "Script/Flow/FlowField/Field_PersonalAction"
 
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Alchemy"
+
+const var AudEx = Audio.Obtain("ALCHEMY_EXTRACT")
+Const int MaxRadius = 70
 
 plua Crystal
 plua FField
@@ -51,6 +56,32 @@ plua FField
 Bool PFA_Francis_Allow(); return gbool.Allow_Field_Francis; End
 
 Bool PFA_Francis_Action(String Wind)
+	AudEx.Play()
+	For otag,dat in pairs(LCrystal)
+		//print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
+		If Kthura.HasObj(otag)
+			For X=Player.X-MaxRadius,Player.X+MaxRadius,1
+				For Y=Player.Y-MaYRadius,Player.Y+MaxRadius,1
+					int RZ1;RZ1 = math.abs(X-Player.X)
+					int RZ2;RZ2 = math.abs(Y-Player.Y)
+					Number HYP;Hyp = math.sqrt((RZ1^2)+(RZ2^2))
+					If Hyp<=MaxRadius && Kthura.InObj(otag,x,y)
+						Map.PermaKill(otag)
+						Mana[odat.Element] = Mana[odat.Element] + odat.Num
+						Mini.Write("Francis ",180,0,255)
+						Mini.Write(sprintf("extacted %d ", odat.Num,255,180,0)
+						Mini.Write(mm,Alchemy.ManaCol[mm].r,Alchemy.ManaCol[mm].g,Alchemy.ManaCol[mm].b)
+						If odat.Num==1
+							mini.WriteLn(" manament",255,180,0)
+						Else
+							mini.WriteLn(" manaments",255,180,0)
+						End
+						Return True
+					End
+				End
+			End
+		End
+	End
 	Return False
 End
 
@@ -59,7 +90,7 @@ Bool PFA_Francis_Cycle()
 End
 
 
-Void LoadCrystals(String Bundle)
+Void LoadCrystals(String mapb)
 	CSay("Crystals")
 	string src
 	var func	
@@ -70,10 +101,16 @@ End
 
 Void CheckCrystals()
 	plua LCrystal = Crystal[Kthura.CurrentLayer] || {}
+	//print("Checking Crystals")
 	For otag,dat in pairs(LCrystal)
+		//print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
 		If Kthura.HasObj(otag)
-			plua o;o=Kthura.Obj(otag)
-			plua c;c=ManaCol[dat.Element]
+			If Upper(dat.Element)=="RANDOM"
+				plua m=Alchemy.Manaments
+				otag.Element = m[math.random(0,len(m)-1)]
+			End
+			plua o;o=Kthura.Obj[otag]
+			plua c;c=Alchemy.ManaCol[dat.Element]
 			if o.r>c.r; o.r--; end
 			if o.g>c.g; o.g--; end
 			if o.b>c.b; o.b--; end
@@ -88,6 +125,6 @@ End
 Init
 	FField = Lua.Scyndi.Globals.FlowField
 	FField.LMFuncs[len(FField.LMFuncs)] = LoadCrystals
-	FField.UDFuncs[len(FField.LMFuncs)] = CheckCrystals
+	FField.UDFuncs[len(FField.UDFuncs)] = CheckCrystals
 	PFA_Reg("Francis",PFA_Francis_Allow,PFA_Francis_Action,PFA_Francis_Cycle,false)
 End
