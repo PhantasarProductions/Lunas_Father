@@ -32,23 +32,78 @@
 // 
 // **********************************************
 // 
-// version: 23.11.13
+// version: 23.11.14
 // End License Information
+
 Script
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
-
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
 
+#use "Script/Use/General/UseIAA"
+
+
+// #001
 Global Void ZA_Welcome()
 	If !Done.Welcome_To_The_Alchemy_Testing_Cave
 		MapText("FEENA_WELCOME")
+	End
+End
+
+Global Void NPC_Feena1()
+	If IAA.ITM_ALC_HEALRUB.Have<=0
+		MapText("FEENA_001_NOREADY")
+		Return
+	End
+	IF !Done.Francis_001_Complete
+		MapText("FEENA_001_READY")
+		Map.PermaKill("DOOR_NEXT")
+		Return		
+	End
+	MapText("FEENA_001_PROCEED")
+End
+
+Global Void NPC_Cauldron()
+	If !Done.Francis_FirstTime_Alchemy
+		MapText("FRANCIS_001_CAULDRON")
+		Recipe.HealRub = True
+	End
+	GoAlchemy()
+End
+
+// ##002
+Global Void ZA_Welcome_to_2()
+	If !Done.Francis_Welcome_To_Alchemy_Room_002
+		MapText("FEENA_002_WELCOME")
+		IAA.KEY_MYSTICALBUM.HAVE++
+	End
+End
+
+Global Void NPC_Feena_002()
+	If !Recipe.Molotov
+		MapText("FEENA_002_NOTREADY")
+		Return
+	End
+	IF !Done.Francis_002_Complete
+		MapText("FEENA_002_READY")
+		Map.PermaKill("DOOR_NEXT")
+		Return		
+	End
+	MapText("FEENA_001_PROCEED")
+End
+
+// #003
+Global Void ZA_Welcome_003()
+	If !Done.Allow_Field_Francis
+		MapText("FEENA_003_WELCOME")
+		//IAA.KEY_MYSTICALBUM.HAVE++		
 	End
 End
