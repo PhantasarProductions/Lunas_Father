@@ -44,6 +44,7 @@ Module
 
 #use "Script/Flow/FlowField/Field_PersonalAction"
 
+#use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Alchemy"
 
@@ -61,17 +62,17 @@ Bool PFA_Francis_Action(String Wind)
 		//print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
 		If Kthura.HasObj(otag)
 			For X=Player.X-MaxRadius,Player.X+MaxRadius,1
-				For Y=Player.Y-MaYRadius,Player.Y+MaxRadius,1
+				For Y=Player.Y-MaxRadius,Player.Y+MaxRadius,1
 					int RZ1;RZ1 = math.abs(X-Player.X)
 					int RZ2;RZ2 = math.abs(Y-Player.Y)
 					Number HYP;Hyp = math.sqrt((RZ1^2)+(RZ2^2))
 					If Hyp<=MaxRadius && Kthura.InObj(otag,x,y)
 						Map.PermaKill(otag)
-						Mana[odat.Element] = Mana[odat.Element] + odat.Num
+						Mana[odat.Element] = Mana[odat.Element] + dat.Num
 						Mini.Write("Francis ",180,0,255)
-						Mini.Write(sprintf("extacted %d ", odat.Num,255,180,0)
+						Mini.Write(sprintf("extacted %d ", dat.Num,255,180,0)
 						Mini.Write(mm,Alchemy.ManaCol[mm].r,Alchemy.ManaCol[mm].g,Alchemy.ManaCol[mm].b)
-						If odat.Num==1
+						If dat.Num==1
 							mini.WriteLn(" manament",255,180,0)
 						Else
 							mini.WriteLn(" manaments",255,180,0)
