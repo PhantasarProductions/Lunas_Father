@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.01
+// version: 23.11.14
 // End License Information
 
 Module
@@ -76,7 +76,7 @@ Int Myrah(executor,target,Act,string param="")
 		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
-	Party.SkillExpUp("Myrah",1)
+	Party.SkillExpUp("Myrah",1,5+Dice.D20)
 	Return Ret
 End
 
@@ -88,7 +88,7 @@ Int Francis(executor,target,Act,string param="")
 		executor.irate = executor.irate + (4-gint.skill) 
 	End
 	FPUp(executor,target,Act,param)
-	Party.SkillExpUp("Francis",1)
+	Party.SkillExpUp("Francis",1,4+Dice.D20)
 	Return Ret
 End
 
@@ -100,7 +100,7 @@ Int Luna(executor,target,Act,string param="")
 		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
-	Party.SkillExpUp("Luna",1,6)
+	Party.SkillExpUp("Luna",1,Dice.D6*Dice.D20)
 	Return Ret
 End
 
@@ -112,7 +112,7 @@ Int Scyndi(executor,target,Act,string param="")
 		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
-	Party.SkillExpUp("Scyndi",1)
+	Party.SkillExpUp("Scyndi",1,(12 div gint.skill)+Dice.D20)
 	Return Ret
 End
 
@@ -124,6 +124,6 @@ Int Aziella(executor,target,Act,string param="")
 		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
-	Party.SkillExpUp("Aziella",1)
+	Party.SkillExpUp("Aziella",1,Dice.D20+Dice.D12)
 	Return Ret
 End
