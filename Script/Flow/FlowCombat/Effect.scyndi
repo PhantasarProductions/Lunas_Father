@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.11.12
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -142,7 +142,9 @@ Bool Effect_Attack(executor,target,act)
 	Return Atk>0
 End
 
+Bool Effect_Healing(executor,target,act)
 
+End
 
 
 Void Go(executor,target,act)
@@ -153,6 +155,9 @@ Void Go(executor,target,act)
 	
 		// Handle attacks
 		Hit = Effect_Attack(executor,target,act) || Hit
+		
+		// Handle Healing
+		Hit = Effect_Healing(executor,target,act) || Hit
 		
 		// Scripts
 	
