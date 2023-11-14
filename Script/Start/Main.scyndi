@@ -160,6 +160,7 @@ Init
 	NAud("AUDIO/GENERAL/LevelUp.OGG","LEVELUP")
 	NAud("Audio/Combat/Boss intro.ogg","BOSS_INTRO")
 	NAud("audio/alchemy/recipe.mp3","ALCHEMY_RECIPE")
+	NAud("Audio/Alchemy/Extract.mp3","ALCHEMY_EXTRACT")
 	For n in each(NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel"))
 		NAud(sprintf("Audio/Combat/Names/%s.ogg",n),sprintf("COMBAT_HERO_NAME_%s",Upper(n)))
 	End
