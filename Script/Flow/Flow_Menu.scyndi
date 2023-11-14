@@ -53,7 +53,7 @@ int _Hue
 
 Var Back = ObtainImage("BOX_BACK")
 
-global const var Situations = { ["FIELD"]={}, ["SHOP"]={}, ["UPGRADE"]={}}
+global const var Situations = { ["FIELD"]={}, ["SHOP"]={}, ["UPGRADE"]={}, ["ALCHEMY"]={}}
 global string CurSituation
 global Table __CurSitTab = {}
 global string CurCharTag
@@ -95,10 +95,14 @@ End
 Init
 	NewSitTab("FIELD","STATUS","Char_Stats","Char_Status")
 	NewSitTab("FIELD","INVENTORY","Char_Stats","Inventory")
-	NewSitTab("FIELD","ABILITIES","Char_Stats","Abilities")
+	NewSitTab("FIELD","ABILITIES","Abl_Status","Abilities")
 	NewSitTab("FIELD","SKILLS","Skill_Bag","Skill_Equipped")
 	NewSitTab("FIELD","SWITCH","Char_Stats","Switch")
 	NewSitTab("FIELD","ACHIEVEMENTS","Achievements")
+	
+	NewSitTab("ALCHEMY","ALCHEMY_SYNTH","Alchemy_Tubes","Alchemy_Synth")
+	NewSitTab("ALCHEMY","ALCHEMY_EXTRACT","Alchemy_Tubes","Alchemy_Extract")
+	NewSitTab("ALCHEMY","ALCHEMY_INITIZE","Alchemy_Tubes","Alchemy_Initize")
 End
 
 global Void ComeToMe(string _Sit,string _Chr)
