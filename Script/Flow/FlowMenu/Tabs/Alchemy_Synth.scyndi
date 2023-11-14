@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Alchemy_Synth.scyndi
-// Version: 23.10.18
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -43,7 +43,85 @@ Module
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
+
+#use "Script/Use/General/UseIAA" 
+
+Const Var BFnt = ObtainFont("BASE")
+Const Var MFnt = ObtainFont("MINI")
+
+Const Var ItemList = IAA.ListAll
+
+int ScrollY = 0
+int Hue = os.time()
+
+Void Col(Byte R, Byte G, Byte B,number Rate=1)
+	SetColor(Math.floor(R*Rate),Math.floor(G*rate),Math.floor(B*Rate))
+End
+
+Void Synthesize(ITM)
+	if ITM.Give(1)
+		For M in Each(Alchemy.Manaments)
+			Int Cost;Cost = ITM["Cost_"..M];
+			If Cost>0
+				Mana[m] = Mana[m]-Cost
+			End
+		End
+	End
+End
 
 
-Void Flow(string _Situation,string CharTag)
+Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
+	Int Y;Y=-ScrollY
+	For _i,itmtag in ipairs(ItemList)
+		//CSayF("%d -> %s -> %s",_i,itmtag,Prefixed(ITMTag,"ITM_ALC_"))
+		If Prefixed(ITMTag,"ITM_ALC_")
+			String ShortTag;ShortTag = Right(ITMTag,Len(ITMTag)-8)			
+			If Recipe[ShortTag]			 
+				Int DX; DX = BX
+				Int DY; DY = BY + (Y*40)
+				If DY>=BY && DY+50<BY+BH
+					Bool Allow;Allow = _Situation=="ALCHEMY" || Initiated[ShortTag]
+					Bool Hover = False
+					Number CRate
+					Var Itm = IAA[ITMTag]
+					if Allow;CRate=1; Else; CRate=0.75; End
+					if MX>DX && MY>DY && MX<BX+BH && MY<DY+50
+						Hue = (Hue+1) % 360
+						SetColorHSV(Hue,1,CRate)
+						Hover = Allow
+					Else
+						Col(255,255,255,CRate)
+					End
+					BFnt.Text(ITM.Name,DX,DY)
+					Col(0,180,255,CRate)
+					BFnt.Text(sprintf("%d",ITM.Num),DX+BW-3,DY,1,0)
+					int MANX;MANX = DX + 5
+					Int MANY;MANY = DY + 30
+					Bool CanCreate = True
+					For M in Each(Alchemy.Manaments)
+						Int Cost;Cost = ITM["Cost_"..M];
+						CanCreate = CanCreate && Mana[M]>=Cost
+						If Cost>0
+							String Txt;Txt=sprintf("%s:%d",M,Cost)
+							Col(Alchemy.ManaCol[M].r,Alchemy.ManaCol[M].g,Alchemy.ManaCol[M].b,CRate)
+							MFnt.Text(Txt,MANX,MANY)
+							MANX = MANX + 10 + MFnt.Width(Txt)							
+						End
+					End
+					If Hover && Allow && ML && CanCreate
+						Switch _Situation
+							Case "ALCHEMY"
+								Synthesize(ITM)
+							Case "COMBAT"
+								CSay("Synthesizing in combat comes later!")
+							Default
+								CSay("I don't know what to do in this situation: ".._Situation)
+						End
+					End
+				End
+				Y++
+			End
+		End
+	End
 End
