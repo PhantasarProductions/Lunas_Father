@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Alchemy_Extract.scyndi
-// Version: 23.10.18
+// Version: 23.11.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -45,5 +45,7 @@ Module
 #use "Script/Use/Link/Party"
 
 
-Void Flow(string _Situation,string CharTag)
+Void Flow(string _Situation,string CharTag,int bx, int by, int ex, int ey)
+	Lua.Scyndi.Class.Inventory.Flow("ALCHEMY","Francis",bx,by,ex,ey)
+	// TODO: Extract All
 End
