@@ -216,6 +216,7 @@ Global Void BoxText_Background()
 	Kthura.Draw(ScrollX,ScrollY)
 	DrawWelcome()
 	for ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
+	For f in Each(FField.UDFuncs);f();End
 End
 
 Void DrawScreen()
@@ -225,6 +226,7 @@ Void DrawScreen()
 	For ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Party.Boxes()
 	FieldStats()
+	For f in Each(FField.UDFuncs);f();End
 	//print("CallGauge"); 
 	Lua.Scyndi.Globals.FlowField.FIELD_RENC.DrawGauge()
 	Lua.Scyndi.Globals.FlowField.FIELD_COMPASS.DrawCompassSpots()
