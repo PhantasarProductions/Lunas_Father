@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/UseIAA.scyndi
-// Version: 23.11.05
+// Version: 23.11.14
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,8 +36,10 @@
 // End License Information
 Module
 
-#use "Libs/SCI/InterVar" 
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/SString"
 #use "Libs/SCI/GINIE"
+#use "Libs/SCI/JCR6"
 
 const var ItemCap = NewArray(100,50,10)
 
@@ -114,6 +116,16 @@ QuickMeta IAA
 		switch Key
 			Case "LIST"
 				return Inventory.Values("Have")
+			Case "LISTALL" 
+				Plua List=JCR6.Dir("Data/IAA")
+				Plua Ret = {}
+				For f in Each(List)
+					plua fl;fl=StripAll(f)
+					if fl!="MyData_ClassFile_IAA"
+						Ret[Len(Ret)]=fl
+					End
+				End
+				Return Ret
 			Case "FIELDS" 
 				return invclass.Values("Class")				
 			Default
