@@ -157,7 +157,15 @@ Bool Act()
 	if !__P.Allow(); Return False; End
 	if !__Going
 		SetColor(255,255,255)
+		If (!__P.Directions) && MX>BX && MY>BY && MX<BX+BS && MY<BY+BS
+			Hue = (Hue+1)%360
+			SetColorHSV(Hue,1,1)
+			IF ML
+				__P.Action()
+			End
+		End
 		Button.Stretch(BX,BY,BS,BS)
+		SetColor(255,255,255)
 		__P.Icon.Stretch(BX,BY,BS,BS)
 		If __P.Directions
 			For _,DB in Pairs(FDA_Dir._Tab)
@@ -166,8 +174,7 @@ Bool Act()
 					CSayF("PFA.%s.%s requested",Map.Leader,DB.Wind)
 					__Going = __P.Action(DB.Wind)
 				End
-			End
-		Else
+			End		
 		End
 	Else
 		__Going = __P.Cycle()
