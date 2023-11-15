@@ -44,6 +44,7 @@ Class Action
 	ReadOnly Var Act
 	ReadOnly Bool Extended
 	ReadOnly Int ExtraDiamonds
+	ReadOnly Bool NoMoreDiamonds // Only used by Francis' script
 	Int RemoveFP
 	Table Targets
 	string ExeTag
