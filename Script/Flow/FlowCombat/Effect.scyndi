@@ -185,8 +185,8 @@ Void Go(executor,target,act)
 		if act.Act.effect_script!=""
 			AES = AES || {}
 			If !AES[Act.Act.Effect_Script]
-				Lua.Scyndi.Use("Script/Use/Combat/SpellEffect/EFFECT_"..Act.Act.WideEffect_Script)
-				AES[Act.Act.WideEffect_Script] = Lua.Scyndi.Class["WIDE_"..Act.Act.WideEffect_Script]
+				Lua.Scyndi.Use("Script/Use/Combat/SpellEffect/EFFECT_"..Act.Act.Effect_Script)
+				AES[Act.Act.Effect_Script] = Lua.Scyndi.Class["EFFECT_"..Act.Act.Effect_Script]
 			End
 			Hit = AES[Act.Act.WideEffect_Script].Go(Executor,Target,Act) || Hit
 		end
