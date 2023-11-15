@@ -184,7 +184,7 @@ Var NewFoe(int position,string tag,force)
 	Return ret
 End
 
-Var NewAction(position,string Tag,string act,targets,force,parameters)
+Var NewAction(position,string Tag,act,targets,force,parameters)
 	var Ret;Ret = New TDiamond()
 	While (!Empty(position)) && (!Forced(tag,Slots[position],force))
 		position++
