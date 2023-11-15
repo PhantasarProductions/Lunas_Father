@@ -151,7 +151,7 @@ Bool Effect_Healing(executor,target,act)
 		End
 	End
 	// TODO: Script
-	If (Target.BlockHeal && HL>0) || Target.HP==0 
+	If HL>0 && (Target.BlockHeal || Target.HP==0) 
 		CharMsg.Put(Target,"No effect",255,180,0)
 		Return True
 	End
@@ -168,7 +168,7 @@ Bool Effect_Healing(executor,target,act)
 	Return False
 End
 
-
+Plua AES 
 Void Go(executor,target,act)
 	Bool Hit = False
 	
@@ -182,6 +182,14 @@ Void Go(executor,target,act)
 		Hit = Effect_Healing(executor,target,act) || Hit
 		
 		// Scripts
+		if act.Act.effect_script!=""
+			AES = AES || {}
+			If !AES[Act.Act.Effect_Script]
+				Lua.Scyndi.Use("Script/Use/Combat/SpellEffect/EFFECT_"..Act.Act.WideEffect_Script)
+				AES[Act.Act.WideEffect_Script] = Lua.Scyndi.Class["WIDE_"..Act.Act.WideEffect_Script]
+			End
+			Hit = AES[Act.Act.WideEffect_Script].Go(Executor,Target,Act) || Hit
+		end
 	
 		// Cause status if applicable (must be last)
 	End
