@@ -115,7 +115,7 @@ Void Flow(string _Situation,string CharTag,int bx, int by, int bw,int bh)
 	pLua Ch;ch=_Party.Char[CharTag]
 	pLua Sit; Sit = AblSit.GetSit(_Situation)
 	If CharTag=="Francis"
-		// TO DO: Link to quick alchemy page
+		Lua.Scyndi.Class.Alchemy_Synth.Flow(_Situation,CharTag,bx,by,bw,bh)
 		Return
 	End
 	bool Hovering = false
