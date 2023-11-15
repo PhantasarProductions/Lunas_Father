@@ -37,13 +37,122 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
+#use "Libs/Rosetta"
 #use "Libs/MultiPointer"
 
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
 
+#use "Script/Use/General/UseIAA"
+#use "Script/Use/General/Dice"
 
-Void Flow(string _Situation,string CharTag)
+ReadOnly Var BFnt = ObtainFont("BASE")
+ReadOnly Var MFnt = ObtainFont("MINI")
+Const Var AudEx   = Audio.Obtain("ALCHEMY_EXTRACT")
+Const Var Buzz    = Audio.Obtain("BUZZ")
+
+Void Col(Byte R, Byte G, Byte B,number Rate=1)
+	SetColor(Math.floor(R*Rate),Math.floor(G*rate),Math.floor(B*Rate))
+End
+
+	
+Void Initize(ITM,String ShortTag)
+	Bool Gelukt
+	Int NeedMore = 0
+	Int Total = 0
+	For M in Each(Alchemy.Manaments)
+		Int Cost;Cost = ITM["Cost_"..M]*(2+(gint.skill-1))
+		Total = Total + Cost
+		NeedMore = Needmore + math.max(0,Cost-Mana[M])
+		Mana[M] = math.max(0,Mana[M] - Cost)
+	End
+	Number PureRatio;PureRatio = NeedMore/Total
+	Int Ratio;Ratio = math.floor(PureRatio*100)
+	Int Roll = Dice.D100
+	If NeedMore==0 && gint.skill!=3
+		Gelukt = True
+	Else
+		Switch Roll
+			case 0 1 2 3
+				Gelukt = Roll < 3 - gint.Skill
+			case 95 96 97 98 99 100
+				Gelukt = (Roll<100-gint.skill) && Roll<Ratio
+			default
+				Gelukt = Roll<Ratio
+		End
+	End
+	Initiated[ShortTag] = Gelukt
+	If Gelukt
+		AudEx.Play()
+		Mini.WriteLn(Rosetta.GetString("ALCHEMY","INIT_SUCCES"),180,255,0)
+		gbool.AllowFrancisAlchemy = True
+	Else
+		Buzz.Play()
+		Mini.WriteLn(Rosetta.GetString("ALCHEMY","INIT_FAIL"),255,100,100)
+	End
+End
+
+Int ScrollY
+ReadOnly Var ItemList = IAA.ListAll
+Int Hue = os.time()
+Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
+	If (!gbool.Allow_Initize)
+		SetColor(255,100,100)
+		//CSayF("No Init '%s'.",Rosetta.GetStr("ALCHEMY","INYL")) // Hardcore debug
+		BFnt.Text(Rosetta.GetStr("ALCHEMY","INYL"),bx+(bw div 2),by+(bh div 2),2,2)
+		Return
+	End
+	
+	Int Y;Y=-ScrollY
+	For _i,itmtag in ipairs(ItemList)
+		//CSayF("%d -> %s -> %s",_i,itmtag,Prefixed(ITMTag,"ITM_ALC_"))
+		If Prefixed(ITMTag,"ITM_ALC_")
+			String ShortTag;ShortTag = Right(ITMTag,Len(ITMTag)-8)			
+			If Recipe[ShortTag] && (!Initiated[ShortTag]) 
+				Int DX; DX = BX
+				Int DY; DY = BY + (Y*40)
+				If DY>=BY && DY+50<BY+BH
+					Bool Allow = True //;Allow = _Situation=="ALCHEMY" || Initiated[ShortTag]
+					Bool Hover = False
+					Number CRate
+					Var Itm = IAA[ITMTag]
+					Allow = Alchemy.Level>=Itm.Alchemy_Minimal_Level
+					
+					if Allow;CRate=1; Else; CRate=0.75; End
+					if MX>DX && MY>DY && MX<BX+BH && MY<DY+50
+						Hue = (Hue+1) % 360
+						SetColorHSV(Hue,1,CRate)
+						Hover = Allow
+					Else
+						Col(255,255,255,CRate)
+					End
+					BFnt.Text(ITM.Name,DX,DY)
+					Col(0,180,255,CRate)
+					BFnt.Text(sprintf("%d",ITM.Num),DX+BW-3,DY,1,0)
+					int MANX;MANX = DX + 5
+					Int MANY;MANY = DY + 30
+					Bool CanCreate = True
+					For M in Each(Alchemy.Manaments)
+						Int Cost;Cost = ITM["Cost_"..M];
+						CanCreate = CanCreate && Mana[M]>=Cost
+						If Cost>0
+							String Txt;Txt=sprintf("%s:%d",M,Cost)
+							Col(Alchemy.ManaCol[M].r,Alchemy.ManaCol[M].g,Alchemy.ManaCol[M].b,CRate)
+							MFnt.Text(Txt,MANX,MANY)
+							MANX = MANX + 10 + MFnt.Width(Txt)							
+						End
+					End
+					If Hover && Allow && ML && CanCreate
+						Initize(ITM,ShortTag)						
+					End
+				End
+				Y++
+			End
+		End
+	End
 End
