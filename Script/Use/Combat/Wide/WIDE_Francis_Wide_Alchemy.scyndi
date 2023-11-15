@@ -1,0 +1,18 @@
+Module
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Flow/FlowCombat/Diamonds"
+#use "Script/use/link/Alchemy"
+
+Void Go(Executor,Act)
+	If Executor.Tag!="Francis"; Return; End // Only works for Francis
+	If Act.NoMoreDiamonds; Return; End
+	Int Deler; Deler = 1 + gint.skill + Act.Act.Alchemy_MinimalLevel
+	Int Times; Times = math.max(Alchemy.Level Div Deler,1)	
+	//Var A;A = new Action("Francis",Act.Act,{["NoMoreDiamonds"]=true,["Extended"]=Act.Extended,["ExtraDiamonds"]=Act.ExtraDiamonds})
+	//A.Targets = Act.Targets
+	For i=1,Times
+		Diamonds.NewAction((25*Act.Act.Alchemy_MinimalLevel),"Francis",Act.Act.Tag,Act.Targets,0,{["NoMoreDiamonds"]=true,["Extended"]=Act.Extended,["ExtraDiamonds"]=Act.ExtraDiamonds})
+	End
+End
