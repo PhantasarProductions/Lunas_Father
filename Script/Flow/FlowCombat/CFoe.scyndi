@@ -185,8 +185,27 @@ Class Foe
 	Int Frame = 0
 	Var Images
 	
+	Int PoseTicker
 	Bool DoPose(string pose)
-		Return True
+		Switch DrawType
+			Case 0
+				Return True
+			Case 1 2
+				 PoseTicker = (PoseTicker + 1) % 12
+				 if (PoseTicker%3)==0
+				 	 Flipped = !Flipped
+				 End
+				 If PoseTicker==0
+				 	 Flipped = False
+				 	 Return True
+				 End
+				 Return False
+			Case 3
+				Lua.Error("Animation not yet supported!")
+			Default
+				Lua.Error(sprintf("Drawtype %d is unknown",DrawType))
+		End
+		Return True // Safety pre-caution
 	End
 	
 	Bool Fatal(string Element)
