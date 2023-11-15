@@ -39,6 +39,7 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/JCR6"
 #use "Libs/SCI/Audio"
+#use "Libs/SCI/SString"
 #use "Libs/SCI/Graphics"
 
 #use "Script/Flow/FlowCombat/Stage"
@@ -144,10 +145,19 @@ Void ES_Pose()
 	End
 End
 
+Plua WES
 void ES_Effect()
 	// TODO: Wide effect script! (Needed for Rachel's Blunderbus)
 	For Target in Each(Act.Targets) 
 		Lua.Scyndi.Class.Effect.Go(Executor,target,act)
+	End
+	If Act.Act.WideEffect_Script!=""
+		WES = WES || {}
+		If !WES[Act.Act.WideEffect_Script]
+			Lua.Scyndi.Use("Script/Use/Combat/Wide/WIDE_"..Act.Act.WideEffect_Script)
+			WES[Act.Act.WideEffect_Script] = Lua.Scyndi.Class["WIDE_"..Act.Act.WideEffect_Script]
+		End
+		WES[Act.Act.WideEffect_Script].Go(Executor,Act)
 	End
 	Executor.AltCoords = False
 	Executor.Pose = "IDLE"
