@@ -107,3 +107,27 @@ Global Void ZA_Welcome_003()
 		//IAA.KEY_MYSTICALBUM.HAVE++		
 	End
 End
+
+
+// #007
+Global Void ZA_Welcome_007()
+	If !Done.Allow_Initize
+		MapText("FEENA_007_WELCOME")
+		//IAA.KEY_MYSTICALBUM.HAVE++		
+	End
+End
+
+
+// #009
+Global Void ZA_Boss()
+	Player.StopWalking()
+	MapText("PRE_BOSS")
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Boss("BIGBOOK")
+End
+
+Global Void ZA_BossKilled()
+	Awarded.Kill_Boss_Big_Book = true
+	Map.PermaKill("ZA_BossKilled")
+End	
