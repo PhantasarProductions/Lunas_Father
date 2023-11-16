@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.13
+// version: 23.11.16
 // End License Information
 Script
 
@@ -49,7 +49,7 @@ Script
 
 // #000
 Global Void ZA_Medal()
-	If !gbool.Done_TutCaves
+	If !gbool.TutorDone
 		gbool.TutorialMedals=true
 		MapText("TUTORIALMEDALS")
 		MapText("NOTIMEFORMEDALS")
@@ -67,9 +67,13 @@ Global Void Bye()
 	Delisto()
 End
 
-Global Void HekWeg()
+Global Void ZA_HekWeg()
 	Map.Kill("Hek")
 	Map.Kill("NPC_Feena_000")
+End
+
+Global Void ZA_ToSugar()
+	Map.GoToMap("MDL_Dungeon_Sugarland","#001","Start")
 End
 
 Global Void NPC_Feena_000()
@@ -78,7 +82,7 @@ Global Void NPC_Feena_000()
 End
 
 Global Void ZA_RemoveFeena()
-	If gbool.Done_TutCaves
+	If gbool.TutorDone
 		Map.Kill("NPC_Feena_000")
 	Else
 		CSay("Since the caves have not yet been completed Feena should stay")
