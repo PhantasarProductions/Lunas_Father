@@ -1,0 +1,41 @@
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Events"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/WorldMap" 
+#use "Script/Use/Link/TextBoxes"
+
+Global Void ZA_Start()
+	If !Done.AfterTheTests
+		Kthura.Obj.Francis.Visible=true
+		MapText("START")
+		gbool.Alchemy_Unlocked = true
+		Kthura.Obj.Francis.Visible=false
+	End
+End
+
+Global Void ZA_Out()
+	Map.GoToLayer("Exterior","Hutspot")
+End
+
+Global Void NPC_Hut()
+	Map.GoToLayer("INTERIOR","Start")
+End
+
+
+
+Global Void Bye()
+	WM_Unlocked.JAKEHUT = True
+	WM_Unlocked.GRYSBOW = True
+	if (!Done.LeaveJakeHut)
+		gstring.CampSituation = "03_Grysbow"
+	End
+	Delisto()
+End
