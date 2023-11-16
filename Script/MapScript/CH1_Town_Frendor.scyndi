@@ -32,11 +32,14 @@
 // 
 // **********************************************
 // 
-// version: 23.11.03
+// version: 23.11.16
 // End License Information
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Events"
+#use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
@@ -95,3 +98,20 @@ Global Void ZA_Exit_Weapons(); Map.GoToLayer("TOWN","EXIT_Weapons"); End
 	
 Global Void NPC_Wands(); Map.GoToLayer("Wands","START"); End
 Global Void ZA_Exit_Wands(); Map.GoToLayer("TOWN","EXIT_Wands"); End
+	
+	
+Global Void ZA_After_Training()
+	If gbool.TutorDone && (!Done.TutorFeenaClosureSpeech)
+		Kthura.Obj.Feena_Francis.Visible=True
+		MapText("END_TUTORS")
+		Awarded.SCEN_ExamsDone = True
+		Cls()
+		plua tdl = LoadImage("GFX/Banners/Three Days later.png")
+		tdl.HotCenter()
+		tdl.Draw(Graphics.Width div 2, Graphics.Height div 2)
+		Flip()
+		Events.Sleep(1500)
+		Map.ExternalKill("CH1_TOWN_VANDAR","TOWN","NPC_MT_Narya")
+		Map.GoToMap("CH1_HUB_JAKEHUT","INTERIOR","Myrah")
+	End
+End
