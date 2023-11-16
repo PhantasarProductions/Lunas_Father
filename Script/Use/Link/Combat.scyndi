@@ -105,8 +105,8 @@ void PrepareCombat(string BossHead,string BossName,byte R,Byte G, Byte B)
 			Music.Push()
 			BossAudio = BossAudio || Audio.LoadNew("Audio/Combat/Boss Intro.ogg","BOSS_INTRO")
 			//Lua.Scyndi.Globals.Music.Stop()
-			//Music.Stop()
-			Music.Play("Music/Sys/Silence.ogg")
+			Music.Stop()
+			//Music.Play("Music/Sys/Silence.ogg")
 			BossChan = BossAudio.Play()			
 		End
 		
