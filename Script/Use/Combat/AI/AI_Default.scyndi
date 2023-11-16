@@ -124,7 +124,7 @@ Var EnemyAct(Executor,string param="")
 			End
 			CSayF("%s will use ability %s on %s",Executor.Tag,aAct.Act.Name,aAct.Targets[0].Tag)
 		Default
-			Lua.error(sprintf("AI Default: Target type (%s) unknown!",aAct.Act.Act.Regular))
+			Lua.error(sprintf("AI Default: Target type (%s) unknown!",aAct.Act.Regular))
 	End
 	Return aAct
 End
