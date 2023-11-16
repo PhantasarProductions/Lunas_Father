@@ -72,6 +72,8 @@ var IAA_IDX(s,string key)
 		case "GIVE"
 			_giveitem = iKey
 			return IAA_GIVE
+		case "TAG"
+			return ikey
 		Default
 			switch upper(invclass.Value("Class",Upper(key)))
 				case "STRING"
