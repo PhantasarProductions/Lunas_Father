@@ -1,0 +1,7 @@
+Script
+
+#use "Script/Use/Link/Map"
+
+Global Void ZA_Leave()
+	Map.GoToMap("CH1_Dungeon_TutorialCave","#000","Exit_Sugar")
+End
