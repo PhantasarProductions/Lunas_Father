@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.10.24
+// version: 23.11.16
 // End License Information
 Script
 
@@ -43,6 +43,7 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
 #use "SCript/Use/Link/Party"
+#use "SCript/Use/Link/Alchemy"
 #use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/TextBoxes"
 
@@ -78,9 +79,13 @@ Global Void NPC_Alchemy()
 		MapText("NO_ALCHEMY")
 		Return
 	End
-	Mini.Writeln("Alchemy not present yet!")
+	If Party.InParty("Francis")
+		MapText("ALCHEMY")
+		GoAlchemy()
+	Else
+		MapText("NOFRANCISFORALCHEMY")
+	End
 End
-	
 
 Global Void ZA_EnterCampSite()
 	Map.Leader = "Myrah"
