@@ -194,8 +194,8 @@ Var NewAction(position,string Tag,act,targets,force,parameters)
 	Ret.ImgTag = "COMBATDIAMOND_EXTRA"
 	Ret.FighterTag=Tag
 	Ret.Action=Act
-	Ret.ActTargets=targets
-	Ret.ActParameters=Parameters
+	Ret.ActionTargets=targets
+	Ret.ActionParameters=Parameters
 	If Slots[position]
 		ret.X = Slots[position].X
 	End
