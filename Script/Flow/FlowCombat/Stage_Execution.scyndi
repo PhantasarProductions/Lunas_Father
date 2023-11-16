@@ -141,6 +141,20 @@ Void ES_Pose()
 			plua au;au = Audio.LoadNew(s,"POSE_END_%s_%s",Executor.AudName,Act.Act.Pose)
 			au.Play()
 		End
+		CES="SpellAni"
+	End
+End
+
+
+int OTSPA = 0 // Old Time SpellAni
+Void ES_SpellAni()
+	Bool GoOn=True
+	If OTSPA==0
+		OTSPA=os.time()
+	End
+	
+	If GoOn && OTSPA!=os.time()
+		OTSPA=0
 		CES="Effect"
 	End
 End
