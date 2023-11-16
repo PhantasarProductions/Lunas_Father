@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Kill.scyndi
-// Version: 23.10.16
+// Version: 23.11.16
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -75,6 +75,12 @@ End
 Void DelayKill(String Tag)	
 	PermaKills.Add(Kthura.LastLoadedMap,Kthura.CurrentLayer,Tag,True,True)
 	CSayF("In layer %s object %s will be killed off permanently the next time this map is loaded!",Kthura.CurrentLayer,Tag)
+End
+
+Void ExternalKill(string MapFile,string Layer,string ObjTag)
+	if !Prefixed(Upper(MapFile),"KTHURA/"); MapFile="Kthura/"..MapFile; End
+	PermaKills.Add(MapFile,Layer,ObjTag)
+	CSayF("\x1b[31mExternal kill\x1b[0m requested %s::%s::%s",MapFile,Layer,ObjTag)
 End
 
 

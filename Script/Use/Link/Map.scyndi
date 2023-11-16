@@ -117,6 +117,9 @@ void DelayKill(string Tag)
 	Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.DelayKill",Tag)
 end	
 
+Void ExternalKill(string M,String L, String T)
+	Sys.Call("FLOW_FIELD","FlowField.FIELD_KILL.ExternalKill",M,L,T)
+End
 
 Get String Layer
 	String Ret
