@@ -97,17 +97,19 @@ Bool Effect_Attack(executor,target,act)
 	Else
 		int modifier; modifier = math.floor(Atk*Target.NResistance(Act.Act.AtkElement))
 		Atk = Atk - Modifier
-		if Target.Resistance(Act.Act.AtkElement)==100
-			CharMsg.Put(Target,"Immune",255,180,0)
-		elseif Target.Resistance(Act.Act.AtkElement)>0
-			CharMsg.Put(Target,Atk,255,180,0)
-		elseif Target.Resistance(Act.Act.AtkElement)==0
-			CharMsg.Put(Target,Atk,255,255,255)
-		else
-			CharMsg.Put(Target,Atk,255,0,0)
-		End
-		If Target.Guarding && Atk>0
-			Atk = math.max(1, Atk div 2)
+		If Atk>0
+			If Target.Guarding && Atk>0
+				Atk = math.max(1, Atk div 2)
+			End
+			if Target.Resistance(Act.Act.AtkElement)==100
+				CharMsg.Put(Target,"Immune",255,180,0)
+			elseif Target.Resistance(Act.Act.AtkElement)>0
+				CharMsg.Put(Target,Atk,255,180,0)
+			elseif Target.Resistance(Act.Act.AtkElement)==0
+				CharMsg.Put(Target,Atk,255,255,255)
+			else
+				CharMsg.Put(Target,Atk,255,0,0)
+			End
 		End
 	End
 	
@@ -188,7 +190,7 @@ Void Go(executor,target,act)
 				Lua.Scyndi.Use("Script/Use/Combat/SpellEffect/EFFECT_"..Act.Act.Effect_Script)
 				AES[Act.Act.Effect_Script] = Lua.Scyndi.Class["EFFECT_"..Act.Act.Effect_Script]
 			End
-			Hit = AES[Act.Act.WideEffect_Script].Go(Executor,Target,Act) || Hit
+			Hit = AES[Act.Act.Effect_Script].Effect(Executor,Target,Act) || Hit
 		end
 	
 		// Cause status if applicable (must be last)
