@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_Menu.scyndi
-// Version: 23.11.13
+// Version: 23.11.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -53,7 +53,7 @@ int _Hue
 
 Var Back = ObtainImage("BOX_BACK")
 
-global const var Situations = { ["FIELD"]={}, ["SHOP"]={}, ["UPGRADE"]={}, ["ALCHEMY"]={}}
+global const var Situations = { ["FIELD"]={}, ["SHOP"]={}, ["UPGRADE"]={}, ["ALCHEMY"]={},["MERCHANT"]={}, ["BLACKMARKET"]={}}
 global string CurSituation
 global Table __CurSitTab = {}
 global string CurCharTag
@@ -103,6 +103,11 @@ Init
 	NewSitTab("ALCHEMY","ALCHEMY_SYNTH","Alchemy_Tubes","Alchemy_Synth")
 	NewSitTab("ALCHEMY","ALCHEMY_EXTRACT","Alchemy_Tubes","Alchemy_Extract")
 	NewSitTab("ALCHEMY","ALCHEMY_INITIZE","Alchemy_Tubes","Alchemy_Initize")
+	
+	NewSitTab("MERCHANT","BUY","Shop_Buy")
+	NewSitTab("MERCHANT","SELL","Shop_Sell")
+	NewSitTab("BLACKMARKET","BUY","Shop_Buy")
+	NewSitTab("BLACKMARKET","SELL","Shop_Sell")
 End
 
 global Void ComeToMe(string _Sit,string _Chr)
