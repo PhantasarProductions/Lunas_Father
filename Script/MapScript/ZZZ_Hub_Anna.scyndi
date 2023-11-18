@@ -1,0 +1,76 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/ZZZ_Hub_Anna.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.11.18
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Medals"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach" 
+#use "Script/Use/Link/Worldmap" 
+#use "Script/Use/Link/Textboxes" 
+
+global const delegate Bye=Delisto
+
+Int CheckRate = 10
+Get Int RoomOpen; Return CheckRate Div 10; End
+
+Void CheckOpen()
+	CSayF("Open Rate: %02d",CheckRate)
+	For i=1,10
+		If i<=RoomOpen
+			CSayF("Anna Zone %02d is now \x1b[32mopen",i)
+			Map.Kill("AZ"..i)
+		Else
+			CSayF("Anna Zone %02d is now \x1b[31mclosed",i)
+			Kthura.HideByLabel("AZ"..i)
+		End
+	End
+	Awarded.SCEN_ANNA = true
+End
+
+
+
+Global Void ZA_Welcome()
+	if !Done.Anna_Welcome_Tutorial
+		MapText("NPC_MT_Human")
+		MapText("TUTORIAL")
+	End
+	CheckOpen()
+End
