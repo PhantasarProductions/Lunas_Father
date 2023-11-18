@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Shop_Buy.scyndi
-// Version: 23.10.18
+// Version: 23.11.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -44,6 +44,82 @@ Module
 
 #use "Script/Use/Link/Party"
 
+#use "Script/Use/General/Cash"
+#use "Script/Use/General/UseIAA"
 
-Void Flow(string _Situation,string CharTag)
+ReadOnly Var BFnt = ObtainFont("BASE")
+ReadOnly Var MFnt = ObtainFont("MINI")
+ReadOnly Var PgUp = ObtainImage("PAGE_UP")
+ReadOnly Var PgDn = ObtainImage("PAGE_DOWN")
+
+
+Int ScrollY = 0
+	
+Void Flow(string _Situation,string CharTag,int bx, int by, int bw,int bh)
+	Int __Y = -ScrollY
+	Bool CanScrollDown
+	For itTag in Each(IAA.List)
+		Var ITM = IAA[itTag]
+		Int Price;Price = ITM.Price 
+		Bool Allow = True
+		Switch _Situation
+			Case "MERCHANT" "SHOP"
+				Switch ITM.Type
+					Case "Ingredient"
+						Allow = Allow && ITM.Mana_Tier<12 div gint.skill
+						Price = math.floor(ITM.Mana_Tier * (1.1*gint.skill))
+					Case "Consumable"
+						Allow = ITM.Shop_Item											
+					Default
+						Allow = False
+				End
+			Case "BLACKMARKET"
+				Switch ITM.Type
+					Case "Ingredient"
+						Allow = Allow && ITM.Mana_Tier>=12 div gint.skill
+						Price = math.floor(ITM.Mana_Tier * (1.1*gint.skill))
+					Case "Consumable"
+						Allow = ITM.Shop_BlackMarket								
+					Default
+						Allow = False
+				End
+			Default
+				Lua.error("Unknown buy situation: ".._Situation)
+			End
+		If Allow
+			Int Y;Y = (__Y*30)+by
+			int X;X = bx + 10
+			If Y>=BY && Y<=BH-90
+				SetColor(255,255,255)
+				If MX>bx && MY>Y && MX<bx+bh-45 && MY<Y+30
+					X = X + 10
+					If ML && gint.Cash>=Price && ITM.Give()
+						Cash.Have = Cash.Have - Price
+					End
+				End
+				BFnt.Text(ITM.Name,X,Y)
+				MFnt.Text(sprintf("Have %3d",ITM.Num),bw div 2,Y+30,2,1)
+				If (gint.Cash<Price); SetColor(255,60,60); Else; SetColor(0,180,255); End
+				BFnt.Text(sprintf("%d Sh",Price),bx+bw-45,Y,1,0)
+			ElseIf Y>BH-90
+				CanScrollDown=true
+			End
+			__Y++
+		End
+	End	
+	SetColor(255,255,255)
+	If ScrollY>0
+		PGUp.Stretch(bx+bw-32,by,32,32)
+		If ML && mx>bx+bw-32 && mx<bx+bw && my>by && my<by+32
+			ScrollY--
+		End
+	End
+	If CanScrollDown
+		PGDN.Stretch(bx+bw-32,by+bh-90,32,32)
+		If ML && mx>bx+bw-32 && mx<bx+bw && my>by+bh-90 && my<by+bh-90+32
+			ScrollY++
+		End
+	End		
+	SetColor(0,180,255)
+	BFnt.Text(sprintf("%d shilders",gint.cash),bx,by+bh-30,0,1)
 End
