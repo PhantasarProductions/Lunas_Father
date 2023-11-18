@@ -219,6 +219,7 @@ Init
 	Stage.Register("Execution",Stage_Execution)
 	EsReg("JumpToTarget",ES_JumpToTarget)
 	EsReg("Pose",ES_Pose)
+	EsReg("SpellAni",ES_SpellAni)
 	EsReg("Effect",ES_Effect)
 End
 #endregion
