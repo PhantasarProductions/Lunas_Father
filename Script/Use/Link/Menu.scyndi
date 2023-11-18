@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Menu.scyndi
-// Version: 23.10.18
+// Version: 23.11.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,6 +38,8 @@ Module
 
 #use "Libs/SCI/Sys"
 
+#use "Script/Use/Link/Map"
+
 
 Init
 	Sys.LoadStateNew("FLOW_MENU","Script/Flow/Flow_Menu.lbc")
@@ -46,4 +48,12 @@ End
 Void Go(string situation,string character)
 	Sys.Call("FLOW_MENU","ComeToMe",situation,character)
 	Sys.GoToFlow("MENU")
+End
+
+Void Shop()
+	Go("MERCHANT",Map.Leader)
+End
+
+Void BlackMarket()
+	Go("BLACKMARKET",Map.Leader)
 End
