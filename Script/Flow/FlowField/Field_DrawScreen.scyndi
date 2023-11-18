@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.11.14
+// Version: 23.11.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -226,6 +226,7 @@ Void DrawScreen()
 	For ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Party.Boxes()
 	FieldStats()
+	DrawWelcome()
 	For f in Each(FField.UDFuncs);f();End
 	//print("CallGauge"); 
 	Lua.Scyndi.Globals.FlowField.FIELD_RENC.DrawGauge()
