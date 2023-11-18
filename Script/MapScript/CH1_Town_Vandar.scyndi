@@ -32,18 +32,18 @@
 // 
 // **********************************************
 // 
-// version: 23.10.16
+// version: 23.11.18
 // End License Information
 Script
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
-#use "Script/Use/Link/Textboxes"
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Menu"
 #use "Script/Use/Link/WorldMap"
-
+#use "Script/Use/Link/Textboxes"
 Init
 	CSay("Welcome to Vandar!")
 End
@@ -146,6 +146,7 @@ End
 
 Global Void NPC_Jaqen()
 	MapText("ITEMS")
-	Mini.Writeln("De itemshop moet er nog ingezet worden!",255,180,0)
-	Mini.WriteLn("See you later, alligator",180,255,0)
+	//Mini.Writeln("De itemshop moet er nog ingezet worden!",255,180,0)
+	//Mini.WriteLn("See you later, alligator",180,255,0)
+	Menu.Shop()
 End
