@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/UseIAA.scyndi
-// Version: 23.11.16
+// Version: 23.11.19
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -41,7 +41,7 @@ Module
 #use "Libs/SCI/GINIE"
 #use "Libs/SCI/JCR6"
 
-const var ItemCap = NewArray(100,50,10)
+const var ItemCap = NewArray(0,100,50,10)
 
 plua _iaareg = {}
 plua _iaameta = {}
