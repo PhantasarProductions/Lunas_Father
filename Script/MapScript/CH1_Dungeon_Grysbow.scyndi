@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.18
+// version: 23.11.19
 // End License Information
 Script
 
@@ -45,4 +45,10 @@ global readonly delegate Bye = Delisto
 Global Void ZA_Tut_BlackOrbs()
 	Map.PermaKill("ZA_Tut_BlackOrbs")
 	MapText("BLACK_ORB")
+End
+
+Global Void TARGET_SetBridge()
+	For i=1,4
+		Map.PermaKill(sprintf("Block_%03d",i))
+	End
 End
