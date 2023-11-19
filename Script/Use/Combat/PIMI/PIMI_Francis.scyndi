@@ -32,21 +32,97 @@
 // 
 // **********************************************
 // 
-// version: 23.10.28
+// version: 23.11.19
 // End License Information
 Module
 
 #use "libs/sci/sys"
+#use "libs/sci/graphics"
 #use "libs/sci/intervar"
 
+#use "libs/multipointer"
+
+#use "Script/Use/Link/Alchemy"
+
+#use "Script/Use/General/UseIAA" 
+
+#use "Script/Flow/flowCombat/Stage"
+#use "Script/Flow/flowCombat/Action_Class"
+
+#use "Script/Flow/FlowMenu/Tabs/Alchemy_Synth"
+#use "Script/Flow/FlowMenu/Tabs/Alchemy_Tubes"
+
 #use "Script/Use/Combat/PIMI/PIMI_Class"
+
+ReadOnly Var Fnt = ObtainFont("BASE")
 
 Void Attack()
 	plua a = new Action("Francis","HERO_FRANCIS_ATTACK")
 	Lua.Scyndi.Globals.PlayerSelectTarget("Francis",a)
 End
 
-Void Alchemy()
+
+Int TubesX
+Int TubesY
+Int TubesW
+Int TubesH
+Int SynthX
+Int SynthY
+Int SynthW
+Int SynthH
+
+
+Class Stage_Alchemy
+	ReadOnly Static Int RectX = 10
+	ReadOnly Static Int RectY = 50
+	ReadOnly Static Int RectW = Graphics.Width-20
+	ReadOnly Static Int RectH = Graphics.Height-260
+
+	Static Int TubesX
+	Static Int TubesY
+	Static Int TubesW
+	Static Int TubesH
+	Static Int SynthX
+	Static Int SynthY
+	Static Int SynthW
+	Static Int SynthH
+		
+		
+	Static Void Arrive()
+		TubesX = RectX
+		TubesY = RectY
+		TubesW = RectW Div 2
+		TubesH = RectH
+		SynthX = TubesX + TubesW
+		SynthY = RectY
+		SynthW = TubesW
+		SynthH = RectH
+	End
+	
+	Static Void Cycle()
+		SetColor(255,255,255)
+		Fnt.Text("Francis",RectX,RectY,0,1)
+		SetColor(0,0,0,100)
+		Rect(RectX,RectY,RectW,RectH)
+		SetColor(255,255,255,255)
+		Alchemy_Tubes.Flow("COMBAT","Francis",TubesX,TubesY,TubesW,TubesH)
+		Alchemy_Synth.Flow("COMBAT","Francis",SynthX,SynthY,SynthW,SynthH)
+		if MR;Stage.CurrentTag="IDLE";End
+	End
+End
+
+Global Void AlchemyAction(string ItemTag)
+	plua _ConsumeMana = {}
+	plua ITM;ITM=IAA[ItemTag]
+	for m in Each(Alchemy.Manaments)
+		_ConsumeMana[m]=ITM["Cost_"..m]
+	End
+	plua na;na = New Action("Francis",ItemTag,{["ConsumeManaments"]=_ConsumeMana})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Francis",na)
+End
+
+Void GoAlchemy()
+	Stage.CurrentTag = "PMALCHEMY"
 End
 
 Void Force()
@@ -59,7 +135,9 @@ Bool AllowForce(); Return gbool.AllowFrancisForce; End
 Init
 	plua _Francis = CreatePIM("Francis")
 	_Francis.Add("Attack",Attack)
-	_Francis.Add("Alchemy",Alchemy,AllowAlchemy)
+	_Francis.Add("Alchemy",GoAlchemy,AllowAlchemy)
 	_Francis.Add("Force",Force,AllowForce)
 	_Francis.ItemsGuard()
+	Stage.Register("PMALCHEMY",Stage_Alchemy)
+	
 End
