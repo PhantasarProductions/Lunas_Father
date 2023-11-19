@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectItem.scyndi
-// Version: 23.11.08
+// Version: 23.11.19
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -68,7 +68,7 @@ Var Player
 
 Void _Action(string User,string _Item)
 	CSayF("%s => Request to use item %s",User,_Item)
-	plua Act;Act = new Action(User,_Item,{["Extended"]=IsMystic})
+	plua Act;Act = new Action(User,_Item,{["Extended"]=IsMystic,["ConsumeItem"]=true})
 	Lua.Scyndi.Globals.PlayerSelectTarget(User,Act)
 End
 

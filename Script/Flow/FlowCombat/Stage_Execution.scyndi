@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
-// Version: 23.11.18
+// Version: 23.11.19
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -93,6 +93,9 @@ Void ES_ShortWait()
 	ShortWait--
 	If ShortWait<=0
 		CES="JumpToTarget"
+		If Act.ConsumeItem
+			Act.Act.Num--
+		End
 	End
 End
 

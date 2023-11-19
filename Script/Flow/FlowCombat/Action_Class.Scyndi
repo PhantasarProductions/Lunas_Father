@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Action_Class.Scyndi
-// Version: 23.11.16
+// Version: 23.11.19
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -45,6 +45,7 @@ Class Action
 	ReadOnly Bool Extended
 	ReadOnly Int ExtraDiamonds
 	ReadOnly Bool NoMoreDiamonds // Only used by Francis' script
+	ReadOnly Bool ConsumeItem
 	Int RemoveFP
 	Table Targets
 	string ExeTag
