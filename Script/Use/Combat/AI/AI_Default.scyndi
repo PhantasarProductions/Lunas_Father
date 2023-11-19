@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/AI/AI_Default.scyndi
-// Version: 23.11.18
+// Version: 23.11.19
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -92,7 +92,7 @@ Var EnemyAct(Executor,string param="")
 					Case "" "Random"
 						if len(Available)<=0
 							CSayF("Could NOT set a target (none available). Setting on self to prevent crashes")
-							aAct.target = {Executor}
+							aAct.Targets = {Executor}
 						Else
 							aAct.Targets = { Available[math.random(0,len(Available)-1)] }
 						End
