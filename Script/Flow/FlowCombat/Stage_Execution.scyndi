@@ -42,6 +42,8 @@ Module
 #use "Libs/SCI/SString"
 #use "Libs/SCI/Graphics"
 
+#use "Script/Use/Link/Alchemy"
+
 #use "Script/Flow/FlowCombat/Stage"
 #use "Script/Flow/FlowCombat/Diamonds"
 
@@ -95,6 +97,11 @@ Void ES_ShortWait()
 		CES="JumpToTarget"
 		If Act.ConsumeItem
 			Act.Act.Num--
+		End
+		if Act.ConsumeManaments
+			For M,N in pairs(Act.ConsumeManaments)
+				Mana[M] = Mana[M] - N
+			End
 		End
 	End
 End

@@ -46,6 +46,7 @@ Class Action
 	ReadOnly Int ExtraDiamonds
 	ReadOnly Bool NoMoreDiamonds // Only used by Francis' script
 	ReadOnly Bool ConsumeItem
+	ReadOnly Var ConsumeManaments = nil
 	Int RemoveFP
 	Table Targets
 	string ExeTag
