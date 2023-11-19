@@ -52,3 +52,8 @@ Global Void TARGET_SetBridge()
 		Map.PermaKill(sprintf("Block_%03d",i))
 	End
 End
+
+Global Void ZA_SeeCave()
+	Map.PermaKill("ZA_SeeCave")
+	MapText("SeeCave")
+End
