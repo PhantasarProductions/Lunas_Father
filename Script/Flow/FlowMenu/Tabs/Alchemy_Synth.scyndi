@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Alchemy_Synth.scyndi
-// Version: 23.11.14
+// Version: 23.11.19
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -114,7 +114,8 @@ Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
 							Case "ALCHEMY"
 								Synthesize(ITM)
 							Case "COMBAT"
-								CSay("Synthesizing in combat comes later!")
+								//CSay("Synthesizing in combat comes later!")
+								Lua.Scyndi.Globals.AlchemyAction(ITMTag)
 							Default
 								CSay("I don't know what to do in this situation: ".._Situation)
 						End
