@@ -36,15 +36,20 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/InterVar"
+
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
+
+ReadOnly Var AudioOrb = Audio.Obtain("BLACK_ORB")
 
 Global Void GetBlackOrb(string T)
 	Mini.Write("Black orb ",100,0,180)
 	Mini.WriteLn(" obtained",255,180,0)
 	gint.BlackOrbs++
+	AudioOrb.Play()
 	Map.PermaKill(T)
 	// TO DO: Superboss: Juggernaut
 End
