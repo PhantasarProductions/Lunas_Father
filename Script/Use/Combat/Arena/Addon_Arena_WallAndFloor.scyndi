@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/Arena/Addon_Arena_WallAndFloor.scyndi
-// Version: 23.11.06
+// Version: 23.11.20
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,9 +42,9 @@ Module
 
 #use "Script/Flow/FlowCombat/Quake"
 
-Int WallY = Graphics.Height div 3
 Int WallH = 128
 int WallW = 64
+Int WallY = (Graphics.Height div 3) - WallW
 
 Class Addon_WallAndFloor
 	ReadOnly Var ImgWall
