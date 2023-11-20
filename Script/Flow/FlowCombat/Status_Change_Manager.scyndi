@@ -61,32 +61,36 @@ Var __SC_Index(s,String Key)
 			End
 			return s.___duration
 		Default
-			Switch _SC_Data.Value("Class",Key)
+			Switch __SC_Data.Value("Class",Key)
 				case "String"
-					Return _SC_Data.Value("Rec:"..s.___status,Key)
+					Return __SC_Data.Value("Rec:"..s.___status,Key)
 				case "Int"
-					Return _SC_Data.IntValue("Rec:"..s.___status,Key)
+					Return __SC_Data.IntValue("Rec:"..s.___status,Key)
 				case "Boolean" "Bool"
-					Return _SC_Data.IntValue("Rec:"..s.___status,Key)=="True"
+					Return __SC_Data.IntValue("Rec:"..s.___status,Key)=="True"
 				default
 					Lua.error("Unknown Status Change Index: "..key)
 			End
 	End
 End
 
-Void __SC_Index(s,String Key,Value)
+Void __SC_NewIndex(s,String Key,Value)
 	Switch Upper(Key)
-		Case "HAS"
-			s.Fighther.HasStatus[___tag] = Value
+		//Case "HAS"
+		//	if Value
+		//		s.Fighther.HasStatus[s.___tag] = s
+		//	else
+		//		s.Fighther.HasStatus[s.___tag] = nil
+		//	End
 		Case "PERMANENCED"
-			s.Figther.Permanenced[___tag]
+			s.Figther.Permanenced[s.___tag] = Value
 		Case "DURATION"
-			if s.Figther.Permanenced[___tag] || s.Duration_Infinite
+			if s.Figther.Permanenced[s.___tag] || s.Duration_Infinite
 				Return
 			End
 			s.___duration = Value
 		Default
-			if _SC_Data.Value("Class",Key)!=""
+			if __SC_Data.Value("Class",Key)!=""
 				Lua.error("Field '"..key.."' is an internal status change field and therefore read-only!")
 				Return
 			End
@@ -98,13 +102,13 @@ plua __SC_Meta
 Init
 	__SC_Meta = {}
 	__SC_Meta.__index = __SC_Index
-	__SC_Mata.__newindex = __SC_NewIndex
+	__SC_Meta.__newindex = __SC_NewIndex
 End
 
 Var SetStatusChange(String FTag,String STag)
 	plua ret = {}
 	ret.___tag = STag
 	ret.___fightertag = FTag
-	ret = SetMetaTabel(ret,__SC_Meta)
+	ret = SetMetaTable(ret,__SC_Meta)
 	Return ret
 End
