@@ -40,7 +40,7 @@ Module
 
 ReadOnly Var __GLB     = Lua.Scyndi.Globals
 ReadOnly Var __CLS     = Lua.Scyndi.Class
-ReadOnly Var __SC_Data = GINIE.Load("Data/General/StatusChanges.ini")
+ReadOnly Var __SC_Data = GINIE.Load("Data/General/StatusChanges.ini","DATABASE_STATUS_CHANGES")
 	
 Var __SC_Index(s,String Key)
 	Key = Upper(Key)
