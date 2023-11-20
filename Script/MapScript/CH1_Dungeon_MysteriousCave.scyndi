@@ -39,5 +39,5 @@ Script
 #use "Script/Use/Link/Map"
 
 Global Void ZA_Forest()
-	Map.GoToMap("CH1_Dungeon_GrysbowForest","#005","Einde")
+	Map.GoToMap("CH1_Dungeon_Grysbow","#005","Einde")
 End
