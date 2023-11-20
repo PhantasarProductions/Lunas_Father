@@ -52,9 +52,9 @@ Var __SC_Index(s,String Key)
 		Case "FIGHTER"
 			return __CLS.Fighter.ByTag[s.__fightertag]
 		Case "HAS"
-			return s.Fighther.HasStatus[___tag] //&& (s.Fighther.HasStatus[___tag]==true || s.Fighther.HasStatus[___tag]>0)
+			return s.Fighther.HasStatus[s.___tag] //&& (s.Fighther.HasStatus[___tag]==true || s.Fighther.HasStatus[___tag]>0)
 		Case "PERMANENCED"
-			return s.Figther.Permanenced[___tag]
+			return s.Figther.Permanenced[s.___tag]
 		Case "DURATION"
 			if s.Figther.Permanenced[___tag] || s.Duration_Infinite
 				Return 100000
