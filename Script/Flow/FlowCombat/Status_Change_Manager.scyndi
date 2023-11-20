@@ -56,7 +56,7 @@ Var __SC_Index(s,String Key)
 		Case "PERMANENCED"
 			return s.Figther.Permanenced[s.___tag]
 		Case "DURATION"
-			if s.Figther.Permanenced[___tag] || s.Duration_Infinite
+			if s.Figther.Permanenced[s.___tag] || s.Duration_Infinite
 				Return 100000
 			End
 			return s.___duration
