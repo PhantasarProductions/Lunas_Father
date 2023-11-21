@@ -140,3 +140,5 @@ Global Void GoAlchemy()
 	CSay("Going to alchemy")
 	Menu.Go("ALCHEMY","Francis")
 End
+
+
