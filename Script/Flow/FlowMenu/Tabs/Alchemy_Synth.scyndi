@@ -111,7 +111,7 @@ Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
 					End
 					If Hover && Allow && ML && CanCreate
 						Switch _Situation
-							Case "ALCHEMY"
+							Case "ALCHEMY" "FIELD"
 								Synthesize(ITM)
 							Case "COMBAT"
 								//CSay("Synthesizing in combat comes later!")
