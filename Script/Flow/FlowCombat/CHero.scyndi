@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.11.14
+// Version: 23.11.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -213,6 +213,7 @@ Class Hero
 	End
 
 	Void Draw()
+		SetColor(255,255,255,255)
 		pLua Img; Img = GetImage
 		Frame=math.min(Frame,Img.Frames-1)
 		SetScale(1.5)
