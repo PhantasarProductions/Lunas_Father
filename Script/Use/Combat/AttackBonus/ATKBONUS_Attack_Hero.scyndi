@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.14
+// version: 23.11.22
 // End License Information
 
 Module
@@ -97,6 +97,7 @@ Int Luna(executor,target,Act,string param="")
 	If Dice.D100<30 / gint.skill
 		Ret = Ret * Dice.D20
 		CharMsg.Go(Target,"Critical",255,180,90)
+		Party.SkillExpUp("Luna",1,Dice.D6*Dice.D20)
 		executor.irate++
 	End
 	FPUp(executor,target,Act,param)
