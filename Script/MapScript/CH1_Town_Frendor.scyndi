@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.18
+// version: 23.11.22
 // End License Information
 Script
 
@@ -48,6 +48,8 @@ Script
 #use "Script/Use/Link/Menu"
 #use "Script/Use/Link/WorldMap" 
 #use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/General/UseIAA"
 
 Init
 	CSay("Welcome to Frendor!")
@@ -77,7 +79,7 @@ Global Void NPC_Feenalaria()
 	if !gBool.Exam_Done
 		MapText("FEENA_WAITCAVE")
 		Return
-	End
+	End	
 	Lua.error("This passage for Feenalaria has not yet been scripted")
 End
 
@@ -119,5 +121,14 @@ Global Void ZA_After_Training()
 		Events.Sleep(1500)
 		Map.ExternalKill("CH1_TOWN_VANDAR","TOWN","NPC_MT_Narya")
 		Map.GoToMap("CH1_HUB_JAKEHUT","INTERIOR","Myrah")
+	End
+	if gbool.Luna_Joined && (!Done.Luna_Joined_Spoken_To_Feenalaria)
+		Kthura.Obj.Feena_Francis.Visible=true
+		Kthura.Obj.Feena_Luna.Visible=true
+		MapText("FEENA_LUNA")
+		Kthura.Obj.Feena_Francis.Visible=false
+		Kthura.Obj.Feena_Luna.Visible=false
+		IAA.Key_FeenaLetter.Have = 1
+		WM_Unlocked.DoublineBay = true
 	End
 End
