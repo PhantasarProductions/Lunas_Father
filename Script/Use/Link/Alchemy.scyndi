@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Alchemy.scyndi
-// Version: 23.11.14
+// Version: 23.11.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -140,5 +140,3 @@ Global Void GoAlchemy()
 	CSay("Going to alchemy")
 	Menu.Go("ALCHEMY","Francis")
 End
-
-
