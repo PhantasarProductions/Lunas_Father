@@ -32,15 +32,20 @@
 // 
 // **********************************************
 // 
-// version: 23.11.20
+// version: 23.11.22
 // End License Information
 Script
 
+#use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
+
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/ManaOrb"
 #use "Script/Use/Link/Alchemy"
 #Use "Script/Use/Link/TextBoxes"
+
 
 Global Void ZA_Forest()
 	Map.GoToMap("CH1_Dungeon_Grysbow","#005","Einde")
@@ -54,3 +59,26 @@ Global Void ZA_Cauldron()
 End
 
 ReadOnly Global Delegate NPC_Cauldron = GoAlchemy
+	
+Global Void ZA_Boss()
+	Player.StopWalking()
+	MapText("BOSS")
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill("Boss")
+	Map.Boss("Shadow")
+End
+
+Global Void ZA_Luna()
+	Kthura.Obj.Player.Visible = false
+	MapText("Crystal1")
+	Map.PermaKill("Luna_Crystal")
+	MapText("Crystal2")
+	Party.NewChar("Luna",1,1,1)
+	For i,Obj In iPairs(NewArray("Myrah","Francis","Luna"))
+		Map.PermaKill(Obj)
+		Party.Char(i,Obj)
+	End
+	gbool.Luna_Joined = True
+	Map.GotoMap("CH1_TOWN_Frendor","TOWN","Front_Feena")
+	//Lua.error("The rest not yet set up")
+End
