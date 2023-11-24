@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.11.18
+// Version: 23.11.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -103,7 +103,7 @@ End
 
 Void DrawWelcome()
 	if MWelcome.First
-		SetAlpha(MWelcome.First.Alpha)
+		SetColor(255,255,255,MWelcome.First.Alpha)		
 		MWelcome.First.Img.Draw(Graphics.Width div 2, Graphics.Height div 2)
 		If MWelcome.First.Time>0 && MWelcome.First.Alpha<255
 			MWelcome.First.Alpha++
