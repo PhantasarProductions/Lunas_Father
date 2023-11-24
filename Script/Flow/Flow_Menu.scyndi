@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_Menu.scyndi
-// Version: 23.11.18
+// Version: 23.11.23
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -108,6 +108,8 @@ Init
 	NewSitTab("MERCHANT","SELL","Shop_Sell")
 	NewSitTab("BLACKMARKET","BUY","Shop_Buy")
 	NewSitTab("BLACKMARKET","SELL","Shop_Sell")
+	
+	NewSitTab("UPGRADE","UPGRADE","Char_Stats","Upgrade_Shop")	
 End
 
 global Void ComeToMe(string _Sit,string _Chr)
