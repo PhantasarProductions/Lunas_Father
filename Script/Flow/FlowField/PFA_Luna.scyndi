@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.22
+// version: 23.11.23
 // End License Information
 Module
 
@@ -55,5 +55,5 @@ End
 Init
 	//FField = Lua.Scyndi.Globals.FlowField
 	//FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
-	PFA_Reg("Luna",nil,PFA_Luna_Action,PFA_Luna_Cycle,false)
+	PFA_Reg("Luna",PFA_Luna_Allow,PFA_Luna_Action,PFA_Luna_Cycle,false)
 End
