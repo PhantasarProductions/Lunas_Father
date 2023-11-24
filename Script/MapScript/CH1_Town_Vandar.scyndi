@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.18
+// version: 23.11.23
 // End License Information
 Script
 
@@ -124,11 +124,11 @@ Global Void NPC_Weapons()
 End
 
 Global Void NPC_Bronn()
-	if !gBool.Done_Meet_Feenalaria
+	if !gBool.Feenalaria_FirstTime
 		MapText("UPGRADE_NOT_YET")
 	Else
-		MapText("UPGRADE")
-		Mini.WriteLn("Hee! Zet die upgrade shop er eens in, lul!",255,100,100)
+		MapText("UPGRADE")		
+		Menu.Upgrade()
 	End
 End
 
