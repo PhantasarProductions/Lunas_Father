@@ -1,0 +1,68 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Abilities/Abilities_Luna.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.11.24
+// End License Information
+Module
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Abilities/Abilities_Class"
+
+// This one MUST be present!
+Var Abl 
+
+Bool Allow_CureLight();         Return gbool.Luna_Can_Cast_Cure_Light_Wounds; End
+Bool Allow_CurePoison();		Return gbool.Luna_Can_Case_Cure_Poison; End
+Bool Allow_CureDisease();		Return gbool.Luna_Can_Case_Cure_Poison; End
+Bool Allow_DoublePower(); Return gbool.Luna_Can_Do_Double_Power; End
+Bool Allow_HolyStrike();        Return True; End
+
+Init
+	Abl = {}
+	Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_CURELIGHT",10,Allow_CureLight)
+	Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_CUREPOISON",5,Allow_CurePoison)
+	Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_CUREDISEASE",5,Allow_CureDisease)
+	Switch gint.skill
+		case 1
+			Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_DoublePowerStrike",15,Allow_DoublePower)
+		case 2
+			Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_DoublePowerStrike",30,Allow_DoublePower)
+		case 3
+			Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_DoublePowerStrike",60,Allow_DoublePower)
+		default
+			Lua.error("Skill error (Luna): "..gint.skill)
+	End
+	Abl[Len(Abl)] = New CharAbility("HERO_Luna_ABL_HOLYSTRIKE",16,Allow_HolyStrike)
+End
