@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.22
+// version: 23.11.24
 // End License Information
 Script
 
@@ -106,6 +106,17 @@ Global Void NPC_Alberta()
 	MapText("ALBERTA")
 	Menu.Shop()
 End
+
+
+Global Void NPC_Michiel()
+	if !gBool.Feenalaria_FirstTime
+		MapText("UPGRADE_NOT_YET")
+	Else
+		MapText("UPGRADE")		
+		Menu.Upgrade()
+	End
+End
+
 	
 	
 Global Void ZA_After_Training()
@@ -130,5 +141,6 @@ Global Void ZA_After_Training()
 		Kthura.Obj.Feena_Luna.Visible=false
 		IAA.Key_FeenaLetter.Have = 1
 		WM_Unlocked.DoublineBay = true
+		gstring.CampSituation = "04_ToDoubline"
 	End
 End
