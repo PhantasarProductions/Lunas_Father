@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Upgrade_Shop.scyndi
-// Version: 23.10.18
+// Version: 23.11.23
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -40,10 +40,84 @@ Module
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
+#use "Libs/Rosetta"
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
 
+#use "Script/Use/General/Dice"
+#use "Script/Use/General/Cash"
 
-Void Flow(string _Situation,string CharTag)
+ReadOnly Var Fnt = ObtainFont("BASE")
+ReadOnly Int BaseCostModifier = 10^gint.skill
+Int Hue 
+
+Void Flow(string _Situation,string CharTag, int bx, int by, int bw, int bh)
+	Var Ch;Ch = Party.GetChar(CharTag)
+	Int BaseCost;BaseCost = (Ch.Stat.Upgrades+1) * BaseCostModifier
+	Int MaxUpdates
+	Switch gint.skill
+		Case 1
+			MaxUpdates = math.max(Ch.Stat.Level,Party.SkillLvl(CharTag,1))
+		case 2
+			MaxUpdates = math.max(1,(Ch.Stat.Level+Party.SkillLvl(CharTag,1)) div 2)
+		case 3
+			MaxUpdates = math.max(math.min(Ch.Stat.Level,Party.SkillLvl(CharTag,1)),1)
+		default
+			MaxUpdates = 0
+	End
+	For i,d in ipairs(Dice.Types)
+		int x;x = bx+i
+		int y;y = by+(i*30)
+		SetColor(255,255,255)
+		Fnt.Text("d"..d,x,y)
+		Fnt.Text("x"..Ch.Stat["d"..d],x+120,y)
+		int ucost;ucost = (i+1)*BaseCost
+		if Ch.Stat["d"..d]>0 && d<20 && Ch.Stat["d"..Dice.Types[i+1]]<9
+			SetColor(255,180,0,255)
+			IF MY>y && MX>bx && MY<y+29 && MX<bx+bw
+				Hue = (Hue+1)%360
+				SetColorHSV(Hue,1,1)
+				If ML && Cash.Have>=ucost
+					Cash.Have = Cash.Have - ucost
+					Ch.Stat["d"..d]--
+					Ch.Stat["d"..Dice.Types[i+1]]++
+				End
+			End
+			Fnt.Text(sprintf(Rosetta.getstr("UPGRADE","UPGRADE"),ucost),x+180,y)
+		End		
+	End
+	int i; i = Len(Dice.Types)
+	int x;x = bx+i
+	int y;y = by+(i*30)
+	int ucost;ucost = BaseCost*(Ch.Stat.ATKPlus+1)
+	Fnt.Text("+"..Ch.Stat.ATKPlus,x,y)
+	SetColor(255,180,0,255)
+	IF MY>y && MX>bx && MY<y+29 && MX<bx+bw
+		If ML && Cash.Have>=ucost
+			Cash.Have = Cash.Have - ucost
+			Ch.Stat.ATKPlus++
+		End
+		Hue = (Hue+1)%360
+		SetColorHSV(Hue,1,1)
+	End
+	
+	Fnt.Text(sprintf(Rosetta.getstr("UPGRADE","UPGRADE"),ucost),x+180,y)
+	y = y + 30
+	x = x + 1
+	ucost = BaseCost div (4-gint.skill) + (Ch.Stat.DiceAdded*gint.skill)
+	SetColor(0,180,255,255)
+	IF MY>y && MX>bx && MY<y+29 && MX<bx+bw
+		If ML && Cash.Have>=ucost && Ch.Stat.D2<9
+			Cash.Have = Cash.Have - ucost
+			Ch.Stat.D2++
+		End
+		Hue = (Hue+1)%360
+		SetColorHSV(Hue,1,1)
+	End
+	Fnt.Text(sprintf(Rosetta.getstr("UPGRADE","Add"),ucost),x,y)
+	y = y + 90
+	SetColor(255,255,255)
+	Fnt.Text(sprintf(Rosetta.getstr("UPGRADE","Upgrades"),Ch.Stat.Upgrades,MaxUpdates),bx,y)
+	Fnt.Text(sprintf(Rosetta.getstr("UPGRADE","Cash"),Cash.Have),bx,y+30)
 End
