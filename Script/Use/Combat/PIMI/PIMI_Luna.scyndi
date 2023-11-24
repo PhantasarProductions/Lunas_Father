@@ -58,6 +58,7 @@ Bool _Allow();return True;End
 
 //Global Void Init_PIMI_Luna()
 Init
+	CSay("Creating PIMI for Luna")
 	plua _Luna = CreatePIM("Luna")
 	_Luna.Add("Shoot",Attack)
 	_Luna.Add("Ability",Magic,_Allow)
