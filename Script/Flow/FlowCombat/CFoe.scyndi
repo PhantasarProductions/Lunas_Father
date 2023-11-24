@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.11.16
+// Version: 23.11.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -256,9 +256,9 @@ Class Foe
 			Return
 		End
 		If HP>0
-			RawData.NewValue("XIMG","Scale","1000")
-			SetScale(RawData.IntValue("XIMG","Scale")/1000)
-			KillScaleX = RawData.IntValue("XIMG","Scale")/1000
+			RawData.NewValue("MetaData","Scale","1000")
+			SetScale(RawData.IntValue("MetaData","Scale")/1000)
+			KillScaleX = RawData.IntValue("MetaData","Scale")/1000
 			KillScaleY = KillScaleX
 		Else
 			If !Killed
@@ -303,7 +303,7 @@ Class Foe
 				KillScaleY = KillScaleY + 0.011
 				//print(KillScaleX,KillScaleY)
 			//End
-			SetScale(KillScaleX,KilLScaleY)
+			SetScale(KillScaleX,KilLScaleY)						
 		End
 
 		SetColor(Red,Green,Blue)
@@ -333,7 +333,7 @@ Class Foe
 	End
 	
 	Get Number Scale
-		return RawData.IntValue("XIMG","Scale")/1000
+		return RawData.IntValue("MetaData","Scale")/1000
 	End
 	
 	Get Int W
