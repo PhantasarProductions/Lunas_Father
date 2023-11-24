@@ -1,0 +1,88 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/Arena/ARENA_Forest_Loof.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.11.24
+// End License Information
+
+Module
+
+#use "libs/sci/sys"
+#use "libs/sci/graphics"
+
+#use "Script/Flow/FlowCombat/Quake"
+
+plua ImgTree  = LoadNewImage("GFX/TEXTURES/TREES/LOOFBOOM.PNG","ARENA_FOREST_SPAR_SPAR")
+plua ImgGrass = LoadNewImage("GFX/Textures/GRASS/GRASS (GREEN).PNG","ARENA_FOREST_GRASS") 
+
+plua Trees
+
+init
+	ImgTree.Hot(ImgTree.Width div 2, ImgTree.Height)
+End
+
+Class ARENA_SPAR
+	static int i
+	int X
+	int Y
+	Constructor
+		X = i
+		i = i + math.random(1,5)
+		Y = (Graphics.Height div 2) + math.random(-50,5)
+	end
+end
+
+
+Void StartCombat()
+	plua Temp = {}
+	plua NewTree
+	Trees = {}
+	ARENA_SPAR.i = -32
+	Repeat
+		NewTree = New ARENA_SPAR()
+		Temp[sprintf("%04d::%04d",NewTree.Y,NewTree.X)] = NewTree
+	LoopWhile ARENA_SPAR.i < Graphics.Width+32
+	for _,tree in spairs(Temp)
+		Trees[len(Trees)] = tree
+	end
+End
+
+Void Draw()
+	SetColor(0,180,255)
+	Rect(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,255,255)
+	ImgGrass.Tile(0,(graphics.height div 2)-55,graphics.width,(graphics.height div 2)+55)
+	For tree in Each(Trees)
+		ImgTree.Draw(tree.x+Quake.X,tree.y+Quake.Y)
+	End
+End
