@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.11.16
+// Version: 23.11.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,6 +38,8 @@ Module
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Mini"
 
 #use "Script/Use/General/Dice"
 
@@ -126,6 +128,13 @@ Bool Effect_Attack(executor,target,act)
 			Default
 				Target.Char.Points.FP.Have = 0
 				// PUNISHMENT FOR CHEATING THE SYSTEM!
+		End
+		if Target.Tag == "Luna"
+			if !Done.Luna_Can_Cast_Cure_Light_Wounds
+				Mini.Write("Luna ",255,180,0)
+				Mini.Write("learned ",180,0,255)
+				Mini.WrteLn("Cure light wounds",255,255,255)
+			End
 		End
 	End
 	
