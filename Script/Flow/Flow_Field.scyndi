@@ -44,6 +44,9 @@ Script
 #use "Script/Use/General/Loading"
 
 
+#use "Script/Use/Link/WorldMap" 
+
+
 Global ReadOnly Var FlowField = { ["LMFuncs"] = {}, ["UDFuncs"] = {}}
 	
 Init
