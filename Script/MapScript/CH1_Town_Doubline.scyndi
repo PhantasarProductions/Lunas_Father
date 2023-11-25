@@ -36,6 +36,13 @@
 // End License Information
 Script
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/Rosetta"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Menu"
 #use "Script/Use/Link/Textboxes"
 
@@ -47,4 +54,15 @@ End
 Global Void NPC_Gendry()
 	MapText("GENDRY")
 	Menu.Upgrade()
+End
+
+Global Void NPC_Petyr()
+	MapText("PETYR")
+	If Sys.Yes(Rosetta.GetSTR("TRAVEL","DELISTO_KOKONORA"))
+		If !Done.FirstTimeToKokonora
+			gstring.CampSituation = "05_Koko"
+		End
+		Map.GoToMap("CH1_Hub_KokoFisherman","Fisherman","Einde")
+		Awarded.Scen_Kokonora = true
+	End
 End
