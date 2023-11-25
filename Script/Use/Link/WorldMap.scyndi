@@ -79,6 +79,11 @@ Void Delisto()
 	Go("Delisto")
 End
 
+Global Void Kokonora()
+	Go("Kokonora")
+End
+
+
 Global Void Neonor()
 	Go("Neonor")
 End
