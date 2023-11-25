@@ -1,0 +1,22 @@
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/Rosetta"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/TextBoxes"
+
+Global Void ZA_WelcomeToKokonora()
+	If !Done.WelcomeToKokonora
+		MapText("WELCOME")
+	End
+End
+
+Global Void NPC_Petyr()
+	MapText("PETYR")
+	If Sys.Yes(Rosetta.GetSTR("TRAVEL","DELISTO"))
+		Map.GoToMap("CH1_Town_Doubline","CITY","Einde")
+	End
+End
