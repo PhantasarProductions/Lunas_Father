@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_LoadMap.scyndi
-// Version: 23.11.13
+// Version: 23.11.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -39,11 +39,14 @@ Module
 #use "Libs/SCI/Sys" 
 #use "Libs/SCI/JCR6" 
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
 
 #use "Libs/Rosetta"
 
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/General/Loading"
 
 plua FField
 
@@ -73,6 +76,7 @@ global Void ExeLoadMap(string MapBundle)
 	// Loading the Kthura data must always be first
 	// At the rest the order doesn't really matter!
 	// Music must always be last!
+	Loading.Show(true); Flip();
 	Plua MBundle
 	MBundle = sprintf("Kthura/%s",MapBundle)
 	CSayF("Loading map: %s",MapBundle)
