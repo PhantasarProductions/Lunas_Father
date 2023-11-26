@@ -1,0 +1,15 @@
+Script
+
+#use "Script/Use/Link/Map" 
+
+Global Void ZA_Boss()
+	// TO DO: Boss Code
+End
+
+Global Void ZA_GoFirst()
+	Map.GoToMap("CH1_Dungeon_KokonoraForest","FOREST","Einde")
+End
+
+Global Void ZA_To_Part2()
+	Map.GoToMap("CH1_Dungeon_KokonoraForest_2","FOREST","Start")
+End
