@@ -15,7 +15,7 @@ Global Void ZA_WelcomeToKokonora()
 End
 
 Global Void NPC_Petyr()
-	MapText("PETYR")
+	MapText("GOBACK")
 	If Sys.Yes(Rosetta.GetSTR("TRAVEL","DELISTO"))
 		Map.GoToMap("CH1_Town_Doubline","CITY","Einde")
 	End
