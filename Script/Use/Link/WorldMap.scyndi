@@ -54,7 +54,12 @@ end
 
 QuickMeta TravelerEmblem
 	index
-		return gbool[sprintf("TRAVELER_EMBLEM_%s",key)]
+		switch Upper(Key)
+			case "CH1_Dungeon_KokonoraForest"
+				return gbool.CH1_Dungeon_KokonoraForest_2
+			default
+				return gbool[sprintf("TRAVELER_EMBLEM_%s",key)]
+		end
 	end
 	
 	newindex
