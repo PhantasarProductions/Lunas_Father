@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.11.21
+// Version: 23.11.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -44,6 +44,8 @@ Module
 #use "libs/sci/statistician"
 
 #use "script/use/link/party"
+
+#use "script/flow/flowcombat/status_change_manager"
 
 const Int MidY = Graphics.Height div 2
 const Int OndH = MidY - 150
@@ -234,6 +236,15 @@ Class Hero
 		Return Ret
 	End
 	
+	Int StatusResistance(string Status)
+		// To do: Alter resistence when equipping skills
+		Return 0
+	End
+	
+	ReadOnly Var _Status 
+	ReadOnly Var StatusChanges
+	ReadOnly Var Permanenced = {}
+	
 	Constructor(string _Tag)
 		Tag = _Tag
 		Char = HParty.Char[_Tag]
@@ -241,6 +252,8 @@ Class Hero
 		Images = {}
 		ImgIcon = ObtainImage(sprintf("COMBATHEROICON_%s",Upper(_Tag)))
 		ImgIcon.Hot(0,ImgIcon.Height)
+		_Status = {}
+		StatusChanges = StatusChangeManager(_Tag,Self,_Status) 
 	End
 	
 End
