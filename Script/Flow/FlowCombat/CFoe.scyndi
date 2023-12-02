@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.11.24
+// Version: 23.11.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -48,6 +48,8 @@ Module
 #use "script/use/general/cash"
 #use "script/use/link/mini"
 #use "script/use/link/party"
+
+#use "script/flow/flowcombat/status_change_manager"
 
 plua LoadedFoes
 plua FParty = Statistician.Obtain("LUNA_PARTY")
@@ -223,6 +225,10 @@ Class Foe
 		Return Ret
 	End
 	
+	Int StatusResistance(string Status)
+		Return RawData.IntValue("RESIST_STATUS",Status)
+	End
+	
 	Number KillScaleX
 	Number KillScaleY
 	Readonly int KillSkipReset = 2
@@ -388,6 +394,10 @@ Class Foe
 	
 	ReadOnly Table Actions
 
+	ReadOnly Var _Status 
+	ReadOnly Var StatusChanges
+	ReadOnly Var Permanenced = {}
+
 	
 	Constructor(int _IDNum,_RawData)
 		IDNum = _IDNum
@@ -409,6 +419,15 @@ Class Foe
 			plua mItem; mItem = { ["Action"] = i, ["Target"] = RawData.Value("ACTION::"..i,"TRGT_SKILL"..gint.skill) }
 			For j = 1,_RawData.IntValue("ACTION::"..i,"RATE_SKILL"..gint.skill)
 				Actions[Len(Actions)] = mItem
+			End
+		End
+		_Status = {}
+		StatusChanges = StatusChangeManager(Tag,Self,_Status) 
+		For _Ail In Each(Ailments)
+			plua Ail;Ail = _Ail; if Ail=="Zombie"; Ail="Undead"; End
+			If Upper(RawData.Value("Start_Status",Ail))=="TRUE"
+				CSayF("Foe %s starts the battle with ailment: %s",Tag,Ail)
+				_Status[Ail] = Lua.Scyndi.Class.Status_Change_Manager.SetStatusChange(Tag,"Ailment_"..Ail)
 			End
 		End
 	End
