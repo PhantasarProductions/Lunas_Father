@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.22
+// version: 23.11.27
 // End License Information
 Module
 
@@ -60,7 +60,7 @@ Bool _Allow();return True;End
 Init
 	CSay("Creating PIMI for Luna")
 	plua _Luna = CreatePIM("Luna")
-	_Luna.Add("Shoot",Attack)
+	_Luna.Add("Attack",Attack)
 	_Luna.Add("Ability",Magic,_Allow)
 	_Luna.Add("Force",Force,_Allow)
 	_Luna.ItemsGuard()
