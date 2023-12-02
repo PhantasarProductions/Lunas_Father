@@ -32,8 +32,29 @@
 // 
 // **********************************************
 // 
-// version: 23.11.30
+// version: 23.12.03
 // End License Information
 Script
 
+#use "Script/Use/Link/Map"
+
 #use "Script/Use/General/SecretDungeon"
+
+
+
+#region "Puzzle on Floor 6"
+Global Void Tar4(); Map.PermaKill("Bar6" ); End
+Global Void Tar3(); Map.PermaKill("Bar8" ); End
+Global Void Tar7(); Map.PermaKill("Bar5" ); End
+Global Void Tar2(); Map.PermaKill("Bar11"); End
+	
+Global Void Tar1(); Map.PermaKill("Bar7" ); End
+Global Void Tar5(); Map.PermaKill("Bar2" ); End
+Global Void Tar6(); Map.PermaKill("Bar10"); End
+	
+Global Void Tar8()
+	Map.PermaKill("Deur")
+	For i in Each(NewArray(1,3,4,5,9,11,12)); Map.PermaKill("Bar"..i); End
+End
+	
+#endregion
