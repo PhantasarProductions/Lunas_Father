@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Status_Change_Manager.scyndi
-// Version: 23.11.21
+// Version: 23.11.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,10 +37,18 @@
 Module
 
 #use "Libs/SCI/GINIE"
+#use "Libs/SCI/Graphics"
+
+#use "Script/Use/Link/Mini"
+
+#use "Script/Use/General/Dice"
 
 ReadOnly Var __GLB     = Lua.Scyndi.Globals
 ReadOnly Var __CLS     = Lua.Scyndi.Class
 ReadOnly Var __SC_Data = GINIE.Load("Data/General/StatusChanges.ini","DATABASE_STATUS_CHANGES")
+ReadOnly Var __Icons   = {}
+	
+Global ReadOnly Table Ailments = NewArray("Poison","Disease","Zombie","Paralysis","Sleep","Curse","Death")
 	
 Var __SC_Index(s,String Key)
 	Key = Upper(Key)
@@ -50,16 +58,19 @@ Var __SC_Index(s,String Key)
 		Case "FIGHTERTAG"
 			return s.___fightertag
 		Case "FIGHTER"
-			return __CLS.Fighter.ByTag[s.__fightertag]
+			return __CLS.Fighter.ByTag[s.___fightertag]
 		Case "HAS"
 			return s.Fighther.HasStatus[s.___tag] //&& (s.Fighther.HasStatus[___tag]==true || s.Fighther.HasStatus[___tag]>0)
 		Case "PERMANENCED"
-			return s.Figther.Permanenced[s.___tag]
+			return s.Fighter.Permanenced[s.___tag]
 		Case "DURATION"
-			if s.Figther.Permanenced[s.___tag] || s.Duration_Infinite
+			if s.Fighter.Permanenced[s.___tag] || s.Duration_Infinite
 				Return 100000
 			End
 			return s.___duration
+		case "ICON" "IMAGE"
+			__Icons[s.___tag] = __Icons[s.___tag] || LoadNewImage(sprintf("GFX/Combat/Status/%s.png",s.___tag),"COMBAT_STATUS_"..s.___tag)
+			return __Icons[s.___tag]
 		Default
 			Switch __SC_Data.Value("Class",Key)
 				case "String"
@@ -83,9 +94,9 @@ Void __SC_NewIndex(s,String Key,Value)
 		//		s.Fighther.HasStatus[s.___tag] = nil
 		//	End
 		Case "PERMANENCED"
-			s.Figther.Permanenced[s.___tag] = Value
+			s.Fighter.Permanenced[s.___tag] = Value
 		Case "DURATION"
-			if s.Figther.Permanenced[s.___tag] || s.Duration_Infinite
+			if s.Fighter.Permanenced[s.___tag] || s.Duration_Infinite
 				Return
 			End
 			s.___duration = Value
@@ -109,6 +120,48 @@ Var SetStatusChange(String FTag,String STag)
 	plua ret = {}
 	ret.___tag = STag
 	ret.___fightertag = FTag
+	ret.___status = STag
+	ret.___duration = __SC_Data.Intvalue("Rec:"..STag,"Duration_Plus")
+	For d in Each(Dice.Types)
+		For r = 1, __SC_Data.Intvalue("Rec:"..STag,"Duration_D"..d)
+			ret.___duration = ret.___duration + Dice["d"..d]
+		End
+	End
 	ret = SetMetaTable(ret,__SC_Meta)
 	Return ret
+End
+
+
+Var SCM_Index(s,string k)
+	k = Upper(k)
+	if (!s.___statuses[k])
+		Return False
+	End
+	Return s.___statuses[k]
+End
+
+Void SCM_NewIndex(s,string k,value)
+	k = Upper(k)
+	If Value
+		plua ssc; ssc=SetStatusChange(s.___fightertag,k)
+		if !s.___statuses[k]
+			Mini.Write(s.___fighter.Name.." ",255,180,0)
+			Mini.WriteLn(ssc.CauseMsg,180,0,255)
+		end
+		s.___statuses[k] = ssc
+	Else
+		if s.___statuses[k]
+			Mini.Write(s.___fighter.Name.." ",255,180,0)
+			Mini.WriteLn(s.___statuses[k].CureMsg,180,255,0)
+		end
+		s.___statuses[k] = nil
+	End
+End
+
+Global Var StatusChangeManager(String FTag,Me,SC)
+	plua ret = {}
+	ret.___fighter    = Me
+	ret.___fightertag = FTag
+	ret.___statuses   = SC
+	Return SetMetaTable(ret,{ ["__index"] = SCM_Index,["__newindex"]=SCM_NewIndex })
 End
