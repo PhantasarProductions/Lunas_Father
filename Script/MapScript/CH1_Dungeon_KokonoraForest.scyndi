@@ -32,14 +32,22 @@
 // 
 // **********************************************
 // 
-// version: 23.11.26
+// version: 23.11.30
 // End License Information
+
 Script
 
-#use "Script/Use/Link/Map" 
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach" 
+#use "Script/Use/Link/ManaOrb"
+#use "Script/Use/Link/WorldMap"
+
 
 Global Void ZA_Boss()
-	// TO DO: Boss Code
+	Player.StopWalking()
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill("Boss")
+	Map.Boss("Eagle")
 End
 
 Global Void ZA_GoFirst()
@@ -48,4 +56,10 @@ End
 
 Global Void ZA_To_Part2()
 	Map.GoToMap("CH1_Dungeon_KokonoraForest_2","FOREST","Start")
+End
+
+Global Void ZA_KokoForestCompleted()
+	Awarded.Voltooid_KokoForest = true
+	WM_Unlocked.Nostraburg = true
+	Kokonora()
 End
