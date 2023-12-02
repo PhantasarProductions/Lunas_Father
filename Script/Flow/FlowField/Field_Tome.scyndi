@@ -1,0 +1,139 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowField/Field_Tome.scyndi
+// Version: 23.11.30
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#Use "Libs/SCI/InterVar"
+
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party" 
+
+#use "Script/Use/General/Dice" 
+
+Class Tome
+	Static ReadOnly Table DS = NewArray("idiocy I don't know about","arts","deeds") 
+	ReadOnly String Name
+	ReadOnly Table Characters
+	ReadOnly Int Skill
+	
+	Get String TomeName
+		return sprintf("Tome of %s %s",Name,DS[Skill])
+	End
+	
+	Static Table Reg = {}
+	
+	Constructor(String N,Int S,Infinity)
+		Name = N
+		Skill = S
+		Characters = {}
+		For Ch in Each( NewArray( Infinity ) )
+			Characters[Ch]=true 
+		End
+	End
+
+End
+
+Void NewTome(String N,Int S, Infinity)
+	CSay("Registering tome: "..N)
+	Tome.Reg[N] = New Tome(N,S,Infinity)
+End
+
+Global Void GetTome(string Tag)
+	For k,uTome in Pairs(Tome.Reg)
+		If Prefixed(Tag,"Tome_"..k)
+			Mini.Write(Map.Leader,255,180,0)
+			Mini.Write(" found a ",180,0,255)
+			Mini.WriteLn(uTome.TomeName,255,255,255)
+			If UTome.Characters[Map.Leader]
+				Int Factor
+				Int Total
+				Int MaxTotal
+				Int Score = 0
+				Number Ratio
+				Switch gint.Skill
+					Case 1
+						Factor = 12
+					case 2
+						Factor = 6
+					case 3
+						Factor = 2
+					Default
+						Factor = 0
+				End
+				MaxTotal = Factor*100
+				CSayF("Tome will allow %s to roll d%d x d100",Map.Leader,Factor)
+				For i=1,Dice["d"..Factor]
+					Int Roll = Dice.D100 + 1
+					Score = Score + Roll
+					CSayF("Roll #%d: %03d -> %03d",i,Roll,Score)
+				End
+				Ratio = (Score/MaxTotal)*100
+				CSayF("Tome gave %d experience points out of a max possible total of %d (%5.1f%%)",Score,MaxTotal,Ratio)
+				Party.SkillExpUp(Map.Leader, UTome.Skill, Score)
+				Mini.Write(Map.Leader,255,180,0)
+				Mini.Write(" leanred ",180,0,255)
+				If Ratio<25
+					Mini.Write(" a tiny bit more about ",180,0,255)
+				ElseIf Ratio<50
+					Mini.Write(" a bit more about ",180,0,255)
+				ElseIf Ratio<75
+					Mini.Write(" a lot more about ",180,0,255)
+				ElseIf Ratio<100
+					Mini.Write(" a craploadt more about ",180,0,255)
+				Else
+					Mini.Write(" learned all she could from this tome about ",180,0,255)
+				End
+				Mini.WriteLn(Party.GetChar(Map.Leader).Data["Skill"..utome.skill])
+				Map.PermaKill(Tag)
+			Else
+				Mini.WriteLn("Unfortunately she doesn't understand this tome at all.",255,100,100)
+			End
+		End
+	End
+End
+
+Init
+	NewTome("Arcane",2,"Myrah","Aziella")
+	NewTome("Exalted",2,"Luna","Scyndi")
+	NewTome("Quick",2,"Rachel")
+	NewTome("Synthetic",2,"Francis")
+	
+	NewTome("Melee",1,"Francis","Luna","Scyndi")
+	NewTome("Ranged",1,"Myrah","Aziella","Rachel")
+End
