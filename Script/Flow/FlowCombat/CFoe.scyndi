@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.11.30
+// Version: 23.12.03
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -80,6 +80,11 @@ Class Foe
 	ReadOnly Var Char
 	ReadOnly Var Stat	
 	ReadOnly String Team = "Foe"
+		
+	ReadOnly Var _Status 
+	ReadOnly Var StatusChanges
+	ReadOnly Var Permanenced = {}
+
 		
 	Get String AudName
 		plua ret;ret = RawData.Value("MetaData","AudName")
@@ -236,6 +241,7 @@ Class Foe
 	
 	Get Bool Drawable
 		Return (!Gone) && (KillScaleX>0 || HP>0)
+		//Return (!Gone) && (KillScaleX>0)
 	End
 
 	
@@ -252,7 +258,7 @@ Class Foe
 	End
 	
 	Get Bool Undead
-		Return False
+		Return _Status.Ailment_Undead || _Status.Ailment_Zombie  
 	End
 	
 	String Pose = "IDLE"
@@ -394,9 +400,6 @@ Class Foe
 	
 	ReadOnly Table Actions
 
-	ReadOnly Var _Status 
-	ReadOnly Var StatusChanges
-	ReadOnly Var Permanenced = {}
 
 	
 	Constructor(int _IDNum,_RawData)
@@ -427,7 +430,7 @@ Class Foe
 			plua Ail;Ail = _Ail; if Ail=="Zombie"; Ail="Undead"; End
 			If Upper(RawData.Value("Start_Status",Ail))=="TRUE"
 				CSayF("Foe %s starts the battle with ailment: %s",Tag,Ail)
-				_Status[Ail] = Lua.Scyndi.Class.Status_Change_Manager.SetStatusChange(Tag,"Ailment_"..Ail)
+				_Status["Ailment_"..Ail] = Lua.Scyndi.Class.Status_Change_Manager.SetStatusChange(Tag,"Ailment_"..Ail)
 			End
 		End
 	End
