@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectTarget.scyndi
-// Version: 23.11.27
+// Version: 23.12.03
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -132,6 +132,7 @@ Void Cycle()
 				int sty;sty = ay+25
 				For k,v in pairs(TChr._Status)
 					If v.Duration!=1 || os.time()%2==0
+						SetColor(255,255,255)
 						v.Icon.Stretch(stx,sty,sts,sts)
 					End
 					stx = stx + sts + (sts div 5)
