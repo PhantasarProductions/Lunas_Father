@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Debug_Console_For_Combat.scyndi
-// Version: 23.10.31
+// Version: 23.12.03
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -73,7 +73,21 @@ Global Void CMBT_DEBUG_HP()
 	End
 End
 
+Global Void CMBT_DEBUG_STATUS()
+	plua f;f=Lua.Scyndi.Class.Fighter
+	For t,tl in pairs(f.Team)
+		printf("\x1b[38;5;11m\x1b[44m%s\x1b[0m\n",t)
+		For ft,fd in spairs(tl)
+			printf("%s:\n",ft)
+			For st,_ in spairs(fd._Status)
+				printf(" => %s\n",st)
+			End
+		End
+	End
+End
+
 Init
 	Sys.ConsoleLocal("DIAMONDS","CMBT_DEBUG_DIAMONDS")
 	Sys.ConsoleLocal("HP","CMBT_DEBUG_HP")
+	Sys.ConsoleLocal("STATUS","CMBT_DEBUG_STATUS")
 End
