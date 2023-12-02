@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.24
+// version: 23.11.27
 // End License Information
 Module
 
@@ -43,11 +43,11 @@ Module
 // This one MUST be present!
 Var Abl 
 
-Bool Allow_CureLight();         Return gbool.Luna_Can_Cast_Cure_Light_Wounds; End
-Bool Allow_CurePoison();		Return gbool.Luna_Can_Case_Cure_Poison; End
-Bool Allow_CureDisease();		Return gbool.Luna_Can_Case_Cure_Poison; End
-Bool Allow_DoublePower(); Return gbool.Luna_Can_Do_Double_Power; End
-Bool Allow_HolyStrike();        Return True; End
+Bool Allow_CureLight();		Return gbool.Luna_Can_Cast_Cure_Light_Wounds; End
+Bool Allow_CurePoison();	Return gbool.Luna_Can_Case_Cure_Poison; End
+Bool Allow_CureDisease();	Return gbool.Luna_Can_Case_Cure_Poison; End
+Bool Allow_DoublePower();	Return gbool.Luna_Can_Do_Double_Power; End
+Bool Allow_HolyStrike();	Return True; End
 
 Init
 	Abl = {}
