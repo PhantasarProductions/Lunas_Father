@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.11.24
+// Version: 23.11.28
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -44,6 +44,7 @@ Module
 #use "Script/Use/General/Dice"
 
 #use "Script/Flow/FlowCombat/CharMsg"
+#use "Script/Flow/FlowCombat/Status_Change_Manager"
 
 Bool Effect_Hit(executor,target,act)
 	If !Act.Act.Accuracy_Check; return true; End
@@ -92,6 +93,10 @@ Bool Effect_Attack(executor,target,act)
 		atk = atk + atks[atkf](executor,target,act)
 	End
 	
+	if Atk<=0
+		Return False
+	End
+	
 	// Elemental Resistances and showing damage
 	if Target.Team=="Foe" && Target.Fatal(Act.Act.AtkElement)
 		Atk = Target.MaxHP
@@ -133,7 +138,7 @@ Bool Effect_Attack(executor,target,act)
 			if !Done.Luna_Can_Cast_Cure_Light_Wounds
 				Mini.Write("Luna ",255,180,0)
 				Mini.Write("learned ",180,0,255)
-				Mini.WrteLn("Cure light wounds",255,255,255)
+				Mini.WriteLn("Cure light wounds",255,255,255)
 			End
 		End
 	End
@@ -161,7 +166,10 @@ Bool Effect_Healing(executor,target,act)
 			HL = HL + Dice[sprintf("D%d",d)]
 		End
 	End
-	// TODO: Script
+	If Act.Act.HealUserBonusScript!=""
+		Lua.Scyndi.Use("Script/Use/Combat/Healing/Healing_"..Act.Act.HealUserBonusScript)
+		HL = HL + Lua.Scyndi.Class["Healing_"..Act.Act.HealUserBonusScript].Go(Executor,Target,Act)	
+	End
 	If HL>0 && (Target.BlockHeal || Target.HP==0) 
 		CharMsg.Put(Target,"No effect",255,180,0)
 		Return True
@@ -177,6 +185,21 @@ Bool Effect_Healing(executor,target,act)
 		Return True
 	End
 	Return False
+End
+
+Bool Effect_CauseAilment(Executor,Target,Act)
+	Bool Hit = False
+	For ail In Each(Ailments)
+		//CSayF("Target: %s; Status ailmeint: %s; Value: %s",Target.Tag,ail,Target.StatusChanges["Ailment_"..ail])
+		If (!Target.StatusChanges["Ailment_"..ail])
+			int roll = dice.d100
+			bool inflict; inflict = ( Act.Act["Cause"..ail] && roll>=Target.StatusResistance(ail) )
+			CSayF("Target: %s; Status ailmeint: %s; Cause: %s; Roll: %3d; Resistance: %3d%% -> Inflect: %s",Target.Tag,ail,Act.Act["Cause"..ail],roll,Target.StatusResistance(ail),inflict)			
+			Target.StatusChanges["Ailment_"..ail] = Inflict
+			Hit = Hit || Inflict
+		End
+	End
+	Return Hit
 End
 
 Plua AES 
@@ -201,8 +224,11 @@ Void Go(executor,target,act)
 			End
 			Hit = AES[Act.Act.Effect_Script].Effect(Executor,Target,Act) || Hit
 		end
+		
+		// Buff / Debuff
 	
 		// Cause status if applicable (must be last)
+		Hit = Effect_CauseAilment(Executor,Target,Act) || Hit
 	End
 	
 	// When it's all done, but no effects took place show "miss"
