@@ -36,7 +36,11 @@
 // End License Information
 Script
 
+#use "Libs/SCI/Kthura"
+
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/ManaOrb"
 
 #use "Script/Use/General/SecretDungeon"
 
@@ -58,3 +62,29 @@ Global Void Tar8()
 End
 	
 #endregion
+
+Global Void ZA_Boss()
+	Player.StopWalking()
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Boss("DarkLord")
+End
+
+Global Void ZA_Voltooid()
+	Awarded.Voltooid_DarkCrypt = True
+	Map.GoToLayer("#000","Einde")
+End
+
+#Region Transporter
+Init
+	Map.AddCyclePre("Cycle")
+End
+
+int Deg = os.time()
+
+Global Void Cycle()
+	If Map.Layer=="#010"
+		Deg = (Deg + 1) % 360
+		Kthura.Obj.Trans.Rotate = Deg
+	End
+End
