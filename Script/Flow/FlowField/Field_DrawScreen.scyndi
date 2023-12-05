@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 23.11.25
+// Version: 23.12.04
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -233,3 +233,5 @@ Void DrawScreen()
 	Lua.Scyndi.Globals.FlowField.FIELD_RENC.DrawGauge()
 	Lua.Scyndi.Globals.FlowField.FIELD_COMPASS.DrawCompassSpots()
 End
+
+Global Void XDS(); DrawScreen(); End
