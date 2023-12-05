@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.30
+// version: 23.12.04
 // End License Information
 Script
 
@@ -92,4 +92,13 @@ End
 Global Void NPC_Sinasina()
 	MapText("Sinasina")
 	WM_Unlocked.DarkCrypt = true
+End
+
+Global Void NPC_Marata()
+	If !Done.WORLDMAP_UNLOCKED_SAYONARA
+		MapText("Marata_Krandar")
+		gstring.CampSituation = "06_KRANDAR"
+		Return
+	End
+	MapText("Marata")
 End
