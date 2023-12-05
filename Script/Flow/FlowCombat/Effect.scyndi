@@ -69,7 +69,7 @@ Bool Effect_Attack(executor,target,act)
 	If Act.Act.StatBase //!=""
 		Atk = math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk]-Target.Char.Stat[Act.Act.AtkStatDef])
 		CSayF("Attack:  %9s = %3d",Act.Act.AtkStatAtk,Executor.Char.Stat[Act.Act.AtkStatAtk])
-		CSayF("Defense: %9s = %3d (%3d)",Act.Act.AtkStatDef,Target.Char.Stat[Act.Act.AtkStatDef],Act.Act.AtkStatDef,Target.Char.Stat[Act.Act.AtkStatDef] div 2)
+		CSayF("Defense: %9s = %3d (%3d)",Act.Act.AtkStatDef,Target.Char.Stat[Act.Act.AtkStatDef],Target.Char.Stat[Act.Act.AtkStatDef] div 2)
 		CSayF("%d - %d = %d (never lower than 1)",Executor.Char.Stat[Act.Act.AtkStatAtk],Target.Char.Stat[Act.Act.AtkStatDef] div 2,math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk]-Target.Char.Stat[Act.Act.AtkStatDef]))
 	End
 	
