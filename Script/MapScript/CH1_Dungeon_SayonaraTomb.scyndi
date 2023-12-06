@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.04
+// version: 23.12.06
 // End License Information
 Script
 
@@ -77,4 +77,13 @@ End
 
 Global Void NPC_Krandar()
 	MapText("Krandar_Think")
+End
+
+Global Void NPC_Gauntlet()
+	Pop.Pop("G","North")
+	MapText("Gauntlet")
+	gbool.Allow_Field_Luna = true
+	Awarded.Scen_Gauntlet = True
+	Map.PermaKill("NPC_Gauntlet")
+	Pop.Unpop()
 End
