@@ -79,6 +79,7 @@ init
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Fandalora/General.png","SG_FANDALORA")
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Feenalaria/General.png","SG_FEENALARIA")
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Marata/Save.png","SG_MARATA")
+	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Krandar/Save.png","SG_KRANDAR")
 end
 
 
