@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Init/Field_Inventory.scyndi
-// Version: 23.11.14
+// Version: 23.12.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -80,6 +80,7 @@ Init
 	n = new InvSit("FIELD",_Action,_Allow)
 	n.AddFilter("Consumable")
 	n.AddFilter("Source")
+	n.AddFilter("Skill")
 	n.AddFilter("Key")
 	n.AddFilter("All")
 	n = new InvSit("ALCHEMY",_Extract,_AllowExtract)
