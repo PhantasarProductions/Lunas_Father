@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.11.23
+// Version: 23.12.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -162,6 +162,7 @@ Init
 	NAud("audio/alchemy/recipe.mp3","ALCHEMY_RECIPE")
 	NAud("Audio/Alchemy/Extract.ogg","ALCHEMY_EXTRACT")
 	Naud("Audio/General/Black Orb.mp3","BLACK_ORB")
+	NAud("Audio/General/RockSmash.ogg","PFA_LUNA")
 	For n in each(NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel"))
 		NAud(sprintf("Audio/Combat/Names/%s.ogg",n),sprintf("COMBAT_HERO_NAME_%s",Upper(n)))
 	End
