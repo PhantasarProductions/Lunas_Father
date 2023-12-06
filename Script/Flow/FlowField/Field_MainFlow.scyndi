@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_MainFlow.scyndi
-// Version: 23.11.24
+// Version: 23.12.05
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -58,6 +58,7 @@ Global Void MainFlow()
 	GameTime.Check()
 	FField.FIELD_KILL.CheckKills()
 	FField.FIELD_SECRET.CheckSecret()
+	FField.PFA_LUNA.CheckSmashWall()
 	Cls()
 	MultiPointer.Rcv()
 	if Events.AppTerminate()
