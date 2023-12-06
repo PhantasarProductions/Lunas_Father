@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_TreasuresChests.scyndi
-// Version: 23.10.16
+// Version: 23.12.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -47,7 +47,8 @@ Module
 #use "Script/use/general/Dice"
 #use "script/Use/General/UseIAA"
 #use "Script/use/Link/Mini"
-#use "script/use/link/alchemy" 
+#use "script/use/link/alchemy"
+#use "script/use/link/textboxes"
 #use "Script/use/Link/Map"
 
 plua FField
@@ -88,13 +89,16 @@ Global Void Open_Chest(string objtag)
 				Mini.Write("Obtained ",180,0,255)
 				Mini.WriteLn(IT.Name,255,255,0)
 				Jingle.Play()
+				If IT.Type=="Skill" && (!Done.Tutorial_Skills)
+					Tutorial("Skill")
+				End
 			Else
 				Mini.Write("You can't take any more ",255,25,25)
 				Mini.WriteLn(IT.Name,255,255,0)
 				Buzz.Play()
 				// Return is important! Leave the chest be when overstocked!
 				Return
-			End
+			End			
 		Default
 			Lua.error(sprintf("I don't know how to handle a treasure chest of type %s", TCData.Value(Tag,"Type")))
 	End
