@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_Menu.scyndi
-// Version: 23.11.23
+// Version: 23.12.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -96,7 +96,7 @@ Init
 	NewSitTab("FIELD","STATUS","Char_Stats","Char_Status")
 	NewSitTab("FIELD","INVENTORY","Char_Stats","Inventory")
 	NewSitTab("FIELD","ABILITIES","Abl_Status","Abilities")
-	NewSitTab("FIELD","SKILLS","Skill_Bag","Skill_Equipped")
+	NewSitTab("FIELD","SKILLS","Inventory","Skill_Equipped")
 	NewSitTab("FIELD","SWITCH","Char_Stats","Switch")
 	NewSitTab("FIELD","ACHIEVEMENTS","Achievements")
 	
