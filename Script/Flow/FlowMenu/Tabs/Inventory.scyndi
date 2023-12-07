@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Inventory.scyndi
-// Version: 23.11.14
+// Version: 23.12.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -48,8 +48,14 @@ Module
 
 Const Var PLeft  = ObtainImage("PAGE_LEFT")
 Const Var PRight = ObtainImage("PAGE_RIGHT")
+
+Const Var SUp    = ObtainImage("PAGE_UP")
+Const Var SDown  = ObtainImage("PAGE_DOWN")
+
 Const Var Fnt    = ObtainFont("BASE")
 Const Var MFnt   = ObtainFont("MINI")
+
+Int Hue = os.time()
 
 Class InvSit
 	Static ReadOnly Var Reg = NewArray()
@@ -116,6 +122,10 @@ Class InvFilter
 		return Prefixed(Item,"KEY_")
 	End
 	
+	static bool Skill(string item,data)
+		return Upper(data.Type) == "SKILL"
+	end
+	
 End
 
 Class IItem
@@ -166,7 +176,7 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 	End
 	MFnt.Text(Sit.Filter,x+(W/2),16,2,2)
 	Bool ScrollOutBounds = True
-	Bool MayScrollDown   = False
+	Bool MayScrollDown   = True
 	Int i=0
 	bool Hovering = false
 	For _i,itmtag in ipairs(IAA.List)		
@@ -180,9 +190,9 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 			plua iy; iy = ((sy*30)+y+40)
 			plua __Allow;__Allow = Sit.Allow(CharTag,itmtag) && Item.Item.Num>0
 			ScrollOutBounds = ScrollOutBounds && sy<0
-			MayScrollDown   = MayScrollDown   || iy<y+h-40			
+			MayScrollDown   = iy>=y+h-40			
 			If sy>=0 && iy<y+h-40
-				If MX>x && MX<x+w && MY>iy && My<iy+30
+				If MX>x && MX<x+w-50 && MY>iy && My<iy+30
 					ix = 20
 					if _hvrold!=itmtag
 						_hvr = new HoverIAA(itmtag)
@@ -210,7 +220,33 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w,int h)
 			i++
 		End
 	End
-	if Hovering && _hvr
+	If Hovering && _hvr
 		_hvr.show(MX,MY+40)
+	End
+	If Sit.ScrollY>0
+		int sus = 40
+		int sux;sux = x+w-sus
+		int suy;suy = y+40
+		if MX>sux && MY>suy && MX<sux+sus && MY<suy+sus
+			Hue = (Hue+1) % 360
+			SetColorHSV(Hue,1,1)
+			if ML;Sit.ScrollY--;End
+		Else
+			SetColor(255,255,255)
+		End
+		SUp.Stretch(sux,suy,sus,sus)
+	End
+	If MayScrollDown
+		int sds = 40
+		int sdx;sdx = x+w-sds
+		int sdy;sdy = y+h-(sds+40)
+		if MX>sdx && MY>sdy && MX<sdx+sds && MY<sdy+sds
+			Hue = (Hue+1) % 360
+			SetColorHSV(Hue,1,1)
+			if ML;Sit.ScrollY++;End
+		Else
+			SetColor(255,255,255)
+		End
+		SDown.Stretch(sdx,sdy,sds,sds)
 	End
 End
