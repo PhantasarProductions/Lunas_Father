@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Init/Field_Inventory.scyndi
-// Version: 23.12.06
+// Version: 23.12.07
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,22 +36,70 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/InterVar"
 
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Link/Alchemy"
 #use "Script/Use/General/Dice"
 #use "Script/Use/General/UseIAA"
 #use "Script/Flow/FlowMenu/Tabs/Inventory"
 
+ReadOnly Var Buzz = Audio.Obtain("BUZZ")
 
-
+Void SkillEquip(string User,string Item)
+	Var Ch;Ch=Party.GetChar(User)
+	Var SP;SP=CH.Points.SP
+	Var IT;IT=IAA[Item]
+	CSayF("Request to equip %s on %s",Item,User)
+	Item = Upper(Item)
+	// Enough points?
+	if IT.Skill_Points+SP.Have>SP.Maximum
+		Buzz.Play()
+		Mini.WriteLn(Ch.Name.." does not have enough SP to equip that skill")
+		Return
+	End
+	// No dupes?
+	if Ch.ListContains("Skills",Item)
+		Buzz.Play()
+		Mini.WriteLn(Ch.Name.." already has that skill equipped")
+		Return
+	End
+	CSay("= Request approved")
+	Int Used = 0
+	Ch.ListAdd("Skills",Item)
+	Ch.ListSort("Skills")
+	IT.Have--
+	PLua Unique = {}
+	for e in each(Alchemy.Manaments); Ch.Stat["EleResist_"..e] = 0; End
+	For i=0,Ch.ListSize("Skills")-1
+		Var IIT;IIT=IAA[Ch.List.Skills[i]]
+		Used = Used + IIT.Skill_Points
+		for e in each(Alchemy.Manaments)
+			Plua ETag;ETag = sprintf("EleResist_%s",e)
+			if !Unique[ETag]
+				Ch.Stat[ETag] = Ch.Stat[Etag] + IIT["Skill_"..e]
+				Unique[ETag] = true
+				CSayF("%s's elemental resistnace against %s is now: %d",User,ETag,Ch.Stat[ETag])
+			End
+		End
+	End
+	SP.Have = Used
+End
 
 Void _Action(string User,string Item)
+	Switch MyItem[Item].Item.Type
+		Case "Skill"
+			CSayF("Player requested to equip skill %s on %s",Item,User)
+			SkillEquip(User,Item)
+	End
 End
 
 
 Bool _Allow(string User,string Item)
-	Return MyItem[Item].Item.Usable_In_Field
+	Return MyItem[Item].Item.Usable_In_Field || MyItem[Item].Item.Type=="Skill"
 End
 
 Bool _AllowExtract(string User, string Item)
