@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/IAA_Hover.scyndi
-// Version: 23.11.10
+// Version: 23.12.06
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -171,6 +171,10 @@ Class HoverIAA
 		End
 		if Item.Accuracy_Check
 			Lines[len(lines)] = new HoverLine(sprintf("Aim: %s vs %s",Item.Accuracy_Stat,Item.Evasion_Stat),255,255,180)
+		End
+		
+		If Item.Type=="Skill"
+			Lines[len(lines)] = new HoverLine(sprintf("Passive Skill: %d SP",Item.Skill_Points),180,255,255)
 		End
 		// Calculate sizes
 		For l in each(lines)
