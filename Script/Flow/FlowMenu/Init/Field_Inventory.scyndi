@@ -48,6 +48,26 @@ Module
 #use "Script/Flow/FlowMenu/Tabs/Inventory"
 
 ReadOnly Var Buzz = Audio.Obtain("BUZZ")
+	
+Global Void SkillRecalc()
+	Int Used = 0
+	PLua Unique = {}
+	for e in each(Alchemy.Manaments); Ch.Stat["EleResist_"..e] = 0; End
+	For i=0,Ch.ListSize("Skills")-1
+		Var IIT;IIT=IAA[Ch.List.Skills[i]]
+		Used = Used + IIT.Skill_Points
+		for e in each(Alchemy.Manaments)
+			Plua ETag;ETag = sprintf("EleResist_%s",e)
+			if !Unique[ETag]
+				Ch.Stat[ETag] = Ch.Stat[Etag] + IIT["Skill_"..e]
+				Unique[ETag] = true
+				CSayF("%s's elemental resistnace against %s is now: %d",User,ETag,Ch.Stat[ETag])
+			End
+		End
+	End
+	SP.Have = Used
+End
+
 
 Void SkillEquip(string User,string Item)
 	Var Ch;Ch=Party.GetChar(User)
@@ -68,26 +88,12 @@ Void SkillEquip(string User,string Item)
 		Return
 	End
 	CSay("= Request approved")
-	Int Used = 0
 	Ch.ListAdd("Skills",Item)
 	Ch.ListSort("Skills")
 	IT.Have--
-	PLua Unique = {}
-	for e in each(Alchemy.Manaments); Ch.Stat["EleResist_"..e] = 0; End
-	For i=0,Ch.ListSize("Skills")-1
-		Var IIT;IIT=IAA[Ch.List.Skills[i]]
-		Used = Used + IIT.Skill_Points
-		for e in each(Alchemy.Manaments)
-			Plua ETag;ETag = sprintf("EleResist_%s",e)
-			if !Unique[ETag]
-				Ch.Stat[ETag] = Ch.Stat[Etag] + IIT["Skill_"..e]
-				Unique[ETag] = true
-				CSayF("%s's elemental resistnace against %s is now: %d",User,ETag,Ch.Stat[ETag])
-			End
-		End
-	End
-	SP.Have = Used
-End
+	SkillRecalc()
+end
+
 
 Void _Action(string User,string Item)
 	Switch MyItem[Item].Item.Type
