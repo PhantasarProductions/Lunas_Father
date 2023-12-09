@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.06
+// version: 23.12.09
 // End License Information
 Script
 
@@ -87,3 +87,99 @@ Global Void NPC_Gauntlet()
 	Map.PermaKill("NPC_Gauntlet")
 	Pop.Unpop()
 End
+
+
+#region "Color Puzzle"
+class PCol
+	ReadOnly Byte R
+	ReadOnly Byte G
+	ReadOnly Byte B
+	ReadOnly String Name
+	Constructor(string _N, Byte _R, Byte _G, Byte _B)
+		Name = _N
+		R = _R
+		G = _G
+		B = _B
+	End
+End
+
+ReadOnly Var ColArray = {}
+ReadOnly Var Col = {}
+Void RC(string _N, Byte _R, Byte _G, Byte _B)
+	Col[_N] = new PCol(_N,_R,_G,_B)
+	ColArray[Len(ColArray)] = Col[_N]
+End
+Init 
+	RC("Red",255,0,0)
+	RC("Yellow",255,255,0)
+	RC("Green",0,255,0)
+	RC("Blue",0,0,255)
+End
+
+Int Cols = 4
+Int MaxDesc = 3
+Var Goed
+Var Desc
+Var Answered
+
+Global Void ZA_StartPuzzle()
+	Goed = {}
+	Desc = {}
+	Answered = {}
+	Bool Same	
+	Int TimeOut=10000
+	Repeat
+		Plua SameCheck = {}
+		Same = False
+		TimeOut--
+		Lua.assert(TimeOut>0,"Sayonara puzzle timeout") // Prevent infinite loops
+		For i=1,Cols
+			Int C; C = math.random(0,Len(ColArray)-1)
+			Int D; D = Math.random(1,MaxDesc)
+			string S; S = sprintf("%s.%d",ColArray[C].Name,D)
+			For CS,_ in pairs(SameCheck); Same = Same || CS==S; End
+			Goed[i] = ColArray[C].Name
+			Desc[i] = D
+		End
+	LoopWhile Same
+End
+
+Void Plate(String Color,Int I)
+	Bool Check = True
+	Answered[i]=Color
+	Var O;O = Kthura.Obj["NPC_T"..i]
+	Var C;C = Col[Color]
+	O.R = C.R
+	O.G = C.G
+	O.B = C.B
+	For i=1,Cols
+		Check = Check && Answered[i]==Goed[i]
+	End
+	If Check 
+		Map.PermaKill("TBarrier")
+	End
+End
+
+Global Void ZA_Red1();    Plate("Red",1);    End
+Global Void ZA_Red2();    Plate("Red",2);    End
+Global Void ZA_Red3();    Plate("Red",3);    End
+Global Void ZA_Red4();    Plate("Red",4);    End
+Global Void ZA_Yellow1(); Plate("Yellow",1); End
+Global Void ZA_Yellow2(); Plate("Yellow",2); End
+Global Void ZA_Yellow3(); Plate("Yellow",3); End
+Global Void ZA_Yellow4(); Plate("Yellow",4); End
+Global Void ZA_Green1();  Plate("Green",1);  End
+Global Void ZA_Green2();  Plate("Green",2);  End
+Global Void ZA_Green3();  Plate("Green",3);  End
+Global Void ZA_Green4();  Plate("Green",4);  End
+Global Void ZA_Blue1();   Plate("Blue",1);   End
+Global Void ZA_Blue2();   Plate("Blue",2);   End
+Global Void ZA_Blue3();   Plate("Blue",3);   End
+Global Void ZA_Blue4();   Plate("Blue",4);   End
+
+Global Void NPC_T1(); MapText("CPZ_"..Goed[1].."_"..Desc[1]); End
+Global Void NPC_T2(); MapText("CPZ_"..Goed[2].."_"..Desc[2]); End
+Global Void NPC_T3(); MapText("CPZ_"..Goed[3].."_"..Desc[3]); End
+Global Void NPC_T4(); MapText("CPZ_"..Goed[4].."_"..Desc[4]); End
+
+#endregion
