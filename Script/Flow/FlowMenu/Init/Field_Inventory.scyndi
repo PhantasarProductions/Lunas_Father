@@ -49,7 +49,10 @@ Module
 
 ReadOnly Var Buzz = Audio.Obtain("BUZZ")
 	
-Global Void SkillRecalc()
+Global Void SkillRecalc(string User)
+	Var Ch;Ch=Party.GetChar(User)
+	Var SP;SP=CH.Points.SP
+	//Var IT;IT=IAA[Item]
 	Int Used = 0
 	PLua Unique = {}
 	for e in each(Alchemy.Manaments); Ch.Stat["EleResist_"..e] = 0; End
@@ -91,7 +94,7 @@ Void SkillEquip(string User,string Item)
 	Ch.ListAdd("Skills",Item)
 	Ch.ListSort("Skills")
 	IT.Have--
-	SkillRecalc()
+	SkillRecalc(User)
 end
 
 
