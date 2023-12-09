@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Skill_Equipped.scyndi
-// Version: 23.10.18
+// Version: 23.12.09
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,13 +37,58 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
+#use "Script/Use/General/UseIAA"
 
+ReadOnly Var Fnt=ObtainFont("BASE")
+ReadOnly Var Sml=ObtainFont("Mini")
+	
+ReadOnly Var Buzz=Audio.Obtain("BUZZ")
 
-Void Flow(string _Situation,string CharTag)
+Table ScrollY = {} 
+Int Hue = os.time()
+
+Void Flow(string _Situation,string CharTag,int bx,int by, int bw,int bh)
+	Var Ch
+	Var SP
+	Ch=Party.GetChar(CharTag)
+	SP=CH.Points.SP
+	SetColor(0,180,255)
+	If (!Done["Init_SP_"..charTag])
+		SP.MaxCopy="Level" 
+	End	
+	Sml.Text(sprintf("SP: Total: %d, Used: %d, Left: %d",SP.Maximum,SP.Have,SP.Maximum-SP.Have),bx,by+bh-40,0,1)
+	If Ch.ListSize("Skills")==0
+		SetColor(255,180,180)
+		Sml.Text(Ch.Name.." does not yet have any skills equipped",bx+(bw div 2),by+(bh div 2),2,2)
+		Return
+	End
+	ScrollY[CharTag] = ScrollY[CharTag] || 0
+	For i=0,Ch.ListSize("Skills")-1
+		Int Y; Y = (i*30)-ScrollY[CharTag]*30
+		If Y>=0 && Y<bh-80
+			SetColor(255,255,255)
+			if MX>bx && MX<bx+bh-50 && MY>by+Y && MY<BY+Y+30
+				Hue = (Hue+1)%360
+				SetColorHSV(Hue,1,1)
+				If ML
+					CSayF("Requested to unequip %s from %s",Ch.List.Skills[i],CharTag)
+					If (!IAA[ Ch.List.Skills[i] ].Give())
+						Buzz.Play()
+					Else
+						Ch.ListRemove("Skills",Ch.List.Skills[i])
+						Lua.Scyndi.Globals.SkillRecalc(CharTag)
+						Return
+					End
+				End
+			End
+			Fnt.Text(IAA[Ch.List.Skills[i]].Name,bx,by+Y)			
+		End
+	End
 End
