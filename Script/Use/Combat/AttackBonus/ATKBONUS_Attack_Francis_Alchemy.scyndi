@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.04
+// version: 23.12.09
 // End License Information
 Module
 
@@ -40,6 +40,6 @@ Module
 
 Int AtkBonus(executor,target,act)
 	If Executor.Tag=="Francis"
-		Return AtkBonus_Attack_Myrah_Magic(executor,target,act)
+		Return AtkBonus_Attack_Myrah_Magic.AtkBonus(executor,target,act)
 	End
 End
