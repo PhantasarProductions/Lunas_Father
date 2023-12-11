@@ -1,0 +1,81 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_Flame.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.12.10
+// End License Information
+
+Module
+
+#use "Libs/SCI/Audio"
+#use "Libs/SCI/Graphics"
+
+bool DrawOvertake
+var Flame
+var MAudio
+readonly int skipmax = 7
+int skip 
+int Frame
+//var Act
+var Targets
+	
+Init
+	Flame = LoadNewImage("gfx/Combat/SpellAni/Flame.jpbf","SPELLANI_Flame")
+	MAudio = Audio.LoadNew("Audio/Combat/SpellAni/Fire.ogg","SPELLANI_Flame")
+	Flame.HotBottomCenter()
+end	
+
+
+Void Start(Executor,_Targets,string Param)		
+	Targets = _Targets
+	skip = 0
+	Frame = 0
+	MAudio.Play()
+End
+
+// Well be called while the SpellAni is running
+// When 'False' is returned the system will assume the SpellAni has ended
+// and move on the next execution stage
+Bool Cycle()
+	// End it if we go overquota! This one is only a safety precaution
+	if Frame>=10
+		return False 
+	end
+	
+	// Draw it all!
+	for tar in each(Targets)
+		Flame.Draw(tar.X,tar.Y,Frame)
+		Frame++
+	end		
+	Return Frame<10
+End
