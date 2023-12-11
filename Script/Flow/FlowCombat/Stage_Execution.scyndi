@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
-// Version: 23.11.19
+// Version: 23.12.10
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -46,6 +46,8 @@ Module
 
 #use "Script/Flow/FlowCombat/Stage"
 #use "Script/Flow/FlowCombat/Diamonds"
+
+Plua Scyndi = Lua.Scyndi
 
 Const Var Fnt = ObtainFont("BASE")
 
@@ -148,10 +150,14 @@ Void ES_Pose()
 		//print(s,"Exist: ",JCR6.EntryExists(S))
 		If JCR6.EntryExists(S)
 			//print("Play: ",S)
-			plua au;au = Audio.LoadNew(s,"POSE_END_%s_%s",Executor.AudName,Act.Act.Pose)
+			plua au;au = Audio.LoadNew(s,sprintf("POSE_END_%s_%s",Executor.AudName,Act.Act.Pose))
 			au.Play()
 		End
 		CES="SpellAni"
+		If Act.Act.SpellAni_Script!=""
+			Scyndi.Use("Script/Use/Combat/SpellAni/SPELLANI_"..Act.Act.SpellAni_Script)
+			Scyndi.Class["SPELLANI_"..Act.Act.SpellAni_Script].Start(Executor,Act.Targets,Act.Act.SpellAni_Param)
+		End
 	End
 End
 
@@ -162,7 +168,9 @@ Void ES_SpellAni()
 	If OTSPA==0
 		OTSPA=os.time()
 	End
-	
+	If Act.Act.SpellAni_Script!=""
+		GoOn = !Scyndi.Class["SPELLANI_"..Act.Act.SpellAni_Script].Cycle(Executor,Act.Targets,Act.Act.SpellAni_Param)
+	End
 	If GoOn && OTSPA!=os.time()
 		OTSPA=0
 		CES="Effect"
