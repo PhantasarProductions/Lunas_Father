@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.09
+// version: 23.12.15
 // End License Information
 Script
 
@@ -43,15 +43,23 @@ Script
 
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Alchemy"
 #use "Script/Use/Link/Textboxes"
+#use "Script/Use/Link/Worldmap"
 
 #use "Script/Use/General/Pop"
 
+#region Medal
 Global Void ZA_CheckMedal()
 	If Ach.MedalRate>=25
 		Map.Kill("Barrier_Medal")
 	End
 End
+
+Global Void ZA_ToMedal()
+	Map.GoToMap("MDL_Dungeon_Autobahn","MAIN","Start")
+End
+#endregion
 
 Global Void ZA_Krandar()
 	If !Done.KrandarSpokenSayonara
@@ -76,7 +84,17 @@ Global Void ZA_Krandar()
 End
 
 Global Void NPC_Krandar()
-	MapText("Krandar_Think")
+	If gbool.MetSayonaraHerself && (!Done.MetSayonaraHerselfAndSpokeWithKrandar)
+		Pop.Pop("K","North")
+		MapText("KRANDAR_SAYONARA")
+		Pop.UnPop()
+		Map.PermaKill("NPC_Krandar")
+		WM_Unlocked.RaldahPass = true
+		gstring.CampSituation = "07_Quayaro"
+		Kokonora()		
+	Else
+		MapText("Krandar_Think")
+	End
 End
 
 Global Void NPC_Gauntlet()
@@ -183,3 +201,35 @@ Global Void NPC_T3(); MapText("CPZ_"..Goed[3].."_"..Desc[3]); End
 Global Void NPC_T4(); MapText("CPZ_"..Goed[4].."_"..Desc[4]); End
 
 #endregion
+
+Global Void Floor007Target(); Map.PermaKill("Barrier_7"); End
+	
+	
+Global Void ZA_Boss()
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill("Boss")
+	Map.Boss("LichKing")
+End
+
+Global Void TargetBoss()
+	Map.PermaKill("BossBarrier")
+End
+
+Global Void NPC_Sayonara()
+	If !Done.MetSayonaraHerself
+		Pop.Pop("S","North")
+		MapText("SAYONARA")
+		Awarded.Scen_Sayonara = true
+		Recipe.ShiningPotion = true
+		Pop.UnPop()
+		Map.GoToLayer("#001","Einde")
+	End
+End
+
+Global Void ZA_KrandarNoLeave()
+	If gbool.MetSayonaraHerself && (!gbool.MetSayonaraHerselfAndSpokeWithKrandar)
+		Player.StopWalking()
+		MapText("KRANDAR_NOLEAVE")
+		Player.WalkTo("Krandar_Spot")
+	End
+End
