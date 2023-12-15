@@ -1,0 +1,8 @@
+Script
+
+#use "script/use/link/map" 
+
+Init
+	Map.Chapter(2)
+End
+
