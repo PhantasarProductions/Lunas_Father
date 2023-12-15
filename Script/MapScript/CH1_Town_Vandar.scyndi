@@ -46,6 +46,7 @@ Script
 #use "Script/Use/Link/Textboxes"
 Init
 	CSay("Welcome to Vandar!")
+	Map.Chapter(1)
 End
 
 Global Void ZA_GameStart()
