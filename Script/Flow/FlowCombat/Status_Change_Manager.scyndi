@@ -147,9 +147,9 @@ Void SCM_NewIndex(s,string k,value)
 		if !s.___statuses[k]
 			Mini.Write(s.___fighter.Name.." ",255,180,0)
 			Mini.WriteLn(ssc.CauseMsg,180,0,255)
-			if s.Cause_Script!=""
-				Lua.Scyndi.Use("Script/Use/Combat/StatusChanges/CAUSE_"..s.Cause_Script)
-				Lua.Scyndi.Class["CAUSE_"..s.Cause_Script].Cause(s.___fighter,s.Cause_Param)
+			if ssc.Cause_Script!=""
+				Lua.Scyndi.Use("Script/Use/Combat/StatusChanges/CAUSE_"..ssc.Cause_Script)
+				Lua.Scyndi.Class["CAUSE_"..ssc.Cause_Script].Cause(s.___fighter,s.Cause_Param)
 			End
 
 		end
