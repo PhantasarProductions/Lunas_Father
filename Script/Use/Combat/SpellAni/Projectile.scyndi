@@ -70,12 +70,14 @@ Class TProjectile
 	Var Prev = Nil
 		
 
-	Constructor(String Pic,Exe,Tgt,Frms,int Rot = 0)
-		Plua UPic;UPic = Upper(Pic)
-		_Pics[UPic] = _Pics[UPic] || LoadNewImage(Pic,"SPELLANI_PROJECTILE_"..UPic) 
+	Constructor(String WPic,Exe,Tgt,Frms,int Rot = 0)
+		//print("Project constructor:",WPic,Exe,Tgt,Frms,Rot)
+		Plua UPic;UPic = Upper(WPic)
+		_Pics[UPic] = _Pics[UPic] || LoadNewImage(WPic,"SPELLANI_PROJECTILE_"..UPic) 
 		Pic = _Pics[UPic]
 		Executor = Exe
 		Target = Tgt
+		Frames=Frms
 		SX = Exe.X
 		SY = Exe.Y - (Exe.H div 2)
 		EX = Tgt.X
