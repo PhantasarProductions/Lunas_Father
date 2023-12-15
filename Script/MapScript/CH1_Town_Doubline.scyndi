@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.26
+// version: 23.12.13
 // End License Information
 Script
 
@@ -44,6 +44,7 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Menu"
+#use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/Textboxes"
 
 Global Void NPC_Cercei()
@@ -65,4 +66,8 @@ Global Void NPC_Petyr()
 		Map.GoToMap("CH1_Hub_KokoFisherman","Fisherman","Einde")
 		Awarded.Scen_Kokonora = true
 	End
+End
+
+Global Void Bye()
+	Delisto()
 End
