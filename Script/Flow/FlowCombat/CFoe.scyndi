@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.12.03
+// Version: 23.12.15
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -37,6 +37,7 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
 #use "libs/sci/GINIE"
 #use "libs/sci/SString"
 #use "libs/sci/Graphics"
@@ -64,7 +65,13 @@ Const Int DrawTypes_Ani = 3
 plua FoeImageRegister 
 
 plua FoeImage(string pic)
-	plua T;T = "COMBAT_FOE::"..Upper(pic)
+	If Right(Pic,1)=="/"
+		Var DPic;DPic = JCR6.Dir(pic)
+		if (Len(DPic)==0); Lua.error("Empty foe pic folder: "..pic); end
+		Int I;I=math.random(0,len(DPic)-1)
+		Pic = DPic[i]
+	End
+	plua T;T = "COMBAT_FOE::"..Upper(pic)	
 	FoeImageRegister = FoeImageRegister || {}
 	FoeImageRegister[T] = FoeImageRegister[T] || LoadNewImage(Pic,T)
 	FoeImageRegister[T].Hot(FoeImageRegister[T].Width div 2, FoeImageRegister[T].Height)
