@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Boss.scyndi
-// Version: 23.11.12
+// Version: 23.12.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -51,6 +51,7 @@ Void LoadBoss(string mapBundle)
 End
 
 Global Void StartBoss(string BossTag)
+	Lua.assert(BossData.Value(BossTag,"Tune")!="","No Music for BossTag:"..BossTag)
 	Int R;R = BossData.IntValue(BossTag,"Announce_R")
 	Int G;G = BossData.IntValue(BossTag,"Announce_G")
 	Int B;B = BossData.IntValue(BossTag,"Announce_B")
