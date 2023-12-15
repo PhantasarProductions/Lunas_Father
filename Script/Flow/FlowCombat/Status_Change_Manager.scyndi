@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Status_Change_Manager.scyndi
-// Version: 23.11.30
+// Version: 23.12.13
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -126,7 +126,7 @@ Var SetStatusChange(String FTag,String STag)
 		For r = 1, __SC_Data.Intvalue("Rec:"..STag,"Duration_D"..d)
 			ret.___duration = ret.___duration + Dice["d"..d]
 		End
-	End
+	End	
 	ret = SetMetaTable(ret,__SC_Meta)
 	Return ret
 End
@@ -147,6 +147,11 @@ Void SCM_NewIndex(s,string k,value)
 		if !s.___statuses[k]
 			Mini.Write(s.___fighter.Name.." ",255,180,0)
 			Mini.WriteLn(ssc.CauseMsg,180,0,255)
+			if s.Cause_Script!=""
+				Lua.Scyndi.Use("Script/Use/Combat/StatusChanges/CAUSE_"..s.Cause_Script)
+				Lua.Scyndi.Class["CAUSE_"..s.Cause_Script].Cause(s.___fighter,s.Cause_Param)
+			End
+
 		end
 		s.___statuses[k] = ssc
 	Else
