@@ -39,7 +39,20 @@ Script
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Map"
 
+Init
+	Awarded.MEDAL_AUTOBAHN = True
+End
 
 Global Void ZA_Zuruck()
 	Map.GoToLayer("MAIN","Start")
+End
+
+Global Void ZA_Boss()
+	Map.Boss("LKW")
+	Map.PermaKill("ZA_Boss")
+End
+
+Global Void ZA_Ausfahrt()
+	Awarded.COMPLETE_AUTOBAHN = True
+	Map.GoToMap("CH1_Dungeon_SayonaraTomb","#000","From_Medal")
 End
