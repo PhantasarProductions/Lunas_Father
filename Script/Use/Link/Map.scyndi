@@ -206,6 +206,16 @@ Void DrawScreen()
 End
 
 
+Void Welcome(string File)
+	Sys.Call("FLOW_FIELD","NewWelcome",File)
+End
+
+Void Chapter(Int Chp)
+	If !Done[sprintf("ANNOUNCED_CHAPTER_%d",Chp)]
+		Welcome(sprintf("GFX/Chapter/%d.png",Chp))
+	End
+End
+
 QuickMeta Player
 	newindex
 		if !HasPlayer
