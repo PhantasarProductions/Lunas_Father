@@ -231,6 +231,15 @@ Global Void Execute(string _Chr,_Act)
 	ShortWait = ShortWaitReset
 	CES=ES_ShortWait
 	ToTarget = nil
+	PLUA KILL={}
+	For s,sd in pairs(Char._Status)
+		sd.Duration--
+		CSayF("Status %s on character %s now has a duration of %d actions",s,_Chr,sd.Duration)
+		if (sd.Duration<=0); Kill[len(Kill)]=s; End
+	End
+	For Victim in Each(Kill)
+		Char.StatusChanges[Victim] = False
+	End
 End
 
 Init 
