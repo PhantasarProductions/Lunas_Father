@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.11.09
+// Version: 23.12.17
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -38,9 +38,13 @@ Module
 
 #use "Libs/SCI/Sys"
 
+#use "Script/Use/General/UseIAA"
+
 #use "Script/Flow/FlowCombat/Stage"
 #use "Script/Flow/FlowCombat/Fighter"
 #use "Script/Flow/FlowCombat/Diamonds"
+
+plua Scyndi = Lua.Scyndi
 
 Void Arrive()
 End
@@ -69,10 +73,34 @@ Void Cycle()
 			If __foe.HP==0
 				Diamonds.RemoveFirst()
 			Else
-				Lua.Scyndi.Class.AI.DoAI(__foe)
+				Scyndi.Class.AI.DoAI(__foe)
 			End
 		Case "JOKER"
-			print("\x1b[31mJOKER, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()			
+			For Tag,FData in pairs(Fighter.ByTag)
+				Switch FData.Team
+					Case "Foe"
+					Case "Hero"
+						For i=0,FData.Char.ListSize("Skills")-1
+							plua Skill_Tag;Skill_Tag = FData.Char.List.Skills[i]
+							plua Skill; Skill = IAA[Skill_Tag]
+							If Skill.Skill_Joker_Script!=""
+								Scyndi.Use(sprintf("Script/Use/Combat/Skill/JOKER_%s",Skill.Skill_Joker_Script))
+								Scyndi.Class["JOKER_"..Skill.Skill_Joker_Script].Joker(FData,Skill.Skill_Joker_Param)
+							End
+						End
+					Default
+						Lua.error("Unknown team for joker: "..FData.Team)
+				End
+				// Status change checks
+				For _sttag,_stdat in pairs(FData._Status)
+					If _stdat.Joker_Script!=""
+						Scyndi.Use(sprintf("Script/Use/Combat/StatusChanges/JOKER_%s",_stdat.Joker_Script))
+						Scyndi.Class["JOKER_".._stdat.Joker_Script].Joker(FData,_stdat.Joker_Param)
+					End
+				End
+			End
+			//print("\x1b[31mJOKER, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); 
+			Diamonds.RemoveFirst()			
 	End
 	Diamonds.Check()
 End
