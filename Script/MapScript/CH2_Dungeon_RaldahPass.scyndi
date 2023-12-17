@@ -1,8 +1,30 @@
 Script
 
+#use "libs/sci/sys"
+#use "libs/sci/kthura"
+#use "libs/sci/intervar"
+
 #use "script/use/link/map" 
+#use "Script/use/link/worldmap" 
 
 Init
 	Map.Chapter(2)
 End
 
+Global Void ZA_BehandelBrug()
+	Plua O = Kthura.Obj.Brug
+	O.Visible = gbool.RaldahPassBrug
+	O.ForcePassible = gbool.RaldahPassBrug
+	CSayF("Bridge passible = %s",gbool.RaldahPassBrug)
+	Kthura.ReMap()
+End
+
+Global Void Brug_Omlaag()
+	gbool.RaldahPassBrug = True
+	ZA_BehandelBrug()
+End
+
+Global Void ZA_Voltooid()
+	WM_Unlocked.QuayaroCastle = true
+	CSay("Quayaro's castle has been unlocked now!")
+End
