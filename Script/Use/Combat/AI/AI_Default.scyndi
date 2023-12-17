@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/AI/AI_Default.scyndi
-// Version: 23.11.30
+// Version: 23.12.17
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -47,6 +47,7 @@ Module
 
 // Should return the Act the enemy is about to perform.
 Var EnemyAct(Executor,string param="")
+	Lua.assert(len(Executor.Actions)>0,sprintf("%s (%s) has no actions set",Executor.Tag,Executor.Name))
 	int rAct; rAct = math.random(0,len(Executor.Actions)-1)
 	var dAct; dAct = Executor.Actions[rAct]
 	// printf("rAct = %d; dAct = %s\n",ract,dact); for i,v in spairs(Executor.Actions); printf("=> %2d/%d -> %s\n",i,len(Executor.Actions),v); end
