@@ -39,6 +39,7 @@ Module
 #use "Libs/SCI/Sys"
 
 #use "Script/Flow/FlowCombat/Fighter"
+#use "Script/Flow/FlowCombat/Status_Change_Manager"
 
 
 Global Void CMBT_DEBUG_DIAMONDS()
@@ -86,8 +87,33 @@ Global Void CMBT_DEBUG_STATUS()
 	End
 End
 
+Global Void CMBT_DEBUG_SetStatus(tar,status)
+	CSayF("SetStatus(\"%s\",\"%s\")",tar,status)
+	If Lua.type(tar)!="string" || Lua.type(status)!="string"
+		printf("\x1b[31m;Error! \x1b[37mIllegal parameters\n")
+		Return
+	End
+	Switch Upper(Tar)
+		Case "ALL" "EVERYBODY"
+			For f,_ in pairs(Fighter.ByTag); CMBT_DEBUG_SetStatus(f,status); End
+		Case "HERO" "FOE"
+			for f,_ in pairs(Fighter.Team[Tar]); CMBT_DEBUG_SetStatus(f,status); End
+		Default
+			If !Fighter.ByTag[Tar]
+				printf("\x1b[31m;Error! \x1b[37mNo fighter tagged '%s'!\n",tar)
+				Return
+			End
+			If !StatusExists(Status)
+				printf("\x1b[31m;Error! \x1b[37mNo data about status '%s'!\n",status)
+			End
+			Fighter.ByTag[Tar].StatusChanges[Status] = true
+			printf("\x1b[37m Fighter \x1b[36m%s\x1b[37m now has status \x1b[35m%s\x1b[37m\n",tar,status) 
+	End
+End
+
 Init
 	Sys.ConsoleLocal("DIAMONDS","CMBT_DEBUG_DIAMONDS")
 	Sys.ConsoleLocal("HP","CMBT_DEBUG_HP")
-	Sys.ConsoleLocal("STATUS","CMBT_DEBUG_STATUS")
+	Sys.ConsoleLocal("SETSTATUS","CMBT_DEBUG_SETSTATUS")
+	Sys.ConsoleLocal("GETSTATUS","CMBT_DEBUG_STATUS")
 End
