@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Status_Change_Manager.scyndi
-// Version: 23.12.15
+// Version: 23.12.17
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -169,4 +169,8 @@ Global Var StatusChangeManager(String FTag,Me,SC)
 	ret.___fightertag = FTag
 	ret.___statuses   = SC
 	Return SetMetaTable(ret,{ ["__index"] = SCM_Index,["__newindex"]=SCM_NewIndex })
+End
+
+Global Bool StatusExists(String Status)
+	Return __SC_Data.Value("Rec:"..Status,"Name")!=""
 End
