@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.11.16
+// Version: 23.12.17
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -262,6 +262,24 @@ Void RemoveFirst()
 		if Slots[i]; Slots[i].ToX = InitialPos(i); end
 	end
 end
+
+Void Blank(i,times)
+	Switch Lua.type(i)
+		Case "number"
+			Slots[i]=nil
+		Case "String"
+			Plua BLNK = {}
+			For idx,dat in pairs(Slots)
+				If dat.FighterTag == i && (times||500)>0
+					Blnk[len(Blnk)] = i
+					if times; times--; end
+				End
+			End
+			for idx in each(Blnk); Blank(idx); End
+		Default
+			Lua.error("Unknown Blank parameter type: "..Lua.type(i))
+	End
+End
 
 
 Void Check()
