@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Next_And_Last.scyndi
-// Version: 23.11.06
+// Version: 23.12.18
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -36,7 +36,9 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Kthura" 
+#use "Libs/SCI/SString"
 
 #use "Script/Use/Link/Map"
 
@@ -57,4 +59,22 @@ Global Void Prev_Layer()
 	lay--
 	newlayer = sprintf(sprintf("#%%0%dd",lln),math.max(0,lay))
 	Map.GoToLayer(newlayer,"Einde")
+End
+
+Global Void MapGoTo(string A)
+	CSayF("MapGoto(\"%s\")",A)
+	plua para;para = xsplit(A,":")
+	// Please note... Index 0 will normally always contain "GO" and is thereofre not interesting at all
+	
+	switch len(Para)
+		case 0 1
+			for i,v in pairs(Para);printf("%d/%d -> %s",i,len(para),v); end
+			Lua.error("No data for MapGoto")
+		case 2
+			Map.GoToLayer(para[1],"Start")
+		case 3
+			Map.GoToLayer(para[1],para[2])
+		default
+			Map.GoToMap(para[1],para[2],para[3])
+	End
 End
