@@ -1,0 +1,12 @@
+Script
+
+#use "Libs/SCI/InterVar" 
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/TextBoxes"
+
+Global Void ZA_Welcome()
+	If !Done.QuayarosCastleWelcome
+		MapText("START")
+	End
+End
