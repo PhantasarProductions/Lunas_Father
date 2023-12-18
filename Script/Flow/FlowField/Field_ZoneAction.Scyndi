@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_ZoneAction.Scyndi
-// Version: 23.11.06
+// Version: 23.12.17
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -105,11 +105,11 @@ void Check_ZoneAction()
 				If CF(NowIn[CT][ObjTag],InZone)
 					Switch Lua.type(ActFunc)
 						Case "function"
-							ActFunc()
+							ActFunc(ObjTag)
 							NowIn[CT][ObjTag]=InZone
 							Return
 						case "string"
-							MapScript[ActFunc]()	
+							MapScript[ActFunc](ObjTag)	
 							NowIn[CT][ObjTag]=InZone
 							Return
 						Default
