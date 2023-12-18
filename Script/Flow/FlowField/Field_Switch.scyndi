@@ -1,0 +1,24 @@
+Module
+
+#use "Libs/SCI/Audio"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Mini"
+
+ReadOnly Var SwSound = Audio.Obtain("SWITCH")
+ReadOnly Var Buzz    = Audio.Obtain("BUZZ")
+	
+Global Void FlipSwitch(String Tag)
+	Plua O;O = Kthura.Obj(Tag)
+	If Upper(O.Data.SwitchOnce)=="YES" && Done["Switch_"..Kthura.LoadedMap.."_"..Kthura.CurrentLayer.."_"..Tag]
+		Mini.Writeln("The switch appears to be stuck",255,200,200)
+		Return
+	End
+	if Upper(O.Texture) == "GFX/Textures/SWITCH/RIGHT.PNG"
+		O.Texture = "GFX/Textures/SWITCH/LEFT.PNG"
+	Else 
+		O.Texture = "GFX/Textures/SWITCH/RIGHT.PNG"
+	End
+	MapScript[Tag](Tag)
+End
