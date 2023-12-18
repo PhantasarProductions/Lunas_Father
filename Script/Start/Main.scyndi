@@ -163,6 +163,7 @@ Init
 	NAud("Audio/Alchemy/Extract.ogg","ALCHEMY_EXTRACT")
 	Naud("Audio/General/Black Orb.mp3","BLACK_ORB")
 	NAud("Audio/General/RockSmash.ogg","PFA_LUNA")
+	NAud("Audio/General/Switch.mo3","SWITCH")
 	For n in each(NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel"))
 		NAud(sprintf("Audio/Combat/Names/%s.ogg",n),sprintf("COMBAT_HERO_NAME_%s",Upper(n)))
 	End
