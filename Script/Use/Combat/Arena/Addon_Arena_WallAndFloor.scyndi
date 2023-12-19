@@ -82,7 +82,7 @@ Class Addon_WallAndFloor
 		Cls()
 		SetColor(FR,FG,FB,FA)
 		ImgFloor.Tile(0-Quake.X,WallY+(WallH div 2)+Quake.Y,Graphics.Width+Quake.X,Graphics.Height-WallY+Quake.Y)
-		SetColor(WR,WG,FB,255)
+		SetColor(WR,WG,WB,255)
 		for x=-Quake.X,Graphics.Width+Quake.X,WallW
 			ImgWall.Stretch(x,WallY+Quake.Y,WallW,WallH)
 		End
