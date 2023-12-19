@@ -1,0 +1,53 @@
+// License Information:
+// src/Scripts/Script/Use/Combat/SpellEffect/Template.scyndi
+// Template - Luna's Father
+// version: 23.10.29
+// Copyright (C) 2023 Jeroen P. Broks
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Mini"
+
+#use "Script/Use/General/Dice"
+
+Plua EffectDie
+Init
+	switch gint.skill
+		case 1
+			EffectDie = "D20"
+		case 2
+			EffectDie = "D6"
+		case 3
+			EffectDie = "D3"
+		Default
+			EffectDie = "D2"
+	End
+End
+
+Void WideEffect(Executor,Targets,String Param)
+End
+
+Bool Effect(Executor,Target,String Param)
+	if Executor.Team!="Hero"; Return False; End
+	If Dice[EffectDie]!=1; Return False; End
+	Mini.Write("The requirement for ",255,180,0)
+	Mini.Write(Executor.Name,180,0,255)
+	Mini.WriteLn("to gain a level has been doubled",255,180,0)
+	Executor.Char.Stat.Exp = Executor.Char.Stat.Exp * 2
+	Return True
+End
