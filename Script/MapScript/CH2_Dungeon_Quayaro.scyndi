@@ -1,12 +1,31 @@
 Script
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar" 
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/TextBoxes"
+
+Get Int FS;Return gint.Quayaro_Castle_Switches_Flipped; End
+Set Int FS;gint.Quayaro_Castle_Switches_Flipped = Value; End
 
 Global Void ZA_Welcome()
 	If !Done.QuayarosCastleWelcome
 		MapText("START")
+	End
+End
+
+Global Void QSwitch()
+	FS ++
+	CSayF("Switched flipped %d/4",FS)
+	If FS==4
+		Mini.WriteLn("You hear a door opening in the courtyard")
+	End
+End
+
+Global Void ZA_CheckTheDoor()
+	If FS==4
+		Map.Kill("MainDoor")
 	End
 End
