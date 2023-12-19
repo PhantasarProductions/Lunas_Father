@@ -267,7 +267,7 @@ Void Blank(i,times)
 	Switch Lua.type(i)
 		Case "number"
 			Slots[i]=nil
-		Case "String"
+		Case "string"
 			Plua BLNK = {}
 			For idx,dat in pairs(Slots)
 				If dat.FighterTag == i && (times||500)>0
