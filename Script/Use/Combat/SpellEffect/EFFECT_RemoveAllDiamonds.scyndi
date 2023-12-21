@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_RemoveAllDiamonds.scyndi
-// Version: 23.12.17
+// Version: 23.12.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -46,6 +46,6 @@ End
 // succesful and 'False' will denote a miss.
 Bool Effect(Executor,Target,String Param)
 	Lua.Scyndi.Globals.Flow_Combat.Diamonds.Blank(Target.Tag)
-	Lua.Scyndi.Globals.Flow_Combat.CharMsg.Put("Cancel",255,200,200)
+	Lua.Scyndi.Globals.Flow_Combat.CharMsg.Put(Target.Tag,"Cancel",255,200,200)
 	Return True
 End
