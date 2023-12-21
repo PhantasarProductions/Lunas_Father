@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.27
+// version: 23.12.21
 // End License Information
 Module
 
@@ -52,6 +52,7 @@ Void Magic()
 End
 
 Void Force()
+	Lua.Scyndi.Class.Stage.CurrentTag = "FIM"
 End
 
 Bool _Allow();return True;End

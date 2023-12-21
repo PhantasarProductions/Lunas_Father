@@ -34,7 +34,7 @@
 // 
 // version: 23.12.21
 // End License Information
-Script
+Module
 
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
@@ -55,8 +55,9 @@ ReadOnly String Caption4 = "Summon Weniaria"
 ReadOnly Bool Allow4(); Return False; End
 ReadOnly Void Action4(); End
 
+Var VFIMI
 	
 Init
 	Print "Init FIMI: Scyndi"
-	NewFIMIMod(Lua.Scyndi.Class.FIMI_Scyndi)
+	VFIMI = NewFIMIMod(Lua.Scyndi.Class.FIMI_Scyndi)
 End

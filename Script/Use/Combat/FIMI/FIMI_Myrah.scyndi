@@ -34,7 +34,7 @@
 // 
 // version: 23.12.21
 // End License Information
-Script
+Module
 
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
@@ -55,9 +55,9 @@ ReadOnly String Caption4 = "Catastrophe"
 ReadOnly Bool Allow4(); Return False; End
 ReadOnly Void Action4(); End
 
+Var VFIMI
 	
-	
-Init
+Init	
 	Print "Init FIMI: Myrah"
-	NewFIMIMod(Lua.Scyndi.Class.FIMI_Myrah)
+	VFIMI = NewFIMIMod(Lua.Scyndi.Class.FIMI_Myrah)
 End

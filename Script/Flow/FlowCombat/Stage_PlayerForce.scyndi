@@ -34,4 +34,87 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // End License Information
+
 Module
+
+#use "libs/sci/sys"
+#use "libs/sci/audio"
+#use "libs/sci/events"
+#use "libs/sci/graphics"
+
+#use "libs/multipointer"
+
+
+#use "Script/Flow/FlowCombat/Stage"
+#use "Script/Flow/FlowCombat/Diamonds"
+#use "Script/Flow/FlowCombat/Fighter"
+
+
+
+#use "script/use/combat/FIMI/FIMI_class"
+
+// Hero's FIMI modules
+#use "script/use/combat/FIMI/FIMI_Myrah"
+#use "script/use/combat/FIMI/FIMI_Francis"
+#use "script/use/combat/FIMI/FIMI_Luna"
+#use "script/use/combat/FIMI/FIMI_Scyndi"
+#use "script/use/combat/FIMI/FIMI_Aziella"
+#use "script/use/combat/FIMI/FIMI_Rachel"
+
+ReadOnly Var Ryanna = ObtainFont("BASE")
+
+Var lvPics = {}
+Init
+	For i=1,4
+		lvPics[i] = ObtainImage(sprintf("FORCE%d",i))
+	End
+End
+
+plua Scyndi = Lua.Scyndi
+plua ScynCls = Lua.Scyndi.Class
+
+ReadOnly Int PFX = Graphics.Width Div 2
+ReadOnly Int PFY = Graphics.Height Div 4
+
+String PlayTag
+Get Var Player; Return Fighter.ByTag[PlayTag]; End
+Get Var PlayFIMICls; Return ScynCls["FIMI_"..PlayTag]; End
+Get Var PlayFIMI; Return ScynCls["FIMI_"..PlayTag].VFIMI; End
+
+
+Void Arrive()
+	PlayTag = Diamonds.Slots[0].FighterTag
+End
+
+int Hue = os.time()
+
+Void Cycle()	
+	SetColor(255,255,255,255)
+	ScynCls.Stage_PlayerMainMenu.DPIM.Portrait.Draw(PFX-125,PFY+(4*30))
+	Ryanna.Text(Player.Name,PFX,PFY)
+	For i=1,4
+		int y;y=PFY+(30*i)
+		SetColor(255,255,255,255)
+		lvPics[i].Draw(PFX,y)
+		if PlayFIMI[i].Allow()			
+			IF Player.FP>=i*25
+				SetColor(255,255,255,255)
+				If MX>PFX && MY>y && MY<y+30 && MX<PFX+45+Ryanna.Width(PlayFIMI[i].Caption)
+					Hue = (Hue+1) % 3600
+					SetColorHSV(Hue div 2,1,1)
+				End
+			Else
+				SetColor(100,  0,180,255)
+			End
+			Ryanna.Dark(PlayFIMI[i].Caption,PFX+45,y)
+		Else
+			SetColor(127,127,127,255)
+			Ryanna.Dark(PlayFIMI[i].HideCaption,PFX+45,y)
+		End
+	End
+	If (MR); Stage.CurrentTag = "IDLE"; End
+End
+
+Init
+	Stage.Register("FIM",Stage_PlayerForce)
+End

@@ -34,7 +34,9 @@
 // 
 // version: 23.12.21
 // End License Information
-Script
+Module
+
+#use "Script/Use/Link/Party" 
 
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
@@ -44,7 +46,7 @@ ReadOnly Bool Allow1(); Return True; End
 ReadOnly Void Action1(); End
 	
 ReadOnly String Caption2 = "Share"
-ReadOnly Bool Allow2(); Return False; End
+ReadOnly Bool Allow2(); Return Party.FrontSize==3; End
 ReadOnly Void Action2(); End
 	
 ReadOnly String Caption3 = "Double Extract"
@@ -55,9 +57,9 @@ ReadOnly String Caption4 = "Killer Extraction"
 ReadOnly Bool Allow4(); Return False; End
 ReadOnly Void Action4(); End
 
-	
+Var VFIMI
 	
 Init
 	Print "Init FIMI: Francis"
-	NewFIMIMod(Lua.Scyndi.Class.FIMI_Francis)
+	VFIMI = NewFIMIMod(Lua.Scyndi.Class.FIMI_Francis)
 End

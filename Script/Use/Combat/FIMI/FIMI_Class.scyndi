@@ -40,10 +40,20 @@ Class FIMI
 	ReadOnly Delegate Allow
 	ReadOnly Delegate Action
 	ReadOnly String Caption
+	ReadOnly String HideCaption
 	Constructor(Al,Ac,Cp)
 		Allow = Al
 		Action = Ac
 		Caption = Cp
+		HideCaption = ""
+		for i=1,Len(CP)
+			Switch Mid(CP,i,1)
+				Case " " "'" "\""
+					HideCaption = HideCaption .. Mid(CP,i,1)
+				Default
+					HideCaption = HideCaption .. "?"
+			End
+		End
 	End
 End
 
@@ -61,8 +71,8 @@ Class FIMI_Level
 End
 
 Var FIMI_Index(s,int n)
-	Lua.assert(n>=1 && n<=2,"FIMI level out of range: "..n)
-	Return s.FIMI[n]
+	Lua.assert(n>=1 && n<=4,"FIMI level out of range: "..n)
+	Return s.FIMI["L"..n]
 End
 
 Void FIMI_NewIndex(s,i,v)
