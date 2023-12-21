@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.12.03
+// Version: 23.12.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -124,6 +124,19 @@ Class Hero
 	Get Int MaxHP
 		Return Char.Points.HP.Maximum
 	End
+	
+	Get Int FP
+		Return Char.Points.FP.Have
+	End
+	Set Int FP
+		Char.Points.FP.Have = Value
+	End
+	Get Int MaxFP
+		Return Char.Points.FP.Maximum
+	End
+	
+	
+	
 	
 	Get Bool TargetablePlayer
 		Return True
