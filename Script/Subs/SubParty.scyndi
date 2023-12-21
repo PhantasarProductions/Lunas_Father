@@ -400,7 +400,7 @@ Global Void CharSkillExpUp(string chTag,int skill,int experience)
 	if sk.Have>=sk.Maximum
 		G.WriteMini(_Party.Char[chTag].Data.Name,180,0,255)
 		G.WriteMini(" has gained a skill level: ",255,180,0)
-		G.Writemini(_Party.Char[chTag].Data["Skill"..skill])
+		G.WriteMini(_Party.Char[chTag].Data["Skill"..skill],255,255,255)
 		G.PushMini()
 		sk.have = 0
 		_Party.Char[chTag].Stat[sprintf("SKILL_Lvl_%d",Skill)] = Party.SkillLvl(chTag,Skill)+1
