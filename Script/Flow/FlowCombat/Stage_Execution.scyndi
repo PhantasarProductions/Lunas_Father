@@ -240,6 +240,9 @@ Global Void Execute(string _Chr,_Act)
 	For Victim in Each(Kill)
 		Char.StatusChanges[Victim] = False
 	End
+	If Act.RemoveFP
+		Char.FP = Char.FP - Act.RemoveFP
+	End
 End
 
 Init 
