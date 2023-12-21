@@ -34,6 +34,7 @@
 // 
 // version: 23.12.21
 // End License Information
+
 Module
 
 #use "Script/Use/Combat/FIMI/FIMI_Class"
@@ -41,7 +42,10 @@ Module
 
 ReadOnly String Caption1 = "Lay On Hands"
 ReadOnly Bool Allow1(); Return True; End
-ReadOnly Void Action1(); End
+ReadOnly Void Action1()
+	plua a = new Action("Luna","HERO_LUNA_FORCE_LAYONHANDS",{["RemoveFP"]=25)
+	Lua.Scyndi.Globals.PlayerSelectTarget("Luna",a)
+End
 	
 ReadOnly String Caption2 = "Turn Undead"
 ReadOnly Bool Allow2(); Return False; End
