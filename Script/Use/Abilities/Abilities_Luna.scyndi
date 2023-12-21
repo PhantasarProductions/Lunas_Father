@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.27
+// version: 23.12.21
 // End License Information
 Module
 
@@ -45,8 +45,8 @@ Var Abl
 
 Bool Allow_CureLight();		Return gbool.Luna_Can_Cast_Cure_Light_Wounds; End
 Bool Allow_CurePoison();	Return gbool.Luna_Can_Case_Cure_Poison; End
-Bool Allow_CureDisease();	Return gbool.Luna_Can_Case_Cure_Poison; End
-Bool Allow_DoublePower();	Return gbool.Luna_Can_Do_Double_Power; End
+Bool Allow_CureDisease();	Return gbool.Luna_Can_Case_Cure_Disease; End
+Bool Allow_DoublePower();	Return gint.gint.Luna_DamageDone>=10000; End
 Bool Allow_HolyStrike();	Return True; End
 
 Init
