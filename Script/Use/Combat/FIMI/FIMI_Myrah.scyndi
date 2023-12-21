@@ -1,0 +1,27 @@
+Script
+
+#use "Script/Use/Combat/FIMI/FIMI_Class"
+
+
+ReadOnly String Caption1 = "Extension"
+ReadOnly Bool Allow1(); Return True; End
+ReadOnly Void Action1(); End
+	
+ReadOnly String Caption2 = "Repeat"
+ReadOnly Bool Allow2(); Return False; End
+ReadOnly Void Action2(); End
+	
+ReadOnly String Caption3 = "Extended Replay"
+ReadOnly Bool Allow3(); Return False; End
+ReadOnly Void Action3(); End
+
+ReadOnly String Caption4 = "Catastrophe"
+ReadOnly Bool Allow4(); Return False; End
+ReadOnly Void Action4(); End
+
+	
+	
+Init
+	Print "Init FIMI: Myrah"
+	NewFIMIMod(Lua.Scyndi.Class.FIMI_Myrah)
+End

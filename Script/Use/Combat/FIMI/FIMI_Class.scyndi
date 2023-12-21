@@ -1,0 +1,44 @@
+Module
+
+Class FIMI
+	ReadOnly Delegate Allow
+	ReadOnly Delegate Action
+	ReadOnly String Caption
+	Constructor(Al,Ac,Cp)
+		Allow = Al
+		Action = Ac
+		Caption = Cp
+	End
+End
+
+Class FIMI_Level	
+	ReadOnly Var L1
+	ReadOnly Var L2
+	ReadOnly Var L3
+	ReadOnly Var L4
+	Constructor(Al1,Ac1,Cp1,Al2,Ac2,Cp2,Al3,Ac3,Cp3,Al4,Ac4,Cp4)
+		L1 = New FIMI(Al1,Ac1,Cp1)
+		L2 = New FIMI(Al2,Ac2,Cp2)
+		L3 = New FIMI(Al3,Ac3,Cp3)
+		L4 = New FIMI(Al4,Ac4,Cp4)
+	End
+End
+
+Var FIMI_Index(s,int n)
+	Lua.assert(n>=1 && n<=2,"FIMI level out of range: "..n)
+	Return s.FIMI[n]
+End
+
+Void FIMI_NewIndex(s,i,v)
+	Lua.error("FIMI Arrays are READ ONLY!")
+End
+
+Global Var NewFIMI(Al1,Ac1,Cp1,Al2,Ac2,Cp2,Al3,Ac3,Cp3,Al4,Ac4,Cp4)
+	plua Ret = {}
+	Ret.FIMI = New FIMI_Level(Al1,Ac1,Cp1,Al2,Ac2,Cp2,Al3,Ac3,Cp3,Al4,Ac4,Cp4)
+	Return SetMetaTable(Ret,{["__index"]=FIMI_Index, ["__newindex"]=FIMI_NewIndex})
+End
+
+Global Var NewFIMIMod(Mod)
+	Return NewFIMI(Mod.Allow1,Mod.Action1,Mod.Caption1,Mod.Allow2,Mod.Action2,Mod.Caption2,Mod.Allow3,Mod.Action4,Mod.Caption4,Mod.Allow4,Mod.Action4,Mod.Caption4)
+End

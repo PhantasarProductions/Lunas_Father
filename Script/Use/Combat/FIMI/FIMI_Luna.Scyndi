@@ -1,0 +1,27 @@
+Script
+
+#use "Script/Use/Combat/FIMI/FIMI_Class"
+
+
+ReadOnly String Caption1 = "Lay On Hands"
+ReadOnly Bool Allow1(); Return True; End
+ReadOnly Void Action1(); End
+	
+ReadOnly String Caption2 = "Turn Undead"
+ReadOnly Bool Allow2(); Return False; End
+ReadOnly Void Action2(); End
+	
+ReadOnly String Caption3 = "Sonic Vision"
+ReadOnly Bool Allow3(); Return False; End
+ReadOnly Void Action3(); End
+
+ReadOnly String Caption4 = "Card Control"
+ReadOnly Bool Allow4(); Return False; End
+ReadOnly Void Action4(); End
+
+	
+	
+Init
+	Print "Init FIMI: Luna"
+	NewFIMIMod(Lua.Scyndi.Class.FIMI_Luna)
+End
