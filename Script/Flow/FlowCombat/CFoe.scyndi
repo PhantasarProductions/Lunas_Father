@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.12.15
+// Version: 23.12.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -194,6 +194,11 @@ Class Foe
 	Get Int MaxHP
 		Return Char.Points.HP.Maximum
 	End
+	
+	// Safety precaution.
+	Get Int FP; Return 0; End
+	Set Int FP; End
+	Get Int MaxFP; Return 0; End
 	
 	Bool Flipped = False
 	Int Frame = 0
