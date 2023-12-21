@@ -43,7 +43,7 @@ Module
 ReadOnly String Caption1 = "Lay On Hands"
 ReadOnly Bool Allow1(); Return True; End
 ReadOnly Void Action1()
-	plua a = new Action("Luna","HERO_LUNA_FORCE_LAYONHANDS",{["RemoveFP"]=25)
+	plua a = new Action("Luna","HERO_LUNA_FORCE_LAYONHANDS",{["RemoveFP"]=25})
 	Lua.Scyndi.Globals.PlayerSelectTarget("Luna",a)
 End
 	
