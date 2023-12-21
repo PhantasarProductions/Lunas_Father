@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.22
+// version: 23.12.21
 // End License Information
 
 Module
@@ -40,6 +40,7 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
 #use "Script/Use/General/Dice"
 #use "Script/Flow/FlowCombat/CharMsg"
@@ -102,6 +103,16 @@ Int Luna(executor,target,Act,string param="")
 	End
 	FPUp(executor,target,Act,param)
 	Party.SkillExpUp("Luna",1,Dice.D6*Dice.D20)
+	If target.team=="Foe" && target.Undead
+		Party.SkillExpUp("Luna",1,(Dice.D12*Dice.D20)+Ret)
+	End
+	gint.Luna_DamageDone = gint.Luna_DamageDone + Ret
+	If gint.Luna_DamageDone>10000 && (!Done.Luna_HasDoublePowerStrike)
+		Mini.Write("Luna",180,0,255)
+		Mini.Write(" has learned ",255,180,0)
+		Mini.WriteLn("Double Power Strike")
+	End	
+	CSayF("Luna has done %d damage in total!",gint.Luna_DamageDone)
 	Return Ret
 End
 
