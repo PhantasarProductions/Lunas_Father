@@ -271,7 +271,7 @@ Void Blank(i,times)
 			Plua BLNK = {}
 			For idx,dat in pairs(Slots)
 				If dat.FighterTag == i && (times||500)>0
-					Blnk[len(Blnk)] = i
+					Blnk[len(Blnk)] = idx
 					if times; times--; end
 				End
 			End
