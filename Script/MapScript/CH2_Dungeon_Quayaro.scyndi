@@ -4,8 +4,12 @@ Script
 #use "Libs/SCI/InterVar" 
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Mini"
+#use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/General/Pop"
 
 Get Int FS;Return gint.Quayaro_Castle_Switches_Flipped; End
 Set Int FS;gint.Quayaro_Castle_Switches_Flipped = Value; End
@@ -28,4 +32,21 @@ Global Void ZA_CheckTheDoor()
 	If FS==4
 		Map.Kill("MainDoor")
 	End
+End
+
+Global Void ZA_Boss()
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Boss("ROGUE")
+End
+
+Global Void NPC_Rosetta()
+	Pop.Pop("R","North")
+	MapText("Rosetta")
+	Awarded.Voltooid_Quayaro = true
+	Pop.UnPop()
+	Map.PermaKill("NPC_Rosetta")
+	WM_Unlocked.IndieForest = true
+	gstring.CampSituation = "09_ROSETTA"
+	Delisto()
 End
