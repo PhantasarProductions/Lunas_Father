@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubAchievements.scyndi
-// Version: 23.11.07
+// Version: 23.12.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -39,6 +39,7 @@ Script
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/GINIE"
 #use "Libs/SCI/Medals"
+#use "Libs/SCI/SString"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
@@ -98,13 +99,13 @@ Class TAch
 		Return Ret && Upper(Achs.Value(Cat,sprintf("AVAILABLE%d",gint.Skill)))=="TRUE"
 	End
 	Get Table MustBeTrue		
-		plua want;want = Split(Achs.Value(Cat,"WantTrueVars")," ")
+		plua want;want = XSplit(Achs.Value(Cat,"WantTrueVars")," ")
 		return want
 	End
 	Get Table WantedInts
 		plua cnt = 0
-		plua wantvars;wantvars = Split(Achs.Value(Cat,"WantIntVars")," ")
-		plua wantvals;wantvals = Split(Achs.Value(Cat,"WantIntValues")," ")
+		plua wantvars;wantvars = XSplit(Achs.Value(Cat,"WantIntVars")," ")
+		plua wantvals;wantvals = XSplit(Achs.Value(Cat,"WantIntValues")," ")
 		plua ret = {}
 		Lua.assert(Len(Wantvars)==Len(wantvals),sprintf("Wanted int vars and values do not match in numbers %d != %d",Len(Wantvars),Len(wantvals)))
 		For i,k in ipairs(wantvars)
