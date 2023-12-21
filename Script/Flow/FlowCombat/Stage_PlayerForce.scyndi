@@ -102,6 +102,9 @@ Void Cycle()
 				If MX>PFX && MY>y && MY<y+30 && MX<PFX+45+Ryanna.Width(PlayFIMI[i].Caption)
 					Hue = (Hue+1) % 3600
 					SetColorHSV(Hue div 10,1,1)
+					If ML
+						PlayFIMI[i].Action()
+					End
 				End
 			Else
 				SetColor(100,  0,180,255)
