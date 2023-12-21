@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.30
+// version: 23.12.21
 // End License Information
 Module
 
@@ -46,15 +46,21 @@ Module
 
 Int Go(Executor,Target,Act)
 	Number OnePercent; OnePercent = Target.MaxHP/100
-	Party.SkillExpUp("Myrah",2,Dice.D20)
+	Party.SkillExpUp("Luna",2,Dice.D20)
+	Int Ret
 	Switch gint.skill
 		case 1
-			return math.max(1,math.ceil(OnePercent*10))
+			Ret = math.max(1,math.ceil(OnePercent*10))
 		case 2
-			return math.max(1,math.ceil(OnePercent*5))
+			Ret = math.max(1,math.ceil(OnePercent*5))
 		case 3
-			return math.max(1,math.ceil(OnePercent*1))
+			Ret = math.max(1,math.ceil(OnePercent*1))
 		Default
 			Return 0
 	End
+	For i=1,Party.SkillLvl("Luna",2)
+		Ret = Ret + Dice.D6
+	End
+	Party.SkillExpUp("Luna",2,Ret)
+	Return Ret
 End
