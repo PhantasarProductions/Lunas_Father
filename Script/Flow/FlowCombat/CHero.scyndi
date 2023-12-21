@@ -135,6 +135,15 @@ Class Hero
 		Return Char.Points.FP.Maximum
 	End
 	
+	Get Int VIT
+		Return Char.Points.VIT.Have
+	End
+	Set Int VIT
+		Char.Points.VIT.Have = Value
+	End
+	Get Int MaxVIT
+		Return Char.Points.VIT.Maximum
+	End
 	
 	
 	
