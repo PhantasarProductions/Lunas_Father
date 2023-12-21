@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.12.19
+// Version: 23.12.21
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -150,6 +150,9 @@ Init
 	LoadItems[Len(LoadItems)] = New LItem("FONTS/Coolvetica.JFBF","COOL","Font")	
 	LoadItems[Len(LoadItems)] = New LItem("Fonts/Coolvetica.Big.jfbf","BIGTEXT","Font")
 	LoadItems[Len(LoadItems)] = New LItem("Fonts/Coolvetica.VeryBig.jfbf","VBGTEXT","Font")
+	For i=1,4
+		NIMG(sprintf("GFX/Combat/Force/%d.png",i),sprintf("FORCE%d",i))
+	End
 	// In basic you can use this font freely for both commercial and free productions. I do recommend though to download this font from dafont.com to have the full font + license files, altogether
 	
 	NAud("Audio/General/ChaChing.ogg","KASSA")
