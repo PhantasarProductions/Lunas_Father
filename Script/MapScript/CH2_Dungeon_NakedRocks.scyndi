@@ -1,0 +1,21 @@
+
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/map"
+#use "Script/Use/Link/Ach"
+
+#region Medal
+Global Void ZA_CheckMedal()
+	CSayF("Medal Rate: %03d%% (%5s), Scyndi Joined: %5s",Ach.MedalRate, Ach.MedalRate>=50, gbool.Scyndi_Joined)
+	If Ach.MedalRate>=50 && gbool.Scyndi_Joined
+		Map.Kill("Medal_Barrier")
+	End
+End
+
+Global Void ZA_ToMedal()
+	Map.GoToMap("MDL_Dungeon_Underworld","#001","Start")
+End
+#endregion
