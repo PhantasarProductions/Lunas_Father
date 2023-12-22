@@ -1,2 +1,9 @@
 Script
 
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Worldmap"
+
+Global Void ZA_Complete()
+	Awarded.Voltooid_IndieBush = true
+	WM_Unlocked.NakedRocks = true
+End
