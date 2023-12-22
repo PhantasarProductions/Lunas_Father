@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.21
+// version: 23.12.22
 // End License Information
 Module
 
@@ -41,13 +41,23 @@ Module
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
 
+plua Scyndi = Lua.Scyndi
+plua Glob = Lua.Scyndi.Globals
+
+
 ReadOnly String Caption1 = "Mystic"
 ReadOnly Bool Allow1(); Return True; End
-ReadOnly Void Action1(); End
+ReadOnly Void Action1()
+	Glob.PlayerToMysticItem("Francis")
+End
 	
 ReadOnly String Caption2 = "Share"
 ReadOnly Bool Allow2(); Return Party.FrontSize==3; End
-ReadOnly Void Action2(); End
+ReadOnly Void Action2()
+	plua a = new Action("Luna","HERO_FRANCIS_FORCE_SHARE",{["RemoveFP"]=25})
+	a.Targets=NewArray(Lua.Scyndi.Class.Fighter.ByTag.Francis)
+	Lua.Scyndi.Globals.Execute("Francis",a)
+End
 	
 ReadOnly String Caption3 = "Double Extract"
 ReadOnly Bool Allow3(); Return False; End
