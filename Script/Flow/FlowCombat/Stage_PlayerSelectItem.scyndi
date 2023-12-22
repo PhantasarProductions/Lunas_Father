@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectItem.scyndi
-// Version: 23.11.19
+// Version: 23.12.22
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -69,6 +69,7 @@ Var Player
 Void _Action(string User,string _Item)
 	CSayF("%s => Request to use item %s",User,_Item)
 	plua Act;Act = new Action(User,_Item,{["Extended"]=IsMystic,["ConsumeItem"]=true})
+	If IsMystic;Act.RemoveFP=25;End
 	Lua.Scyndi.Globals.PlayerSelectTarget(User,Act)
 End
 
@@ -101,7 +102,7 @@ Global Void PlayerToMysticItem(string PlTag)
 	ItemSituation="Combat_MysticItem"
 	PlayTag = PlTag
 	IsMystic = True
-	Player = Lua.Scyndi.Class.Fighter.ByTag(PlTag)
+	Player = Lua.Scyndi.Class.Fighter.ByTag[PlTag]
 	Stage.CurrentTag = "PMITEMS"
 End
 

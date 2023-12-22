@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectAbility.scyndi
-// Version: 23.11.11
+// Version: 23.12.22
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -81,6 +81,7 @@ Void _Action(string User,Abl)
 	
 	CSayF("%s => Request to use ability %s",User,Abl.IAATag)
 	plua Act;Act = new Action(User,Abl.IAAData,{["Extended"]=IsExtend})
+	If IsExtend; Act.RemoveFP=25; End
 	Lua.Scyndi.Globals.PlayerSelectTarget(User,Act)
 
 End
@@ -113,7 +114,7 @@ Global Void PlayerToExtendAbility(string PlTag)
 	AblSituation="Combat_ExtendAbility"
 	PlayTag = PlTag
 	IsExtend = True
-	Player = Lua.Scyndi.Class.Fighter.ByTag(PlTag)
+	Player = Lua.Scyndi.Class.Fighter.ByTag[PlTag]
 	Stage.CurrentTag = "PMABILITY"
 End
 
