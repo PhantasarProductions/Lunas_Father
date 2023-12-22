@@ -73,7 +73,7 @@ Void Flow(string _Situation,string CharTag, int bx, int by, int bw, int bh)
 		Fnt.Text("d"..d,x,y)
 		Fnt.Text("x"..Ch.Stat["d"..d],x+120,y)
 		int ucost;ucost = (i+1)*BaseCost
-		if Ch.Tag=="Luna"; math.max(gint.skill*10,ucost div 2); End
+		if CharTag=="Luna"; math.max(gint.skill*10,ucost div 2); End
 		if Ch.Stat["d"..d]>0 && d<20 && Ch.Stat["d"..Dice.Types[i+1]]<9
 			SetColor(255,180,0,255)
 			IF MY>y && MX>bx && MY<y+29 && MX<bx+bw
@@ -93,7 +93,7 @@ Void Flow(string _Situation,string CharTag, int bx, int by, int bw, int bh)
 	int x;x = bx+i
 	int y;y = by+(i*30)
 	int ucost;ucost = BaseCost*(Ch.Stat.ATKPlus+1)
-	if Ch.Tag=="Luna"; math.max(gint.skill*10,ucost div 2); End
+	if CharTag=="Luna"; math.max(gint.skill*10,ucost div 2); End
 	Fnt.Text("+"..Ch.Stat.ATKPlus,x,y)
 	SetColor(255,180,0,255)
 	IF MY>y && MX>bx && MY<y+29 && MX<bx+bw
@@ -110,7 +110,7 @@ Void Flow(string _Situation,string CharTag, int bx, int by, int bw, int bh)
 	y = y + 30
 	x = x + 1
 	ucost = BaseCost div (4-gint.skill) + (Ch.Stat.DiceAdded*gint.skill)
-	If Ch.Tag=="Luna"; math.max(gint.skill*10,ucost div 2); End
+	If CharTag=="Luna"; math.max(gint.skill*10,ucost div 2); End
 	SetColor(0,180,255,255)
 	IF MY>y && MX>bx && MY<y+29 && MX<bx+bw
 		If ML && Cash.Have>=ucost && Ch.Stat.D2<9 && Ch.Stat.Upgrades<MaxUpdates
