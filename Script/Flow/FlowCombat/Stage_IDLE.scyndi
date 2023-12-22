@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.12.17
+// Version: 23.12.22
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -40,6 +40,7 @@ Module
 
 #use "Script/Use/General/UseIAA"
 
+#use "Script/Flow/FlowCombat/Action_Class"
 #use "Script/Flow/FlowCombat/Stage"
 #use "Script/Flow/FlowCombat/Fighter"
 #use "Script/Flow/FlowCombat/Diamonds"
@@ -47,6 +48,12 @@ Module
 plua Scyndi = Lua.Scyndi
 
 Void Arrive()
+End
+
+Void SkipTurn()
+	plua a = new Action(Diamonds.Slots[0].FighterTag,"ACT_SKIPTURN")
+	a.Targets={Diamonds.Slots[0].FighterTag}
+	Scyndi.Globals.Execute(Diamonds.Slots[0].FighterTag,a)
 End
 
 Void Cycle()
@@ -66,12 +73,18 @@ Void Cycle()
 		case "BACK" "EMPTY"
 			Diamonds.RemoveFirst()
 		case "PLAYER" "HERO"
-			Stage.CurrentTag = "PMM"
+			If Fighter.ByTag[Diamonds.Slots[0].FighterTag].UnableToMove
+				SkipTurn()
+			Else
+				Stage.CurrentTag = "PMM"
+			End
 		Case "FOE" "ENEMY"
 			//print("\x1b[31mENEMY TURN, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()
 			plua __foe;__foe=Fighter.ByTag[Diamonds.Slots[0].FighterTag]
 			If __foe.HP==0
 				Diamonds.RemoveFirst()
+			ElIf Fighter.ByTag[Diamonds.Slots[0].FighterTag].UnableToMove
+				SkipTurn()
 			Else
 				Scyndi.Class.AI.DoAI(__foe)
 			End
