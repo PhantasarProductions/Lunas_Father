@@ -412,6 +412,13 @@ Class Foe
 	
 	ReadOnly Table Actions
 
+	Get Bool UnableToMove
+		If HP<=0; Return True; End
+		For _,s in pairs(_Status)
+			if s.SkipTurn; Return True; End
+		End
+		Return False
+	End
 
 	
 	Constructor(int _IDNum,_RawData)

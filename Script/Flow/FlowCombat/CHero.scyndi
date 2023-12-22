@@ -166,6 +166,8 @@ Class Hero
 	Get Bool Undead
 		Return _Status.Ailment_Undead || _Status.Ailment_Zombie
 	End
+	
+	
 
 	
 	Int IRate = 1000
@@ -266,6 +268,14 @@ Class Hero
 	ReadOnly Var _Status 
 	ReadOnly Var StatusChanges
 	ReadOnly Var Permanenced = {}
+		
+	Get Bool UnableToMove
+		If HP<=0; Return True; End
+		For _,s in pairs(_Status)
+			if s.SkipTurn; Return True; End
+		End
+		Return False
+	End
 	
 	Constructor(string _Tag)
 		Tag = _Tag
