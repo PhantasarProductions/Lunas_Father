@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
-// Version: 23.12.21
+// Version: 23.12.22
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -57,6 +57,7 @@ Get Int MYMsgBar; Return HMsgBar Div 2; End
 
 Const Var HeadBack = ObtainImage("BOX_BACK")
 Const Int HeadCDReset = 250
+String HeadName
 Int HeadCD
 Int ShortWaitReset = 5
 Int ShortWait 
@@ -207,7 +208,7 @@ Void ExeHead()
 		HeadBack.Tile(0,YMsgBar,Graphics.Width,HMsgBar)
 		Diamonds.Slots[0].Img.Draw(5,YMsgBar+MYMsgBar-(Diamonds.Slots[0].Img.Height div 2))
 		SetColor(255,180,0)
-		Fnt.Text(Act.Act.Name, Graphics.Width div 2, YMsgBar+MYMsgBar, 2, 2)
+		Fnt.Text(Replace(Act.Act.Name,"$NAME$",HeadName), Graphics.Width div 2, YMsgBar+MYMsgBar, 2, 2)
 		SetColor(255,255,255)
 	End
 End
@@ -232,6 +233,14 @@ Global Void Execute(string _Chr,_Act)
 	CES=ES_ShortWait
 	ToTarget = nil
 	PLUA KILL={}
+	Switch Char.Team
+		Case "Foe"
+			HeadName = sprintf("(%s) %s",Chr(64+Char.CardAlphaNum),Char.Name)
+		Case "Hero"
+			HeadName = Char.Name
+		Default
+			HeadName = "???"
+	End
 	For s,sd in pairs(Char._Status)
 		sd.Duration--
 		CSayF("Status %s on character %s now has a duration of %d actions",s,_Chr,sd.Duration)
