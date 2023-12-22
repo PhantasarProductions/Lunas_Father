@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectTarget.scyndi
-// Version: 23.12.03
+// Version: 23.12.22
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -80,19 +80,21 @@ Void Cycle()
 			Case "EV"
 				AddMe = tChr.TargetablePlayer
 			Case "AF" 
-				AddMe = MX<Graphics.Width div 2 && TChr.Team=="Foe"
-				AddMe = MX>Graphics.Width div 2 && TChr.Team=="Hero"
+				AddMe =           MX<Graphics.Width div 2 && TChr.Team=="Foe"
+				AddMe = AddMe || (MX>Graphics.Width div 2 && TChr.Team=="Hero")
 				If WorkAct.Act.Discrimminate
 					AddMe = AddMe && TChr.Team=="Foe"
 				End
 				AddMe = AddMe && tChr.TargetablePlayer
+				//CSayF("AF: Checking %s; Mouse X = %4d; Half Screen Width = %4d; Team = %4s; Discrimminate = %5s; Targetable = %5s; AddMe = %5s",TKey,MX,Graphics.Width div 2,TChr.Team=="Foe",WorkAct.Act.Discrimminate,tChr.TargetablePlayer,AddMe)
 			Case "AA" 
-				AddMe = MX<Graphics.Width div 2 && TChr.Team=="Foe"
-				AddMe = MX>Graphics.Width div 2 && TChr.Team=="Hero"
+				AddMe =           MX<Graphics.Width div 2 && TChr.Team=="Foe"
+				AddMe = AddMe || (MX>Graphics.Width div 2 && TChr.Team=="Hero")
 				If WorkAct.Act.Discrimminate
 					AddMe = AddMe && TChr.Team=="Hero"
 				End
 				AddMe = AddMe && tChr.TargetablePlayer
+				//CSayF("AA: Checking %s; Mouse X = %4d; Half Screen Width = %4d; Team = %4s; Discrimminate = %5s; Targetable = %5s; AddMe = %5s",TKey,MX,Graphics.Width div 2,TChr.Team=="Foe",WorkAct.Act.Discrimminate,tChr.TargetablePlayer,AddMe)
 			Case "1A"
 				AddMe = Len(Targets) == 0
 				If WorkAct.Act.Discrimminate
