@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.10
+// version: 23.12.24
 // End License Information
 
 Module
@@ -75,7 +75,7 @@ Bool Cycle()
 	// Draw it all!
 	for tar in each(Targets)
 		Flame.Draw(tar.X,tar.Y,Frame)
-		Frame++
 	end		
+	Frame++
 	Return Frame<10
 End
