@@ -40,9 +40,16 @@ Script
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Menu"
 #use "Script/Use/Link/Party"
 #use "Script/Use/Link/Textboxes"
 
+Global Void ZA_SetCat()
+	if !gbool.NewGamePlus;Map.Kill("NPC_Cat");End
+	Map.Kill("ZA_SetCat")
+End
+
+#region "Scyndi's House"
 Global Void ZA_ScyndiHouse()
 	If !Done.RachelFoundAndBroughtToScyndiHouse
 		MapText("RACHEL1")
@@ -58,8 +65,28 @@ Global Void NPC_Dernor()
 		MapText("DERNOR_RACHEL")
 	End
 End
+#endregion
 
 #region "Enter Houses"
-Global Void NPC_ScyndiHome(); 	Map.GoToLayer("SCYNDI","Start"); End
-Global Void NPC_Shop(); 		Map.GoToLayer("SHOP",  "Start"); End
+Global Void NPC_ScyndiHome(); 	Map.GoToLayer("SCYNDI", "Start"); End
+Global Void NPC_Shop(); 		Map.GoToLayer("SHOP",   "Start"); End
+Global Void NPC_Weapons();		Map.GoToLayer("WEAPONS","Start"); End
+#endregion
+
+
+
+#region "Regular services"
+Global Void NPC_ShopKeeper()
+	If Map.Leader=="Scyndi"
+		MapText("SHOPKEEPER_SCYNDI")
+	Else
+		MapText("SHOPKEEPER")
+	End
+	Menu.Shop()
+End
+
+Global Void NPC_Balandar()
+	MapText("BALANDAR")
+	Menu.Upgrade()
+End
 #endregion
