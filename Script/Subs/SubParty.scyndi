@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.12.21
+// Version: 23.12.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -235,11 +235,14 @@ Global Void CreateChar(string Tag,int slvl1, int slvl2, int slvl3)
 End
 
 plua Portret
+plua MiniPortret
 Init
 	Portret = {}
+	MiniPortret = {}
 	for i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
 		CSayF("SubParty: Obtained portrait for %s",c)
 		Portret[c] = ObtainImage(sprintf("PORTRET_%s",Upper(c)))
+		MiniPortret[c] = ObtainImage(sprintf("MINIPORTRAIT_%s",Upper(c)))
 	end
 End
 
@@ -360,6 +363,9 @@ Global Void PartyBoxes(flashchar,incombat)
 			AudLvUp.Play()
 			_LvAlpha=255
 			_LvCD=255
+			For i=1,2 
+				Lua.Scyndi.Globals.CharSkillExpUp(_Party.Party[i],i,Ch.Stat.Level)
+			End
 		End
 		if  _LvAlpha>0 || _LvCD>0
 			_LvCD--
@@ -370,6 +376,26 @@ Global Void PartyBoxes(flashchar,incombat)
 		SetAlpha(_LvAlpha)
 		ImgLvUp.Draw(BW*i,(PBY+PBH)-ImgLvUp.Height)
 		SetAlpha(255)
+	End
+	For i=3,Party.FullSize-1
+		plua TC
+		plua CH
+		int Y;Y = PBY+((i-3)*20)
+		TC = _Party.Party[i]
+		Ch = _Party.Char[TC]
+		If (!incombat) && MX>Graphics.Width-20 && MY>Y && MY<Y+20
+			SetColorHSV(_Hue,1,1)
+			SetAlpha(100)
+			Rect(Graphics.Width-20,Y,20,20)
+			If ML
+				Sys.Call(Sys.CurrentFlow,"Left_Clicked_Party",i,_Party.Party[i])
+			ElIf MR
+				Sys.Call(Sys.CurrentFlow,"Right_Clicked_Party",i,_Party.Party[i])
+			End
+		End
+		SetColor(255,255,255,255)
+		MiniPortret[TC].Draw(Graphics.Width-10,Y+10)
+		
 	End
 	Lua.Scyndi.Globals.MiniShow()
 End
