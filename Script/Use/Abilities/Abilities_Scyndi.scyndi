@@ -57,5 +57,6 @@ Init
 	ScA("FirstAid",20)
 	ScA("Recover",50,Allow_Recover)
 	ScA("Shine",16)
+	ScA("Darkness",16)
 	ScA("Zap",16)
 End
