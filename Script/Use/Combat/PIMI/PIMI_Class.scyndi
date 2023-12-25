@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/PIMI/PIMI_Class.scyndi
-// Version: 23.11.11
+// Version: 23.12.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -43,6 +43,7 @@ Module
 #use "libs/rosetta"
 
 #use "script/use/link/mini"
+#use "script/use/link/party"
 
 
 #use "Script/flow/flowcombat/fighter"
@@ -62,6 +63,11 @@ End
 
 Void ItemsAct(string Pltag)
 	Scyndi.Globals.PlayerToUseItem(PlTag)
+End
+
+Bool AllowSwitch(); Return Party.FullSize>=4; End
+
+Void ActSwitch(string PlTag)
 End
 
 // Player Input Menu Item
@@ -97,6 +103,7 @@ Class PIM
 	Void ItemsGuard()
 		Self.Add("Items",ItemsAct,Always)
 		Self.Add("Guard",Guard,Always)
+		Self.Add("Switch",ActSwitch,AllowSwitch)
 	End
 		
 	Constructor(string _T)
