@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Switch.scyndi
-// Version: 23.10.18
+// Version: 23.12.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -44,6 +44,65 @@ Module
 
 #use "Script/Use/Link/Party"
 
+ReadOnly Var Fnt = ObtainFont("BASE")
+	
+plua Portret
+plua MiniPortret
+Init
+	Portret = {}
+	MiniPortret = {}
+	For i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+		CSayF("Switch: Obtained portrait for %s",c)
+		Portret[c] = ObtainImage(sprintf("PORTRET_%s",Upper(c)))
+		MiniPortret[c] = ObtainImage(sprintf("MINIPORTRAIT_%s",Upper(c)))
+	End
+End
 
-Void Flow(string _Situation,string CharTag)
+Int Chosen = -1
+Get Bool GotChosen; Return Chosen>=0 && Chosen<Party.FullSize; End
+Set Bool GotChosen; Chosen=-1; End
+Int Hue = os.time()
+
+
+Void Flow(string _Situation,string CharTag,int bx,int by,int bw, int bh)
+	For i=0,Party.FullSize-1
+		Int  PY;  PY = i % 3
+		Int  PX;  PX = i div 3
+		Int   X;   X = (PX*(bw div 2) + bx)
+		int   Y;   Y = (PY*(bh div 4) + by)
+		Int Hgt; Hgt = bh div 4
+		String Tag;Tag = Party.Char(i)
+		Var Ch;Ch = Party.GetChar(Tag)
+		If Chosen==i
+			Hue = (Hue+1) % 360
+			For h=0,Hgt
+				SetColorHSV((Hue+h)%360,1,1)
+				Rect(X,Y+h,bw div 2,3)
+			End
+		End
+		SetColor(255,255,255)
+		Portret[Tag].Draw(X,Y)
+		if MX>X && MY>Y && MX<X+(bw div 2) && MY<Y+Hgt
+			SetColor(0,180,255)
+			If ML
+				If GotChosen
+					if i==Chosen
+						GotChosen=false
+					Else
+						plua a = Party.Char(i)
+						plua b = Party.Char(Chosen)
+						Party.Char(i,b)
+						Party.Char(Chosen,a)
+						GotChosen=false
+					End
+				Else
+					Chosen=i
+				End
+			End
+		Else
+			SetColor(255,255,255)
+		End
+		Fnt.Text(Ch.Data.Name,X+120,Y)
+		
+	End
 End
