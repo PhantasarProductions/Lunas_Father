@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_MainFlow.scyndi
-// Version: 23.12.05
+// Version: 23.12.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -59,6 +59,7 @@ Global Void MainFlow()
 	FField.FIELD_KILL.CheckKills()
 	FField.FIELD_SECRET.CheckSecret()
 	FField.PFA_LUNA.CheckSmashWall()
+	FField.FIELD_SCHEDULE.Handle()
 	Cls()
 	MultiPointer.Rcv()
 	if Events.AppTerminate()
@@ -74,7 +75,7 @@ Global Void MainFlow()
 		FField.FIELD_WALK.WalkCheck()
 	End
 	FField.FIELD_ZONEACTION.Check_ZoneAction()
-	Lua.Scyndi.Globals.FlowField.FIELD_RENC.UpdateGauge()
+	Lua.Scyndi.Globals.FlowField.FIELD_RENC.UpdateGauge()	
 	// Must be the last command!
 	MultiPointer.Draw()
 end
