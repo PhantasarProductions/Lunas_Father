@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.12.24
+// Version: 23.12.25
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -383,16 +383,36 @@ Global Void PartyBoxes(flashchar,incombat)
 		int Y;Y = PBY+((i-3)*20)
 		TC = _Party.Party[i]
 		Ch = _Party.Char[TC]
-		If (!incombat) && MX>Graphics.Width-20 && MY>Y && MY<Y+20
-			SetColorHSV(_Hue,1,1)
-			SetAlpha(100)
-			Rect(Graphics.Width-20,Y,20,20)
-			If ML
-				Sys.Call(Sys.CurrentFlow,"Left_Clicked_Party",i,_Party.Party[i])
-			ElIf MR
-				Sys.Call(Sys.CurrentFlow,"Right_Clicked_Party",i,_Party.Party[i])
+		If (!incombat) 
+			Ch.Points.FP.Maximum=100
+			switch gint.skill
+			case 1
+				Ch.Points.FP.Have=math.max(Ch.Points.FP.Have,Ch.Stat.Level)
+			case 2
+				Ch.Points.FP.Have=Ch.Stat.Level
+			case 3
+				Ch.Points.FP.Have=math.min(Ch.Points.FP.Have,Ch.Stat.Level)
+			Default
+				Lua.error("FP Skill Error!")
+			end
+			If MX>Graphics.Width-20 && MY>Y && MY<Y+20
+				SetColorHSV(_Hue,1,1)
+				SetAlpha(100)
+				Rect(Graphics.Width-20,Y,20,20)
+				If ML
+					Sys.Call(Sys.CurrentFlow,"Left_Clicked_Party",i,_Party.Party[i])
+				ElIf MR
+					Sys.Call(Sys.CurrentFlow,"Right_Clicked_Party",i,_Party.Party[i])
+				End
 			End
 		End
+		// Yes in combat the VIT bar will fill up the back row. 
+		// That was deliberate! An advantage of knowing when to switch characters.
+		If Ch.Points.HP.Have<Ch.Points.HP.Maximum && Ch.Points.VIT.Have>0
+			Ch.Points.VIT.Have--
+			Ch.Points.HP.Have = Ch.Points.HP.Have + math.max(1,Ch.Points.HP.Maximum Div 100)
+		End
+
 		SetColor(255,255,255,255)
 		MiniPortret[TC].Draw(Graphics.Width-10,Y+10)
 		
