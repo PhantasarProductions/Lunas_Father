@@ -1,0 +1,61 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Abilities/Abilities_Scyndi.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.12.25
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Abilities/Abilities_Class"
+
+// This one MUST be present!
+Var Abl 
+
+Bool Just_Allow();	Return True; End
+Bool Allow_Recover(); Return gbool.LearnedRecover; End
+
+Void ScA(string Tag,int FP,Allow)
+	CSayF("Adding ability %s for %d FP to Scyndi",Tag,FP)
+	Abl [ Len( Abl ) ] = new CharAbility(sprintf("HERO_SCYNDI_%s",Upper(Tag)),FP,Allow || Just_Allow)
+End
+
+Init
+	Abl = {}
+	ScA("FirstAid",20)
+	ScA("Recover",50,Allow_Recover)
+	ScA("Shine",16)
+	ScA("Zap",16)
+End
