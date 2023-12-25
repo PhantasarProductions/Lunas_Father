@@ -32,16 +32,22 @@
 // 
 // **********************************************
 // 
-// version: 23.12.22
+// version: 23.12.24
 // End License Information
 
 Script
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
 
 #use "Script/Use/Link/map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/WorldMap"
+#use "Script/Use/Link/Textboxes"
+
+#use "Script/Use/General/Pop"
 
 #region Medal
 Global Void ZA_CheckMedal()
@@ -53,5 +59,39 @@ End
 
 Global Void ZA_ToMedal()
 	Map.GoToMap("MDL_Dungeon_Underworld","#001","Start")
+End
+#endregion
+
+
+#region Kraken
+Global Void ZA_Boss()
+	Player.StopWalking()
+	MapText("PRE_BOSS")	
+	Map.Boss("Kraken")
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Schedule("Post_Boss")
+End
+
+Global Void Post_Boss()
+	Pop.Pop("R","West")
+	MapText("POST_BOSS")
+	Pop.UnPop()
+	Map.PermaKill("Rachel")
+	int MxL = 0
+	for i=0,2
+		MxL = math.max(MxL,Party.GetChar(Party.Char(i)).Stat.Level)
+	End	
+	Party.NewChar("Scyndi",MxL+10,MxL+5,MxL)
+	plua _Party
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_Party.Char.Scyndi.Stat.SKILL_Lvl_1 = 10
+	_Party.Char.Scyndi.Stat.SKILL_Lvl_2 = 30 div gint.skill
+	Map.GoToMap("CH2_Town_Independence","Scyndi","S_Myrah")
+	Awarded.Scen_Scyndi = true
+	WM_Unlocked.Independence = true
+	gstring.CampSituation = "0A_SCYNDI"
+	//Lua.error("Link to Independence not yet implemented")
+	
 End
 #endregion
