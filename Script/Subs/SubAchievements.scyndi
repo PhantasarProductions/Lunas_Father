@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubAchievements.scyndi
-// Version: 23.12.21
+// Version: 23.12.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -152,7 +152,7 @@ Var GetAch(string k)
 	return Reg[k]
 End
 
-Const Int MaxScore = 32000
+Const Int MaxScore = 30000
 Get Number CrudeRate
 	return Medals.FullScore / MaxScore
 End
@@ -233,7 +233,7 @@ Global Void AchDebug()
 	printf("Full Score      = %9d\n",Medals.FullScore)
 	printf("Max Score       = %9d\n",MaxScore)
 	printf("Crude rate      =         %1.9f\n",CrudeRate)
-	printf("Lua rate        = %9d%%\n",Rate)
+	printf("Luna rate       = %9d%%\n",Rate)
 End
 
 Init
