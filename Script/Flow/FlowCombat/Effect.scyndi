@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.12.05
+// Version: 23.12.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -40,6 +40,7 @@ Module
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
 
 #use "Script/Use/General/Dice"
 
@@ -71,6 +72,28 @@ Bool Effect_Attack(executor,target,act)
 		CSayF("Attack:  %9s = %3d",Act.Act.AtkStatAtk,Executor.Char.Stat[Act.Act.AtkStatAtk])
 		CSayF("Defense: %9s = %3d (%3d)",Act.Act.AtkStatDef,Target.Char.Stat[Act.Act.AtkStatDef],Target.Char.Stat[Act.Act.AtkStatDef] div 2)
 		CSayF("%d - %d = %d (never lower than 1)",Executor.Char.Stat[Act.Act.AtkStatAtk],Target.Char.Stat[Act.Act.AtkStatDef] div 2,math.max(1,Executor.Char.Stat[Act.Act.AtkStatAtk]-Target.Char.Stat[Act.Act.AtkStatDef]))
+		If Target.Team=="Hero"
+			Switch Act.Act.AtkStatDef
+				Case "Strength" "Defense"
+					Party.SkillExpUp(Target.Tag,1,Atk)
+				Case "Intelligence" "Resistance"
+					if Target.Tag=="Rachel"
+						Party.SkillExpUp(Target.Tag,1,Atk div 2)
+						Party.SkillExpUp(Target.Tag,2,Atk div 2)
+					Else
+						Party.SkillExpUp(Target.Tag,2,Atk)
+					End
+				Case "Agility" "Accuracy" "Evasion"
+					if Target.Tag!="Rachel"
+						Party.SkillExpUp(Target.Tag,1,Atk div 2)
+						Party.SkillExpUp(Target.Tag,2,Atk div 2)
+					Else
+						Party.SkillExpUp(Target.Tag,2,Atk)
+					End
+				Default
+					CSayF("No exp gain with defense stat: %s",Act.Act.AtkStatDef)
+			End
+		End
 	End
 	
 	// Plus
