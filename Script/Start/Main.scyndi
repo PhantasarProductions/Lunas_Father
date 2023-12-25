@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.12.21
+// Version: 23.12.24
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -124,7 +124,7 @@ Init
 	NIMG("GFX/Alchemy/Tube.png","ALCHEMY_TUBE")
 	NIMG("GFX/Alchemy/Liquid.png","ALCHEMY_LIQUID")
 	NIMG("GFX/PFA/Button.png","PFA_BUTTON")
-	For ch In Each(NewArray("MYRAH","FRANCIS","LUNA"))
+	For ch In Each(NewArray("MYRAH","FRANCIS","LUNA","SCYNDI"))
 		NIMG("GFX/PFA/"..ch..".png","PFA_"..ch)
 	End
 	For i=1,26 
@@ -133,6 +133,7 @@ Init
 	End
 	for ch In Each(NewArray("MYRAH","FRANCIS","LUNA","SCYNDI","AZIELLA","RACHEL"))
 		NIMG(sprintf("GFX/COMBAT/DIAMONDS/HERO_%s.PNG",ch),sprintf("COMBATDIAMOND_HERO_%s",ch))
+		NIMG(sprintf("GFX/MINIPORTRAITS/%s.PNG",ch),sprintf("MINIPORTRAIT_%s",ch),true)
 	End
 	For ch In Each(NewArray("MYRAH","FRANCIS","LUNA"))
 		NIMG(sprintf("GFX/Combat/PlayerIcons/%s.png",ch),sprintf("COMBATHEROICON_%s",Upper(ch)))
