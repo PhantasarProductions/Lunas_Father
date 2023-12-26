@@ -68,5 +68,5 @@ Init
 	Assist("Wind",95)
 	Assist("Water",10)
 	Assist("Earth",30)
-	Abl[len(Abl)] = new CharAbility("HERO_MYRAH_ABL_ASS_WOOD",256,Abilities_Myrah.Allow_Wood)
+	Abl[len(Abl)] = new CharAbility("HERO_MYRAH_ABL_ASS_WOOD",25,Abilities_Myrah.Allow_Wood)
 End
