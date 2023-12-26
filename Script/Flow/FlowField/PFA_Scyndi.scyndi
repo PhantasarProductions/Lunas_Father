@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.08
+// version: 23.12.26
 // End License Information
 Module
 
@@ -47,6 +47,12 @@ Module
 #use "Script/Flow/FlowField/Field_PersonalAction"
 
 plua FField
+Int GoToX
+Int GoToY
+
+get int ScrollX; Return Lua.Scyndi.Class.Field_DrawScreen.ScrollX; End
+get int ScrollY; Return Lua.Scyndi.Class.Field_DrawScreen.ScrollY; End
+
 
 
 Var HookSpots
@@ -81,12 +87,29 @@ Bool PFA_Scyndi_Action(String Wind)
 	End
 	if !Accepted; CSay("Whip hook rejected! No spots in range at all"); Return False;End
 	CSayF("A spot for Scyndi has been accepted at (%4d,%4d) for now (are there any blockades ahead?)",Accepted.x,Accepted.y)
-	
-	Return False
+	Bool GoOn = true
+	For ix=math.min(Player.X,Accepted.x),math.max(Accepted.x,Player.X)
+		For iy=math.min(Player.Y,Accepted.y),math.max(Accepted.y,Player.Y)			
+			If Kthura.Block(ix div 32,iy div 32)
+				GoOn = GoOn && PFA_Pass(ix,iy)
+				If !GoOn
+					CSayF("= Whip blocked at (%4d,%4d). (Block=%5s; Pass=%5s)",ix,iy,Kthura.Block(ix div 32,iy div 32),PFA_Pass(ix,iy))
+					Break
+				End
+			End
+		End
+	End	
+	If GoOn
+		GoToX,GoToY = Accepted.x,Accepted.y
+		Player.MoveTo(GoToX,GoToY)
+	End
+	Return GoOn
 End
 
 Bool PFA_Scyndi_Cycle()
-	Return False
+	SetColor(255,180,0)
+	Line(Player.X-Scrollx,Player.Y-16-Scrolly,GoToX-ScrollX,GoToY-ScrollY)
+	Return Player.Moving
 End
 
 Init
