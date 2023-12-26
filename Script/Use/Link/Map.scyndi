@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.12.24
+// Version: 23.12.26
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -185,6 +185,10 @@ void PlayerWalkTo(a,b)
 	Kthura.WalkTo("Player",a,b)
 end
 
+void PlayerMoveTo(a,b)
+	Kthura.MoveTo("Player",a,b)
+end
+
 Get Bool HasPlayer
 	Return Kthura.HasObj("PLAYER")
 End
@@ -234,8 +238,12 @@ QuickMeta Player
 		switch upper(key)
 		case "WALKTO"
 			return PlayerWalkTo
+		case "MOVETO"
+			return PlayerMoveTo
 		case "WALKING" 
 			return Kthura.Walking("Player")
+		Case "MOVING"
+			Return Kthura.Moving("Player")
 		case "STOPWALKING"
 			Kthura.StopWalking("Player")
 			return __Niks
