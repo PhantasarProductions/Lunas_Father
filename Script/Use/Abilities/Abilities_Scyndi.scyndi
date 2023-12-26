@@ -59,4 +59,7 @@ Init
 	ScA("Shine",16)
 	ScA("Darkness",16)
 	ScA("Zap",16)
+	ScA("Restore",30)
+	ScA("Enlighten",40)
+	ScA("Revive",45)
 End
