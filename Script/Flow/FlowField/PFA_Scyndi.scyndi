@@ -36,11 +36,52 @@
 // End License Information
 Module
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/JCR6"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+
 #use "Script/Flow/FlowField/Field_PersonalAction"
+
+plua FField
+
+
+Var HookSpots
+
+Void LoadHookSpots(string mapbundle)
+	plua f
+	plua e
+	string code;code = JCR6.GetString(sprintf("Kthura/%s/Poles.lua",MapBundle))
+	f,e = Lua.load(code)
+	Lua.assert(f,sprintf("Loading poles for %s failed! => %s",MapBundle,e))
+	HookSpots = f()
+End
 
 //Bool PFA_Scyndi_Allow(); return gbool.Allow_Field_Scyndi; End
 
 Bool PFA_Scyndi_Action(String Wind)
+	plua Accepted = nil
+	For tag,Spot in pairs(HookSpots[Kthura.CurrentLayer])
+		If Accepted; Break; End
+		Switch Upper(Wind)
+			Case "NORTH"
+				If math.abs(Spot.x-Player.x)<=16 && spot.y<Player.y; Accepted=Spot; End
+			Case "SOUTH"
+				If math.abs(Spot.x-Player.x)<=16 && spot.y>Player.y; Accepted=Spot; End
+			Case "WEST"
+				If math.abs(Spot.y-Player.y)<=16 && spot.x<Player.x; Accepted=Spot; End
+			Case "EAST"
+				If math.abs(Spot.y-Player.y)<=16 && spot.x>Player.x; Accepted=Spot; End
+			Default
+				Return False
+		End
+	End
+	if !Accepted; CSay("Whip hook rejected! No spots in range at all"); Return False;End
+	CSayF("A spot for Scyndi has been accepted at (%4d,%4d) for now (are there any blockades ahead?)",Accepted.x,Accepted.y)
+	
 	Return False
 End
 
@@ -49,7 +90,7 @@ Bool PFA_Scyndi_Cycle()
 End
 
 Init
-	//FField = Lua.Scyndi.Globals.FlowField
-	//FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
+	FField = Lua.Scyndi.Globals.FlowField
+	FField.LMFuncs[len(FField.LMFuncs)] = LoadHookSpots
 	PFA_Reg("Scyndi",nil,PFA_Scyndi_Action,PFA_Scyndi_Cycle,true)
 End
