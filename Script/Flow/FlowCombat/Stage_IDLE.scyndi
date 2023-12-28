@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.12.22
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -51,7 +51,7 @@ Void Arrive()
 End
 
 Void SkipTurn()
-	plua a = new Action(Diamonds.Slots[0].FighterTag,"ACT_SKIPTURN")
+	plua a = new Action(Diamonds.Slots[0].FighterTag,"ACT_SKIP")
 	a.Targets={Diamonds.Slots[0].FighterTag}
 	Scyndi.Globals.Execute(Diamonds.Slots[0].FighterTag,a)
 End
@@ -75,6 +75,9 @@ Void Cycle()
 		case "PLAYER" "HERO"
 			If Fighter.ByTag[Diamonds.Slots[0].FighterTag].UnableToMove
 				SkipTurn()
+			ElseIf Fighter.ByTag[Diamonds.Slots[0].FighterTag].PartyPos>=3
+				CSayF("%s is not on the front row (%d), so ignore",Diamonds.Slots[0].FighterTag,Fighter.ByTag[Diamonds.Slots[0].FighterTag].PartyPos)
+				Diamonds.RemoveFirst()
 			Else
 				Stage.CurrentTag = "PMM"
 			End
