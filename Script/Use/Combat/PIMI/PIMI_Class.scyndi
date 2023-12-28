@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/PIMI/PIMI_Class.scyndi
-// Version: 23.12.25
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -68,6 +68,7 @@ End
 Bool AllowSwitch(); Return Party.FullSize>=4; End
 
 Void ActSwitch(string PlTag)
+	Scyndi.Class.Stage.CurrentTag="Switch"	
 End
 
 // Player Input Menu Item
