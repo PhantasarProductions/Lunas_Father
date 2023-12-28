@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
-// Version: 23.12.22
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -148,11 +148,11 @@ Class Hero
 	
 	
 	Get Bool TargetablePlayer
-		Return True
+		Return Party.PosInParty(Tag)<3
 	End
 	
 	Get Bool TargetableFoe
-		Return HP>0
+		Return HP>0 && Party.PosInParty(Tag)<3
 	End
 	
 	Get Bool Defeated
