@@ -1,0 +1,114 @@
+// License Information:
+// src/Scripts/Script/Flow/FlowCombat/Stage_Switch.scyndi
+// Version: 23.12.27
+// Copyright (C) 2023 Jeroen Petrus Broks
+// 
+// ===========================
+// This file is part of a project related to the Phantasar Chronicles or another
+// series or saga which is property of Jeroen P. Broks.
+// This means that it may contain references to a story-line plus characters
+// which are property of Jeroen Broks. These references may only be distributed
+// along with an unmodified version of the game.
+// 
+// As soon as you remove or replace ALL references to the storyline or character
+// references, or any termology specifically set up for the Phantasar universe,
+// or any other univers a story of Jeroen P. Broks is set up for,
+// the restrictions of this file are removed and will automatically become
+// zLib licensed (see below).
+// 
+// Please note that doing so counts as a modification and must be marked as such
+// in accordance to the zLib license.
+// ===========================
+// zLib license terms:
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+
+#use "Libs/MultiPointer" 
+
+#use "Script/Flow/FlowCombat/Stage"
+#use "Script/Flow/FlowCombat/Diamonds"
+
+#use "Script/Use/Link/Party"
+
+ReadOnly Var Fnt = ObtainFont("BASE")
+Int X = Graphics.Width Div 2
+
+String CurrentPlayer
+
+Int Hue = os.time()
+	
+plua Portret
+Init
+	Portret = {}
+	For i,c in pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+		CSayF("Combat Switch: Obtained portrait for %s",c)
+		Portret[c] = ObtainImage(sprintf("PORTRET_%s",Upper(c)))
+	End
+End
+
+Void Arrive()
+	CurrentPlayer = Diamonds.Slots[0].FighterTag
+End 
+	
+Void Cycle()
+	String Hover=""
+	Int HoverIndex
+	For i=3,5
+		Int Y;Y=100+(i*30)
+		If MX>X && MX<X+200 && MY>Y && MY<Y+30
+			Hover=Party.Char(i)
+			HoverIndex = i
+			if Hover!=""
+				SetColor(255,255,255)
+				Portret[Hover].Draw(X-100,190)
+			End
+		End
+	End
+	For i=3,5
+		Int Y;Y=100+(i*30)
+		String CTag = Party.Char(i)
+		if CTag!=""
+			Var Ch ;Ch = Party.GetChar(CTag)
+			if Hover==CTag
+				Hue = (Hue+1)%360
+				SetColorHSV(Hue,1,1)
+			Else
+				SetColor(255,255,255)
+			End
+			Fnt.Dark(Ch.Data.Name,X,Y)
+		End
+	End
+	If MR
+		Stage.CurrentTag="IDLE"
+	ElIf ML	&& Hover!=""
+		int cb;cb = Party.PosInParty(CurrentPlayer)
+		plua a;a = Party.Char(HoverIndex)
+		plua b;b = Party.Char(cb)
+		Party.Char(HoverIndex,b)
+		Party.Char(CB,a)						
+		Diamonds.NewPlayer(1,a)
+		Stage.CurrentTag="IDLE"
+	End
+	
+End
+
+
+Init
+	Stage.Register("Switch",Stage_Switch)
+End
