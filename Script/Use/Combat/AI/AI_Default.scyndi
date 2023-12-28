@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/AI/AI_Default.scyndi
-// Version: 23.12.17
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -116,17 +116,20 @@ Var EnemyAct(Executor,string param="")
 					If Weakest.HP  >F.HP; Weakest  = F; End
 					If Strongest.HP<F.HP; Strongest= F; End
 					Available[len(Available)]=F
+					CSayF("%s:Hero added! AI can chose %d hero(es) now",F.Tag,len(Available))
+				Else
+					CSayF("%s:Hero not available by Foe. (HP=%d; PartyPos=%s)",F.Tag,F.HP, Lua.Scyndi.Class.Party.PosInParty(F.Tag))
 				End
-				Switch dAct.Target
-					Case "" "Random" 
-						aAct.Targets = NewArray( Available[math.random(0,len(Available)-1)] )
-					Case "Strongest"
-						aAct.Targets = NewArray( Strongest )
-					Case "Weakest"
-						aAct.Targets = NewArray( Weakest )
-					Default
-						Lua.error(sprintf("AI Default: Target type (%s/%s) unknown!",aAct.Act.Regular,dAct.Target))
-				End
+			End
+			Switch dAct.Target
+				Case "" "Random" 
+					aAct.Targets = NewArray( Available[math.random(0,len(Available)-1)] )
+				Case "Strongest"
+					aAct.Targets = NewArray( Strongest )
+				Case "Weakest"
+					aAct.Targets = NewArray( Weakest )
+				Default
+					Lua.error(sprintf("AI Default: Target type (%s/%s) unknown!",aAct.Act.Regular,dAct.Target))			
 			End
 			CSayF("%s will use ability %s on %s",Executor.Tag,aAct.Act.Name,aAct.Targets[0].Tag)
 		Default
