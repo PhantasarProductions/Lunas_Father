@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Start/Main.scyndi
-// Version: 23.12.24
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -137,6 +137,9 @@ Init
 	End
 	For ch In Each(NewArray("MYRAH","FRANCIS","LUNA"))
 		NIMG(sprintf("GFX/Combat/PlayerIcons/%s.png",ch),sprintf("COMBATHEROICON_%s",Upper(ch)))
+	End
+	For ch In Each(NewArray("SCYNDI","AZIELLA","RACHEL"))
+		NIMG(sprintf("GFX/MiniPortraits/%s.png",ch),sprintf("COMBATHEROICON_%s",Upper(ch)))
 	End
 
 	For i,c In Pairs {"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
