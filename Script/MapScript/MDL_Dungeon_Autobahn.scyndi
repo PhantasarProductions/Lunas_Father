@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.15
+// version: 23.12.27
 // End License Information
 Script
 
@@ -53,6 +53,6 @@ Global Void ZA_Boss()
 End
 
 Global Void ZA_Ausfahrt()
-	Awarded.COMPLETE_AUTOBAHN = True
+	Awarded.Voltooid_AUTOBAHN = True
 	Map.GoToMap("CH1_Dungeon_SayonaraTomb","#000","From_Medal")
 End
