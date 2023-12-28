@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.12.21
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -225,7 +225,9 @@ Void InitialDiamonds()
 	For i,ch in ipairs(Order)
 		Switch ch.Team
 			Case "Hero"
-				NewPlayer((i+1)*4,ch.Tag,ch.Force)
+				If Ch.PartyPos<3
+					NewPlayer((i+1)*4,ch.Tag,ch.Force)
+				End
 			Case "Foe"
 				NewFoe((i+1)*4,ch.Tag,ch.Force)
 			Default
@@ -300,7 +302,9 @@ Void Check()
 					//Cards.Add(Spot,FTag)
 					Switch FDat.Team
 						Case "Hero"
-							NewPlayer(spot,FTag,FDat.force)
+							If FDat.PartyPos<3
+								NewPlayer(spot,FTag,FDat.force)
+							End
 						Case "Foe"
 							NewFoe(spot,FTag,FDat.force)
 						Default
