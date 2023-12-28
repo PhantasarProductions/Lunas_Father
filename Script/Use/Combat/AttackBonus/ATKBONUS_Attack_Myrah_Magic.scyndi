@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.03
+// version: 23.12.27
 // End License Information
 Module
 
@@ -63,7 +63,7 @@ Int AtkBonus(executor,target,act)
 		printf("d%d x %d --> ",d,rolls)
 		for j=1,rolls,1
 			int r;r = Dice["D"..d];
-			ret = ret + 
+			ret = ret + r
 			if j>1; printf(" + "); end
 			printf("%d",r)
 			Party.SkillExpUp(executor.tag,2,d)
