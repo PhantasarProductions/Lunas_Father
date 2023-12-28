@@ -32,12 +32,23 @@
 // 
 // **********************************************
 // 
-// version: 23.11.16
+// version: 23.12.27
 // End License Information
 Script
 
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Map"
 
 Global Void ZA_Leave()
 	Map.GoToMap("CH1_Dungeon_TutorialCave","#000","Exit_Sugar")
+End
+
+Global Void ZA_Boss()
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill(   "Boss")
+	Map.Boss("Turbo")
+End
+
+Global Void ZA_Voltooid()
+	Awarded.Voltooid_Sugar = True
 End
