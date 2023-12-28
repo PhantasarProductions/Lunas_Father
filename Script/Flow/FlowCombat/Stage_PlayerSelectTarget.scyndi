@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerSelectTarget.scyndi
-// Version: 23.12.22
+// Version: 23.12.27
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -142,7 +142,7 @@ Void Cycle()
 			End
 		End		
 	End	
-	If ML
+	If ML && Len(Targets)>0
 		WorkAct.Targets=Targets
 		Lua.Scyndi.Globals.Execute(CharTag,WorkAct)
 	End
