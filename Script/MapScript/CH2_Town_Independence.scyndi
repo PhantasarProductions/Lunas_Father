@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.25
+// version: 23.12.28
 // End License Information
 Script
 
@@ -42,7 +42,11 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
 #use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
+#use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/Textboxes"
+
+#use "Script/Use/General/Dice"
 
 Global Void ZA_SetCat()
 	if !gbool.NewGamePlus;Map.Kill("NPC_Cat");End
@@ -90,3 +94,19 @@ Global Void NPC_Balandar()
 	Menu.Upgrade()
 End
 #endregion
+
+
+Global Void NPC_Trixia(); MapText("TRIXIA_"..Map.Leader); End
+	
+Global Void NPC_Flora()
+	If Map.leader=="Francis" && Dice.D20<=Party.SkillLvl("Francis",2) && !Done.HipoRecipeGiven
+		MapText("FLORA_HYPO")
+		Recipe.Hipo = True
+	Else
+		MapText("Flora")
+	End
+End
+	
+Init
+	WM_Unlocked.SkyTower = True
+End
