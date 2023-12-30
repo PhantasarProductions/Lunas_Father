@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 23.12.25
+// Version: 23.12.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -251,6 +251,20 @@ int _Deg = os.time()
 int _lvcd = 0
 int _lvalpha = 0
 
+Void ChkLevelUp(int i,Ch)
+	if Ch.Stat.Level<=gint.LevelCap && Ch.Stat.Exp<=0
+		Mini.Write(Ch.Data.Name,255,180,0)
+		Mini.WriteLn(" has gained a level!",180,0,255)
+		SetLevel(_Party.Party[i],Ch.Stat.Level+1)
+		AudLvUp.Play()
+		_LvAlpha=255
+		_LvCD=255
+		For i=1,2 
+			Lua.Scyndi.Globals.CharSkillExpUp(_Party.Party[i],i,Ch.Stat.Level)
+		End
+	End
+End
+
 Global Void PartyBoxes(flashchar,incombat)
 	int BW
 	SetColor(255,255,255,255)
@@ -356,17 +370,7 @@ Global Void PartyBoxes(flashchar,incombat)
 			StatFnt.Text(lua.tostring(Ch.Stat.Level),(BW*i)+ImgLv.Width+5,(PBY+PBH),0,1)
 		End
 		// Level Up
-		if Ch.Stat.Level<=gint.LevelCap && Ch.Stat.Exp<=0
-			Mini.Write(Ch.Data.Name,255,180,0)
-			Mini.WriteLn(" has gained a level!",180,0,255)
-			SetLevel(_Party.Party[i],Ch.Stat.Level+1)
-			AudLvUp.Play()
-			_LvAlpha=255
-			_LvCD=255
-			For i=1,2 
-				Lua.Scyndi.Globals.CharSkillExpUp(_Party.Party[i],i,Ch.Stat.Level)
-			End
-		End
+		ChkLevelUp(i,ch)	
 		if  _LvAlpha>0 || _LvCD>0
 			_LvCD--
 			if _LvCD<=0
@@ -383,6 +387,7 @@ Global Void PartyBoxes(flashchar,incombat)
 		int Y;Y = PBY+((i-3)*20)
 		TC = _Party.Party[i]
 		Ch = _Party.Char[TC]
+		ChkLevelUp(i,ch)
 		If (!incombat) 
 			Ch.Points.FP.Maximum=100
 			switch gint.skill
