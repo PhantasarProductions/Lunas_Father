@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.12.24
+// Version: 23.12.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -225,12 +225,22 @@ Bool Effect_CauseAilment(Executor,Target,Act)
 	Return Hit
 End
 
+Bool Effect_Revive(Executor,Target,Act)
+	if Target.HP!=0; return False; End
+	if Act.Act.Revive; Target.HP=1; CharMsg.Put(Target,"Revive",180,255,0); Return True; End
+	if Act.Act.Resurrect; Target.HP=Target.MaxHP; CharMsg.Put(Target,"Resurrect",180,255,0); Return True; End
+	Return False
+End
+
 Plua AES 
 Void Go(executor,target,act)
 	Bool Hit = False
 	
 	if Effect_Hit(executor,target,act)
 		// Cure status if applicable (must be first)
+		
+		// Revive
+		Hit = Effect_Revive(executor,target,act) || Hit
 	
 		// Handle attacks
 		Hit = Effect_Attack(executor,target,act) || Hit
