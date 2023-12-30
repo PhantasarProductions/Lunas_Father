@@ -1,0 +1,73 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/Arena/ARENA_SkyTower.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.12.30
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/GINIE"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/SString"
+
+#use "Script/Use/Combat/Arena/Addon_Arena_WallAndFloor"
+
+Get String L
+	return Kthura.CurrentLayer
+End
+
+string OL = "***"
+Var Cols = GINIE.Load("Data/Arena/SkyTower.ini","ARENA_SKYTOWER")
+Var A 
+Init	
+End
+
+Void StartCombat()
+	If OL!=L
+		plua W;W = XSplit(Cols.Value(L,"WALL"),",")
+		plua F;F = XSplit(Cols.Value(L,"FLOOR"),",")
+		for i=0,2
+			W[i]=Lua.tonumber(W[i])
+			F[i]=Lua.tonumber(F[i])
+		End
+		CSayF("Arena Wall: %d,%d,%d; Arena Floor: %d,%d,%d",W[0],W[1],W[2],F[0],F[1],F[2])
+		A = new Addon_WallAndFloor("GFX/Textures/DUNGEON/GREY/Wall_North.png","GFX/Textures/DUNGEON/GREY/Floor.png",W[0],W[1],W[2],F[0],F[1],F[2])
+		OL=L
+	End
+	
+End
+
+Void Draw()
+	A.Draw()
+End
