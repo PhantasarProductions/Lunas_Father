@@ -1,0 +1,83 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/CH2_Dungeon_SkyTower_1.scyndi
+// (c) Jeroen Broks, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 23.12.30
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+#use "SCript/Use/Link/Alchemy"
+#use "Script/Use/Link/TextBoxes"
+
+Init
+	CSay("Sky Tower")
+End
+
+Global Void ZA_Welcome()
+	If !Done.WelcomeToTheSkyTower
+		MapText("WELCOME")
+	End
+End
+
+Global Void ZA_Hook()
+	If !Done.TutorialHooksForScyndiInSkyTower
+		MapText("HOOK")
+	End
+End
+
+Global Void DeurSwitch()
+	Map.PermaKill("Deur")
+End
+
+Global Void Target_Deur()
+	Map.PermaKill("Deur")
+End
+
+Global Void ZA_Boss()
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Boss("Boss")
+End
+
+Global Void NPC_Cauldron()
+	if Map.Leader=="Francis"
+		MapText("Alchemy_Francis")
+		GoAlchemy()
+	Else
+		MapText("Alchemy_"..Map.Leader)
+	End
+End
