@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Alchemy_Extract.scyndi
-// Version: 23.11.13
+// Version: 23.12.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -40,12 +40,50 @@ Module
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
+#use "Libs/Rosetta"
 #use "Libs/MultiPointer"
 
 #use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
 
+#use "Script/Use/General/UseIAA"
+
+ReadOnly Var Fnt = ObtainFont("BASE")
+String EAS 
+Int EAW
+Int Hue
+
+Init
+	EAS = Rosetta.GetStr("ALCHEMY","ALL")
+	if EAS==""
+		CSay("For some odd reason the Extract All string is empty")
+		EAS = "EXTRACT ALL"
+	End
+	EAW = Fnt.Width(EAS)
+	CSayF("EAS: %s; EAW: %d",EAS,EAW)
+End
+
+Void ExtractAll()
+	plua ic;ic=Lua.Scyndi.Class.Field_Inventory
+	For mnmnt in Each(Alchemy.Manaments)
+		For i=1,20
+			String Tag;Tag = sprintf("INGREDIENT_MANAMENT_%s_TIER_%d",mnmnt,i)
+			while IAA[Tag].Have>0 && ic._AllowExtract("Francis",Tag) && Mana[mnmnt]<Alchemy.MaxMana
+				ic._Extract("Francis",Tag)
+			End
+		End
+	End
+End
 
 Void Flow(string _Situation,string CharTag,int bx, int by, int ex, int ey)
 	Lua.Scyndi.Class.Inventory.Flow("ALCHEMY","Francis",bx,by,ex,ey)
-	// TODO: Extract All
+	// Extract All
+	if MX<bx && MX>bx-EAW && MY>ey-90 && MY<ey-60
+		Hue = (Hue+1) % 360
+		SetColorHSV(Hue,1,1)
+		if ML && Sys.Yes(Rosetta.GetStr("ALCHEMY","ALL_CONFIRM" )); ExtractAll(); End		
+	Else
+		SetColor(255,255,255)
+	End
+	Fnt.Text(EAS,bx,ey-90,1)
 End
