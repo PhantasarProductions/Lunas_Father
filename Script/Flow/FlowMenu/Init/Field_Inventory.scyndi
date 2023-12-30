@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Init/Field_Inventory.scyndi
-// Version: 23.12.09
+// Version: 23.12.30
 // Copyright (C) 2023 Jeroen Petrus Broks
 // 
 // ===========================
@@ -122,11 +122,11 @@ Void _Extract(string User,string Item)
 	For mnmnt in Each(Alchemy.Manaments)
 		string tag;tag="Mana_"..mnmnt		
 		Consume = Consume || (it[Tag]>0 && Mana[mnmnt]<Alchemy.MaxMana) 
-		Mana[mnmnt] = Mana[mnmnt] + it[Tag]  
+		Mana[mnmnt] = Mana[mnmnt] + it[Tag]  		
 	End
 	if Consume
 		it.Have--
-		Alchemy.EXP = Alchemy.EXP + (it.Mana_Tier*Dice.d3) 
+		Alchemy.EXP = Alchemy.EXP + (it.Mana_Tier*Dice.d20) 
 	End
 End
 
