@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_Tsunami.scyndi
-// Version: 23.12.24
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.01
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -37,22 +37,31 @@
 
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 
 ReadOnly Var Water = LoadNewImage("GFX/Textures/Water/Water.png","SPELLANI_TSUNAMI_WATER")
 
 Class TsunamiWave
+	Static Int Count	
 	Static Var First = Nil
 	Static Bool Fade = False
 	Var Next = Nil
+	ReadOnly Int ID
 	ReadOnly Number ASpd = 1
 	ReadOnly Number Alpha
 	ReadOnly Int Y = Graphics.Height
 	ReadOnly Int YSpd
 	Constructor(Number _alpha,Number _aspd,Int _YSpd)
-		Alpha=_alpha
-		ASpd =_ASpd
-		YSpd = YSpd		
+		Alpha= _alpha
+		ASpd = _ASpd
+		YSpd = _YSpd
+		Count++
+		ID=Count
+		CSayF("Created wave #%d (%f/%f/%f)",ID,Alpha,ASpd,YSpd)
+	End
+	Destructor
+		CSayF("Disposed wave #%d",ID)
 	End
 End
 
@@ -61,7 +70,7 @@ Void Start(Executor,Targets,string Param)
 	TsunamiWave.Fade = 0
 	TsunamiWave.First = New TsunamiWave(127,1,5)
 	Next = TsunamiWave.First 
-	For i=4,1
+	For i=4,1,-1
 		Next.Next = New TsunamiWave(127 div i,1/i,i)
 		Next = Next.Next
 	End		
@@ -78,8 +87,13 @@ Bool Cycle()
 		if CH.Y<-25; TsunamiWave.Fade=True; End
 		if TsunamiWave.Fade; Ch.Alpha = Ch.Alpha - Ch.ASpd; End
 		Ch.Y = Ch.Y - Ch.YSpd
-		If Ch.Alpha<0; TsunamiWave.First=Ch.Next; End
-		Ch=Ch.Next // Must be last!
+		
+		//CSayF("Drawn wave #%d  Alpha(%f/%f) Y(%d/%d)",Ch.ID,Ch.Alpha,Ch.ASpd,Ch.Y,CH.YSpd)
+		Ch=Ch.Next // Must be last!.		
+	End
+	If TsunamiWave.First.Alpha<0
+		CSayF("Unlinked Wave #%d",TsunamiWave.First.ID)
+		TsunamiWave.First=TsunamiWave.First.Next
 	End
 	Return TsunamiWave.First!=Nil
 End
