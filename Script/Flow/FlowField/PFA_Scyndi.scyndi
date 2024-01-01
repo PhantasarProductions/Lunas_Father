@@ -78,9 +78,9 @@ Bool PFA_Scyndi_Action(String Wind)
 			Case "SOUTH"
 				If math.abs(Spot.x-Player.x)<=16 && spot.y>Player.y; Accepted=Spot; End
 			Case "WEST"
-				If math.abs(Spot.y-Player.y)<=20 && spot.x<Player.x; Accepted=Spot; End
+				If math.abs(Spot.y-Player.y)<=34 && spot.x<Player.x; Accepted=Spot; End
 			Case "EAST"
-				If math.abs(Spot.y-Player.y)<=20 && spot.x>Player.x; Accepted=Spot; End
+				If math.abs(Spot.y-Player.y)<=34 && spot.x>Player.x; Accepted=Spot; End
 			Default
 				Return False
 		End
