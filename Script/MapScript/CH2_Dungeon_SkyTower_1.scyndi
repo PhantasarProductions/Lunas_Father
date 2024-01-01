@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH2_Dungeon_SkyTower_1.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.30
+// version: 24.01.01
 // End License Information
 Script
 
@@ -63,6 +63,8 @@ Global Void DeurSwitch()
 	Map.PermaKill("Deur")
 End
 
+global Delegate SWITCH_DEUR 
+
 Global Void Target_Deur()
 	Map.PermaKill("Deur")
 End
@@ -80,4 +82,8 @@ Global Void NPC_Cauldron()
 	Else
 		MapText("Alchemy_"..Map.Leader)
 	End
+End
+
+Init
+	SWITCH_DEUR = DeurSwitch
 End
