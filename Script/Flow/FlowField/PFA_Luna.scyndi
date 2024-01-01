@@ -64,7 +64,8 @@ Bool PFA_Luna_Action()
 			PLUA O
 			O = Kthura.Obj[_crack_]
 			CrTex = "CRTEX_"..right(_crack_,len(_crack_)-6)
-			If Player.X>=O.X && Player.X<=O.X+O.W && Player.Y>O.Y+O.H && Player.Y<O.Y+O.H+40
+			CSayF("Crack checking: %s (%d,%d) %dx%d    Player(%d,%d)",_crack_,O.X,O.Y,O.W,O.H,Player.X,Player.Y)
+			If Player.X>=O.X && Player.X<=O.X+O.W && Player.Y>O.Y+O.H && Player.Y<O.Y+O.H+40+((O.H+O.Y)%32)
 				SmashAudio.Play()
 				Map.PermaKill(CrTex)
 				Map.PermaKill(_crack_)
@@ -72,6 +73,8 @@ Bool PFA_Luna_Action()
 				gInt.Luna_Broken_Walls++
 				Return True
 			End
+		Else
+			CSayF("Check checking: %s -> Not existant so skipping!",_crack_)
 		End
 	End
 	Return False
