@@ -95,6 +95,12 @@ Global Void Kill_Switch();
 	Party.SkillExpUp("Myrah",1,1000)
 End
 
+Global Void ZA_IsHetNogVer()
+	If !Done.SkyTower_Is_het_nog_ver_Grote_Smurf
+		MapText("ISHETNOGVER")
+	End
+End
+
 Global Void ZA_TravelCheck()
 	For i=1,3
 		gbool[sprintf("TRAVELER_EMBLEM_CH2_DUNGEON_SKYTOWER_%d",i)] = gbool.TRAVELER_EMBLEM_CH2_DUNGEON_SKYTOWER_4
