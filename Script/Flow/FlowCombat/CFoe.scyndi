@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 23.12.22
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.02
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -473,4 +473,7 @@ Void CompileFoe(int FID,FoeData)
 	NF._X = FoeData.X
 	NF._Y = FoeData.Y
 	Lua.Scyndi.Class.Fighter.ByTag[NF.Tag] = NF
+	plua Alt
+	Alt = Raw.IntValue("AltCoords","X"); If Alt<0; NF._X=Graphics.Width  - Alt; ElIf Alt>0; NF._X=Alt; End
+	Alt = Raw.IntValue("AltCoords","Y"); If Alt<0; NF._Y=Graphics.Height - Alt; ElIf Alt>0; NF._Y=Alt; End
 End
