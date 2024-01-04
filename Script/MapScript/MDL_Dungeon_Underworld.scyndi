@@ -1,2 +1,7 @@
 Script
 
+#use "SCript/Use/Link/Map"
+
+Global Void ZA_Rocks()
+	Map.GoToMap("CH2_Dungeon_NakedRocks","#001","From_Medal")
+End
