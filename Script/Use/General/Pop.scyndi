@@ -69,6 +69,11 @@ Void Pop(string ExPr,string W="North")
 	Popped = 2
 End
 
+Void Tex(String ChT,String W)
+	Var O;O = Kthura.Obj["Pop_"..ChT]
+	O.Texture = sprintf("GFX/Player/%s.%s.jpbf",ChT,W)
+End
+
 Void UnPop()
 	Switch Popped
 		Case 2
