@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_HPto1.scyndi
-// Version: 23.12.17
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.04
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -50,6 +50,6 @@ End
 // will be called once for each target). 'True' denotes the effect was 
 // succesful and 'False' will denote a miss.
 Bool Effect(Executor,Target,String Param)
-	Target.HP = Math.max(Target.HP,1)
+	Target.HP = Math.min(Target.HP,1)
 	Return True
 End
