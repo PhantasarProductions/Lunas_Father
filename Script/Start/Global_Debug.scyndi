@@ -1,0 +1,14 @@
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+Global Void ReGenMode()
+	gbool.Regenmode = !gbool.Regenmode
+	printf("Regen mode: %s\n",gbool.Regenmode)
+End
+
+
+Init
+	Sys.ConsoleGlobal("Whizzy","ReGenMode")
+End
