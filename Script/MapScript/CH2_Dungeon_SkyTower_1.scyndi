@@ -41,9 +41,13 @@ Script
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
 #use "SCript/Use/Link/Alchemy"
 #use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/General/Pop"
 
 Init
 	CSay("Sky Tower")
