@@ -129,6 +129,20 @@ Global Void POST_Angel()
 		End
 	End
 End	
+
+Global Void ZA_Herb()
+	If !Done.Done_SkyTower
+		Pop.Pop("H","North")
+		MapText("Herb")
+		Map.PermaKill("Herb")		
+		Mini.Write("Scyndi ",180,0,255)
+		Mini.Write("has learned the force ability ",255,180,0)
+		Mini.Writeln("Vitalize")
+		Pop.Unpop()
+		Map.GoToMap("CH2_Town_Independence","Scyndi","Start")
+	End
+End
+
 Init
 	SWITCH_DEUR = DeurSwitch
 End
