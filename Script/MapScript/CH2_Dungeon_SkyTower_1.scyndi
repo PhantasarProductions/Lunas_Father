@@ -111,6 +111,24 @@ Global Void ZA_TravelCheck()
 	End
 End
 
+Global Void ZA_Angel()
+	Player.StopWalking()
+	MapText("ANGEL")
+	Map.Schedule("POST_Angel")
+	Map.Boss("ANGEL")
+	Map.Kill("Angel")
+	Map.Kill("ZA_Angel")
+End
+
+Global Void POST_Angel()
+	MapText("ANGEL_POST")
+	Awarded.Kill_Boss_Angel=true
+	For _,ch in pairs{"Myrah","Francis","Luna","Scyndi"}
+		For i=1,2
+			Party.SkillExpUp(ch,1,9000 div gint.skill)
+		End
+	End
+End	
 Init
 	SWITCH_DEUR = DeurSwitch
 End
