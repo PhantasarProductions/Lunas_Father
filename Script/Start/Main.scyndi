@@ -61,6 +61,7 @@ Init
 	CSay("Default config")
 	CFG.NewValue("Rosetta","Language","English")
 	Rosetta.StringsDir="Languages/Game"
+	Sys.LoadNewState("DEBUG_GLOBAL","Script/Start/Global_Debug.lbc")
 End
 
 
