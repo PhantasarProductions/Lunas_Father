@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_Invade.scyndi
-// Version: 24.01.02
+// Version: 24.01.04
 // Copyright (C) 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -43,7 +43,7 @@ End
 
 
 Bool Effect(Executor,Target,String Param)
-	Int N;N = Lua.tonumber(Param) || 2
+	Int N;N = math.max(Lua.tonumber(Param) || 2,2)
 	Int Pos = 1
 	For i=1,n 
 		Pos = Pos + i
