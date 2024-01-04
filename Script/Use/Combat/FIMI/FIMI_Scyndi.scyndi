@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Scyndi.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -32,9 +32,11 @@
 // 
 // **********************************************
 // 
-// version: 23.12.21
+// version: 24.01.04
 // End License Information
 Module
+
+#use "Libs/SCI/InterVar"
 
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
@@ -43,8 +45,8 @@ ReadOnly String Caption1 = "Turn Undead"
 ReadOnly Bool Allow1(); Return True; End
 ReadOnly Void Action1(); End
 	
-ReadOnly String Caption2 = "Twinkle Twinkle Little Star"
-ReadOnly Bool Allow2(); Return False; End
+ReadOnly String Caption2 = "Vitalize"
+ReadOnly Bool Allow2(); Return gbool.Done_SkyTower; End
 ReadOnly Void Action2(); End
 	
 ReadOnly String Caption3 = "Whizzy's Megaheal"
