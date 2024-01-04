@@ -315,6 +315,7 @@ Global Void PartyBoxes(flashchar,incombat)
 		Rect((BW*i)+120,PBY+10,math.floor(barw*breuk),10)
 		ImgHP.Draw(BW*i+120,PBY)
 		StatFnt.Text(lua.tostring(Ch.Points.HP.Have),(BW*i)+(BW-10),PBY,1)
+		if gbool.Regenmode;Ch.Points.HP.Have++;End
 		// FP
 		if !incombat
 			switch gint.skill
