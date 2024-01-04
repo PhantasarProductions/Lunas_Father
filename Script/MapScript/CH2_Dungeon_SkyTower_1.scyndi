@@ -76,7 +76,7 @@ Global Void Target_Deur()
 	Map.PermaKill("Deur")
 End
 
-Global Void ZA_Boss()
+Global Void ZA_Boss()	
 	Map.PermaKill("Boss")
 	Map.PermaKill("ZA_Boss")
 	Map.Boss("Boss")
