@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH2_Town_Independence.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.12.28
+// version: 24.01.04
 // End License Information
 Script
 
@@ -40,12 +40,14 @@ Script
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Menu"
 #use "Script/Use/Link/Party"
 #use "Script/Use/Link/Alchemy"
 #use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/Textboxes"
 
+#use "Script/Use/General/Pop"
 #use "Script/Use/General/Dice"
 
 Global Void ZA_SetCat()
@@ -62,6 +64,14 @@ Global Void ZA_ScyndiHouse()
 		Party.Char(3,"Scyndi")
 	End
 	Kthura.Obj.Scyndi.Visible=False
+	If gbool.Done_SkyTower && !done.Done_SkyTower_Speak_About_Rachel
+		Pop.Pop("S","North")
+		Pop.Tex("Scyndi","South")
+		MapText("RACHEL2")
+		WM_Unlocked.GagForest = True
+		Awarded.Voltooid_SkyTower = True
+		Pop.UnPop()
+	End	
 End
 
 Global Void NPC_Dernor()
