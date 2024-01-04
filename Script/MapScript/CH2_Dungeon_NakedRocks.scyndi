@@ -51,13 +51,13 @@ Script
 
 #region Medal
 Global Void ZA_CheckMedal()
-	CSayF("Medal Rate: %03d%% (%5s), Scyndi Joined: %5s",Ach.MedalRate, Ach.MedalRate>=50, gbool.Scyndi_Joined)
-	If Ach.MedalRate>=50 && gbool.Scyndi_Joined
+	CSayF("Medal Rate: %03d%% (%5s), Scyndi Joined: %5s",Ach.MedalRate, Ach.MedalRate>=50, gbool.ScyndiJoin)
+	If Ach.MedalRate>=50 && gbool.ScyndiJoin
 		Map.Kill("Medal_Barrier")
 	End
 End
 
-Global Void ZA_ToMedal()
+Global Void ZA_MedalPortal()
 	Map.GoToMap("MDL_Dungeon_Underworld","#001","Start")
 End
 #endregion
