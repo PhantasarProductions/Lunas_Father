@@ -330,7 +330,9 @@ Void T_ShowBox(TBox,PLines)
 			ElseIf IY==SY
 				SetColor(255,255,255)
 				Complete = false
-				TBox.Font.Text(Left(L[1],sX),MarginLeft,L[0]+PLines.StartY)
+				string showt;showt=Left(L[1],sX)
+				if Right(showt,1)=="|"; sX=SX+2; Showt=Left(L[1],sX); End
+				TBox.Font.Text(showt,sX,MarginLeft,L[0]+PLines.StartY)
 				sTick = (sTick+1) % TxtSpeed
 				if sTick==0
 					sX++
