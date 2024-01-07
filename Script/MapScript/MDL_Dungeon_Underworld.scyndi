@@ -32,12 +32,79 @@
 // 
 // **********************************************
 // 
-// version: 24.01.04
+// version: 24.01.07
 // End License Information
 Script
 
-#use "SCript/Use/Link/Map"
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/Rosetta"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/Textboxes"
+
+#use "Script/Use/General/Cash"
+
+
+Get Int CharonPrice
+	Switch gint.skill
+		Case 1
+			Return 20
+		Case 2
+			Return math.max( 25,Party.GetChar("Myrah").Stat.Level*5)
+		Case 3
+			Return math.max(250,Party.GetChar("Myrah").Stat.Level*20)
+		Default
+			Return 100000000
+	End
+End
+
+Global Void NPC_Charon_S()
+	MapText("CHARON")
+	If Sys.Yes(sprintf(Rosetta.GetStr("Charon","Confirm"),CharonPrice))
+		If Cash.Pay(CharonPrice)
+			//CSay("Oke, Jeroen! Begin nu maar aan de overtocht zelf!")
+			plua Boat;Boat = Kthura.Obj.Boat
+			plua Trgt;Trgt = Kthura.Obj.Ferry_N
+			plua PlTg;PlTg = Kthura.Obj.NPC_Charon_N_Spot
+			Kthura.Obj.Player.Visible=false
+			Kthura.Obj.NPC_Charon_S.visible=false
+			While Boat.Y>Trgt.Y
+				Cls()
+				Map.DrawScreen()
+				Flip()
+				//Sys.Sleep(10)
+				Boat.Y--
+			End
+			Player.X = PlTg.X
+			Player.Y = PlTg.Y
+			Kthura.Obj.Player.Visible=true
+			Kthura.Obj.NPC_Charon_N.visible=true			
+		Else
+			Sys.ErrorBox(Rosetta.GetStr("Charon","NotEnough"))
+		ENd
+	End
+End
+
+Global Void NPC_Charon_N()
+	MapText("CHARON_N")
+End
 
 Global Void ZA_Rocks()
 	Map.GoToMap("CH2_Dungeon_NakedRocks","#001","From_Medal")
+End
+
+Global Void ZA_Boss()
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Boss("Valkyrie")
+End
+
+Global Void ZA_Voltooid()
+	Awarded.Voltooid_Underworld = true
 End
