@@ -1,0 +1,74 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/CH2_Dungeon_GagoltonForest.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.01.08
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/General/Pop"
+
+Global Void NPC_House()
+	//print("The house is not yet set up")
+	Map.GoToLayer("INTERIOR","Start")
+End
+
+
+Global Void NPC_Aziella()
+	Pop.Pop("A","North")
+	MapText("AZIELLA1")
+	Cls()
+	Flip()
+	Sys.Sleep(500)
+	MapText("AZIELLA2")
+	Pop.UnPop()
+	Awarded.Scen_Aziella = true
+	Party.NewChar("Aziella",gint.LEVELCAP,gint.LEVELCAP,gint.LEVELCAP)
+	Party.Char(4,"Aziella")
+	plua _Party
+	_Party = Statistician.CreateNew("LUNA_PARTY")
+	_Party.Char.Aziella.Stat.SKILL_Lvl_1 = math.max(1,gint.LEVELCAP div (gint.skill+1))
+	_Party.Char.Aziella.Stat.SKILL_Lvl_2 = math.max(1,gint.LEVELCAP div (gint.skill+1))
+	Map.PermaKill("NPC_Aziella")
+	gstring.CampSituation = "0B_AZIELLA"
+End
