@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/AI/AI_Default.scyndi
-// Version: 23.12.27
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.07
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -55,7 +55,7 @@ Var EnemyAct(Executor,string param="")
 	//for i,k in sPairs(IAA.Fields);	printf("%9s %9s = %s\n",i,k,aAct.Act[k]); end
 	Switch aAct.Act.Regular
 		Case "OS" ""
-			aAct.Targets = {Executor}
+			aAct.Targets = NewArray(Executor)
 		Case "EV"
 			aAct.Targets = {}
 			For _,F in pairs(Fighter.ByTag)
