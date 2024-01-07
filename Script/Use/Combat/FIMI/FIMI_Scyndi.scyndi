@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.04
+// version: 24.01.08
 // End License Information
 Module
 
@@ -47,7 +47,10 @@ ReadOnly Void Action1(); End
 	
 ReadOnly String Caption2 = "Vitalize"
 ReadOnly Bool Allow2(); Return gbool.Done_SkyTower; End
-ReadOnly Void Action2(); End
+ReadOnly Void Action2()
+	plua a = new Action("Scyndi","HERO_Scyndi_Force_Vitalize")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Scyndi",a)
+End
 	
 ReadOnly String Caption3 = "Whizzy's Megaheal"
 ReadOnly Bool Allow3(); Return False; End
