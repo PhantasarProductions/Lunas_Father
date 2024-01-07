@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Combat.scyndi
-// Version: 23.11.16
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.07
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -58,6 +58,9 @@ QuickMeta CombatData
 	newindex
 		switch Upper(key)
 			case "MUSIC"
+				If Prefixed(Upper(value),"SB:")
+					value=sprintf("Music/Combat/Boss/Special/%s",right(value,len(value)-3))
+				End
 				CSayF("Music for combat: %s",value)
 				Sys.Call("FLOW_COMBAT","DefineStartValue","CMusic",value)
 			default
