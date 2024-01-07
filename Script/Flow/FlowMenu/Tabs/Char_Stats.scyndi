@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Char_Stats.scyndi
-// Version: 23.11.01
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.08
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -87,7 +87,11 @@ Void Flow(string _Situation,string CharTag,int x, int y, int w, int h)
 		SetColor(255,255,255)
 		Fnt.Text(stn,x,sy)
 		SetColor(255,180,0)
-		Fnt.Text(lua.tostring(ch.stat[stn]),(x+w)-5,sy,1)
+		If CharTag=="Aziella" && stn=="Accuracy"
+			Fnt.Text("|in",(x+w)-5,sy,1)
+		Else
+			Fnt.Text(lua.tostring(ch.stat[stn]),(x+w)-5,sy,1)
+		End
 	End
 	// Hitpoints
 	sy = sy + 60
