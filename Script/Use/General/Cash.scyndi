@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/General/Cash.scyndi
-// Version: 23.10.14
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.07
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -64,4 +64,12 @@ Set Int Have
 	if gint.Cash!=old
 		Kassa.Play()
 	End
+End
+
+Bool Pay(int Bedrag)
+	If Bedrag>Have
+		Return False
+	End
+	Have = Have - Bedrag
+	Return True
 End
