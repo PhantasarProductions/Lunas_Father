@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubBoxText.scyndi
-// Version: 24.01.04
+// Version: 24.01.08
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -322,7 +322,12 @@ Void T_ShowBox(TBox,PLines)
 			TBox.Portrait_Img.Draw(5,(Graphics.Height-5))
 		End
 		SetColor(255,180,0)
-		Fnt.Text(TBox.Header,MarginLeft,PLines.HeadY+PLines.StartY)
+		if TBox.Header=="Aziella"
+			// Not the cleanest way to go, but it is the simplest and the safest!
+			Fnt.Text("Azi|uella",MarginLeft,PLines.HeadY+PLines.StartY)
+		Else
+			Fnt.Text(TBox.Header,MarginLeft,PLines.HeadY+PLines.StartY)
+		End
 		For IY,L in iPairs(PLines)
 			If IY<sY || TxtSpeed==0
 				SetColor(255,255,255)
