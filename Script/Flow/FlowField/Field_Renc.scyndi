@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_Renc.scyndi
-// Version: 23.11.01
-// Copyright (C) 2021, 2022, 2023 Jeroen Petrus Broks
+// Version: 24.01.08
+// Copyright (C) 2021, 2022, 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -176,7 +176,7 @@ module
 	plua Tab
 	Void StartEncounter()
 		// Announce
-		CSay("Start Enoounter")
+		CSay("Start Encounter")
 		// Reset
 		RateLevel = 1
 		NEnc[Kthura.CurrentLayer]--
