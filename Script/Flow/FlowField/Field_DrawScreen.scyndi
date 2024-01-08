@@ -82,7 +82,7 @@ Class MWelcome
 	End
 	
 	Destructor
-		CSay("Destroyed welcome tag: %s",Tag)
+		CSayF("Destroyed welcome tag: %s",Tag)
 	End
 End
 
