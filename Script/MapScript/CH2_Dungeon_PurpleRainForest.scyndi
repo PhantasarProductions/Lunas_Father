@@ -1,0 +1,134 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/CH2_Dungeon_PurpleRainForest.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.01.08
+// End License Information
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#Use "Script/Use/Link/Map"
+#Use "Script/Use/Link/TextBoxes"
+
+Class Drop
+	Static Int DropCount=0
+	ReadOnly Int ID
+	ReadOnly Int Hue
+	ReadOnly Number Sat
+	ReadOnly Number Val
+	ReadOnly Int Length
+	ReadOnly Int _BeginX
+	Number _Y
+	
+	ReadOnly Number _Spd
+	
+	
+	Get Int StartY; Return math.floor(_Y); End
+	Get Int StartX; Return _BeginX - StartY; End
+	Get Int EndY;   Return StartY-Length; End
+	Get Int EndX;   Return StartX+Length; End
+	
+	Static Var First
+	Var Next
+	Var Prev
+	
+	Void UnLink()
+		if Prev
+			Prev.Next = Next
+		Else
+			First = Next
+		End
+	End
+	
+	Void Draw()
+		SetColorHSV(Hue,Sat,Val)
+		Line(StartX,StartY,EndX,EndY)
+		_Y = _Y + _Spd
+		if EndX<0 || EndY>Graphics.Height; 
+			//self.UnLink();
+			_Y=0
+			_BeginX=math.random(0,graphics.width+Graphics.height)
+		End
+	End
+	
+	Static Void DrawAll()
+		If !First
+			First = New Drop()
+		End
+		int tel
+		plua C=First
+		plua Last;Last=C
+		While C
+			C.Draw()
+			Last = C
+			C=C.Next
+			tel++
+		End
+		if Last && tel<200 && math.random(0,tel)<100
+			Last.Next = New Drop()
+		End
+	End
+	
+	Constructor
+		Hue = math.random(260,264)
+		Sat = 1
+		Val = math.random(500,1000)/1000
+		Length = math.random(5,10)
+		_Y = -math.random(10,20)
+		_Spd = math.random(1000,2000)/1234
+		_BeginX = math.random(0,Graphics.Width)
+		DropCount++
+		ID = DropCount
+		CSayF("Created raindrop #%d",ID)
+	End
+	
+End
+	
+Global Delegate DrawRain	
+
+Global Void ZA_Welcome()
+	If !Done.WelcomeToPurpleRainForest
+		MapText("WELCOME")
+		Tutorial("SECRET_DUNGEON")
+	End
+End
+
+
+Init
+	CSay("Purple Rain Forest!")
+	DrawRain = Drop.DrawAll
+	Map.AddCyclePost("DrawRain")
+End
