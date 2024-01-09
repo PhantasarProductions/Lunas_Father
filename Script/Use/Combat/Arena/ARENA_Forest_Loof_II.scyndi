@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/Arena/ARENA_Forest_Loof_II.scyndi
-// Version: 24.01.08
+// Version: 24.01.09
 // Copyright (C) 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -42,7 +42,7 @@ Module
 
 #use "Script/Flow/FlowCombat/Quake"
 
-plua ImgTree  = LoadNewImage("GFX/TEXTURES/TREES/LOOFBOOM II.PNG","ARENA_FOREST_SPAR_SPAR")
+plua ImgTree  = LoadNewImage("GFX/TEXTURES/TREES/LOOFBOOM II.PNG","ARENA_FOREST_LOOFBOOM_II")
 plua ImgGrass = LoadNewImage("GFX/Textures/GRASS/GRASS (GREEN).PNG","ARENA_FOREST_GRASS") 
 
 plua Trees
@@ -81,7 +81,7 @@ Void Draw()
 	SetColor(0,180,255)
 	Rect(0,0,Graphics.Width,Graphics.Height)
 	SetColor(255,255,255)
-	ImgGrass.Tile(0,(graphics.height div 4)-55,graphics.width,(graphics.height div 2)+55)
+	ImgGrass.Tile(0,(graphics.height div 4)-55,graphics.width,(graphics.height div 4)+55)
 	For tree in Each(Trees)
 		ImgTree.Draw(tree.x+Quake.X,tree.y+Quake.Y)
 	End
