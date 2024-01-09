@@ -84,7 +84,7 @@ Void Draw()
 	Rect(0,0,Graphics.Width,Graphics.Height)
 	SetColor(255,255,255)
 	ImgGrass.Tile(0,(graphics.height div 4)-55,graphics.width,graphics.height )
-	SetColorHSV(261,1,0.8)
+	SetColorHSV(261,1,1)
 	For tree in Each(Trees)
 		ImgTree.Draw(tree.x+Quake.X,tree.y+Quake.Y)
 	End
