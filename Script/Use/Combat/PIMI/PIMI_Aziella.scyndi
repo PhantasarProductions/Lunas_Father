@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.08
+// version: 24.01.09
 // End License Information
 Module
 
@@ -55,8 +55,8 @@ Void Force()
 	Lua.Scyndi.Class.Stage.CurrentTag = "FIM"
 End
 
-Bool AllowMagic(); Return gbool.AllowAziellaMagic; End
-Bool AllowForce(); Return gbool.AllowAziellaForce; End
+Bool AllowMagic(); Return True; End
+Bool AllowForce(); Return True; End
 
 //Global Void Init_PIMI_Aziella()
 Init
