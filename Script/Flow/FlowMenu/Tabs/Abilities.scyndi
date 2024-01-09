@@ -104,7 +104,7 @@ End
 
 Init 
 	ChAbl = {}
-	For _,ch in pairs{"Myrah","Luna","Scyndi"}
+	For _,ch in pairs{"Myrah","Luna","Scyndi","Aziella"}
 		CSayF("Getting the abilities for: %s",ch)
 		Lua.Scyndi.Use("Script/Use/Abilities/Abilities_"..ch)
 		ChAbl[Ch] = Lua.Scyndi.Class["Abilities_"..ch].Abl
