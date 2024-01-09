@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/Arena/ARENA_Forest_Loof.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 23.11.30
+// version: 24.01.09
 // End License Information
 
 Module
@@ -42,7 +42,7 @@ Module
 
 #use "Script/Flow/FlowCombat/Quake"
 
-plua ImgTree  = LoadNewImage("GFX/TEXTURES/TREES/LOOFBOOM.PNG","ARENA_FOREST_SPAR_SPAR")
+plua ImgTree  = LoadNewImage("GFX/TEXTURES/TREES/LOOFBOOM.PNG","ARENA_FOREST_LOOFBOOM")
 plua ImgGrass = LoadNewImage("GFX/Textures/GRASS/GRASS (GREEN).PNG","ARENA_FOREST_GRASS") 
 
 plua Trees
