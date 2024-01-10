@@ -41,6 +41,8 @@ Script
 #use "Libs/SCI/InterVar"
 
 #Use "Script/Use/Link/Map"
+#Use "Script/Use/Link/Ach"
+#Use "Script/Use/Link/Mini"
 #Use "Script/Use/Link/TextBoxes"
 
 Class Drop
@@ -131,6 +133,16 @@ Global Void ZA_Boss()
 	Map.PermaKill("ZA_Boss")
 	Map.Boss("Dryad")
 End
+
+Global Void ZA_Voltooid()
+	If !Done.Done_PurpleRainForest
+		Mini.Write("Scyndi ",255,180,0)
+		mini.Write("has learned the force ability: ",180,0,255)
+		Mini.WriteLn("Whizzy's Megaheal")
+	End
+	Awarded.Voltooid_PurpleRain = True
+End
+
 
 Init
 	CSay("Purple Rain Forest!")
