@@ -53,7 +53,7 @@ ReadOnly Void Action2()
 End
 	
 ReadOnly String Caption3 = "Whizzy's Megaheal"
-ReadOnly Bool Allow3(); Return False; End
+ReadOnly Bool Allow3(); Return gbool.Done_PurpleRainForest; End
 ReadOnly Void Action3(); End
 
 ReadOnly String Caption4 = "Summon Weniaria"
