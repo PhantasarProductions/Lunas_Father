@@ -40,7 +40,7 @@ Module
 #use "Libs/SCI/Graphics"
 
 readonly var saobj = NewArray("Acorn","Leaf","Heli","Seed","Chestnut","PineCone","Walnut")
-get int mxobj; return len(saobj-1); end
+get int mxobj; return len(saobj)-1; end
 
 class NatureStuff
 	static int Cnt
@@ -66,15 +66,15 @@ class NatureStuff
 		ID = Cnt
 		Y = -math.random(0,graphics.height)
 		X = math.random(0,graphics.width)
-		spd = math.random(1,4)
-		CSayF("Nature object #%04d created!")
+		spd = math.random(2,6)
+		CSayF("Nature object #%04d created!",ID)
 		Siz = math.random(32,96)
 		i=math.random(0,mxobj)
 		Img = LoadNewImage(sprintf("GFX/Combat/SpellAni/Nature/%s.png",saobj[i]),sprintf("SPELLANI_NATURE_OBJ_%02d",i))
 	end
 	
 	destructor
-		CSayF("Nature object #%04d destroyed!")
+		CSayF("Nature object #%04d destroyed!",ID)
 	End
 end
 	
@@ -97,10 +97,14 @@ Bool Cycle()
 	plua ret = False
 	plua cobj;cobj=NatureStuff.First
 	SetColor(255,255,255)
+	int timeout=10000
 	Repeat
 		cObj.Img.stretch(cobj.x,cobj.y,cobj.siz,cobj.siz)
 		cobj.y = cobj.y + cobj.spd
 		ret = ret || cobj.y<Graphics.Height
+		cobj = cobj.Next
+		timeout--
+		Lua.assert(timeout>=0,"Woe of Nature SPELLANI timeout!")
 	LoopWhile cObj
 	If !Ret; NatureStuff.First = nil; end
 	Return Ret
