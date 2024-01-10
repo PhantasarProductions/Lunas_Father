@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.09
+// version: 24.01.10
 // End License Information
 Script
 
@@ -126,6 +126,11 @@ Global Void ZA_Welcome()
 	End
 End
 
+Global Void ZA_Boss()
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	Map.Boss("Dryad")
+End
 
 Init
 	CSay("Purple Rain Forest!")
