@@ -1,5 +1,5 @@
 // License Information:
-// src/Scripts/Script/Use/Combat/Arena/ARENA_Forest_PurpleRain.scyndi
+// src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_Nature.scyndi
 // Version: 24.01.10
 // Copyright (C) 2024 Jeroen Petrus Broks
 // 
@@ -34,59 +34,74 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // End License Information
-
 Module
 
-#use "libs/sci/sys"
-#use "libs/sci/graphics"
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
 
-#use "Script/use/link/Map"
+readonly var saobj = NewArray("Acorn","Leaf","Heli","Seed","Chestnut","PineCone","Walnut")
+get int mxobj; return len(saobj-1); end
 
-#use "Script/Flow/FlowCombat/Quake"
-
-plua ImgTree  = LoadNewImage("GFX/TEXTURES/TREES/LOOFBOOM II.PNG","ARENA_FOREST_LOOFBOOM_II")
-plua ImgGrass = LoadNewImage("GFX/Textures/GRASS/GRASS (GREEN).PNG","ARENA_FOREST_GRASS") 
-
-plua Trees
-
-init
-	ImgTree.Hot(ImgTree.Width div 2, ImgTree.Height)
-End
-
-Class ARENA_SPAR
-	static int i
-	int X
-	int Y
-	Constructor
-		X = i
-		i = i + math.random(1,5)
-		Y = (Graphics.Height div 4) + math.random(-50,5)
+class NatureStuff
+	static int Cnt
+	static var First
+	var Next
+	ReadOnly Var Img
+	ReadOnly int Siz
+	
+	
+	readonly int ID
+	readonly int X
+	Int Y
+	readonly int spd
+		
+	//readonly int degspd
+	//int deg
+	
+	
+		
+	constructor
+		plua i
+		Cnt++
+		ID = Cnt
+		Y = -math.random(0,graphics.height)
+		X = math.random(0,graphics.width)
+		spd = math.random(1,4)
+		CSayF("Nature object #%04d created!")
+		Siz = math.random(32,96)
+		i=math.random(0,mxobj)
+		Img = LoadNewImage(sprintf("GFX/Combat/SpellAni/Nature/%s.png",saobj[i]),sprintf("SPELLANI_NATURE_OBJ_%02d",i))
 	end
-end
-
-
-Void StartCombat()
-	plua Temp = {}
-	plua NewTree
-	Trees = {}
-	ARENA_SPAR.i = -32
-	Repeat
-		NewTree = New ARENA_SPAR()
-		Temp[sprintf("%04d::%04d",NewTree.Y,NewTree.X)] = NewTree
-	LoopWhile ARENA_SPAR.i < Graphics.Width+32
-	for _,tree in spairs(Temp)
-		Trees[len(Trees)] = tree
-	end
-End
-
-Void Draw()
-	SetColor(180,0,255)
-	Rect(0,0,Graphics.Width,Graphics.Height)
-	SetColor(255,255,255)
-	ImgGrass.Tile(0,(graphics.height div 4)-55,graphics.width,graphics.height )
-	SetColorHSV(261,1,1)
-	For tree in Each(Trees)
-		ImgTree.Draw(tree.x+Quake.X,tree.y+Quake.Y)
+	
+	destructor
+		CSayF("Nature object #%04d destroyed!")
 	End
-	MapScript.DrawRain()
+end
+	
+
+
+Void Start(Executor,Targets,string Param)
+	plua cobj
+	NatureStuff.First = New NatureStuff()
+	cobj=NatureStuff.First
+	For i=1,50
+		cobj.Next = New NatureStuff()
+		cobj = cobj.Next
+	End
+End
+
+// Well be called while the SpellAni is running
+// When 'False' is returned the system will assume the SpellAni has ended
+// and move on the next execution stage
+Bool Cycle()
+	plua ret = False
+	plua cobj;cobj=NatureStuff.First
+	SetColor(255,255,255)
+	Repeat
+		cObj.Img.stretch(cobj.x,cobj.y,cobj.siz,cobj.siz)
+		cobj.y = cobj.y + cobj.spd
+		ret = ret || cobj.y<Graphics.Height
+	LoopWhile cObj
+	If !Ret; NatureStuff.First = nil; end
+	Return Ret
 End
