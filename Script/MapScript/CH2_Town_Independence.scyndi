@@ -32,12 +32,16 @@
 // 
 // **********************************************
 // 
-// version: 24.01.04
+// version: 24.01.11
 // End License Information
 Script
 
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
+
+#use "Libs/Music"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
@@ -72,12 +76,64 @@ Global Void ZA_ScyndiHouse()
 		Awarded.Voltooid_SkyTower = True
 		Pop.UnPop()
 	End	
+	if Party.InParty("Aziella") && !Done.RachelCured
+		Pop.Pop("S","North")
+		Pop.Tex("Scyndi","South")
+		MapText("RACHEL3")
+		Pop.UnPop()
+		Map.GoToLayer("CITYNIGHT","Myrah")
+		Return
+	End	
+	If gbool.RachelCured && !Done.StoryHarryAfterMath
+		plua _Party
+		_Party = Statistician.CreateNew("LUNA_PARTY")
+		Pop.Pop("S","North")
+		Pop.Tex("Scyndi","South")
+		MapText("RACHEL4")
+		Pop.UnPop()		
+		Map.PermaKill("Rachel")				
+		Int GLv = 0
+		Int SLv = 0
+		For cht in each{[0]="Myrah","Francis","Luna","Scyndi","Aziella"}
+			plua ch;ch=Party.GetChar(cht)
+			GLv = GLv + Ch.Stat.level
+			Slv = Slv + Party.SkillLvl(cht,1)
+			Slv = Slv + Party.SkillLvl(cht,2)
+		End
+		Party.NewChar("Rachel",math.max(20,Glv div 4),math.max(15,Glv div 5),math.max(10,Glv div 6))
+		Party.Char(5,"Rachel")
+		_Party.Char.Rachel.Stat.SKILL_Lvl_1 = math.max(1,SlV div (8+gint.skill))
+		_Party.Char.Rachel.Stat.SKILL_Lvl_2 = math.max(1,SlV div (8+gint.skill))
+		gstring.CampSituation = "0C_RACHEL"
+		Awarded.SCEN_RACHEL=True
+	End	
 End
 
 Global Void NPC_Dernor()
 	If !gbool.RachelCured
 		MapText("DERNOR_RACHEL")
+	Else
+		MapText("Dernor")
 	End
+End
+
+Global Void ZA_RosettaNight()
+	Music.Push()
+	Music.Play("MUSIC/HUB/CRACKLING FIREPLACE.MP3")
+	Kthura.Obj.Player.Visible=false
+	For y = Kthura.Obj.PreVillage.Y,Kthura.Obj.Campoint.Y
+		Cls()
+		Map.ScrollX = Kthura.Obj.PreVillage.X
+		Map.ScrollY = Y
+		Map.DrawScreenNoAuto()
+		Flip()
+	End
+	Kthura.HideByLabel("VP")
+	MapText("ROSETTA_MYRAH")
+	Awarded.SCEN_HARRY=true
+	gbool.STORYHARRY=true
+	Music.Pull()
+	Map.GoToLayer("SCYNDI","Start")
 End
 #endregion
 
