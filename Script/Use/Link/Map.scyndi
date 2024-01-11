@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Map.scyndi
-// Version: 23.12.26
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.11
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -209,6 +209,11 @@ Void DrawScreen()
 	Sys.Call("FLOW_FIELD","XDS")
 End
 
+Void DrawScreenNoAuto()
+	Sys.Call("FLOW_FIELD","XDSNA")
+End
+
+
 
 Void Welcome(string File)
 	Sys.Call("FLOW_FIELD","NewWelcome",File)
@@ -223,6 +228,9 @@ End
 Void Schedule(string Event)
 	Sys.Call("FLOW_FIELD","AddSchedule",Event)
 End
+
+Set Int ScrollX; Sys.Call("FLOW_FIELD","SetScrollX",value); End
+Set Int ScrollY; Sys.Call("FLOW_FIELD","SetScrollY",value); End
 
 QuickMeta Player
 	newindex

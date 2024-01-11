@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
-// Version: 24.01.08
+// Version: 24.01.11
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -51,6 +51,11 @@ Module
 
 int ScrollX
 int ScrollY
+
+Global Void SetScroll(Int X,Int Y); ScrollX=X; ScrollY=Y; End
+Global Void SetScrollX(Int X); ScrollX=X; End
+Global Void SetScrollY(Int Y); ScrollY=Y; End
+
 
 int HX
 int HY
@@ -220,8 +225,8 @@ Global Void BoxText_Background()
 	For f in Each(FField.UDFuncs);f();End
 End
 
-Void DrawScreen()
-	AutoPlayer()
+Void DrawScreen(NoAuto)
+	if !NoAuto;AutoPlayer();End
 	for ms in each(PreDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
 	Kthura.Draw(ScrollX,ScrollY)
 	For ms in each(PostDrawScreenMapScriptCyclesFunctions); MapScript[ms](); end;
@@ -235,3 +240,4 @@ Void DrawScreen()
 End
 
 Global Void XDS(); DrawScreen(); End
+Global Void XDSNA(); DrawScreen(true); End
