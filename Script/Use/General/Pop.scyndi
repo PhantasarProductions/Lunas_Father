@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/General/Pop.scyndi
-// Version: 24.01.04
+// Version: 24.01.11
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -104,4 +104,5 @@ Void UnPop()
 		Default
 			Return
 	End
+	Popped=0
 End
