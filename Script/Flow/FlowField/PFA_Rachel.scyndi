@@ -53,5 +53,5 @@ End
 Init
 	//FField = Lua.Rachel.Globals.FlowField
 	//FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
-	PFA_Reg("Rachel",nil,PFA_Rachel_Action,PFA_Rachel_Cycle,true)
+	PFA_Reg("Rachel",PFA_Rachel_Allow,PFA_Rachel_Action,PFA_Rachel_Cycle,true)
 End
