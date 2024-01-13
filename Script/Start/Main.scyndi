@@ -125,7 +125,7 @@ Init
 	NIMG("GFX/Alchemy/Tube.png","ALCHEMY_TUBE")
 	NIMG("GFX/Alchemy/Liquid.png","ALCHEMY_LIQUID")
 	NIMG("GFX/PFA/Button.png","PFA_BUTTON")
-	For ch In Each(NewArray("MYRAH","FRANCIS","LUNA","SCYNDI"))
+	For ch In Each(NewArray("MYRAH","FRANCIS","LUNA","SCYNDI","RACHEL"))
 		NIMG("GFX/PFA/"..ch..".png","PFA_"..ch)
 	End
 	For i=1,26 
