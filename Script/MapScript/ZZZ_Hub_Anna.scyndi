@@ -48,7 +48,7 @@ Script
 
 global const delegate Bye=Delisto
 
-Int CheckRate = 10
+Int CheckRate = 20
 Get Int RoomOpen; Return CheckRate Div 10; End
 
 Void CheckOpen()
