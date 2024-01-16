@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.11
+// version: 24.01.16
 // End License Information
 Script
 
@@ -107,6 +107,7 @@ Global Void ZA_ScyndiHouse()
 		gstring.CampSituation = "0C_RACHEL"
 		Awarded.SCEN_RACHEL=True
 	End	
+	WM_Unlocked.DarkTunnel = gbool.RachelCured
 End
 
 Global Void NPC_Dernor()
