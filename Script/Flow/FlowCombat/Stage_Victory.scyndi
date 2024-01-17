@@ -93,7 +93,8 @@ Void Cycle()
 	Ratio   = VScaleX / Graphics.Width
 	VScaleY = math.floor(Img.Height*Ratio)
 	Img.Stretch( (Graphics.Width div 2) - (VScaleX div 2),(Graphics.Height Div 4) - (VScaleY div 2),VScaleX,VScaleY)
-	If VScaleX>=Graphics.Width || VScaleY>Img.Height
+	//If VScaleX>=Graphics.Width || VScaleY>Img.Height
+	If VScaleX>=Img.Width || VScaleY>=Img.Height
 		Fighter.KillFoes()
 		Sys.GoToFlow("FIELD")
 		Switch Upper(CMusic)
