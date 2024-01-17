@@ -385,7 +385,7 @@ Global Void PartyBoxes(flashchar,incombat)
 	For i=3,Party.FullSize-1
 		plua TC
 		plua CH
-		int Y;Y = PBY+((i-3)*20)
+		int Y;Y = PBY+((i-3)*30)
 		TC = _Party.Party[i]
 		Ch = _Party.Char[TC]
 		ChkLevelUp(i,ch)
