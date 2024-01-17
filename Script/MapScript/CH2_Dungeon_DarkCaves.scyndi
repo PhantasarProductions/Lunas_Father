@@ -36,15 +36,20 @@
 // End License Information
 Script
 
+#use "LIBS/SCI/SYS"
 #use "LIBS/SCI/KTHURA"
 #use "LIBS/SCI/GRAPHICS"
 #use "LIBS/SCI/INTERVAR"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Textboxes"
 
 Plua Light = {["#000"]=True}
 Plua ImgDark
+
+Plua GoodSudoku = {}
+Plua AnswSudoku = {}
 
 Global Void Dark()
 	If !Light[Kthura.CurrentLayer]
@@ -80,6 +85,70 @@ Global Void Myrah_Remove_Block()
 	End
 End
 
+Global Void BreakFree()
+	Awarded.SCEN_BreakFree = true
+End
+
+Global Void BrugSchakelaar()
+	plua Brug = Kthura.Obj.Brug
+	Brug.ForcePassible = !Brug.ForcePassible
+	Brug.Visible = Brug.ForcePassible
+	Kthura.Remap()
+End
+
+Global Delegate ZA_21
+Global Delegate ZA_31
+Global Delegate ZA_41
+Global Delegate ZA_12
+Global Delegate ZA_32
+
+Global Delegate ZA_13
+Global Delegate ZA_23
+Global Delegate ZA_43
+
+Global Delegate ZA_14
+Global Delegate ZA_24
+Global Delegate ZA_34
+
+Global Void Check(String Tag)
+	Bool Goed = True
+	CSayF("Stepped on Sudoku tile: %s",tag)
+	AnswSudoku[Tag] = (AnswSudoku[Tag] % 4) + 1
+	Kthura.Obj[Tag].Texture = sprintf("GFX/Combat/Diamonds/FOE_%02d.png",AnswSudoku[Tag])
+	For k,v in sPairs(GoodSudoku)
+		Goed = Goed && v==AnswSudoku[k]
+		CSayF("= Checking %s => Must be: %d and is %d (Good=%s)",k,v,AnswSudoku[k],Goed)
+	End
+	If Goed
+		Map.PermaKill("Deur")
+		Awarded.Scen_Sudoku = True
+	End
+End
+
+Global Void TAR_DEUR()
+	Map.PermaKill("Deur")
+	Map.PermaKill("Hide")
+End
+
 Init
 	Map.AddCyclePost("Dark")
+	
+	// Set up puzzle
+	GoodSudoku.ZA_21 = 3
+	GoodSudoku.ZA_31 = 2
+	GoodSudoku.ZA_41 = 4
+	GoodSudoku.ZA_12 = 4
+	GoodSudoku.ZA_32 = 1
+	GoodSudoku.ZA_13 = 3
+	GoodSudoku.ZA_23 = 1
+	GoodSudoku.ZA_43 = 2
+	GoodSudoku.ZA_14 = 2
+	GoodSudoku.ZA_24 = 4
+	GoodSudoku.ZA_34 = 3
+	
+	For k,v in Pairs(GoodSudoku)
+		CSayF("SudokuDef: %s (Good: %d)",k,v)
+		AnswSudoku[k]=0
+		Lua.Scyndi.Globals[k] = Lua.load(sprintf("Scyndi.Globals.Check(\"%s\")",k))
+	End
 End
