@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
-// Version: 23.12.22
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.18
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -190,7 +190,7 @@ void ES_Effect()
 			Lua.Scyndi.Use("Script/Use/Combat/Wide/WIDE_"..Act.Act.WideEffect_Script)
 			WES[Act.Act.WideEffect_Script] = Lua.Scyndi.Class["WIDE_"..Act.Act.WideEffect_Script]
 		End
-		WES[Act.Act.WideEffect_Script].Go(Executor,Act)
+		WES[Act.Act.WideEffect_Script].Go(Executor,Act,Act.Act.WideEffect_Param)
 	End
 	Executor.AltCoords = False
 	Executor.Pose = "IDLE"
