@@ -134,6 +134,15 @@ Global Void TAR_DEUR()
 	Map.PermaKill("Hide")
 End
 
+Global Void ZA_WarnBoss()
+	Map.PermaKill("ZA_WarnBoss")
+	MapText("WARN_"..Map.Leader)
+End
+
+Global Void Crack_Boss()
+	Map.Boss("Skull")
+End
+
 Init
 	Map.AddCyclePost("Dark")
 	
