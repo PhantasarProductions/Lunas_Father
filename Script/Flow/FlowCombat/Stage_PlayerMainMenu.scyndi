@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_PlayerMainMenu.scyndi
-// Version: 24.01.09
+// Version: 24.01.18
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -55,6 +55,7 @@ Module
 #use "script/use/combat/pimi/pimi_luna"
 #use "script/use/combat/pimi/pimi_scyndi"
 #use "script/use/combat/pimi/pimi_aziella"
+#use "script/use/combat/pimi/pimi_rachel"
 
 Var AudName
 String CurrentPlayer
