@@ -147,6 +147,24 @@ Global Void ZA_Chapter3()
 	Map.Chapter(3)
 	Map.PermaKill("ZA_Chapter3")
 End
+
+Global Void ZA_Apple()
+	Pop.Pop("A","North")
+	MapText("Apple")
+	Pop.Unpop()
+	Map.PermaKill("ZA_Apple")
+	Awarded.Voltooid_DarkCaves = true
+	gbool.DarkCavesDone = true
+	gstring.CampSituation = "0D_NEONOR"
+End
+
+Global Void NPC_Apple()
+	MapText("Apple_Back")
+	If Sys.Yes(Rosetta.GetSTR("TRAVEL","DELISTO"))
+		Map.GoToLayer("#000","Einde")
+	End
+End
+
 Init
 	Map.AddCyclePost("Dark")
 	
