@@ -165,6 +165,14 @@ Global Void NPC_Apple()
 	End
 End
 
+Global Void NPC_Guard()
+	MapText("Guard")
+	If Sys.Yes(Rosetta.GetSTR("TRAVEL","Neonor"))
+		Map.GoToLayer("#010","Start")
+	End
+End
+
+
 Init
 	Map.AddCyclePost("Dark")
 	
