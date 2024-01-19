@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 23.12.30
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.18
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -175,6 +175,13 @@ Bool Effect_Attack(executor,target,act)
 			Lua.Scyndi.Use("Script/Use/Combat/Kill/KILL_"..Act.Act.Kill_Script)
 			Lua.Scyndi.Class["KILL_"..Act.Act.Kill_Script].KillEffect(Executor,Target,Act.Act.Kill_Param)
 		End
+		If Executor.Team=="Hero"
+			executor.irate++
+		End
+	End
+	
+	If Target.Team=="Hero" && Target.HP>0 && Atk>0
+		Target.iRate++
 	End
 	
 	// If any damage was done, return True
