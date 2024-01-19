@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.02
+// version: 24.01.18
 // End License Information
 Module
 
@@ -71,6 +71,9 @@ Bool PFA_Luna_Action()
 				Map.PermaKill(_crack_)
 				Kthura.ShowByLabel(_crack_)
 				gInt.Luna_Broken_Walls++
+				if Smash[Kthura.CurrentLayer][_crack_]
+					MapScript[Smash[Kthura.CurrentLayer][_crack_]](_crack_)
+				End
 				Return True
 			End
 		Else
