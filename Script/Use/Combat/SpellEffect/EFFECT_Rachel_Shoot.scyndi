@@ -1,0 +1,92 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_Rachel_Shoot.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.01.18
+// End License Information
+Module
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
+
+#use "Script/Use/General/Dice"
+
+#use "Script/Flow/FlowCombat/CharMsg"
+ 
+Bool DidWeHitAnything
+
+
+Void WideEffect(Executor,Targets,String Param)
+	DidWeHitAnything = False
+	If Len(Targets)<1
+		Mini.Write("ERROR> ",255,0,0)
+		Mini.WriteLn("Rachel has no targets!",255,255,0)
+		Return
+	End
+	Plua Rachel = Lua.Scyndi.Class.Fighter.ByTag.Rachel
+	Plua CRachel; CRachel = Rachel.Char
+	Plua SRachel; SRachel = Rachel.Char.Stat
+	For d in Each(Dice.Types)
+		Var Tar;Tar = Targets[math.random(1,len(Targets))-1]
+		string dTag;dTag="d"..d
+		Bool Hit
+		Hit = SRachel.Accuracy+Dice.D20>Tar.Stat.Evasion+Dice.D20+(gint.skill^2)+Dice.D20
+		Int Dmg=0
+		For i=1,SRachel[dTag]
+			Dmg = Dmg + Dice[dTag]
+		End
+		Switch Upper(Param)
+			Case "LOCKON"
+				Hit = true
+			Case "ANYTHINGBUTTHEKITCHENSINK"
+				Dmg = Dmg * Dice[dTag]
+			Case "FURYSHOT"
+				Hit = True
+				Dmg = math.max(1,Dmg) * 6
+			Default
+				Rachel.FP = Rachel.FP + (12 div gint.skill)
+		End
+		If Hit && Dmg>0
+			DidWeHitAnything = True
+			CharMsg.Put(Tar,Dmg,180,200,255)
+			Party.SkillExpUp("Rachel",1,Dice[dTag])
+		End
+	End
+End
+
+
+Bool Effect(Executor,Target,String Param)
+	Return True // DidWeHitAnything
+End
