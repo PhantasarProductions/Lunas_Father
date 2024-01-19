@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_SaveGame.Scyndi
-// Version: 23.12.21
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.18
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -82,6 +82,7 @@ init
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Krandar/Save.png","SG_KRANDAR")
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Sayonara/General.png","SG_SAYONARA")
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Rosetta/General.png","SG_Rosetta")
+	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Appel/General.png","SG_Appel")
 end
 
 
