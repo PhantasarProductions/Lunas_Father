@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Rachel.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -32,28 +32,44 @@
 // 
 // **********************************************
 // 
-// version: 23.12.21
+// version: 24.01.18
 // End License Information
 Module
 
+#use "Libs/SCI/InterVar"
+
 #use "Script/Use/Combat/FIMI/FIMI_Class"
+
+#use "Script/Flow/FlowCombat/Fighter"
+
+#use "Script/Use/Link/Party"
 
 
 ReadOnly String Caption1 = "Lock-On"
 ReadOnly Bool Allow1(); Return True; End
-ReadOnly Void Action1(); End
+ReadOnly Void Action1() 
+	plua a = new Action("Rachel","HERO_Rachel_Shoot_LockOn")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
+End
 	
 ReadOnly String Caption2 = "Anything but the kitchen sink"
-ReadOnly Bool Allow2(); Return False; End
-ReadOnly Void Action2(); End
+ReadOnly Bool Allow2(); Return Party.SkillLvl("Rachel",1)>=gint.skill*6; End
+ReadOnly Void Action2()
+	plua a = new Action("Rachel","HERO_Rachel_Shoot_AnythingButTheKitchSink")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
+
+End
 	
 ReadOnly String Caption3 = "Backstab"
-ReadOnly Bool Allow3(); Return False; End
+ReadOnly Bool Allow3(); Return Party.SkillLvl("Rachel",2)>=gint.skill*6; End
 ReadOnly Void Action3(); End
 
 ReadOnly String Caption4 = "Fury Shot"
 ReadOnly Bool Allow4(); Return False; End
-ReadOnly Void Action4(); End
+ReadOnly Void Action4()
+	plua a = new Action("Rachel","HERO_Rachel_Shoot_FuryShot")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
+End
 
 Var VFIMI
 	
