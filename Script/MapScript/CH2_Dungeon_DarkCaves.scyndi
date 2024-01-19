@@ -47,7 +47,9 @@ Script
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Textboxes"
 
-Plua Light = {["#000"]=True}
+#use "Script/Use/General/Pop"
+
+Plua Light = {["#000"]=True,["#010"]=True}
 Plua ImgDark
 
 Plua GoodSudoku = {}
