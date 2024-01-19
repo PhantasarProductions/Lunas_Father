@@ -143,6 +143,10 @@ Global Void Crack_Boss()
 	Map.Boss("Skull")
 End
 
+Global Void ZA_Chapter3()
+	Map.Chapter(3)
+	Map.PermaKill("ZA_Chapter3")
+End
 Init
 	Map.AddCyclePost("Dark")
 	
