@@ -1,0 +1,9 @@
+Script
+
+#use "Script/Use/Link/Menu"
+#use "Script/Use/Link/Textboxes"
+
+Global Void NPC_Blacksmith()
+	MapText("Blacksmith")
+	Menu.Upgrade()
+End
