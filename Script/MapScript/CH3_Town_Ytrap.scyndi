@@ -53,3 +53,7 @@ Global Void NPC_Besje()
 	MapText("Besje_"..Map.Leader)
 End
 
+global Void NPC_ItemMerchant()
+	MapText("Merchant")
+	Menu.Shop()
+End
