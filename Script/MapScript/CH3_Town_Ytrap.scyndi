@@ -44,7 +44,12 @@ Global Void NPC_Blacksmith()
 	MapText("Blacksmith")
 	Menu.Upgrade()
 End
+
 Global Void NPC_Pear()
 	MapText("Pear")
+End
+
+Global Void NPC_Besje()
+	MapText("Besje_"..Map.Leader)
 End
 
