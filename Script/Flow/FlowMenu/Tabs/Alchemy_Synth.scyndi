@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowMenu/Tabs/Alchemy_Synth.scyndi
-// Version: 23.11.21
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.24
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -50,6 +50,10 @@ Module
 Const Var BFnt = ObtainFont("BASE")
 Const Var MFnt = ObtainFont("MINI")
 
+Const Var SUp    = ObtainImage("PAGE_UP")
+Const Var SDown  = ObtainImage("PAGE_DOWN")
+
+
 Const Var ItemList = IAA.ListAll
 
 int ScrollY = 0
@@ -73,6 +77,7 @@ End
 
 Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
 	Int Y;Y=-ScrollY
+	Hue = (Hue+1) % 360
 	For _i,itmtag in ipairs(ItemList)
 		//CSayF("%d -> %s -> %s",_i,itmtag,Prefixed(ITMTag,"ITM_ALC_"))
 		If Prefixed(ITMTag,"ITM_ALC_")
@@ -86,8 +91,7 @@ Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
 					Number CRate
 					Var Itm = IAA[ITMTag]
 					if Allow;CRate=1; Else; CRate=0.75; End
-					if MX>DX && MY>DY && MX<BX+BH && MY<DY+50
-						Hue = (Hue+1) % 360
+					if MX>DX && MY>DY && MX+30<BX+BW && MY<DY+50
 						SetColorHSV(Hue,1,CRate)
 						Hover = Allow
 					Else
@@ -95,7 +99,7 @@ Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
 					End
 					BFnt.Text(ITM.Name,DX,DY)
 					Col(0,180,255,CRate)
-					BFnt.Text(sprintf("%d",ITM.Num),DX+BW-3,DY,1,0)
+					BFnt.Text(sprintf("%d",ITM.Num),DX+BW-33,DY,1,0)
 					int MANX;MANX = DX + 5
 					Int MANY;MANY = DY + 30
 					Bool CanCreate = True
@@ -124,5 +128,21 @@ Void Flow(string _Situation,string CharTag,int bx,int by,int bw,int bh)
 				Y++
 			End
 		End
+	End
+	If ScrollY>0
+		SetColor(255,255,255)
+		If MY>by && MY<by+30 && MX>(bx+bw)-30 && BX<bx+Bw
+			SetColorHSV(360-Hue,1,1)
+			If ML; ScrollY--; End
+		End
+		SUp.Stretch(bx+bw-30,by,30,30)
+	End
+	If (Y*40)>=BY+BH-50
+		SetColor(255,255,255)
+		If MY>by+bh-80 && MY<by+bh && MX>(bx+bw)-30 && BX<bx+Bw
+			SetColorHSV(360-Hue,1,1)
+			If ML; ScrollY++; End
+		End
+		SDown.Stretch(bx+bw-30,by+bh-80,30,30)
 	End
 End
