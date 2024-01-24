@@ -32,13 +32,19 @@
 // 
 // **********************************************
 // 
-// version: 24.01.20
+// version: 24.01.24
 // End License Information
 Script
 
+#use "Libs/SCI/InterVar"
+
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
+#use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/Textboxes"
+
+#use "Script/Use/General/Pop"
+
 
 Global Void NPC_Blacksmith()
 	MapText("Blacksmith")
@@ -56,4 +62,20 @@ End
 global Void NPC_ItemMerchant()
 	MapText("Merchant")
 	Menu.Shop()
+End
+
+Global Void NPC_Duke()
+	If !Done.SpokenHalflingDukeForTheFirstTime
+		Pop.Pop("D")
+		MapText("Duke1")
+		Pop.UnPop()
+		WM_Unlocked.Rodrom = True
+		gstring.CampSituation = "0E_GRAPE"
+		Return
+	End
+	If gbool.Rodrom_Completed
+		MapText("Duke3")
+	Else
+		MapText("Duke2")
+	End
 End
