@@ -41,6 +41,9 @@ Script
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#Use "Script/Use/Link/Party"
+
 		Map.Kill("Medal_Barrier")
 	End
 End
