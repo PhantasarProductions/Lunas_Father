@@ -33,5 +33,15 @@
 // **********************************************
 // 
 // version: 24.01.24
+// version: 24.01.25
 // End License Information
+
 Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+		Map.Kill("Medal_Barrier")
+	End
+End
