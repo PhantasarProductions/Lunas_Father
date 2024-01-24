@@ -44,6 +44,14 @@ Script
 #use "Script/Use/Link/Ach"
 #Use "Script/Use/Link/Party"
 
+plua Heroes = NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel")
+
+Global Void RemoveBar()
+	Map.PermaKill("BarNext")
+	For H in Each(Heroes)
+		Party.GetChar(H).Stat.Exp = Party.GetChar(H).Stat.Exp - (3000 div gint.skill) 
+	End
+End
 		Map.Kill("Medal_Barrier")
 	End
 End
