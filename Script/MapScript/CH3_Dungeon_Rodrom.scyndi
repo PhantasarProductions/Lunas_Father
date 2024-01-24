@@ -52,6 +52,11 @@ Global Void RemoveBar()
 		Party.GetChar(H).Stat.Exp = Party.GetChar(H).Stat.Exp - (3000 div gint.skill) 
 	End
 End
+
+
+Global Void ZA_CheckMedal()
+	CSayF("Medal Rate: %03d%% (%5s)",Ach.MedalRate, Ach.MedalRate>=75)
+	If Ach.MedalRate>=75 
 		Map.Kill("Medal_Barrier")
 	End
 End
