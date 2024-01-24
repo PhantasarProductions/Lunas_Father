@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/Flow_SaveGame.Scyndi
-// Version: 24.01.18
+// Version: 24.01.24
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -83,6 +83,7 @@ init
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Sayonara/General.png","SG_SAYONARA")
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Rosetta/General.png","SG_Rosetta")
 	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Appel/General.png","SG_Appel")
+	Pics[Len(Pics)] = LoadNewImage("GFX/Portraits/Besje/General.png","SG_Besje")
 end
 
 
