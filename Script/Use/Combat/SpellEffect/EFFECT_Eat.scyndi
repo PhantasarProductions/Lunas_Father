@@ -37,6 +37,7 @@
 
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Party"
@@ -55,15 +56,19 @@ Bool Effect(Executor,Target,String Param)
 	Int TarHP;  TarHP  = Target.HP
 	If gint.skill!=3;TarHP--;End
 	Int Drain; Drain = math.min(ExLoss,TarHP)
-	If Drain<=0; Return False; End
+	If Drain<=0; Return False; End		
+	Executor.Char.Points.HP.Maximum = math.max(gint.skill,Executor.Char.Points.HP.Maximum-(3-gint.skill)) 
 	CharMsg.Put(Target,  Drain)
 	CharMsg.Put(Executor,Drain,180,255,0)
 	Executor.HP = Executor.HP + Drain
 	Target.HP = Target.HP - Drain
+	CSayF("After eating %s has %d of %d HP",Executor.Name,Executor.Char.Points.HP.Have,Executor.Char.Points.HP.Maximum)
 	If Target.Team=="Hero"
 		// The "if" check should not be needed, but is a safety precaution
 		Party.SkillExpUp(Target.Tag,1,Drain * (4-gint.skill))
 		Party.SkillExpUp(Target.Tag,2,Drain * (4-gint.skill))
+		Target.irate = Target.irate + 4-gint.skill 
+		Target.Char.Points.VIT.Have++
 	End
 	Return True
 End
