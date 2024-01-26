@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/StatusChanges/CAUSE_Death.scyndi
-// Version: 23.12.15
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.01.26
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -36,7 +36,7 @@
 // End License Information
 Module
 
-Void Cause(Target,string Param)
+Void Cause(Target,string Param="")
 	If Target.StatusChanges.Zombie || Target.StatusChanges.Undead
 		Target.HP = Target.MaxHP
 	Else
