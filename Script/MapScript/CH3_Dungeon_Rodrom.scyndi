@@ -42,14 +42,23 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#Use "Script/Use/Link/Mini"
 #Use "Script/Use/Link/Party"
 
 plua Heroes = NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel")
 
 Global Void RemoveBar()
 	Map.PermaKill("BarNext")
+	Mini.WriteLn("A door opens")
 	For H in Each(Heroes)
 		Party.GetChar(H).Stat.Exp = Party.GetChar(H).Stat.Exp - (3000 div gint.skill) 
+	End
+End
+
+Global Void RemoveH()
+	Map.PermaKill("H")
+	For H in Each(Heroes)
+		Party.GetChar(H).Stat.Exp = Party.GetChar(H).Stat.Exp - (6000 div gint.skill) 
 	End
 End
 
