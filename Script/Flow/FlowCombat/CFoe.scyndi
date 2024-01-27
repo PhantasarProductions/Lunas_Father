@@ -91,7 +91,6 @@ Class Foe
 	ReadOnly Var _Status 
 	ReadOnly Var StatusChanges
 	ReadOnly Var Permanenced = {}
-
 		
 	Get String AudName
 		plua ret;ret = RawData.Value("MetaData","AudName")
