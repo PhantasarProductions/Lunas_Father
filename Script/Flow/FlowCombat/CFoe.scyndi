@@ -286,8 +286,9 @@ Class Foe
 			KillScaleY = KillScaleX
 		Else
 			If !Killed
-				For i=0,Party.FullSize-1
+				For i=0,Party.FullSize-1					
 					Var h;h = Lua.Scyndi.Class.Fighter.ByTag[Party.Char(i)]
+					if i<3; h.irate++; end
 					Int e;e = Round(RawData.IntValue("Kill","Experience")*h.rate)
 					If h.stat.Level<gint.levelcap
 						h.stat.EXP = h.stat.EXP - e
@@ -301,9 +302,9 @@ Class Foe
 				KillScaleX = RawData.IntValue("XIMG","Scale")/1000
 				KillScaleY = KillScaleX
 				Killed = True
-				For i=0,party.FullSize-1
-					CSay("Experience system not yet operational! So no points yet for "..Party.Char(i))
-				End				
+				//For i=0,party.FullSize-1
+				//	CSay("Experience system not yet operational! So no points yet for "..Party.Char(i))
+				//End				
 				If Dice.D100<RawData.IntValue("DROP1","RATE") 
 					Self.Drop(RawData.value("DROP1","ITEM"))
 				ElseIf Dice.D100<RawData.IntValue("DROP2","RATE")
