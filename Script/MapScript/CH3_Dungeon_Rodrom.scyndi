@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.26
+// version: 24.04.10
 // End License Information
 
 Script
@@ -89,4 +89,8 @@ Global Void POST_Boss()
 	//Lua.error("Rest not scripted yet")
 	Map.GoToMap("CH3_Town_Ytrap","TOWN","Post_Grape")
 End
+
+Global Void ZA_HouseOfCards()
+	CSay("Entering the House Of Cards")
+	Map.GoToMap("MDL_Dungeon_HouseOfCards","#000","Start")
 End
