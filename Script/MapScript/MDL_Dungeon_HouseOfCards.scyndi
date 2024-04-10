@@ -1,0 +1,184 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/MDL_Dungeon_HouseOfCards.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.04.10
+// End License Information
+Script
+
+#use "Libs/SCI/sys"
+#use "Libs/SCI/sstring"
+#use "Libs/SCI/intervar"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
+
+#use "Script/Use/General/Cash"
+
+Get String LeadTag
+	return sprintf("%s_%s_%04d_%04d",Map.Layer,Map.Leader,Player.X,Player.Y)
+End
+
+Get String AllTag
+	return sprintf("%s_%04d_%04d",Map.Layer,Player.X,Player.Y)
+End
+
+class SuitLink
+
+	Static Void Harten()
+		Bool R
+		Switch gint.skill
+		case 1
+			R = true
+		case 2
+			If !Done["Harten_"..LeadTag]
+				gint["Harten_"..LeadTag] = math.random(5,math.ceil(6,100-Party.GetLevel(Map.Leader)))
+			End
+			R = gint["Harten_"..LeadTag]>0
+			If R;
+				gint["Harten_"..LeadTag]--
+				CSayF("Only %d recover(y)(ies) left for '%s'",gint["Harten_"..LeadTag],LeadTag)
+			End
+		case 3
+			R = !Done.Harten
+		Default
+			R = False
+		End
+		If R
+			Party.Recover()
+		End
+		Mini.WriteLn("Hearts",255,0,0)
+	End
+	
+	Static Void Ruiten()		
+		Switch gint.skill
+			Case 1
+				If !Done["Ruiten_"..AllTag]
+					Cash.Have = math.min(math.max(5,Cash.Have),100000)
+				End
+			Case 2
+				If !Done["Ruiten_"..AllTag]
+					Cash.Have = math.random(1,math.min(math.max(5,Cash.Have),250000))						
+				End
+			Case 3
+				If !Done["Ruiten_"..AllTag]
+					Cash.Have = Cash.Have + math.random(-Cash.Have,Cash.Have)
+				End
+		End
+		Mini.WriteLn("Diamonds",255,0,0)
+	End
+	
+	Static Void Schoppen()
+		plua ch = Party.GetChar(Map.Leader)
+		int P;P = ch.Points.HP.Have div 10
+		int H;H = P * gint.skill
+		H = math.min(H,ch.Points.HP.Have-1)
+		if H>0
+			ch.Points.HP.Have = ch.Points.HP.Have - H
+			Mini.Write(Map.Leader,255,180,0)
+			Mini.Write(sprintf(" took %d HP damage",H),255,0,0)
+			if gint.skill!=3
+				ch.Points.VIT.Have = ch.Points.VIT.Have - 10
+				Mini.Write(" and lost 10 VIT",255,0,0)
+			End
+			Mini.WriteLn("!",255,0,0)
+		End
+		Mini.WriteLn("Spades")
+	End
+	
+	Static Void Klaver()
+		Switch gint.skill
+		Case 1
+			if !Done["Clubs_"..AllTag]
+				For _,CT in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+					For i=1,2
+						plua ske
+						ske = Party.GetChar(CT).Points[sprintf("SKILL_EXP_%d",i)]
+						Party.SkillExpUp(CT,i,ske.Maximum)
+					End
+				End
+			End
+		Case 2
+			If !Done["Clubs_"..AllTag]
+				For i=1,2
+					plua ske
+					ske = Party.GetChar(Map.Leader).Points[sprintf("SKILL_EXP_%d",i)]
+					Party.SkillExpUp(Map.Leader,i,ske.Maximum)
+				End
+			End
+		Case 3
+			If !Done["Clubs_"..AllTag]
+				gint.ClubsDiv++
+				For i=1,2
+					plua ske
+					ske = Party.GetChar(Map.Leader).Points[sprintf("SKILL_EXP_%d",i)]
+					Party.SkillExpUp(Map.Leader,i,ske.Maximum div gint.ClubsDiv)
+				End
+			End
+		Default
+			Lua.error("Unknown Clubs Skill")
+		End
+		Mini.WriteLn("Clubs")
+	End
+End
+
+
+QuickMeta QMFancy
+	index
+		//plua f;f=xsplit(Upper(Key,"_"))
+		//return SuitLink[f[0]]
+		// Why splitting won't work is beyond me, but fact it, it doesn't.
+		string f = ""
+		CSayF("Gonna work out %s(%d)",Key,len(Key))
+		For i=1,len(Key)
+			CSayF("%d>%d>%s>%s(%s)",i,len(key),Key,F,Mid(Key,i,1))
+			if Mid(Key,i,1)=="_"; Break; End
+			F = F .. Mid(Key,i,1)
+		End
+		Return SuitLink[F]
+	end
+End
+
+Global Get Var NPC_Fancy; Return QMFancy; End
+
+Global Void ZA_HartenVrouw()
+	If !Done.HOC_HartenVrouw
+		For _,CT in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+			Party.GetChar(CT).Points.HP.Have=1
+			Party.GetChar(CT).Points.VIT.Have=0
+		End
+		Awarded.SCEN_QUEENHEARTS = True
+	End
+End
