@@ -32,11 +32,12 @@
 // 
 // **********************************************
 // 
-// version: 24.01.24
+// version: 24.04.06
 // End License Information
 Script
 
 #use "Libs/SCI/InterVar"
+#use "Libs/SCI/Kthura"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
@@ -45,6 +46,7 @@ Script
 
 #use "Script/Use/General/Pop"
 
+plua Fanda
 
 Global Void NPC_Blacksmith()
 	MapText("Blacksmith")
@@ -77,5 +79,31 @@ Global Void NPC_Duke()
 		MapText("Duke3")
 	Else
 		MapText("Duke2")
+	End
+End
+
+Global Void NPC_Fandalora()
+	If Fanda
+		MapText("Fandalora")
+	End
+End
+
+Global Void NPC_Grape()
+	If gbool.Defeated_Grape_InRodrom
+		MapText("Grape")
+	End
+End
+
+Global Void ZA_CheckGrape()
+	Kthura.Obj.NPC_Fandalora.Visible = gbool.Ytrap_Show_Fandalora
+	Kthura.obj.NPC_Grape.Visible = gbool.Defeated_Grape_InRodrom
+	Fanda = gbool.Ytrap_Show_Fandalora
+	gbool.Ytrap_Show_Fandalora = False
+	If Fanda && (!Done.Rodrom_Completed)
+		Pop.Pop("D")
+		MapText("GRAPE_FANDALORA")
+		Pop.UnPop()
+		WM_Unlocked.Myr = True
+		gstring.CampSituation = "0F_MYR"
 	End
 End
