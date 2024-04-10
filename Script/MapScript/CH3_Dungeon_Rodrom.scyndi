@@ -38,12 +38,14 @@
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
 #Use "Script/Use/Link/Mini"
 #Use "Script/Use/Link/Party"
+#Use "Script/Use/Link/TextBoxes"
 
 plua Heroes = NewArray("Myrah","Francis","Luna","Scyndi","Aziella","Rachel")
 
@@ -68,4 +70,23 @@ Global Void ZA_CheckMedal()
 	If Ach.MedalRate>=75 
 		Map.Kill("Medal_Barrier")
 	End
+End
+
+Global Void ZA_Boss()
+	Player.StopWalking()
+	MapText("GRAPE_PREBOSS")
+	Map.Schedule("POST_Boss")
+	Map.Boss("Grape")
+	Map.PermaKill("ZA_Boss")
+End
+
+Global Void POST_Boss()
+	Kthura.Obj.Boss.Texture="GFX/NPC/Halflings/Grape Fallen.png" 
+	MapText("GRAPE_POSTBOSS")
+	Map.PermaKill("Boss")
+	gbool.Defeated_Grape_InRodrom = true
+	gbool.Ytrap_Show_Fandalora = true
+	//Lua.error("Rest not scripted yet")
+	Map.GoToMap("CH3_Town_Ytrap","TOWN","Post_Grape")
+End
 End
