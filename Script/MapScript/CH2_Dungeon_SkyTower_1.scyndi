@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.04
+// version: 24.04.06
 // End License Information
 Script
 
@@ -116,8 +116,8 @@ Global Void ZA_Angel()
 	MapText("ANGEL")
 	Map.Schedule("POST_Angel")
 	Map.Boss("ANGEL")
-	Map.Kill("Angel")
-	Map.Kill("ZA_Angel")
+	Map.PermaKill("Angel")
+	Map.PermaKill("ZA_Angel")
 End
 
 Global Void POST_Angel()
