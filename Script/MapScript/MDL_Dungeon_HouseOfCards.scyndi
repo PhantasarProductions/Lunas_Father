@@ -182,3 +182,8 @@ Global Void ZA_HartenVrouw()
 		Awarded.SCEN_QUEENHEARTS = True
 	End
 End
+
+Global Void OpenDoor(); 
+	Map.PermaKill("Door");
+	Mini.WriteLn("A door opens somewhere in this area.",math.random(0,255),math.random(0,255),math.random(0,255))
+End
