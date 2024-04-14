@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_Accelerator.scyndi
-// Version: 24.01.09
+// Version: 24.04.14
 // Copyright (C) 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -47,6 +47,11 @@ End
 Bool Effect(Executor,Target,String Param)
 	If Executor.Tag=="Aziella"
 		Party.SkillExpUp("Aziella",2,Dice.D100)
+		Party.SkillExpUp("Aziella",2,Dice.D100)
+	End
+	If Executor.Tag=="Myrah"
+		Party.SkillExpUp("Myrah",2,Dice.D100)
+		Party.SkillExpUp("Myrah",2,Dice.D100*Dice.D20)
 	End
 	Switch Target.Team
 		Case "Hero"
