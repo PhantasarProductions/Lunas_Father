@@ -32,11 +32,12 @@
 // 
 // **********************************************
 // 
-// version: 24.04.12
+// version: 24.04.18
 // End License Information
 Script
 
 #use "Libs/SCI/sys"
+#use "Libs/SCI/Kthura"
 #use "Libs/SCI/sstring"
 #use "Libs/SCI/intervar"
 
@@ -186,4 +187,19 @@ End
 Global Void OpenDoor(); 
 	Map.PermaKill("Door");
 	Mini.WriteLn("A door opens somewhere in this area.",math.random(0,255),math.random(0,255),math.random(0,255))
+End
+
+Global Void ZA_CheckBoss()
+	If !gbool.HouseOfCardsBoss
+		Kthura.HideByLabel("Post_Boss")
+	End
+	Map.Kill("ZA_CheckBoss")
+End
+
+Global Void NPC_Joker()
+	Map.PermaKill("NPC_Joker")
+	Map.PermaKill("BossWall")
+	Kthura.ShowByLabel("Post_Boss")
+	gbool.HouseOfCardsBoss=true
+	Map.Boss("Joker")
 End
