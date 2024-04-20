@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
-// Version: 23.12.27
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.04.19
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -95,6 +95,10 @@ Void Cycle()
 			For Tag,FData in pairs(Fighter.ByTag)
 				Switch FData.Team
 					Case "Foe"
+						If FData.Joker!="" 
+							Scyndi.Use(sprintf("Script/Use/Combat/Joker/JOKER_%s",FData.Joker))
+							Scyndi.Class["JOKER_"..fData.Joker].JAct(FData)
+						End
 					Case "Hero"
 						For i=0,FData.Char.ListSize("Skills")-1
 							plua Skill_Tag;Skill_Tag = FData.Char.List.Skills[i]
