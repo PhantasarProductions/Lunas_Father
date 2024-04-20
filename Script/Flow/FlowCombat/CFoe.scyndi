@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 24.02.11
+// Version: 24.04.19
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -131,6 +131,10 @@ Class Foe
 	
 	Get String ImageFile
 		Return RawData.Value("MetaData","Image")
+	End
+	
+	Get String Joker
+		Return RawData.Value("Joker","Joker")
 	End
 		
 	Get Bool ShowHPBar
