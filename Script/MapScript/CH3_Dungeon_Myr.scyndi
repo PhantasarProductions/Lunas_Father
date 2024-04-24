@@ -38,7 +38,14 @@
 Script
 
 #use "libs/sci/sys"
+#use "libs/sci/intervar"
 #use "script/use/link/map"
+#use "Script/Use/General/Pop"
+#use "Script/Use/Link/WorldMap"
+#use "Script/Use/Link/Textboxes"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
+
 
 Global Void ZA_PLAY20()
 	Player.Dominance=20
@@ -48,4 +55,16 @@ End
 Global Void ZA_PLAY10()
 	Player.Dominance=10
 	CSay("Player to dom10")
+End
+
+Global Void ZA_Ankie()
+	Pop.Pop("A","East")
+	MapText("ANKIE")
+	Pop.UnPop()
+	Awarded.Scen_Ankie = true
+	WM_Unlocked.Equus = true
+	Map.PermaKill("ZA_Ankie")
+	Map.DelayKill("NPC_MT_Ankie")
+	Party.SkillExpUp("Myrah",1,10000) // Myrah made a new hunting friend.
+	gstring.CampSituation = "10_ANKIE"
 End
