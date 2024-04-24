@@ -1,0 +1,155 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/Joker/JXP.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.04.21
+// End License Information
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Intervar"
+
+#use "Script/Use/Link/Party"
+
+Bool FrontOnly = True
+
+Get Int MaxXP	
+	return 1000000 div (10^gint.skill)
+End
+
+Get Int MyrahBow; return gint.XP_MyrahBow; End
+Set Int MyraBow
+	If FrontOnly && (!Party.InFront("Myrah")); Return 0; End
+	gint.XP_MyrahBow=math.min(MaxXP,Value)
+	Party.SkillExpUp("Myrah",1, gint.XP_MyrahBow)
+End
+
+Get Int MyrahMagic; return gint.XP_MyrahMagic; End
+Set Int MyrahMagic
+	If FrontOnly && (!Party.InFront("Myrah")); Return 0; End
+	gint.XP_MyrahMagic=math.min(MaxXP,Value)
+	Party.SkillExpUp("Myrah",2, gint.XP_MyrahMagic)
+End
+
+
+Get Int FrancisStaff; return gint.XP_FrancisStaff; End
+Set Int FrancisStaff
+	If FrontOnly && (!Party.InFront("Francis")); Return 0; End
+	gint.XP_FrancisStaff=math.min(MaxXP,Value)
+	Party.SkillExpUp("Francis",1, gint.XP_FrancisStaff)
+End
+
+Get Int FrancisAlchemy; return gint.XP_FrancisAlchemy; End
+Set Int FrancisAlchemy
+	If FrontOnly && (!Party.InFront("Francis")); Return 0; End
+	gint.XP_FrancisAlchemy=math.min(MaxXP,Value)
+	Party.SkillExpUp("Francis",2, gint.XP_FrancisAlchemy)
+End
+
+
+Get Int LunaSabre; return gint.XP_LunaSabre; End
+Set Int LunaSabre
+	If FrontOnly && (!Party.InFront("Luna")); Return 0; End
+	gint.XP_LunaSabre=math.min(MaxXP,Value)
+	Party.SkillExpUp("Luna",1, gint.XP_LunaSabre)
+End
+
+Get Int LunaMagic; return gint.XP_LunaMagic; End
+Set Int LunaMagic
+	If FrontOnly && (!Party.InFront("Luna")); Return 0; End
+	gint.XP_LunaMagic=math.min(MaxXP,Value)
+	Party.SkillExpUp("Luna",2, gint.XP_LunaMagic)
+End
+
+
+Get Int ScyndiWhip; return gint.XP_ScyndiWhip; End
+Set Int ScyndiWhip
+	If FrontOnly && (!Party.InFront("Scyndi")); Return 0; End
+	gint.XP_ScyndiWhip=math.min(MaxXP,Value)
+	Party.SkillExpUp("Scyndi",1, gint.XP_ScyndiWhip)
+End
+
+Get Int ScyndiMagic; return gint.XP_ScyndiMagic; End
+Set Int ScyndiMagic
+	If FrontOnly && (!Party.InFront("Scyndi")); Return 0; End
+	gint.XP_ScyndiMagic=math.min(MaxXP,Value)
+	Party.SkillExpUp("Scyndi",2, gint.XP_ScyndiMagic)
+End
+
+
+Get Int AziellaBow; return gint.XP_AziellaBow; End
+Set Int AziellaBow
+	If FrontOnly && (!Party.InFront("Aziella")); Return 0; End
+	gint.XP_AziellaBow=math.min(MaxXP,Value)
+	Party.SkillExpUp("Aziella",1, gint.XP_AziellaBow)
+End
+
+Get Int AziellaMagic; return gint.XP_AziellaMagic; End
+Set Int AziellaMagic
+	If FrontOnly && (!Party.InFront("Aziella")); Return 0; End
+	gint.XP_AziellaMagic=math.min(MaxXP,Value)
+	Party.SkillExpUp("Aziella",2, gint.XP_AziellaMagic)
+End
+
+
+Get Int RachelGun; return gint.XP_RachelGun; End
+Set Int RachelGun
+	If FrontOnly && (!Party.InFront("Rachel")); Return 0; End
+	gint.XP_RachelGun=math.min(MaxXP,Value)
+	Party.SkillExpUp("Rachel",1, gint.XP_RachelGun)
+End
+
+Get Int RachelTinker; return gint.XP_RachelTinker; End
+Set Int RachelTinker
+	If FrontOnly && (!Party.InFront("Rachel")); Return 0; End
+	gint.XP_RachelTinker=math.min(MaxXP,Value)
+	Party.SkillExpUp("Rachel",2, gint.XP_RachelTinker)
+End
+
+Table Sk1 = NewArray("MyrahBow","FrancisStaff","LunaSabre","ScyndiWhip","AziellaBow","RachelGun")
+Table Sk2 = NewArray("MyrahMagic","FrancisAlchemy","LunaMagic","ScyndiMagic","AziellaMagic","RachelTinker")
+Table Melee = NewArray("FrancisStaff","LunaSabre","ScyndiWhip")
+Table Range = NewArray("MyrahBow","AziellaBow","RachelGun")
+Table Magic = NewArray("MyrahMagic","LunaMagic","ScyndiMagic","AziellaMagic")
+Table All = Sk1
+Init
+	AppendArray(All,Sk2)
+End
+
+Void RUP(String Tag)
+	plua s   = Lua.Scyndi.Class.JXP
+	plua a;a = s[Tag]
+	plua r;r = a[math.random(0,len(a)-1)]
+	CSayF("RUP(%s) -> %s" ,Tag,r)
+	s[r]++
+End
