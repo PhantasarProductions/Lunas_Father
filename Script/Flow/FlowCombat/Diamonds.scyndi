@@ -1,7 +1,7 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Diamonds.scyndi
-// Version: 23.12.27
-// Copyright (C) 2023 Jeroen Petrus Broks
+// Version: 24.04.21
+// Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
 // This file is part of a project related to the Phantasar Chronicles or another
@@ -304,13 +304,14 @@ Void Check()
 						Case "Hero"
 							If FDat.PartyPos<3
 								NewPlayer(spot,FTag,FDat.force)
+								CSayF("No cards for %s so automatically added one on spot #%d",FTag,Spot)
 							End
 						Case "Foe"
 							NewFoe(spot,FTag,FDat.force)
+							CSayF("No cards for %s so automatically added one on spot #%d",FTag,Spot)
 						Default
 							Lua.error("Diamonds.Check(): Unknown Team ("..FDat.Team..") for fighter: "..FTag)
-					End
-					CSayF("No cards for %s so automatically added one on spot #%d",FTag,Spot)
+					End					
 				End
 			End
 		End
