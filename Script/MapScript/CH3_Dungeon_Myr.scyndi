@@ -34,4 +34,20 @@
 // 
 // version: 24.04.12
 // End License Information
+
 Script
+
+#use "libs/sci/sys"
+#use "script/use/link/map"
+
+Global Void ZA_PLAY20()
+	Player.Dominance=20
+	CSay("Player to dom20")
+End
+
+Global Void ZA_PLAY10()
+	Player.Dominance=10
+	CSay("Player to dom10")
+End	
+	
+	
