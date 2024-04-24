@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.04.18
+// version: 24.04.21
 // End License Information
 Script
 
@@ -202,4 +202,29 @@ Global Void NPC_Joker()
 	Kthura.ShowByLabel("Post_Boss")
 	gbool.HouseOfCardsBoss=true
 	Map.Boss("Joker")
+End
+
+Global Void ZA_Exit()
+	If gint.Skill<3
+		For _,ch in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+			For skl = 1,2
+				Int TimeOut=10000
+				While Party.SkillLvl(ch,skl)<20 div gint.skill
+					TimeOut--
+					if TimeOut<=0
+						CSayF("Time-Out for %s",ch)
+						break
+					End
+					CSayF("%04d> Skill #%d up for %s",TimeOut,skl,ch)
+					Party.SkillExpUp(ch,skl,1000000000)
+				End
+			End
+		End
+	End
+	Awarded.Voltooid_HouseOfCards = True
+	Map.GoToMap("CH3_DUNGEON_Rodrom","#002","From_HouseOfCards")
+End
+
+Init
+	Awarded.MEDAL_HouseOfCards = True
 End
