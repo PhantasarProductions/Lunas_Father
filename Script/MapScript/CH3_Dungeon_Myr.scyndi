@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.04.12
+// version: 24.04.24
 // End License Information
 
 Script
@@ -48,6 +48,4 @@ End
 Global Void ZA_PLAY10()
 	Player.Dominance=10
 	CSay("Player to dom10")
-End	
-	
-	
+End
