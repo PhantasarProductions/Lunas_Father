@@ -56,3 +56,8 @@ Global Void NPC_Blacksmith()
 	MapText("Blacksmith")
 	Menu.Upgrade()
 End
+
+global Void NPC_Merchant()
+	MapText("Merchant")
+	Menu.Shop()
+End
