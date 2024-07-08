@@ -52,5 +52,7 @@ Global Void NPC_Ankie()
 	End
 End
 
-Global Void NPC_BlackSmith()
+Global Void NPC_Blacksmith()
+	MapText("Blacksmith")
+	Menu.Upgrade()
 End
