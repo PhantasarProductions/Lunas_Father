@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.07.07
+// version: 24.07.08
 // End License Information
 Script
 
@@ -47,6 +47,9 @@ Script
 #use "Script/Use/General/Pop"
 
 Global Void NPC_Ankie()
+	If !gbool.EQUUS_SpokenToKingCheval
+		MapText("ANKIE_NEW")
+	End
 End
 
 Global Void NPC_BlackSmith()
