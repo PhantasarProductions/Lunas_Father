@@ -1,0 +1,13 @@
+Script
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Textboxes"
+
+Global Void ZA_Welcome()
+	If !Done.CENTAUR_HOLY_FOREST_WELCOME
+		MapText("WELCOME")
+		Map.Set_Respawn()
+	End
+End
