@@ -44,6 +44,7 @@ Script
 #use "Libs/Rosetta"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Menu"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/Textboxes"
@@ -69,4 +70,16 @@ End
 Global Void NPC_Merchant()
 	MapText("Merchant")
 	Menu.Shop()
+End
+Global Void ZA_King()
+	Player.StopWalking()
+	Pop.Pop("KING","East",true)
+	MapText("KING_WELCOME")
+	If !Done.EQUUS_SpokenToKingCheval
+		MapText("KING_TRIAL")
+	ElIf !gbool.EQUUS_CompletedHolyForest
+		MapText("KING_ANKIE_TRIAL")
+	ENd
+	Pop.UnPop("Leave_King")
+	Awarded.SCEN_KING_CHEVAL = true
 End
