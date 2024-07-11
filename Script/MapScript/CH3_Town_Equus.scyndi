@@ -39,6 +39,9 @@ Script
 
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/Sys"
+
+#use "Libs/Rosetta"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
@@ -50,6 +53,11 @@ Script
 Global Void NPC_Ankie()
 	If !gbool.EQUUS_SpokenToKingCheval
 		MapText("ANKIE_NEW")
+	ElIf !gbool.EQUUS_CompletedHolyForest
+		MapText("ANKIE_TRIAL")
+		If Sys.Yes(Rosetta.GetSTR("EQUUS","HOLYFOREST"))
+			Map.GoToMap("CH3_DUNGEON_HOLYFOREST","#000","Start")
+		End
 	End
 End
 
