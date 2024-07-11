@@ -260,3 +260,11 @@ QuickMeta Player
 		end
 	end
 end
+
+Void Set_Respawn()
+	gstring.Respawn_Map = Kthura.LastLoadedMap
+	gstring.Respawn_Lay = Kthura.CurrentLayer
+	gint.Respawn_X      = Player.X
+	gint.Respawn_Y      = Player.Y
+	CSayF("Respawn set to %s::%s -> (%4d,%4d)",gstring.Respawn_Map,gstring.Respawn_Lay,gint.Respawn_X,gint.Respawn_Y)
+End
