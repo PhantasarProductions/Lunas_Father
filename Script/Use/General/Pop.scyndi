@@ -52,7 +52,7 @@ Var PopActors
 
 
 
-Void Pop(string ExPr,string W="North")
+Void Pop(string ExPr,string W="North",MoveNoWalk)
 	Lua.assert(Popped==0,"Double pop!")
 	Player.Visible=False
 	PopActors = {}
@@ -64,7 +64,11 @@ Void Pop(string ExPr,string W="North")
 		PopActors[len(PopActors)] = O
 		PopActors[Cht] = O
 		O.Texture = sprintf("GFX/Player/%s.%s.jpbf",ChT,W)
-		Kthura.WalkTo("Pop_"..ChT,ExPr.."_"..ChT)
+		If MoveNoWalk
+			Kthura.MoveTo("Pop_"..ChT,ExPr.."_"..ChT)
+		Else
+			Kthura.WalkTo("Pop_"..ChT,ExPr.."_"..ChT)
+		End
 	End
 	Popped = 2
 End
@@ -74,7 +78,11 @@ Void Tex(String ChT,String W)
 	O.Texture = sprintf("GFX/Player/%s.%s.jpbf",ChT,W)
 End
 
-Void UnPop()
+Void UnPop(string aspt="")
+	If aspt!=""
+		Player.X = Kthura.Obj[aspt].X
+		Player.Y = Kthura.Obj[aspt].Y
+	End
 	Switch Popped
 		Case 2
 			For k,o in Pairs(PopActors)
