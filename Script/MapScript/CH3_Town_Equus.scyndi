@@ -71,6 +71,13 @@ Global Void NPC_Merchant()
 	MapText("Merchant")
 	Menu.Shop()
 End
+
+Global Void ZA_NoEntry()
+	Player.StopWalking()
+	MapText("NoEntry")
+	Player.WalkTo("Terug")
+End
+
 Global Void ZA_King()
 	Player.StopWalking()
 	Pop.Pop("KING","East",true)
