@@ -34,6 +34,7 @@
 // 
 // version: 24.07.08
 // End License Information
+
 Script
 
 #use "Libs/SCI/InterVar"
