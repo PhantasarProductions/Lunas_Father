@@ -38,6 +38,8 @@ Script
 
 #use "Libs/SCI/InterVar"
 
+#use "Libs/Music"
+
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Textboxes"
 
@@ -50,4 +52,8 @@ End
 
 Global Void Remove_TarBar()
 	Map.PermaKill("TarBar")
+End
+
+Global Void ZA_ChangeMusic()
+	Music.Play("Music/Hub/Chanson d'eglise.ogg")
 End
