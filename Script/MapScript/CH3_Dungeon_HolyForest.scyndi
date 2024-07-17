@@ -47,3 +47,7 @@ Global Void ZA_Welcome()
 		Map.Set_Respawn()
 	End
 End
+
+Global Void Remove_TarBar()
+	Map.PermaKill("TarBar")
+End
