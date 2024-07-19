@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Subs/SubParty.scyndi
-// Version: 24.01.17
+// Version: 24.07.19
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -458,6 +458,21 @@ Global Void CharSkillExpUp(string chTag,int skill,int experience)
 		_Party.Char[chTag].Stat[sprintf("SKILL_Lvl_%d",Skill)] = Party.SkillLvl(chTag,Skill)+1
 	End		
 End
+
+Global Void CharRemove(string Char)
+	Var R = {}
+	For i=0,5
+		String CH = _Party.Party[i]
+		If CH!=Char
+			Append(R,Ch)
+		End
+	End
+	For i=Len(R),5;Append(R,"");End
+	For i,ch in ipairs(R)
+		_Party.Party[i]=ch
+	End
+End
+	
 
 #region "Mini Messages"
 

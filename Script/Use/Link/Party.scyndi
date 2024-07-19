@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Link/Party.scyndi
-// Version: 24.04.19
+// Version: 24.07.18
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -65,7 +65,10 @@ Void SkillExpUp(String Ch, int skill, int experience=10)
 	//print("Skill: ",Ch,skill,experience)
 	Sys.Call("SUB_PARTY","CharSkillExpUp",Ch,skill,experience||5)
 End
-	
+
+Void Remove(String CH)
+	Sys.Call("SUB_PARTY","CharRemove",Ch)
+End
 
 
 Void StartSet()
