@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.07.18
+// version: 24.07.19
 // End License Information
 Script
 
@@ -40,7 +40,11 @@ Script
 
 #use "Libs/Music"
 
+#use "Script/Use/General/Pop"
+
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach" 
+#use "Script/Use/Link/Party"
 #use "Script/Use/Link/Textboxes"
 
 Global Void ZA_Welcome()
@@ -56,4 +60,20 @@ End
 
 Global Void ZA_MusicChange()
 	Music.Play("Music/Hub/Chanson d'eglise.ogg")
+End
+
+Global Void NPC_Altar()
+	Pop.Pop("A","North")
+	MapText("ALTAR_1")
+	Party.Remove("Rachel")
+	//Map.Boss("Olympyona")
+	Map.Schedule("POST_Olympyona")
+End
+
+Global Void POST_Olympyona()
+	MapText("ALTAR_2")
+	Party.Char(5,"Rachel")
+	Awarded.KILL_BOSS_OLYMPYONA=true
+	Pop.UnPop()
+	Map.GoToMap("CH3_TOWN_Equus","KING","Olympyona")
 End
