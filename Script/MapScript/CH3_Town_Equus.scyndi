@@ -46,6 +46,7 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Menu"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/Textboxes"
 
@@ -58,6 +59,13 @@ Global Void NPC_Ankie()
 		MapText("ANKIE_TRIAL")
 		If Sys.Yes(Rosetta.GetSTR("EQUUS","HOLYFOREST"))
 			Map.GoToMap("CH3_DUNGEON_HOLYFOREST","#000","Start")
+		End
+	Else
+		MapText("ANKIE_POSTTRIAL")
+		If !Done["ANKIE_BONUS_"..Map.Leader]
+			gint.ANKIE_DELER++
+			Party.SkillExpUp(Map.Leader,1,100000 div (gint.ANKIE_DELER * gint.skill))
+			Party.SkillExpUp(Map.Leader,2,100000 div (gint.ANKIE_DELER * gint.skill))
 		End
 	End
 End
