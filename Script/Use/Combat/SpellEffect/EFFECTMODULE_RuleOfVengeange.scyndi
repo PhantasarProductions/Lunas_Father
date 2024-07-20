@@ -1,0 +1,106 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellEffect/EFFECTMODULE_RuleOfVengeange.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.07.20
+// End License Information
+Module
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
+#use "Script/Flow/FlowCombat/CharMsg"
+#use "Script/Flow/FlowCombat/Fighter"
+#use "Script/Flow/FlowCombat/CharMsg"
+
+Global Get Var RuleOfVengeange
+	Return Lua.Scyndi.Class.EFFECTMODULE_RuleOfVengeange
+End
+
+String _Initiated
+
+Int Myrah = 0
+Int Francis = 0
+Int Luna = 0
+Int Scyndi = 0
+Int Rachel = 0
+
+Table __P = NewArray("Myrah","Francis","Luna", "Scyndi", "Aziella", "Rachel")
+
+Void Reset()
+	For Ch in Each(__P)		
+		RuleOfVengeange[Ch] = 0
+		CSayF("Rule Of Vengeance - Reset: %s",Ch)  
+	End
+End
+
+Get String Initiated
+	Return _Initiated
+End
+
+Set String Initiated
+	If Value!=_Initiated
+		Reset()
+	End
+	_Initiated=Value
+End
+
+Void Struck(int dmg,attacker,victim)
+	RuleOfVengeange[attacker.Tag] = RuleOfVengeange[attacker.Tag] + dmg
+	CSayF("Foe %s attacked by %s, accumulating %d damage for Rule of Vengeance (total: %d)",victim.tag,attacker.tag,dmg,RuleOfVengeange[attacker.Tag], dmg)
+	For i=0,3-gint.skill
+		Party.SkillExpUp(Attacker.Tag,0,RuleOfVengeange[attacker.Tag])
+		Party.SkillExpUp(Attacker.Tag,1,RuleOfVengeange[attacker.Tag])
+	End
+End
+
+Void Initiate(InitFoe,string InitName)
+	Initiated = InitName
+	For f in Each(InitFoe.struck)
+		If f==struck; Return; End
+	End
+	Append(InitFoe.struck,struck)
+End
+
+Void Backlash(string IniName)
+	Initiated=IniName
+	For Ch in Each(__P)
+		Var ChD;ChD=Fighter.ByTag[ch]		
+		If RuleOfVengeange[Ch]>0 && ChD.HP>0 && Party.PosInParty(Ch)<3
+			CharMsg.Put(ChD,RuleOfVengeange[Ch])
+			Mini.Rainbow(sprintf("%s suffered %d damage due to the Rule of Vengeance backlash!",Ch,RuleOfVengeange[Ch]),255,0,0,0,255,0)
+			ChD.HP = ChD.HP - RuleOfVengeange[Ch]
+			RuleOfVengeange[Ch]=0
+		End
+	End
+End
