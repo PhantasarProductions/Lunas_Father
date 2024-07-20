@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.07.11
+// version: 24.07.20
 // End License Information
 
 Script
@@ -86,7 +86,20 @@ Global Void ZA_King()
 		MapText("KING_TRIAL")
 	ElIf !gbool.EQUUS_CompletedHolyForest
 		MapText("KING_ANKIE_TRIAL")
+	ElIf !Done.EQUUS_CompletedHolyForest_Spoken_To_King_Afterward
+		MapText("KING_TRIALCOMPLETE")
+		Kthura.Obj.Travel_King.X=KThura.Obj.Leave_King.X
+		Kthura.Obj.Travel_King.Y=KThura.Obj.Leave_King.Y-32
+		WM_Unlocked.Yushore = True
 	ENd
 	Pop.UnPop("Leave_King")
 	Awarded.SCEN_KING_CHEVAL = true
+End
+
+Global Void ZA_CheckTravel()
+	If gbool.EQUUS_CompletedHolyForest_Spoken_To_King_Afterward && Kthura.HasObj("Travel_King")
+		Player.StopWalking()
+		MapText("NOTRAV_"..Map.Leader)
+		Player.WalkTo("Leave_King")
+	End
 End
