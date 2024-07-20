@@ -79,8 +79,8 @@ Void Struck(int dmg,attacker,victim)
 	RuleOfVengeange[attacker.Tag] = RuleOfVengeange[attacker.Tag] + dmg
 	CSayF("Foe %s attacked by %s, accumulating %d damage for Rule of Vengeance (total: %d)",victim.tag,attacker.tag,dmg,RuleOfVengeange[attacker.Tag], dmg)
 	For i=0,3-gint.skill
-		Party.SkillExpUp(Attacker.Tag,0,RuleOfVengeange[attacker.Tag])
 		Party.SkillExpUp(Attacker.Tag,1,RuleOfVengeange[attacker.Tag])
+		Party.SkillExpUp(Attacker.Tag,2,RuleOfVengeange[attacker.Tag])
 	End
 End
 

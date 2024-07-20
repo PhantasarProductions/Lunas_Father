@@ -53,7 +53,7 @@ Bool Effect(Executor,Target,String Param)
 		CharMsg.Put(Target,math.abs(verschil),180,255,0)
 	Else
 		CharMsg.Put(Target,math.abs(verschil))
-		Party.SkillExpUp(Target.Tag, 0, verschil * (4-Skill))
+		Party.SkillExpUp(Target.Tag, 2, verschil * (4-Skill))
 		Party.SkillExpUp(Target.Tag, 1, verschil * (4-Skill))
 	End
 	Target.HP=math.max(1,wordt)
