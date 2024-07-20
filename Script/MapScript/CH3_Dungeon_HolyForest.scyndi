@@ -32,10 +32,11 @@
 // 
 // **********************************************
 // 
-// version: 24.07.19
+// version: 24.07.20
 // End License Information
 Script
 
+#use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
 #use "Libs/Music"
@@ -66,7 +67,7 @@ Global Void NPC_Altar()
 	Pop.Pop("A","North")
 	MapText("ALTAR_1")
 	Party.Remove("Rachel")
-	//Map.Boss("Olympyona")
+	Map.Boss("Olympyona")
 	Map.Schedule("POST_Olympyona")
 End
 
@@ -74,6 +75,7 @@ Global Void POST_Olympyona()
 	MapText("ALTAR_2")
 	Party.Char(5,"Rachel")
 	Awarded.KILL_BOSS_OLYMPYONA=true
+	gbool.EQUUS_CompletedHolyForest = true
 	Pop.UnPop()
 	Map.GoToMap("CH3_TOWN_Equus","KING","Olympyona")
 End
