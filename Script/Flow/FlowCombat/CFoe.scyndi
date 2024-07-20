@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
-// Version: 24.04.19
+// Version: 24.07.20
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -91,6 +91,10 @@ Class Foe
 	ReadOnly Var _Status 
 	ReadOnly Var StatusChanges
 	ReadOnly Var Permanenced = {}
+		
+	// Bunch of callbacks that could be run if a hero attacks a foe.
+	// Function should be:   Void StruckFunc(int damage,var attacker, var target) 
+	Var Struck = {}
 		
 	Get String AudName
 		plua ret;ret = RawData.Value("MetaData","AudName")

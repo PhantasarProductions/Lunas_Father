@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
-// Version: 24.01.18
+// Version: 24.07.20
 // Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -184,6 +184,12 @@ Bool Effect_Attack(executor,target,act)
 		Target.iRate++
 	End
 	
+	If Target.Team=="Foe" && Executor.Team=="Hero" && Target.HP>0 && Atk>0
+		For S in Each(Target.Struck)
+			S(Atk,Executor,Target)
+		End
+	End
+	
 	// If any damage was done, return True
 	Return Atk>0
 End
@@ -273,7 +279,6 @@ Void Go(executor,target,act)
 	
 	// When it's all done, but no effects took place show "miss"
 	If !Hit
-		CharMsg.Put(target,"Miss",127,127,127)
 	End
 	
 	// All done!
