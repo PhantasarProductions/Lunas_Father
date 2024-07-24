@@ -1,7 +1,7 @@
 // License Information:
 // **********************************************
 // 
-// src/Scripts/Script/MapScript/CH3_Dungeon_YushoreTunnel.scyndi
+// src/Scripts/Script/Use/Combat/Arena/ARENA_LavaRiver.scyndi
 // (c) Jeroen Broks, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
@@ -34,16 +34,26 @@
 // 
 // version: 24.07.24
 // End License Information
-Script
+
+Module
 
 #use "Libs/SCI/Sys"
-#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Graphics"
 
-#use "Script/Use/Link/Map"
-#use "Script/Use/Link/Mini"
-#use "Script/Use/Link/Party"
+PLUA Lava  = LoadNewImage("GFX/TEXTURES/Lava/Lava.png",       "ARENA_LAVA_LAVA")
+Plua Floor = LoadNewImage("GFX/Textures/CAVES/Red/Floor.png", "ARENA_LAVA_FLOOR")
+Plua Shore = LoadNewImage("GFX/Textures/CAVES/Red/Shore.png", "ARENA_LAVA_SHORE")
+Int InsX = os.time()
+Const Int LW = Graphics.Width
+Const Int LH = Graphics.Height div 3
+Const Int FH = Graphics.Height - LH
 
-Global Void ZA_Lava()
-	Mini.Rainbow("Entering: The Subterranean Lava River")
-	Map.GoToMap("CH3_Dungeon_LavaRiver","#001","Start",180,255,0,255,100,0)
+Void StartCombat()
+End
+
+Void Draw()
+	InsX = (InsX + 1) % Lava.Width
+	Lava.Tile(0-InsX,0,LW+300, LH)
+	Floor.Tile(0,LH,LW,LH)
+	Shore.Tile(0,LH-32,LW,LH)
 End
