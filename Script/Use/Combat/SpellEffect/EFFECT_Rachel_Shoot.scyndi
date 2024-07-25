@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.01.18
+// version: 24.07.25
 // End License Information
 Module
 
@@ -76,11 +76,12 @@ Void WideEffect(Executor,Targets,String Param)
 				Hit = True
 				Dmg = math.max(1,Dmg) * 6
 			Default
-				Rachel.FP = Rachel.FP + (12 div gint.skill)
+				Rachel.FP = Rachel.FP + (3 div gint.skill)
 		End
 		If Hit && Dmg>0
 			DidWeHitAnything = True
 			CharMsg.Put(Tar,Dmg,180,200,255)
+			Tar.HP = Tar.HP - Dmg
 			Party.SkillExpUp("Rachel",1,Dice[dTag])
 		End
 	End
