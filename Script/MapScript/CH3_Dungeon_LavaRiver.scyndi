@@ -187,7 +187,16 @@ Global Void ZA_Next()
         Map.GoToLayer(newlayer,"Start2")
 End
 
-
+Global Void ZA_Boss()
+	ZA_SecretSkillBonus()
+	For i=Dice.d6+gint.skill,9
+		CSayF("Pre-Boss Bonus: %d/%d",i,9)
+		RandomSkillUp()
+	End
+	Map.Boss("BOSS")
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")	
+End
 
 Init
 	If gint.LAVA_BeenHere < 4-gint.skill
