@@ -1,6 +1,6 @@
 // License Information:
 // src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_TimedBlow.scyndi
-// Version: 24.01.08
+// Version: 24.07.25
 // Copyright (C) 2024 Jeroen Petrus Broks
 // 
 // ===========================
@@ -51,6 +51,7 @@ Bool Effect(Executor,Target,String Param)
 	Int Dmg;Dmg = Executor.HP-1
 	If Dmg<=0; Return false; End
 	Target.HP = Target.HP - Dmg
+	Executor.HP = math.max(1,Executor.HP - Dmg)
 	CharMsg.Put(Executor,Dmg)
 	CharMsg.Put(Target,Dmg)
 	Return True
