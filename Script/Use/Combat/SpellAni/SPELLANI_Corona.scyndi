@@ -1,0 +1,117 @@
+// License Information:
+// src/Scripts/Script/Use/Combat/SpellAni/Template.scyndi
+// Template - Luna's Father
+// version: 24.01.02
+// Copyright (C) 2023, 2024 Jeroen P. Broks
+// This software is provided 'as-is', without any express or implied
+// warranty.  In no event will the authors be held liable for any damages
+// arising from the use of this software.
+// Permission is granted to anyone to use this software for any purpose,
+// including commercial applications, and to alter it and redistribute it
+// freely, subject to the following restrictions:
+// 1. The origin of this software must not be misrepresented; you must not
+// claim that you wrote the original software. If you use this software
+// in a product, an acknowledgment in the product documentation would be
+// appreciated but is not required.
+// 2. Altered source versions must be plainly marked as such, and must not be
+// misrepresented as being the original software.
+// 3. This notice may not be removed or altered from any source distribution.
+// End License Information
+Module
+
+#use "LIBS/SCI/SYS"
+#use "LIBS/SCI/GRAPHICS"
+
+#use "Script/Use/Combat/SpellAni/SPELLANI_Flame"
+
+plua Inferno
+plua Picture
+int y
+int stage
+
+plua Executor
+plua Targets
+string Param
+
+Init
+	Picture = LoadNewImage("gfx/Combat/SpellAni/SolarFire.png","SPELLANI_Corona")
+	Inferno = SPELLANI_Flame
+End
+
+Void Start(_Executor,_Targets,string _Param)
+	// Params
+	Executor=_Executor
+	Targets=_Targets
+	Param=_Param
+	
+	// Link to "Inferno"
+	Inferno.Start(Executor,Targets,Param)
+	
+	// Set Internal Stuff
+	Stage = 1
+	Y = Graphics.Height
+End
+
+// Well be called while the SpellAni is running
+// When 'False' is returned the system will assume the SpellAni has ended
+// and move on the next execution stage
+Bool Cycle()
+	// Adapted NIL code
+	switch Stage
+		case 1
+			if y<=0
+				Stage=2
+				//self.Inferno.Init() // Already done, y'know!
+			end
+			Picture.Stretch(0, y, Graphics.W, Graphics.H-y)
+			y = math.max(y-2,0)
+			return true
+		case 2
+			return Inferno.Cycle()
+		default
+			lua.error("Unknown corona stage: "..stage)                           
+	end                   
+	Return False
+End
+
+
+
+// Below is the original code in NIL placed in a way the Scyndi compiler won't see it!
+// Always good to have this in the back for references
+#if IGNORE_THIS
+//module SpellAni_Corona                                                                                
+                                                                                                      
+//        var Inferno                                                                                   
+//        var Picture                                                                                   
+        //int y                                                                                         
+        //int stage                                                                                     
+                                                                                                      
+        //void CONSTRUCTOR()                                                                            
+//                self.Inferno = NIL.Use("Script/Use/Specific/CombatModules/SpellAni/Inferno")          
+//                self.Picture = LoadIfNew("gfx/Combat/SpellAni/SolarFire.png","SPELLANI_Corona")       
+//        end                                                                                           
+                                                                                                      
+//        void Init()                                                                                   
+//                self.y = Screen.H                                                                     
+//                self.stage = 1                                                                        
+//        end                                                                                           
+                                                                                                      
+//        bool Cycle()                                                                                  
+//                switch self.stage                                                                     
+//                        case 1                                                                        
+//                                if self.y<=0                                                          
+//                                        self.stage=2                                                  
+//                                        self.Inferno.Init()                                           
+//                                end                                                                   
+//                                self.Picture.StretchDraw(0, self.y, Screen.W, Screen.H-self.y)        
+//                                self.y = math.max(self.y-2,0)                                         
+//                                return false                                                          
+//                        case 2                                                                        
+//                                return self.Inferno.Cycle()                                           
+//                        default                                                                       
+//                                error("Unknown corona stage: "..self.stage)                           
+//                end                                                                                   
+//        end                                                                                           
+                                                                                                      
+//end                                                                                                   
+#fi
