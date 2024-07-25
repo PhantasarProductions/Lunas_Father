@@ -40,9 +40,9 @@ Module
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 
-PLUA Lava  = LoadNewImage("GFX/TEXTURES/Lava/Lava.png",       "ARENA_LAVA_LAVA")
-Plua Floor = LoadNewImage("GFX/Textures/CAVES/Red/Floor.png", "ARENA_LAVA_FLOOR")
-Plua Shore = LoadNewImage("GFX/Textures/CAVES/Red/Shore.png", "ARENA_LAVA_SHORE")
+PLUA Lava  = LoadNewImage("GFX/TEXTURES/Lava/Lava.png",         "ARENA_LAVA_LAVA")
+Plua Floor = LoadNewImage("GFX/Textures/CAVES/Red/Floor.png",   "ARENA_LAVA_FLOOR")
+Plua Shore = LoadNewImage("GFX/Textures/CAVES/Red/S_Shore.png", "ARENA_LAVA_SHORE")
 Int InsX = os.time()
 Const Int LW = Graphics.Width
 Const Int LH = Graphics.Height div 3
@@ -55,5 +55,5 @@ Void Draw()
 	InsX = (InsX + 1) % Lava.Width
 	Lava.Tile(0-InsX,0,LW+300, LH)
 	Floor.Tile(0,LH,LW,LH)
-	Shore.Tile(0,LH-32,LW,LH)
+	Shore.Tile(0,LH-32,LW,FH)
 End
