@@ -44,6 +44,7 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
+#use "SCript/Use/Link/Alchemy"
 
 #use "Script/Use/General/Dice"
 
@@ -104,6 +105,13 @@ Global Void ZA_SecretSkillBonus()
 End
 
 Global Get Delegate ZA_SecretSkillBonus2; return ZA_SecretSkillBonus; End
+Global Get Delegate ZA_SecretBonus2; return ZA_SecretSkillBonus; End
+Global Table ZA_SecretSkillBonusMulti
+plua SSBM(); Return ZA_SecretSkillBonus; End
+Init
+	ZA_SecretSkillBonusMulti = SetMetaTable({},{["__index"]=SSBM})
+	// I should have thought of this earlier. Would have saved me a lot of trouble!
+End
 	
 Global Void ZA_Scyndi()
 	gint.LAVARIVER_SKU_Scyndi=math.max(gint.LAVARIVER_SKU_Scyndi,1)
@@ -198,6 +206,17 @@ Global Void ZA_Boss()
 	Map.PermaKill("ZA_Boss")	
 End
 
+Global Void NPC_Ketel()
+	If Party.InParty("Francis")
+		gint.LAVARIVER_SKU_Francis=math.max(gint.LAVARIVER_SKU_Francis,3-gint.skill)
+		gint.LAVARIVER_SKU_Francis++
+		ZA_SecretSkillBonus()
+		GoAlchemy()
+	Else
+		Mini.WriteLn("Francis needs to be present in order to use an alchemy cauldron",255,0,0)
+	End
+End
+
 Init
 	If gint.LAVA_BeenHere < 4-gint.skill
 		gint.LAVA_BeenHere++
@@ -209,6 +228,7 @@ Init
 	Lava["#003"] = NewArray("Lava")
 	Lava["#004"] = Lava["#001"]
 	Lava["#005"] = {}
+	Lava["#006"] = Lava["#003"]
 	For i=1,4; Append(Lava["#005"],sprintf("Lava_%d",i)); End
 	Map.AddCyclePre("Cycle")
 End
