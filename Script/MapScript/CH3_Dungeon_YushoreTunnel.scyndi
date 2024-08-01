@@ -32,7 +32,7 @@
 // 
 // **********************************************
 // 
-// version: 24.07.24
+// version: 24.08.01
 // End License Information
 Script
 
@@ -42,8 +42,23 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
+#use "Script/Use/Link/WorldMap"
 
 Global Void ZA_Lava()
 	Mini.Rainbow("Entering: The Subterranean Lava River")
 	Map.GoToMap("CH3_Dungeon_LavaRiver","#001","Start",180,255,0,255,100,0)
+End
+
+
+
+Global Void ZA_Boss()
+	// Remove tag "Vitality" when activating boss in hard mode.
+	If gint.skill>=3; Map.PermaKill("Vitality"); End
+	// Unlock Grovkon's Bay on the world map
+	WM_Unlocked.Grovkon = True
+	// Remove boss objects
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+	// Activate boss fight
+	Map.Boss("Boss")
 End
