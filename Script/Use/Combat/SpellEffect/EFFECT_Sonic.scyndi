@@ -46,7 +46,7 @@ End
 
 Bool Effect(Executor,Target,String Param)
 	Target.iRate = Target.iRate + Target.FP
-	CharMsg(Target,"-%d FP",Target.FP)
+	CharMsg.Put(Target,"-%d FP",Target.FP)
 	Target.FP = 0	
 	Return True
 End
