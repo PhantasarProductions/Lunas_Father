@@ -38,12 +38,28 @@ Script
 
 #use "Libs/SCI/Intervar" 
 
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/TextBoxes" 
 
 Global Var ZA_South; Init; ZA_South=TinkerIsland; End
 
-global Void ZA_Road()
+Global Void ZA_UnlockKnutselStad()
+	If !Done.Completed_Highway_Tinker_Island
+		MapText("GOODBYE")
+	End
+	Awarded.SCEN_HIGHWAY = True
+	gint.GnomeHighwayDeler++
+	For _,ch in pairs{"Myrah", "Francis", "Luna", "Scyndi", "Aziella", "Rachel"}
+		Var ChD = Party.GetChar(ch).Stat
+		ChD.Exp = ChD.Exp - (1000000000 div gint.GnomeHighwayDeler)
+	End
+	WM_Unlocked.Knutselstad = True
+	TinkerIsland()
+End
+
+Global Void ZA_Road()
 	If !Done.Visited_Gnome_Highway_For_The_First_Time
 		MapText("WELCOME")
 	End
