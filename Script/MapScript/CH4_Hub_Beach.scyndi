@@ -46,10 +46,10 @@ Script
 #use "Script/Use/Link/TextBoxes"
 
 Global Void ZA_Welcome()
-	If !Done.Welcome_to_TinkerIsland
+	If !Done.Arrived_onto_TinkerIsland
 		MapText("Chantal")
 		For _,c in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
-			Party.GetChar(c).Stat.Experience = Party.GetChar(c).Stat.Experience div math.min(1,4-gint.skill)
+			Party.GetChar(c).Stat.Exp = Party.GetChar(c).Stat.Exp div math.min(1,4-gint.skill)
 			CSayF("Experience for character %s has been halved!",c)
 		End
 	End
