@@ -1,0 +1,64 @@
+// License Information:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/Arena/ARENA_HighWay.SCYNDI
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// version: 24.08.06
+// End License Information
+Module                                                                                                                       
+                                                                                                                             
+#use "Libs/SCI/Graphics"                                                                                                     
+                                                                                                                             
+ReadOnly Int HZY = Graphics.Height Div 4                                                                                     
+ReadOnly Var Vangrail = LoadNewImage("GFX/Textures/Autobahn/Vangrail.png","Arena_Autobahn_Vangrail")                         
+ReadOnly Var ImgGrass = LoadNewImage("GFX/Textures/Road/Dead Grass.png","ARENA_FOREST_GRASS")                            
+ReadOnly Var Asfalt   = LoadNewImage("GFX/TEXTURES/Autobahn/dgrey047.jpg","ARENA_Autobahn_Asfalt")                           
+                                                                                                                             
+Void StartCombat(); End                                                                                                      
+                                                                                                                             
+Void Draw()                                                                                                                  
+        SetColor(255,255,255,255)                                                                                            
+        ImgGrass.Tile(0,HZY,Graphics.width,40)                                                                               
+        Vangrail.Stretch(0,HZY-40,Graphics.Width,35)                                                                         
+        Asfalt.Tile(0,HZY+40,Graphics.Width,Graphics.Height-HZY)
+        SetColor(255,180,0,255)
+        Rect(0,HZY+56,Graphics.Width,16)
+        //SetColor(180,255,0,255)
+        //For x=0,Graphics.Width,200                                                                                            
+        //        Rect(x,HZY+56,180,16)                                                                                        
+        //End                                                                                                                  
+        SetColor(255,255,255,255)
+        For x=0,Graphics.Width,96                                                                                            
+                Rect(x,HZY+356,64,16)                                                                                        
+        End                                                                                                                  
+        Rect(0,HZY+656,Graphics.Width,16)                                                                                    
+End
