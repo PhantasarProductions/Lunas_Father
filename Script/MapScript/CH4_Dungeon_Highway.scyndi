@@ -45,6 +45,10 @@ Script
 
 Global Var ZA_South; Init; ZA_South=TinkerIsland; End
 
+Get Int MiljardBase
+	Return 1000000000 div (10^gint.skil)
+End
+
 Global Void ZA_UnlockKnutselStad()
 	If !Done.Completed_Highway_Tinker_Island
 		MapText("GOODBYE")
@@ -53,7 +57,9 @@ Global Void ZA_UnlockKnutselStad()
 	gint.GnomeHighwayDeler++
 	For _,ch in pairs{"Myrah", "Francis", "Luna", "Scyndi", "Aziella", "Rachel"}
 		Var ChD = Party.GetChar(ch).Stat
-		ChD.Exp = ChD.Exp - (1000000000 div gint.GnomeHighwayDeler)
+		If ChD.Level<gint.LevelCap
+			ChD.Exp = ChD.Exp - (MiljardBase div gint.GnomeHighwayDeler)
+		End
 	End
 	WM_Unlocked.Knutselstad = True
 	TinkerIsland()
