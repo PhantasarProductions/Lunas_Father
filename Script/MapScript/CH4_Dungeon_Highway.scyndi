@@ -36,6 +36,7 @@
 // End License Information
 Script
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Intervar" 
 
 #use "Script/Use/Link/Ach"
@@ -46,7 +47,7 @@ Script
 Global Var ZA_South; Init; ZA_South=TinkerIsland; End
 
 Get Int MiljardBase
-	Return 1000000000 div (10^gint.skil)
+	Return 1000000000 div (10^gint.skill)
 End
 
 Global Void ZA_UnlockKnutselStad()
@@ -54,11 +55,14 @@ Global Void ZA_UnlockKnutselStad()
 		MapText("GOODBYE")
 	End
 	Awarded.SCEN_HIGHWAY = True
+	gint.GnomeHighwayDeler = math.max(gint.GnomeHighwayDeler,gint.skill)
 	gint.GnomeHighwayDeler++
 	For _,ch in pairs{"Myrah", "Francis", "Luna", "Scyndi", "Aziella", "Rachel"}
 		Var ChD = Party.GetChar(ch).Stat
 		If ChD.Level<gint.LevelCap
-			ChD.Exp = ChD.Exp - (MiljardBase div gint.GnomeHighwayDeler)
+			int gexp;gexp = (MiljardBase div gint.GnomeHighwayDeler)
+			CSayF("%s receives %d exerpience points (%d:%d)",ch,gexp,MiljardBase,gint.GnomeHighwayDeler)
+			ChD.Exp = ChD.Exp - gexp			
 		End
 	End
 	WM_Unlocked.Knutselstad = True
