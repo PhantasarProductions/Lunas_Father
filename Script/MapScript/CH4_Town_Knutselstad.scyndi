@@ -32,8 +32,52 @@
 // 
 // **********************************************
 // 
-// version: 24.08.09
+// version: 24.08.11
 // End License Information
 Script
 
+#use "Libs/SCI/InterVar"
+
+
 #use "Script/Use/Map/Cogs"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Menu"
+#use "Script/Use/Link/Textboxes"
+
+
+Global Void NPC_Blacksmith()
+	MapText("Blacksmith")
+	Menu.Upgrade()
+End
+
+Global Void NPC_Merchant()
+	MapText("Merchant")
+	Menu.Shop()
+End
+
+
+Global Void ZA_Karl()
+	If !gbool.Visited_Gnome_Duke
+		Player.StopWalking()
+		MapText("NOKARL_"..Map.Leader)
+		Player.WalkTo("From_Karl")
+	Else
+		Lua.error("Karl's house not set up, yet!")
+	End
+End
+
+Global Void NPC_TheGrandGnome()
+	MapText("GRANDGNOME")
+	MapText("GRANDGNOME_"..Map.Leader)
+	Awarded.SCEN_GrandGnome = true
+End
+
+
+Global Void ZA_Magenta()
+	Map.GoToMap("CH4_Dungeon_Magenta","#001","Start")
+End
+
+Init
+	Awarded.SCEN_Knutselstad = true
+End
