@@ -1,0 +1,16 @@
+Script
+
+#use "Script/Use/Map/Cogs"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Map"
+
+Global Void ZA_Knutselstad()
+	Map.GoToMap("CH4_Town_Knutselstad","BUITEN","From_Magenta")
+End
+
+
+Global Void ZA_Boss()
+	Map.Boss("Doom")
+	Map.PermaKill("Boss")
+	Map.PermaKill("ZA_Boss")
+End
