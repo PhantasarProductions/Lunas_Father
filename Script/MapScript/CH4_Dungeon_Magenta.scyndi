@@ -36,9 +36,12 @@
 // End License Information
 Script
 
+#use "Libs/SCI/Intervar"
+
 #use "Script/Use/Map/Cogs"
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Textboxes"
 
 Global Void ZA_Knutselstad()
 	Map.GoToMap("CH4_Town_Knutselstad","BUITEN","From_Magenta")
@@ -49,4 +52,11 @@ Global Void ZA_Boss()
 	Map.Boss("Doom")
 	Map.PermaKill("Boss")
 	Map.PermaKill("ZA_Boss")
+End
+
+Global Void NPC_Ring()
+	gbool.Allow_Field_Aziella = true
+	MapText("RING")
+	Awarded.SCEN_RING = true
+	Map.PermaKill("NPC_Ring")
 End
