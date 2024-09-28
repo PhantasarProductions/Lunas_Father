@@ -32,10 +32,12 @@
 // 
 // **********************************************
 // 
-// version: 24.09.24
+// version: 24.09.28
 // End License Information
 Script
 
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
 
@@ -44,6 +46,7 @@ Script
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
 #use "Script/Use/Link/Textboxes"
+#use "Script/Use/General/Pop"
 
 
 Global Void NPC_Blacksmith()
@@ -76,6 +79,31 @@ End
 
 Global Void ZA_Magenta()
 	Map.GoToMap("CH4_Dungeon_Magenta","#001","Start")
+End
+
+Global Void NPC_Karl_Hertog()
+	Switch Map.Leader
+		Case "Francis"
+			MapText("KARL_HERTOG_FRANCIS")
+		Case "Rachel"
+			MapText("KARL_HERTOG_RACHEL")
+		Default
+			MapText("KARL_HERTOG")
+	End
+End
+
+Global Void NPC_Duke()
+	If !Done.SpokenDuke
+		Pop.Pop("D","North")
+		MapText("HERTOG_WELCOME")
+		Cls()
+		Flip()
+		Sys.Sleep(2)
+		MapText("HERTOG_WELCOME_POST_STORY")
+		Pop.Unpop()
+		Map.PermaKill("NPC_Karl_Hertog")
+		Lua.error("The rest has not yet been scripted")
+	End
 End
 
 Init
