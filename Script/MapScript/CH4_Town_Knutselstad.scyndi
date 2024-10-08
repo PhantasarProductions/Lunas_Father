@@ -36,7 +36,10 @@
 // End License Information
 Script
 
+#use "Libs/Music"
+
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
@@ -45,6 +48,7 @@ Script
 #use "Script/Use/Link/Ach"
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
+#use "Script/Use/Link/WorldMap"
 #use "Script/Use/Link/Textboxes"
 #use "Script/Use/General/Pop"
 
@@ -98,11 +102,33 @@ Global Void NPC_Duke()
 		MapText("HERTOG_WELCOME")
 		Cls()
 		Flip()
-		Sys.Sleep(2)
+		Sys.Sleep(200)
 		MapText("HERTOG_WELCOME_POST_STORY")
 		Pop.Unpop()
 		Map.PermaKill("NPC_Karl_Hertog")
-		Lua.error("The rest has not yet been scripted")
+		Music.Play("Music/Sys/Silence.ogg")
+		Var Crash = Audio.Load("audio/Scenario/CrashCrockery.WAV","Karl_Crash")		
+		Map.Leader = "Francis"
+		Map.GoToLayer("KARL","S_Francis")
+		MapText("KARL_I_LOVE_YOU_FRANCIS")
+		Cls()
+		Flip()
+		Crash.Play()
+		Sys.Sleep(100)
+		Crash.Play()
+		Sys.Sleep(500)
+		Map.Leader="Myrah"
+		Map.GoToLayer("BUITEN","S_MYRAH")
+		MapText("KARL_I_FUCK_YOU_FRANCIS")
+		Awarded.SCEN_FUCKFRANCIS=true
+		Map.GoToLayer("HERTOG","Start")
+		Pop.Pop("D","North")
+		MapText("HERTOG_WELCOME_POST_KARL")
+		WM_Unlocked.Labyrinth=true
+		gstring.CampSituation="20_LABY"
+		Pop.UnPop()
+		Music.Play("MUSIC/WORLDMAP/TINKER ISLAND.OGG")
+		//Lua.error("The rest has not yet been scripted")
 	End
 End
 
