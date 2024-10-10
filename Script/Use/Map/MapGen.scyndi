@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 XI
+// 	  Version: 24.10.10 XII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -43,6 +43,8 @@
 // End License
 
 Module
+
+#use "Libs/SCI/Sys"
 
 Int StartX = 32
 Int StartY = 128
