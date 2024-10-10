@@ -1,0 +1,21 @@
+Module
+
+Int StartX = 16
+Int StartY = 128
+
+Int EndX = 3200
+int EndY = 3200
+
+Get Int Width;  Return EndX-StartX; End
+Get Int Height; Return EndY-StartY; End
+
+Int FloorModuloX = 130
+Int FloorModuloY = 130
+
+Int FloorDominance = 3
+
+String FloorTexture = "GFX/TEXTURES/Metal/Metalen Ribbelvloer.jpg"
+
+Int FrontModuloX = 0
+Int FrontModuloY = 0
+Int FrontDominance = 2
