@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.10 VI
+// version: 24.10.10 VII
 // 
 // End License
 
@@ -47,7 +47,7 @@ Script
 #use "Script/Use/Link/TextBoxes"
 
 Int DoorMoving=0
-int Deg=os.time() 
+int Deg=os.time()
 
 Init
 	Map.AddCyclePre("Cycle")
