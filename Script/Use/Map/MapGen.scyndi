@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 IX
+// 	  Version: 24.10.10 X
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -165,7 +165,29 @@ Class MG_Tak
 		End
 	End
 	
-End	
+	Static Int Cnt = 0
+	ReadOnly Int ID
+	Constructor (Int _X, Int _Y,Int _L,Int _W=-1)
+		Cnt++; ID=0
+		X = (_X div GridX)*GridX // This removes any modulos not being right.
+		Y = (_X div GridY)*GridY // This removes any modulos not being right.
+		W = _W
+		If _W<0 || _W>3; W = math.random(0,3); End
+		Switch W
+			case 0 2
+				L = (_L div GridY)*GridY
+			default
+				L = (_L div GridX)*GridX
+		End
+		CSayF("Tak #%04d -> P(%d,%d,%d,%d)",ID,_X,_Y,_L,_W)
+		CSayF("Tak     -> O(%d,%d,%d,%d)",OX,OY,OW,OH)
+	End
+	
+	Destructor
+		CSay("Tak #%04d has been destroyed")
+	End
+	
+End
 
 Void Generate()
 	
