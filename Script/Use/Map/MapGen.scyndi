@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 XIII
+// 	  Version: 24.10.10 XIV
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -45,6 +45,7 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura" 
 
 String LastMap = ""
 Table Generated
