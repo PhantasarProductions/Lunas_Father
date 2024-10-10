@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 VI
+// 	  Version: 24.10.10 IX
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -146,6 +146,24 @@ Class MG_Tak
 	Get Int OEX; Return OX+OW; End
 	Get Int OEY; Return OY+OH; End
 	
+	Get Int NextX
+		Switch W
+			case 0 2 3
+				return OX+MWHX
+			case 1
+				Return OEX-MWHX
+		End
+		Return 0
+	End
+	
+	Get Int NextY
+		Switch W
+			case 0 1 3
+				Return OY+MWHX
+			case 2
+				Return OEY-MWHY
+		End
+	End
 	
 End	
 
