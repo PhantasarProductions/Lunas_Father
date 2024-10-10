@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.10 VIII
+// version: 24.10.11
 // 
 // End License
 
@@ -85,4 +85,17 @@ Global Void NPC_RachelDeur()
 		DoorMoving=70
 		Map.PermaKill("NPC_RachelDeur")
 	End
+End
+
+Global Void ZA_NextMap()
+	Int ZN;ZN=Lua.tonumber(Right(Kthura.CurrentMap,3))||0
+	ZN++
+	if ZN%5==0
+		Map.GotoLayer(sprintf("#%03d",ZN),"Start")
+		Return
+	End
+	Map.Kill("PLAYER")
+	Kthura.CurrentLayer=sprintf("#%03d",ZN);
+	MapGen.Generate()
+	Kthura.Spawn("Player","Start")
 End

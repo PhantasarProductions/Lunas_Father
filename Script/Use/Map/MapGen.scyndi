@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 XVI
+// 	  Version: 24.10.11 I
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -69,6 +69,8 @@ String FloorTexture = "GFX/TEXTURES/Metal/Metalen Ribbelvloer.jpg"
 Int FrontModuloX = 0
 Int FrontModuloY = 0
 Int FrontDominance = 2
+	
+String FrontTexture = "GFX/Textures/Hole Textures/Light Yellow.png"
 
 Int GridX = 16
 Int GridY = 16
@@ -212,6 +214,24 @@ Class MG_Tak
 	
 	Destructor
 		CSay("Tak #%04d has been destroyed")
+	End
+	
+	Bool Generated = False
+	Void Generate()
+		If Generated; Return; End // Dupe Prevention
+		plua platform
+		plua bottom
+		platform = NewTiledArea(OX, OY, OW, OH, FloorTexture)
+		platform.ForcePassible = true
+		platform.Dominance = FloorDominance
+		if FloorModuloX>0;platform.InsertX=-(OX % FloorModuloX); End
+		if FloorModuloY>0;platform.InsertY=-(OY % FloorModuloY); End
+		bottom = NewTileArea(OX,OY+OH,OW,64)
+		bottom.ForcePassible = true
+		bottom.Dominance = FrontDominance
+		if FrontModuloX>0;bottom.InsertX=-(OX % FrontModuloX); End
+		if FrontModuloY>0;bottom.InsertY=-(OY % FrontModuloY); End		
+		Generated = True
 	End
 	
 End
