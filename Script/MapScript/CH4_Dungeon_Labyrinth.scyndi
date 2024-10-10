@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.10 II
+// version: 24.10.10 III
 // 
 // End License
 
@@ -55,7 +55,7 @@ End
 
 Global Void Cycle()
 	If Map.Layer=="#000" && DoorMoving>0
-		CSayF("Open Sesame - Frame #%02",DoorMoving)
+		CSayF("Open Sesame - Frame #%02d",DoorMoving)
 		Kthura.Obj.Deur.X++
 		DoorMoving--
 		if DoorMoving<=0
