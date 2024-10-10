@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 XIV
+// 	  Version: 24.10.10 XVI
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -84,8 +84,15 @@ Get int MWHY; return MWY div 2; End
 Get int SQHX; return SQX div 2; End
 Get int SQHY; return SQY div 2; End
 
-//                    0   1   2   3
-Var Winds = NewArray("N","E","S","W")
+String TransTex = "GFX/Textures/Transporter/Transporter.png"
+String TransTag = "TransPic"
+Int    TransRad = 32
+String TransZAT = "ZA_NextMap" // ZAT = Zone Action Tag (it also means "drunk" in Dutch).
+
+//                    0   1   2   3      4
+Var Winds = NewArray("N","E","S","W","SQUARE")
+
+// Square is not really a wind direction, but will create the bigger platforms that surround the start and finish location.
 
 Class MG_Tak
 	ReadOnly Int X
@@ -102,6 +109,8 @@ Class MG_Tak
 			case 3
 				int r;r=(x-L)-MWHX
 				return math.max(r,StartX)
+			case 4
+				return StartX-SQHX			
 		End
 		Return 0
 	End
@@ -114,6 +123,8 @@ Class MG_Tak
 			case 0
 				int r;r=(x-L)-MWHX
 				return math.max(r,StartY)
+			case 4
+				Return StartY-SQHY
 		End
 		Return 0
 	End
@@ -130,6 +141,8 @@ Class MG_Tak
 				Else
 					Return r
 				End			
+			case 4
+				Return SQX
 		End
 		Return 0
 	End
@@ -144,7 +157,9 @@ Class MG_Tak
 					return EndX-OY
 				Else
 					Return r
-				End			
+				End	
+			case 4
+				Return SQY
 		End
 		Return 0
 	End
@@ -158,6 +173,8 @@ Class MG_Tak
 				return OX+MWHX
 			case 1
 				Return OEX-MWHX
+			case 4
+				Return OX
 		End
 		Return 0
 	End
@@ -168,6 +185,8 @@ Class MG_Tak
 				Return OY+MWHX
 			case 2
 				Return OEY-MWHY
+			case 4
+				Return OY
 		End
 	End
 	
@@ -180,13 +199,15 @@ Class MG_Tak
 		W = _W
 		If _W<0 || _W>3; W = math.random(0,3); End
 		Switch W
+			case 4
+				L = 0
 			case 0 2
 				L = (_L div GridY)*GridY
 			default
 				L = (_L div GridX)*GridX
 		End
 		CSayF("Tak #%04d -> P(%d,%d,%d,%d)",ID,_X,_Y,_L,_W)
-		CSayF("Tak     -> O(%d,%d,%d,%d)",OX,OY,OW,OH)
+		CSayF("Tak     -> O(%d,%d,%d,%d) -> %s",OX,OY,OW,OH,Winds[W])
 	End
 	
 	Destructor
@@ -206,6 +227,7 @@ Void Generate()
 		CSayF("It appears layer '%s' had its map generated before. Getting out!",Kthura.CurrentLayer)
 		Return
 	End
-	
+	plua Start;Start = New MG_Tak(math.random(StartX,EndX),math.random(StartY,EndY),0,4)
+	plua StartExit;StartExit = Kthura.NewExit(Start.NextX,Start.NextY,"Start","South")
 End
 
