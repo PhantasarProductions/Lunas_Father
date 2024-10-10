@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 III
+// 	  Version: 24.10.10 IV
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -82,10 +82,10 @@ Get int SQHY; return SQY div 2; End
 Var Winds = NewArray("N","E","S","W")
 
 Class MG_Tak
-	Int X
-	Int Y
-	Int W
-	Int L
+	ReadOnly Int X
+	ReadOnly Int Y
+	ReadOnly Int W
+	ReadOnly Int L
 	Get String Wind; Return Winds[W] || "???"; End
 	
 	// Object X
@@ -97,7 +97,7 @@ Class MG_Tak
 				int r=(x-L)-MWHX
 				return math.max(r,StartX)
 		End
-		return 0
+		Return 0
 	End
 	
 	// Object Y
@@ -109,9 +109,42 @@ Class MG_Tak
 				int r=(x-L)-MWHX
 				return math.max(r,StartY)
 		End
-		return 0
+		Return 0
 	End
 
+	// Object Width
+	Get Int OW
+		Switch W
+			case 0 2
+				Return MWX
+			case 1 3
+				int r = L+NWHX
+				if (r+OX>EndX)
+					return EndX-OX
+				Else
+					Return r
+				End			
+		End
+		Return 0
+	End
+	
+	Get Int OH
+		Switch W
+			case 1 3
+				Return MWY
+			case 0 2
+				int r = L+NWHY
+				if (r+OY>EndY)
+					return EndX-OY
+				Else
+					Return r
+				End			
+		End
+		Return 0
+	End
+	
+	Get Int OEX; Return OX+HW; End
+	Get Int OEY; Return OY+OH; End
 End	
 
 Void Generate()
