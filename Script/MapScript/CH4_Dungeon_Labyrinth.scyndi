@@ -34,13 +34,14 @@
 // **********************************************
 // 
 // 
-// version: 24.10.10 I
+// version: 24.10.10 II
 // 
 // End License
 
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/TextBoxes"
