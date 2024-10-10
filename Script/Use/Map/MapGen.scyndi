@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10 XII
+// 	  Version: 24.10.10 XIII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -45,6 +45,9 @@
 Module
 
 #use "Libs/SCI/Sys"
+
+String LastMap = ""
+Table Generated
 
 Int StartX = 32
 Int StartY = 128
@@ -192,6 +195,16 @@ Class MG_Tak
 End
 
 Void Generate()
+	// Conflict preventor
+	If LastMap!=Kthura.LastLoadedMap
+		CSayF("MapGen: New map %s encountered. Resetting generation table",Kthura.LastLoadedMap)
+		Generated = {}
+		LastMap=Kthura.LastLoadedMap
+	End
+	If Generated[Kthura.CurrentLayer]
+		CSayF("It appears layer '%s' had its map generated before. Getting out!",Kthura.CurrentLayer)
+		Return
+	End
 	
 End
 
