@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 VI
+// 	  Version: 24.10.11 VII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -112,7 +112,7 @@ Class MG_Tak
 				int r;r=(x-L)-MWHX
 				return math.max(r,StartX)
 			case 4
-				return StartX-SQHX			
+				return X-SQHX			
 		End
 		Return 0
 	End
@@ -126,7 +126,7 @@ Class MG_Tak
 				int r;r=(x-L)-MWHX
 				return math.max(r,StartY)
 			case 4
-				Return StartY-SQHY
+				Return Y-SQHY
 		End
 		Return 0
 	End
@@ -176,7 +176,7 @@ Class MG_Tak
 			case 1
 				Return OEX-MWHX
 			case 4
-				Return OX
+				Return X
 		End
 		Return 0
 	End
@@ -188,7 +188,7 @@ Class MG_Tak
 			case 2
 				Return OEY-MWHY
 			case 4
-				Return OY
+				Return Y
 		End
 	End
 	
@@ -203,6 +203,8 @@ Class MG_Tak
 		Switch W
 			case 4
 				L = 0
+				if OX<StartX;X=StartX+SQX; End
+				if OY<StartY;Y=StartY+SQY; End
 			case 0 2
 				L = (_L div GridY)*GridY
 			default
@@ -213,7 +215,7 @@ Class MG_Tak
 	End
 	
 	Destructor
-		CSay("Tak #%04d has been destroyed")
+		CSayF("Tak #%04d has been destroyed",ID)
 	End
 	
 	Bool Generated = False
