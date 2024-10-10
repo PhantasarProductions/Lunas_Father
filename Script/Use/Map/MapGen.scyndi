@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 I
+// 	  Version: 24.10.11 VI
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -199,7 +199,7 @@ Class MG_Tak
 		X = (_X div GridX)*GridX // This removes any modulos not being right.
 		Y = (_X div GridY)*GridY // This removes any modulos not being right.
 		W = _W
-		If _W<0 || _W>3; W = math.random(0,3); End
+		If _W<0 || _W>4; W = math.random(0,3); End
 		Switch W
 			case 4
 				L = 0
@@ -221,12 +221,12 @@ Class MG_Tak
 		If Generated; Return; End // Dupe Prevention
 		plua platform
 		plua bottom
-		platform = NewTiledArea(OX, OY, OW, OH, FloorTexture)
+		platform = Kthura.NewTiledArea(OX, OY, OW, OH, FloorTexture)
 		platform.ForcePassible = true
 		platform.Dominance = FloorDominance
 		if FloorModuloX>0;platform.InsertX=-(OX % FloorModuloX); End
 		if FloorModuloY>0;platform.InsertY=-(OY % FloorModuloY); End
-		bottom = NewTileArea(OX,OY+OH,OW,64)
+		bottom = Kthura.NewTiledArea(OX,OY+OH,OW,64,FrontTexture)
 		bottom.ForcePassible = true
 		bottom.Dominance = FrontDominance
 		if FrontModuloX>0;bottom.InsertX=-(OX % FrontModuloX); End
@@ -249,5 +249,6 @@ Void Generate()
 	End
 	plua Start;Start = New MG_Tak(math.random(StartX,EndX),math.random(StartY,EndY),0,4)
 	plua StartExit;StartExit = Kthura.NewExit(Start.NextX,Start.NextY,"Start","South")
+	Start.Generate()
 End
 
