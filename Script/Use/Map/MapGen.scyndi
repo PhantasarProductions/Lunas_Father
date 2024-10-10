@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.10
+// 	  Version: 24.10.10 III
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -44,7 +44,7 @@
 
 Module
 
-Int StartX = 16
+Int StartX = 32
 Int StartY = 128
 
 Int EndX = 3200
@@ -63,3 +63,58 @@ String FloorTexture = "GFX/TEXTURES/Metal/Metalen Ribbelvloer.jpg"
 Int FrontModuloX = 0
 Int FrontModuloY = 0
 Int FrontDominance = 2
+
+Int GridX = 16
+Int GridY = 16
+
+Int MWX = 96
+int MWY = 96
+
+int SQX = 160
+int SQY = 160
+
+Get int MWHX; return MWX div 2; End
+Get int MWHY; return MWY div 2; End
+Get int SQHX; return SQX div 2; End
+Get int SQHY; return SQY div 2; End
+
+//                    0   1   2   3
+Var Winds = NewArray("N","E","S","W")
+
+Class MG_Tak
+	Int X
+	Int Y
+	Int W
+	Int L
+	Get String Wind; Return Winds[W] || "???"; End
+	
+	// Object X
+	Get Int OX
+		Switch W
+			case 0 2 1
+				Return math.max(StartX,x-MWHX)
+			case 3
+				int r=(x-L)-MWHX
+				return math.max(r,StartX)
+		End
+		return 0
+	End
+	
+	// Object Y
+	Get Int OY
+		Switch W
+			case 1 2 3
+				Return math.max(StartY,y-MWHY)
+			case 0
+				int r=(x-L)-MWHX
+				return math.max(r,StartY)
+		End
+		return 0
+	End
+
+End	
+
+Void Generate()
+	
+End
+
