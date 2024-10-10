@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.10 VII
+// version: 24.10.10 VIII
 // 
 // End License
 
@@ -45,6 +45,8 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/TextBoxes"
+
+#use "Script/Use/Map/MapGen"
 
 Int DoorMoving=0
 int Deg=os.time()
