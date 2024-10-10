@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.10 III
+// version: 24.10.10 IV
 // 
 // End License
 
@@ -62,6 +62,15 @@ Global Void Cycle()
 			CSay("And the door is open, and even removed from the game, permanently. We don't need it anymore!")
 			Map.PermaKill("Deur")
 		End
+	End
+	// There is a difference, and this act of laziness will get me away with stupidity
+	If Kthura.HasObj("TransPic")
+		Deg = (Deg + 1) % 360
+		Kthura.Obj.TransPic.Rotate = Deg
+	End
+	If Kthura.HasObj("PicTrans")
+		Deg = (Deg + 1) % 360
+		Kthura.Obj.PicTrans.Rotate = Deg
 	End
 End
 
