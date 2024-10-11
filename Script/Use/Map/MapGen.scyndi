@@ -75,8 +75,8 @@ Int FrontDominance = 2
 	
 String FrontTexture = "GFX/Textures/Hole Textures/Light Yellow.png"
 
-Int GridX = 16
-Int GridY = 16
+Int GridX = 32
+Int GridY = 32
 
 Int MWX = 96
 int MWY = 96
