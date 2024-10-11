@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 VIII
+// 	  Version: 24.10.11 IX
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -266,7 +266,7 @@ Void Generate()
 	plua LastTak = {}
 	// Safety precaution. It *is* tecnically possible (with a bit of bad luck) 
 	// No map is generated at all, and then it least there'll be an exit now!
-	if Start.NextX<EindX div 2
+	if Start.NextX<EndX div 2
 		LastTak.NextX = Start.NextX+SQX
 	Else
 		LastTak.NextX = Start.NextX-SQX
