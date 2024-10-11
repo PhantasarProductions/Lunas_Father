@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 VII
+// 	  Version: 24.10.11 VIII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -251,6 +251,58 @@ Void Generate()
 	End
 	plua Start;Start = New MG_Tak(math.random(StartX,EndX),math.random(StartY,EndY),0,4)
 	plua StartExit;StartExit = Kthura.NewExit(Start.NextX,Start.NextY,"Start","South")
+	plua Einde = nil
+	plua EindeZone = nil
+	plua EindeTeleporter = nil
 	Start.Generate()
+	Int Takken = math.random(2,6)
+	Table TakTab = {}
+	Table TakNew
+	For i=0,Takken
+		TakTab[i] = New MT_Tak(Start.NextX,Start.NextY,math(32,256))
+	End
+	Int TimeOut=10000
+	Int UlMax=100
+	plua LastTak = {}
+	// Safety precaution. It *is* tecnically possible (with a bit of bad luck) 
+	// No map is generated at all, and then it least there'll be an exit now!
+	if Start.NextX<EindX div 2
+		LastTak.NextX = Start.NextX+SQX
+	Else
+		LastTak.NextX = Start.NextX-SQX
+	End
+	// Generate the map
+	Repeat
+		TakNew = {}
+		For i,t in pairs(TakTab)
+			CSayF("Growth %02d/%02d",i,Takken)
+			LastTak=t
+			t.Generate()
+			If UlMax<=0 || math.random(0,UlMax)==0
+				if (!Einde) && math.random(1,math.max(2,UlMax))==1
+					Einde = New MG_Tak(t.NextX,t.NextY,0,4)
+					if math.random(1,math.max(2,UlMax))!=1
+						TakNew[i]=New MT_Tak(t.NextX,t.NextY,math(32,256))
+					End
+				End
+			Else
+				TakNew[i]=New MT_Tak(t.NextX,t.NextY,math(32,256))
+			End
+		End
+		int NieuweTakken=0
+		for i,t in pairs(TakNew); NieuweTakken++; End
+		TimeOut--
+		CSay("New branches: %d; Timeou:%04d",NieuweTakken,TimeOut)
+		TakTab = TakNew
+	Until NieuweTakken==0 || TimeOut<=0
+	// Make sure there's an ending platform
+	Einde = Einde || New MG_Tak(t.NextX,t.NextY,0,4)
+	// Set up the einding platform
+	Einde.Generate()
+	EindeTeleporter = Kthura.NewObstacle(Einde.NextX,Einde.NextY,TransTex)
+	EindeTeleporter.Tag = TransTag
+	EindeZone = Kthura.NewZone(Einde.NextX-TransRad,Einde.NextY,TransRad,TransRad*2,TransRad*2)
+	EindeZone.Tag = TransZAT
+	
 End
 
