@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.11 III
+// version: 24.10.11 IV
 // 
 // End License
 
@@ -76,7 +76,7 @@ Global Void Cycle()
 		Kthura.Obj.PicTrans.Rotate = Deg
 	End
 	If Kthura.HasObj("ZA_Boss_Portrait")
-		Kthura.Obj.ZA_Boss_Portrait.Texure = sprintf("GFX/Portraits/%s.png",Map.Leader)
+		Kthura.Obj.ZA_Boss_Portrait.Texture = sprintf("GFX/Portraits/%s.png",Map.Leader)
 	End
 End
 
