@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 XIII
+// 	  Version: 24.10.11 XV
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -195,7 +195,7 @@ Class MG_Tak
 	Static Int Cnt = 0
 	ReadOnly Int ID
 	Constructor (Int _X, Int _Y,Int _L,Int _W=10)
-		Cnt++; ID=0
+		Cnt++; ID=Cnt
 		X = (_X div GridX)*GridX // This removes any modulos not being right.
 		Y = (_X div GridY)*GridY // This removes any modulos not being right.
 		W = _W
@@ -228,11 +228,14 @@ Class MG_Tak
 		platform.Dominance = FloorDominance
 		if FloorModuloX>0;platform.InsertX=-(OX % FloorModuloX); End
 		if FloorModuloY>0;platform.InsertY=-(OY % FloorModuloY); End
-		bottom = Kthura.NewTiledArea(OX,OY+OH,OW,64,FrontTexture)
-		bottom.ForcePassible = true
-		bottom.Dominance = FrontDominance
-		if FrontModuloX>0;bottom.InsertX=-(OX % FrontModuloX); End
-		if FrontModuloY>0;bottom.InsertY=-(OY % FrontModuloY); End		
+		if OY+OH<EndY
+			bottom = Kthura.NewTiledArea(OX,OY+OH,OW,64,FrontTexture)
+			//bottom.ForcePassible = true
+			bottom.Dominance = FrontDominance
+			if FrontModuloX>0;bottom.InsertX=-(OX % FrontModuloX); End
+			if FrontModuloY>0;bottom.InsertY=-(OY % FrontModuloY); End
+			While Bottom.Y+Bottom.H>EndY && Bottom.H>0;Bottom.H--;End
+		End
 		Generated = True
 	End
 	
@@ -302,5 +305,6 @@ Void Generate()
 	EindeTeleporter = Kthura.NewObstacle(Einde.NextX,Einde.NextY,TransTex)
 	EindeTeleporter.Tag = TransTag
 	EindeZone = Kthura.NewZone(Einde.NextX-TransRad,Einde.NextY,TransRad,TransRad*2,TransRad*2)
-	EindeZone.Tag = TransZAT	
+	EindeZone.Tag = TransZAT
+	Kthura.Remap()
 End
