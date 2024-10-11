@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.11
+// version: 24.10.11 III
 // 
 // End License
 
@@ -75,6 +75,9 @@ Global Void Cycle()
 		Deg = (Deg + 1) % 360
 		Kthura.Obj.PicTrans.Rotate = Deg
 	End
+	If Kthura.HasObj("ZA_Boss_Portrait")
+		Kthura.Obj.ZA_Boss_Portrait.Texure = sprintf("GFX/Portraits/%s.png",Map.Leader)
+	End
 End
 
 Global Void NPC_RachelDeur()
@@ -98,6 +101,7 @@ Global Void ZA_NextMap()
 	End
 	Map.Kill("PLAYER")
 	Kthura.CurrentLayer=sprintf("#%03d",ZN);
+	CSayF("Gerating: %s",Kthura.CurrentLayer)
 	MapGen.Generate()
 	Kthura.Spawn("Player","Start")
 End
