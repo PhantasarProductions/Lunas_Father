@@ -88,9 +88,11 @@ Global Void NPC_RachelDeur()
 End
 
 Global Void ZA_NextMap()
-	Int ZN;ZN=Lua.tonumber(Right(Kthura.CurrentMap,3))||0
+	Int ZN;ZN=Lua.tonumber(Right(Kthura.CurrentLayer,3))||0
 	ZN++
+	CSayF("Going to next layer")
 	if ZN%5==0
+		CSay("-> Fixed map")
 		Map.GotoLayer(sprintf("#%03d",ZN),"Start")
 		Return
 	End
