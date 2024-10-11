@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 XII
+// 	  Version: 24.10.11 XIII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -259,7 +259,7 @@ Void Generate()
 	Table TakTab = {}
 	Table TakNew
 	For i=0,Takken
-		TakTab[i] = New MT_Tak(Start.NextX,Start.NextY,math.random(32,256))
+		TakTab[i] = New MG_Tak(Start.NextX,Start.NextY,math.random(32,256))
 	End
 	Int TimeOut=10000
 	Int UlMax=100
@@ -282,11 +282,11 @@ Void Generate()
 				if (!Einde) && math.random(1,math.max(2,UlMax))==1
 					Einde = New MG_Tak(t.NextX,t.NextY,0,4)
 					if math.random(1,math.max(2,UlMax))!=1
-						TakNew[i]=New MT_Tak(t.NextX,t.NextY,math.random(32,256))
+						TakNew[i]=New MG_Tak(t.NextX,t.NextY,math.random(32,256))
 					End
 				End
 			Else
-				TakNew[i]=New MT_Tak(t.NextX,t.NextY,math.random(32,256))
+				TakNew[i]=New MG_Tak(t.NextX,t.NextY,math.random(32,256))
 			End
 		End
 		int NieuweTakken=0
