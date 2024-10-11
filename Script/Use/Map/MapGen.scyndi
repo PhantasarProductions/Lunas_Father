@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Map/MapGen.scyndi
 // 
-// 	  Version: 24.10.11 IX
+// 	  Version: 24.10.11 XI
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -282,11 +282,11 @@ Void Generate()
 				if (!Einde) && math.random(1,math.max(2,UlMax))==1
 					Einde = New MG_Tak(t.NextX,t.NextY,0,4)
 					if math.random(1,math.max(2,UlMax))!=1
-						TakNew[i]=New MT_Tak(t.NextX,t.NextY,math(32,256))
+						TakNew[i]=New MT_Tak(t.NextX,t.NextY,math.random(32,256))
 					End
 				End
 			Else
-				TakNew[i]=New MT_Tak(t.NextX,t.NextY,math(32,256))
+				TakNew[i]=New MT_Tak(t.NextX,t.NextY,math.random(32,256))
 			End
 		End
 		int NieuweTakken=0
@@ -296,13 +296,11 @@ Void Generate()
 		TakTab = TakNew
 	Until NieuweTakken==0 || TimeOut<=0
 	// Make sure there's an ending platform
-	Einde = Einde || New MG_Tak(t.NextX,t.NextY,0,4)
+	Einde = Einde || New MG_Tak(Lasttak.NextX,lasttak.NextY,0,4)
 	// Set up the einding platform
 	Einde.Generate()
 	EindeTeleporter = Kthura.NewObstacle(Einde.NextX,Einde.NextY,TransTex)
 	EindeTeleporter.Tag = TransTag
 	EindeZone = Kthura.NewZone(Einde.NextX-TransRad,Einde.NextY,TransRad,TransRad*2,TransRad*2)
-	EindeZone.Tag = TransZAT
-	
+	EindeZone.Tag = TransZAT	
 End
-
