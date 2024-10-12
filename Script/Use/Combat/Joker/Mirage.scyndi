@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
 // 
-// 	  Version: 24.10.12 I
+// 	  Version: 24.10.12 IV
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -44,8 +44,8 @@
 
 Module
 
-#use "SCI/Sys"
-#use "SCI/Intervar"
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Intervar"
 
 #use "Script/Use/Link/Mini"
 
