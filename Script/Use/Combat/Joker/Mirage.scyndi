@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
 // 
-// 	  Version: 24.10.12 VII
+// 	  Version: 24.10.12 VIII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -48,14 +48,17 @@ Module
 #use "Libs/SCI/Intervar"
 
 #use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
 
 #use "Script/Flow/FlowCombat/Fighter"
 
 Void Drain(Ch,String HeroTag)
 	plua HCh = nil
 	For i=0,2
-		HCh = Fighter.ByTag[HeroTag]
-		CSayF("Hero %s found at position %d",HeroTag,i+1)
+		if Party.Party[i]==HeroTag
+			HCh = Fighter.ByTag[HeroTag]
+			CSayF("Hero %s found at position %d",HeroTag,i+1)
+		End
 	End
 	If !HCh
 		CSayF("Hero %s not present or not on front row. Skipping!",HeroTag)
@@ -77,7 +80,7 @@ Void Drain(Ch,String HeroTag)
 	Mini.Write(HeroTag,255,180,0)
 	Mini.Write(" feels ",255,0,0)
 	Mini.Write(sprintf("%d HP",HPD),255,255,0)
-	Mini.Write(" has been drained by her mirage form")
+	Mini.Writeln(" has been drained by her mirage form",255,0,0)
 	switch gint.Skill
 		case 1
 			if HCH.iRate<300000; HCH.iRate = HCH.iRate + HCH.iRate; end
