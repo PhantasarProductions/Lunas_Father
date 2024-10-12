@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
 // 
-// 	  Version: 24.10.12 VI
+// 	  Version: 24.10.12 VII
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -87,6 +87,6 @@ Void Drain(Ch,String HeroTag)
 		default
 			HCH.iRate = 0
 	End
-	CSayF("%s's iRate is now %d",HCH.iRate)
+	CSayF("%s's iRate is now %d",HeroTag,HCH.iRate)
 End
 	
