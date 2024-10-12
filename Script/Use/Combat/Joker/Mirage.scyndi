@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
 // 
-// 	  Version: 24.10.12 IV
+// 	  Version: 24.10.12 V
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -49,10 +49,12 @@ Module
 
 #use "Script/Use/Link/Mini"
 
+#use "Script/Flow/FlowCombat/Fighter.scyndi"
+
 Void Drain(Ch,String HeroTag)
 	plua HCh = nil
 	For i=0,2
-		HCh = Lua.Scyndi.Fighter.ByTag[HeroTag]
+		HCh = Fighter.ByTag[HeroTag]
 		CSayF("Hero %s found at position %d",HeroTag,i+1)
 	End
 	If !HCh
