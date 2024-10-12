@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH4_Dungeon_Magenta.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,10 +33,15 @@
 // 
 // **********************************************
 // 
-// version: 24.09.25
-// End License Information
+// 
+// version: 24.10.13
+// 
+// End License
+
+
 Script
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Intervar"
 
 #use "Script/Use/Map/Cogs"
@@ -60,3 +66,16 @@ Global Void NPC_Ring()
 	Awarded.SCEN_RING = true
 	Map.PermaKill("NPC_Ring")
 End
+
+#region Medal
+Global Void ZA_OpenMedal()
+	CSayF("Medal Rate: %03d%% (%5s), Scyndi Joined: %5s",Ach.MedalRate, Ach.MedalRate>=50, gbool.ScyndiJoin)
+	If Ach.MedalRate>=100
+		Map.Kill("Medal_Barrier")
+	End
+End
+
+Global Void ZA_ToMedal()
+	Map.GoToMap("MDL_Dungeon_SS2_Muerte","#001","From_Phantasar")
+End
+#endregion
