@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
 // 
-// 	  Version: 24.10.12 V
+// 	  Version: 24.10.12 VI
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -49,7 +49,7 @@ Module
 
 #use "Script/Use/Link/Mini"
 
-#use "Script/Flow/FlowCombat/Fighter.scyndi"
+#use "Script/Flow/FlowCombat/Fighter"
 
 Void Drain(Ch,String HeroTag)
 	plua HCh = nil
