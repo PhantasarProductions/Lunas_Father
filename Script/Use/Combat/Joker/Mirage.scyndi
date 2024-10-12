@@ -78,9 +78,9 @@ Void Drain(Ch,String HeroTag)
 	Mini.Write(" has been drained by her mirage form")
 	switch gint.Skill
 		case 1
-			if HCH.iRate<300000; iRate = iRate + iRate; end
+			if HCH.iRate<300000; HCH.iRate = HCH.iRate + HCH.iRate; end
 		case 2
-			 if HCH.iRate<300000; iRate = iRate + 500; end
+			 if HCH.iRate<300000; HCH.iRate = HCH.iRate + 500; end
 		case 3
 		default
 			HCH.iRate = 0
