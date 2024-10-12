@@ -65,8 +65,7 @@ Void Drain(Ch,String HeroTag)
 		case 0 1
 			HPD=math.min(HPD,(HCH.MaxHP-HCH.HP)-1)
 		case 3
-			HPD=math.min(HPD,(HCH.MaxHP-HCH.HP))
-		End
+			HPD=math.min(HPD,(HCH.MaxHP-HCH.HP))		
 	End
 	if HPD<=0
 		CSayF("HP to drain from %s turned out to be %d. Dropping out!",HeroTag,HPD)
