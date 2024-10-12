@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.11 V
+// version: 24.10.12
 // 
 // End License
 
@@ -42,6 +42,7 @@ Script
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/TextBoxes"
@@ -55,6 +56,17 @@ Init
 	Map.AddCyclePre("Cycle")
 	Print "Welcome to the Everchanging Labyrinth"
 End
+
+QuickMeta MD
+	index
+		if Upper(key)=="LEADER"; return MD[Map.Leader]; end
+		return gbool[sprintf("Defeated_LabyrinthBoss_%s",key)]
+	end
+	
+	newindex
+		if Upper(key)=="LEADER"; MD[Map.Leader] = value; end
+		gbool[sprintf("Defeated_LabyrinthBoss_%s",key)] = value
+	end
 
 Global Void Cycle()
 	If Map.Layer=="#000" && DoorMoving>0
@@ -76,6 +88,7 @@ Global Void Cycle()
 		Kthura.Obj.PicTrans.Rotate = Deg
 	End
 	If Kthura.HasObj("ZA_Boss_Portrait")
+		Kthura.Obj.ZA_Boss_Portrait.Visible = !MD.Leader
 		Kthura.Obj.ZA_Boss_Portrait.Texture = sprintf("GFX/Portraits/%s/General.png",Map.Leader)
 	End
 End
@@ -104,4 +117,16 @@ Global Void ZA_NextMap()
 	CSayF("Gerating: %s",Kthura.CurrentLayer)
 	MapGen.Generate()
 	Kthura.Spawn("Player","Start")
+End
+
+Global Void ZA_Boss_Portrait()
+	Map.Kill("ZA_Boss_Portrait") // Just do it all again if you want them all.
+	Bool gotall=true
+	bool GoForIt = MD[ch]
+	MD[ch] = true
+	For _,ch in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+		gotall = gotall && MD[ch]
+		CSayF("%s -> %s -> %s",ch,lua.tostring(MD[ch]),lua.tostring(gotall))
+	End
+	Map.Boss(Map.Leader)
 End
