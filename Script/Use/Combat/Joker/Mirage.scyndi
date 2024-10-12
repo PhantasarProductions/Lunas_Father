@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
 // 
-// 	  Version: 24.10.12 VIII
+// 	  Version: 24.10.12 IX
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -55,7 +55,7 @@ Module
 Void Drain(Ch,String HeroTag)
 	plua HCh = nil
 	For i=0,2
-		if Party.Party[i]==HeroTag
+		if Party.Char(i)==HeroTag
 			HCh = Fighter.ByTag[HeroTag]
 			CSayF("Hero %s found at position %d",HeroTag,i+1)
 		End
