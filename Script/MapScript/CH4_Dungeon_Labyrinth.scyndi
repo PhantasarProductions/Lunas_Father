@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.12 II
+// version: 24.10.12 III
 // 
 // End License
 
@@ -123,8 +123,8 @@ End
 Global Void ZA_Boss_Portrait()
 	Map.Kill("ZA_Boss_Portrait") // Just do it all again if you want them all.
 	Bool gotall=true
-	bool GoForIt;GoForIt = !MD[ch]
-	MD[ch] = true
+	bool GoForIt;GoForIt = !MD.Leader
+	MD.Leader = true
 	For _,ch in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
 		gotall = gotall && MD[ch]
 		CSayF("%s -> %s -> %s",ch,lua.tostring(MD[ch]),lua.tostring(gotall))
