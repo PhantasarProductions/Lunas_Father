@@ -1,0 +1,91 @@
+// License:
+// 	  src/Scripts/Script/Use/Combat/Joker/Mirage.scyndi
+// 
+// 	  Version: 24.10.12
+// 	
+// 	  Copyright (C) 2024 Jeroen Petrus Broks
+// 	
+// 	  ===========================
+// 	  This file is part of a project related to the Phantasar Chronicles or another
+// 	  series or saga which is property of Jeroen P. Broks.
+// 	  This means that it may contain references to a story-line plus characters
+// 	  which are property of Jeroen Broks. These references may only be distributed
+// 	  along with an unmodified version of the game.
+// 
+// 	  As soon as you remove or replace ALL references to the storyline or character
+// 	  references, or any termology specifically set up for the Phantasar universe,
+// 	  or any other univers a story of Jeroen P. Broks is set up for,
+// 	  the restrictions of this file are removed and will automatically become
+// 	  zLib licensed (see below).
+// 
+// 	  Please note that doing so counts as a modification and must be marked as such
+// 	  in accordance to the zLib license.
+// 	  ===========================
+// 
+// 
+// 	  zLib license terms:
+// 	
+// 	  This software is provided 'as-is', without any express or implied
+// 	  warranty.  In no event will the authors be held liable for any damages
+// 	  arising from the use of this software.
+// 
+// 	  Permission is granted to anyone to use this software for any purpose,
+// 	  including commercial applications, and to alter it and redistribute it
+// 	  freely, subject to the following restrictions:
+// 	
+// 	  1. The origin of this software must not be misrepresented; you must not
+// 	     claim that you wrote the original software. If you use this software
+// 	     in a product, an acknowledgment in the product documentation would be
+// 	     appreciated but is not required.
+// 	  2. Altered source versions must be plainly marked as such, and must not be
+// 	     misrepresented as being the original software.
+// 	  3. This notice may not be removed or altered from any source distribution.
+// End License
+
+Module
+
+#use "SCI/Sys"
+#use "SCI/Intervar"
+
+#use "Script/Use/Link/Mini"
+
+Void Drain(Ch,String HeroTag)
+	plua HCh = nil
+	For i=0,2
+		HCh = Lua.Scyndi.Fighter.ByTag[HeroTag]
+		CSayF("Hero %s found at position %d",HeroTag,i+1)
+	End
+	If !HCh
+		CSayF("Hero %s not present or not on front row. Skipping!",HeroTag)
+		Return
+	End
+	Int HPD=0
+	HPD = math.min(Ch.MaxHP-Ch.HP,HCH.HP)
+	switch gint.Skill
+		case 0 1
+			HPD=math.min(HPD,(HCH.MaxHP-HCH.HP)-1)
+		case 3
+			HPD=math.min(HPD,(HCH.MaxHP-HCH.HP))
+		End
+	End
+	if HPD<=0
+		CSayF("HP to drain from %s turned out to be %d. Dropping out!",HeroTag,HPD)
+		Return
+	End
+	HCH.HP = HCH.HP - HPD
+	Mini.Write(HeroTag,255,180,0)
+	Mini.Write(" feels ",255,0,0)
+	Mini.Write(sprintf("%d HP",HPD),255,255,0)
+	Mini.Write(" has been drained by her mirage form")
+	switch gint.Skill
+		case 1
+			if HCH.iRate<300000; iRate = iRate + iRate; end
+		case 2
+			 if HCH.iRate<300000; iRate = iRate + 500; end
+		case 3
+		default
+			HCH.iRate = 0
+	End
+	CSayF("%s's iRate is now %d",HCH.iRate)
+End
+	
