@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.12 III
+// version: 24.10.12 VIII
 // 
 // End License
 
@@ -45,6 +45,9 @@ Script
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/TextBoxes"
 
 #use "Script/Use/Map/MapGen"
@@ -92,6 +95,11 @@ Global Void Cycle()
 		Kthura.Obj.ZA_Boss_Portrait.Visible = !MD.Leader
 		Kthura.Obj.ZA_Boss_Portrait.Texture = sprintf("GFX/Portraits/%s/General.png",Map.Leader)
 	End
+	if Kthura.CurrentLayer=="#010" && (!Kthura.HasObj("NPC_Blueprint"))
+		Deg = (Deg + 1) % 360
+		Kthura.Obj.ExitTrans.Rotate = 360-Deg
+	End	
+
 End
 
 Global Void NPC_RachelDeur()
@@ -129,7 +137,31 @@ Global Void ZA_Boss_Portrait()
 		gotall = gotall && MD[ch]
 		CSayF("%s -> %s -> %s",ch,lua.tostring(MD[ch]),lua.tostring(gotall))
 	End
+	if GotAll
+		Awarded.Bonus_Mirage = true
+	end
 	if GoForIt
 		Map.Boss(Map.Leader)
+	End
+End
+
+Global Void ZA_Eindstreep()
+	If Kthura.HasObj("NPC_Blueprint")
+		CSay("Blueprint is still there. No go!")
+		Return
+	End
+	TinkerIsland()
+	gbool.Complete_Labyrinth = true
+End
+
+Global Void NPC_Blueprint()
+	gstring.CampSituation="21_BLUE"
+	MapText("Blueprint")
+	map.permakill("NPC_BluePrint")
+	map.permakill("Blueprintwhite")
+	Awarded.Voltooid_Labyrinth = true
+	For _,ch in pairs{"Myrah","Francis","Luna","Scyndi","Aziella","Rachel"}
+		plua st;st=Party.GetChar(ch).Stat
+		st.Exp = St.Exp - (1000000000 div gint.skill)
 	End
 End
