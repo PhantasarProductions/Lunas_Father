@@ -1,0 +1,75 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/MDL_Dungeon_SS2_Feo.scyndi
+// (c) Jeroen Broks, 2022, 2023, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.10.15
+// 
+// End License
+Script
+
+#use "Libs/SCI/Kthura" 
+#use "Libs/SCI/InterVar" 
+
+#use "Script/Use/Link/Map"
+
+plua Sein = Kthura.Obj.Sein
+
+Global Void ZA_Welcome()
+End
+
+Global Void ZA_CheckStairs1()
+	Sein.Texture = "GFX/Textures/Star Story II/Sein/1.png"
+	Kthura.HideByLabel("Lab_Sein")
+	If (gbool.FEOSW1 && gbool.FEOSW2)
+		Map.Kill("BAR_STAIRS1")
+		Sein.Texture = "GFX/Textures/Star Story II/Sein/2.png"
+	End
+	If gbool.Defeated_Feo
+		Sein.Texture = "GFX/Textures/Star Story II/Sein/3.png"
+		Map.Kill("DeSeinBarriere")
+		Kthura.ShowByLabel("Lab_Sein")
+	End
+End
+
+Global Void ZA_CheckStairs2()
+	If (gbool.FEOSW3 && gbool.FEOSW4)
+		Map.Kill("BAR_STAIRS2")		
+	End
+End
+
+Global Void Switch_Een();   gbool.FEOSW1 = true; end
+Global Void Switch_Twee();  gbool.FEOSW2 = true; end
+Global Void Switch_Drie();  gbool.FEOSW3 = true; end
+Global Void Switch_Vier();  gbool.FEOSW4 = true; end
