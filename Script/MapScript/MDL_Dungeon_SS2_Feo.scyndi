@@ -34,11 +34,12 @@
 // **********************************************
 // 
 // 
-// version: 24.10.15
+// version: 24.10.15 IV
 // 
 // End License
 Script
 
+#use "Libs/SCI/Sys" 
 #use "Libs/SCI/Kthura" 
 #use "Libs/SCI/InterVar" 
 
@@ -79,10 +80,10 @@ Set Int FeoDeler
 	gint.Feo_Bonus_Deler_Boss = math.min(value+gint.skill,1000000)
 End
 
-Void ZA_Feo()
+Global Void ZA_Feo()
 	If !Done.Defeated_Feo
-		MapText("Foe")
-		Map.Boss("Foe")
+		MapText("Feo")
+		Map.Boss("Feo")
 	Elseif FeoDeler<1000000
 		For i=0,5
 			plua s;s = Party.GetChar(Party.Char(i)).Stat
