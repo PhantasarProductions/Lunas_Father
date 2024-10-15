@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.12 IV
+// version: 24.10.13
 // 
 // End License
 
@@ -53,4 +53,17 @@ Global Void ZA_Green()
 	If !Done.Muerte_Green_Whatever
 		Party.GetChar(Map.Leader).Stat.Exp = 0
 	End
+End
+
+
+table mdeler = NewArray(0,100000,10000,1000)
+Global Void ZA_Feo()
+	if gint.Feo_Deler<mdeler[gint.Skill]
+		for i=0,5
+			plua s;s = Party.GetChar(Map.Leader).Stat
+			gint.Feo_Deler++
+			s.Exp = s.Exp - (100000000 div gint.Feo_Deler)
+		end
+	End
+	Map.GoToMap("MDL_Dungeon_SS2_Feo","Lobby","Start")
 End
