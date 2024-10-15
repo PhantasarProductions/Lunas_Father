@@ -60,7 +60,7 @@ table mdeler = NewArray(0,100000,10000,1000)
 Global Void ZA_Feo()
 	if gint.Feo_Deler<mdeler[gint.Skill]
 		for i=0,5
-			plua s;s = Party.GetChar(Map.Leader).Stat
+			plua s;s = Party.GetChar(Party.Char(i)).Stat
 			gint.Feo_Deler++
 			s.Exp = s.Exp - (100000000 div gint.Feo_Deler)
 		end
