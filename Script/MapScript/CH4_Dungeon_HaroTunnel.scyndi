@@ -34,9 +34,42 @@
 // **********************************************
 // 
 // 
-// version: 24.10.18
+// version: 24.10.18 IV
 // 
 // End License
 
 Script
 
+#use "Libs/SCI/Kthura"
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/WorldMap"
+
+Number DeurY=64
+
+Global Void Barrier_Begone()
+	Map.PermaKill("Barrier")
+End
+
+Global Void NPC_Deur()
+	If Map.Leader=="Rachel"
+		Map.AddCyclePre("Deur")
+		Map.PermaKill("NPC_Deur")
+		WM_Unlocked.QuayaroLair = true
+	End
+End
+
+Global Void Deur()
+	If Kthura.HasObj("Deur")
+		If DeurY<=0
+			Map.PermaKill("Deur")
+		Else
+			Kthura.Obj.Deur.Y=math.floor(DeurY)
+			DeurY=DeurY-0.25
+			printf("Deur Y=%4.2f\n",DeurY)
+		End
+	End
+End
+
+Global Void ZA_Complete()
+	TinkerIsland()
+End
