@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.15 IV
+// version: 24.10.17
 // 
 // End License
 Script
@@ -84,6 +84,7 @@ Global Void ZA_Feo()
 	If !Done.Defeated_Feo
 		MapText("Feo")
 		Map.Boss("Feo")
+		Map.PermaKill("Feo")
 	Elseif FeoDeler<1000000
 		For i=0,5
 			plua s;s = Party.GetChar(Party.Char(i)).Stat
@@ -99,3 +100,8 @@ Global Void Switch_Een();   gbool.FEOSW1 = true; end
 Global Void Switch_Twee();  gbool.FEOSW2 = true; end
 Global Void Switch_Drie();  gbool.FEOSW3 = true; end
 Global Void Switch_Vier();  gbool.FEOSW4 = true; end
+
+	
+Global Void ZA_Muerte()
+	Map.GoToMap("MDL_Dungeon_SS2_Muerte","#002","From_Feo")
+End
