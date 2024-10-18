@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.12
+// version: 24.10.18 I
 // 
 // End License
 
@@ -132,8 +132,13 @@ Global Void NPC_Duke()
 		gstring.CampSituation="20_LABY"
 		Pop.UnPop()
 		Music.Play("MUSIC/WORLDMAP/TINKER ISLAND.OGG")
-		//Lua.error("The rest has not yet been scripted")
-	End
+		//Lua.error("The rest has not yet been scripted")	
+	ElIf gbool.Complete_Labyrinth && (!Done.GnomeDukePostLabyrinth)
+		MapText("HERTOG_POST_LABYRINTH")
+		WM_Unlocked.HAROTUNNEL = true
+	Else
+		MapText("HERTOG")
+	End	
 End
 
 Init
