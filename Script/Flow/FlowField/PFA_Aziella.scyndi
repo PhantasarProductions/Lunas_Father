@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Flow/FlowField/PFA_Aziella.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,16 +33,25 @@
 // 
 // **********************************************
 // 
-// version: 23.11.18
-// End License Information
+// 
+// version: 24.10.19 VII
+// 
+// End License
+
+
 Module
 
+#use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/TextBoxes"
 
 #use "Script/Flow/FlowField/Field_PersonalAction"
+#use "Script/Flow/FlowField/Field_Renc"
+
+plua Renc = Field_Renc
 
 Global Void PurpleSeal()
 	Tutorial("SEAL_"..Map.Leader)
@@ -49,8 +59,40 @@ End
 
 Bool PFA_Aziella_Allow(); return gbool.Allow_Field_Aziella; End
 
-Bool PFA_Aziella_Action(String Wind)
-	Return False
+Get Var Seal
+	If !Kthura.HasObj("PURPLESEAL") 
+		return Nil
+	Else
+		Return Kthura.Obj.PURPLESEAL
+	End
+End
+
+Get Number DistanceSeal
+	if !Seal; Return 1000000; End
+	int HRZ = math.abs(Seal.X-Player.X)
+	int BRZ = math.abs(Seal.Y-Player.Y)
+	// Long live Pythagoras!
+	return math.sqrt( (HRZ*HRZ) + (BRZ*BRZ) )
+End
+
+Get Bool SealNear	
+	Return DistanceSeal<=128
+End
+
+Bool PFA_Aziella_Action(String Wind="Irrelevant")
+	Mini.Write("Aziella ",255,180,0)
+	Mini.Writeln("raises her hand with the amethyst ring, looking for trouble!",180,0,255)
+	if SealNear
+		//Lua.error("Opening seals not yet set up!")
+		Mini.WriteLn("The sealed monster answers her call and breaks the seal",140,0,200)
+		Map.Boss("Sealed")
+	elif Renc.MapHasEnc && Renc.NEnc[Kthura.CurrentLayer] && Renc.NEnc[Kthura.CurrentLayer]>0 
+		Mini.WriteLn("Some nearby monsters heard her call!",255,255,0)
+		Renc.StartEncounter()
+	Else
+		Mini.WriteLn("Nothing happens")
+	End
+	Return True
 End
 
 Bool PFA_Aziella_Cycle()
@@ -60,5 +102,5 @@ End
 Init
 	//FField = Lua.Scyndi.Globals.FlowField
 	//FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
-	PFA_Reg("Aziella",PFA_Aziella_Allow,PFA_Aziella_Action,PFA_Aziella_Cycle,True)
+	PFA_Reg("Aziella",PFA_Aziella_Allow,PFA_Aziella_Action,PFA_Aziella_Cycle,False)
 End
