@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Flow/FlowField/PFA_Aziella.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.19 VII
+// version: 24.10.19 VIII
 // 
 // End License
 
@@ -57,7 +57,7 @@ Global Void PurpleSeal()
 	Tutorial("SEAL_"..Map.Leader)
 End
 
-Bool PFA_Aziella_Allow(); return gbool.Allow_Field_Aziella; End
+Bool PFA_Aziella_Allow(); return (!Player.Walking) && gbool.Allow_Field_Aziella; End
 
 Get Var Seal
 	If !Kthura.HasObj("PURPLESEAL") 
