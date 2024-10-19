@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH4_Hub_Beach.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,10 @@
 // 
 // **********************************************
 // 
-// version: 24.08.09
-// End License Information
+// 
+// version: 24.10.19 I
+// 
+// End License
 Script
 
 #use "Libs/SCI/Sys"
@@ -59,6 +62,6 @@ Global Void NPC_Chantal()
 	MapText("Chantal_Leave")
 	If Sys.Yes(Rosetta.GetSTR("TRAVEL","Neonor"))
 		MapText("Chantal_Goede_Reis")		
-		Map.GoToMap("CH4_HUB_GrovkonBay","BAY","Arrival")
+		Map.GoToMap("CH3_HUB_GrovkonBay","BAY","Arrival")
 	End
 End
