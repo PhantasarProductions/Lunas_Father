@@ -1,0 +1,126 @@
+// License:
+// 	  src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_Armageddon.scyndi
+// 
+// 	  Version: 24.10.19 VII
+// 	
+// 	  Copyright (C) 2024 Jeroen Petrus Broks
+// 	
+// 	  ===========================
+// 	  This file is part of a project related to the Phantasar Chronicles or another
+// 	  series or saga which is property of Jeroen P. Broks.
+// 	  This means that it may contain references to a story-line plus characters
+// 	  which are property of Jeroen Broks. These references may only be distributed
+// 	  along with an unmodified version of the game.
+// 
+// 	  As soon as you remove or replace ALL references to the storyline or character
+// 	  references, or any termology specifically set up for the Phantasar universe,
+// 	  or any other univers a story of Jeroen P. Broks is set up for,
+// 	  the restrictions of this file are removed and will automatically become
+// 	  zLib licensed (see below).
+// 
+// 	  Please note that doing so counts as a modification and must be marked as such
+// 	  in accordance to the zLib license.
+// 	  ===========================
+// 
+// 
+// 	  zLib license terms:
+// 	
+// 	  This software is provided 'as-is', without any express or implied
+// 	  warranty.  In no event will the authors be held liable for any damages
+// 	  arising from the use of this software.
+// 
+// 	  Permission is granted to anyone to use this software for any purpose,
+// 	  including commercial applications, and to alter it and redistribute it
+// 	  freely, subject to the following restrictions:
+// 	
+// 	  1. The origin of this software must not be misrepresented; you must not
+// 	     claim that you wrote the original software. If you use this software
+// 	     in a product, an acknowledgment in the product documentation would be
+// 	     appreciated but is not required.
+// 	  2. Altered source versions must be plainly marked as such, and must not be
+// 	     misrepresented as being the original software.
+// 	  3. This notice may not be removed or altered from any source distribution.
+// End License
+
+
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
+#use "Libs/SCI/Graphics"
+
+plua Boem = Audio.Load("Audio/Combat/SpellAni/Explosion.ogg")
+plua StarField = LoadImage("GFX/Intro/Starfield.png","ARMA_STERRETJES")
+plua Wereld = LoadImage("GFX/Combat/SpellAni/Armageddon/Earth.png","AMRA_WORLD")
+plua Oops = LoadImage("GFX/Combat/SpellAni/Armageddon/Oops.png","ARMA_OOPS")
+plua Explosion = LoadImage("GFX/Combat/SpellAni/explosion.jpbf","ARMA_BOEM")
+
+Class ArmaBoem
+	ReadOnly Int X
+	ReadOnly Int Y
+	ReadOnly Int Frame = 0
+	ReadOnly Int SKF
+	ReadOnly Int CnF = 0
+	Get Bool Valid; Return Frame<=15 && Frame>=0; End
+	
+	Void Draw()
+		If Valid
+			Explosion.Draw(X,Y,Frame)
+			CnF = (CnF + 1) % SKF
+			If CnF==0; Frame++; End
+		End
+	End
+
+	Constructor()
+		X = math.random(0,Graphics.Width)
+		Y = math.random(0,Graphics.Height)
+		SKF = math.random(1,5)
+	End
+End	
+	
+
+int MidX = Graphics.Width div 2
+int MidY = Graphics.Height div 2
+int StartTime
+Table Blam
+bool boemgedaan = false
+
+Init
+	Wereld.HotCenter()
+	Oops.HotCenter()
+End
+
+Void Start(Executor,Targets,string Param)
+	StartTime = os.time()
+	int boemen=math.random(45,100)
+	Blam = {}
+	For i=0,boemen
+		Blam[i] = New ArmaBoem()
+	End	
+End
+
+Bool Cycle()
+	Cls()
+	setColor(255,255,255)
+	StarField.Stretch(0,0,Graphics.Width,Graphics.Height)
+	If (!boemgedaan) && math.abs(os.time()-StartTime)<3
+		Wereld.Draw(MidX,MidY)
+		Return True
+	End
+	if !boemgedaan;Boem.Play(); boemgedaan=true; End
+	bool Allemaal
+	Allemaal=True
+	For b in Each(Blam)
+		b.Draw()
+		Allemaal = Allemaal && (!b.Valid)
+	End
+	If Allemaal
+		Oops.Draw(MidX,MidY)
+		If math.abs(os.time()-StartTime)>3
+			Sys.Exit()
+		End
+	Else
+		StartTime = os.time()
+	End
+	Return True
+End
