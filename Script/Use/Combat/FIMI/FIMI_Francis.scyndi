@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Francis.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,9 +33,14 @@
 // 
 // **********************************************
 // 
-// version: 23.12.22
-// End License Information
+// 
+// version: 24.10.19 II
+// 
+// End License
+
 Module
+
+#use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Party" 
 
@@ -64,8 +70,11 @@ ReadOnly Bool Allow3(); Return False; End
 ReadOnly Void Action3(); End
 
 ReadOnly String Caption4 = "Killer Extraction"
-ReadOnly Bool Allow4(); Return False; End
-ReadOnly Void Action4(); End
+Bool Allow4(); Return gbool.FORTHFORCE_Francis; End
+Void Action4()
+	plua a = new Action("Luna","HERO_FRANCIS_FORCE_SHARE",{["RemoveFP"]=100})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Francis",A)
+End
 
 Var VFIMI
 	

@@ -1,0 +1,89 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_KillerExtraction.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.10.19 IV
+// 
+// End License
+
+Module
+
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
+#use "Libs/SCI/Statistician"
+
+#use "Script/Use/Link/Alchemy"
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
+
+#use "Script/Use/General/Dice"
+
+#use "Script/Flow/FlowCombat/CharMsg"
+
+Void WideEffect(Executor,Targets,String Param)
+End
+
+
+Bool Effect(Executor,Target,String Param)
+	If Target.IsBoss; CharMsg.Put(Target,"No effect!",255,255,0); Return True; End
+	Bool Ret = False
+	int dmg = 0
+	For mm in Each(Alchemy.Manaments)
+		If Target.RawData.IntValue("Extract",mm)>0
+			int em; em = Target.RawData.IntValue("Extract",mm)
+			int tm = 0
+			While Target.HP>0 && Mana[mm]<MaxMana
+				Ret=true
+				tm++;
+				dmg = dmg + em
+				Target.HP = Target.HP - em				
+			End
+			Party.SkillExpUp("Francis", 2, tm)
+			Mana[mm] = Mana[mm] + tm 
+			Mini.Write("Francis ",180,0,255)
+			Mini.Write(sprintf("extacted %d ", tm),255,180,0)
+			Mini.Write(mm,Alchemy.ManaCol[mm].r,Alchemy.ManaCol[mm].g,Alchemy.ManaCol[mm].b)
+			If Target.RawData.IntValue("Extract",mm)==1
+				mini.WriteLn(" manament",255,180,0)
+			Else 
+				mini.WriteLn(" manaments",255,180,0)
+			End
+		End
+	End
+	CharMsg.Put(Target,dmg,255,100,0)
+	Party.SkillExpUp("Francis", 2, dmg)
+	Return Ret
+End
