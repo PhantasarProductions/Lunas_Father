@@ -1,0 +1,86 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_Ram.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.10.19 VI
+// 
+// End License
+
+Module
+
+#use "Libs/SCI/SString"
+
+#use "Script/Use/Link/Party"
+
+#use "Script/Flow/FlowCombat/CharMsg"
+
+Void WideEffect(Executor,Targets,String Param)
+End
+
+
+Bool Effect(Executor,Target,String Param)
+	plua args;args=Split(Param)
+	int procent;procent = Lua.tonumber(args[0] || "90") || 90
+	String elem;elem = args[1] || "None"
+	int Dmg;Dmg = math.ceil( (procent/100)*Target.MaxHP)
+	if Target.Team=="Hero"
+		Party.SkillExpUp(Target.Tag,1,Dmg)
+		Party.SkillExpUp(Target.Tag,2,Dmg)
+	End
+	
+	if Target.Team=="Foe" && Target.Fatal(elem)
+		Dmg = Target.MaxHP
+		CharMsg.Put(Target,"Death",255,0,0)
+	Else
+		int modifier; modifier = math.floor(Dmg*Target.NResistance(elem))
+		Dmg = Dmg - Modifier
+		If Dmg>0
+			If Target.Guarding && Dmg>0
+				Dmg = math.max(1, Dmg div 2)
+			End
+			if Target.Resistance(elem)==100
+				CharMsg.Put(Target,"Immune",255,180,0)
+			elseif Target.Resistance(elem)>0
+				CharMsg.Put(Target,Dmg,255,180,0)
+			elseif Target.Resistance(elem)==0
+				CharMsg.Put(Target,Dmg,255,255,255)
+			else
+				CharMsg.Put(Target,Dmg,255,0,0)
+			End
+		End
+	End
+	Target.HP = Target.HP - Dmg 	
+	Return True
+End
