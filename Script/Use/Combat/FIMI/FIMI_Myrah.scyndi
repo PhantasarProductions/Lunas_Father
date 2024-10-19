@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Myrah.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,32 +33,50 @@
 // 
 // **********************************************
 // 
-// version: 23.12.22
-// End License Information
+// 
+// version: 24.10.19 I
+// 
+// End License
+
+
 Module
 
+#use "Libs/SCI/InterVar"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
 plua Scyndi = Lua.Scyndi
 plua Glob = Lua.Scyndi.Globals
 
 ReadOnly String Caption1 = "Extension"
-ReadOnly Bool Allow1(); Return True; End
-ReadOnly Void Action1()
+Bool Allow1(); Return True; End
+Void Action1()
 	Glob.PlayerToExtendAbility("Myrah")
 End
 	
 ReadOnly String Caption2 = "Repeat"
-ReadOnly Bool Allow2(); Return False; End
-ReadOnly Void Action2(); End
+Bool Allow2(); Return False; End
+Void Action2(); End
 	
-ReadOnly String Caption3 = "Extended Replay"
-ReadOnly Bool Allow3(); Return False; End
-ReadOnly Void Action3(); End
+//ReadOnly String Caption3 = "Extended Replay"
+//ReadOnly Bool Allow3(); Return False; End
+//ReadOnly Void Action3(); End
+
+ReadOnly String Caption3 = "Willpower"
+Bool Allow3(); return gint.VICTORIES>100*gint.skill; End
+Void Action3()
+	plua Myrah = Party.GetChar("Myrah")
+	Myrah.Points.FP.Have = Myrah.Points.FP.Have - 75
+	Myrah.Points.HP.Have = Myrah.Points.HP.Maximum
+End
 
 ReadOnly String Caption4 = "Catastrophe"
-ReadOnly Bool Allow4(); Return False; End
-ReadOnly Void Action4(); End
+Bool Allow4(); Return gbool.FORTHFORCE_MYRAH; End
+Void Action4()
+	plua Act;Act = new Action("Myrah","HERO_MYRAH_FORCE_CATASTROPHE",False)
+	Act.RemoveFP=100
+	Lua.Scyndi.Globals.PlayerSelectTarget("Myrah",Act)	
+End
 
 Var VFIMI
 	
