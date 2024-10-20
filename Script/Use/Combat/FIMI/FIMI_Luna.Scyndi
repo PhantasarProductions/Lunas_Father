@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.20 III
+// version: 24.10.20 IV
 // 
 // End License
 // License Information:
@@ -111,7 +111,10 @@ End
 
 ReadOnly String Caption4 = "Card Control"
 Bool Allow4(); Return gbool.FORTHFORCE_Luna; End
-Void Action4(); End
+Void Action4()
+	plua a = new Action("Luna","HERO_LUNA_FORCE_CARDCONTROL",{["RemoveFP"]=100})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Luna",a)
+End
 
 Var VFIMI
 	
