@@ -1,3 +1,42 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/FIMI/FIMI_Luna.Scyndi
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.10.20 III
+// 
+// End License
 // License Information:
 // **********************************************
 // 
@@ -37,27 +76,42 @@
 
 Module
 
+
+#use "Libs/SCI/InterVar"
+
+#use "Script/Use/Link/Party"
+
 #use "Script/Use/Combat/FIMI/FIMI_Class"
+
+plua Luna = Party.GetChar("Luna")
+Get Int LFight; Return Party.SkillLvl("Luna",1); End
+Get Int LHoly;  Return Party.SkillLvl("Luna",2); End
 
 
 ReadOnly String Caption1 = "Lay On Hands"
-ReadOnly Bool Allow1(); Return True; End
-ReadOnly Void Action1()
+Bool Allow1(); Return True; End
+Void Action1()
 	plua a = new Action("Luna","HERO_LUNA_FORCE_LAYONHANDS",{["RemoveFP"]=25})
 	Lua.Scyndi.Globals.PlayerSelectTarget("Luna",a)
 End
 	
 ReadOnly String Caption2 = "Turn Undead"
-ReadOnly Bool Allow2(); Return False; End
-ReadOnly Void Action2(); End
+Bool Allow2(); if gint.skill>=3; Return LHoly>20; Else; Return LHoly>=5; End; End
+Void Action2()
+	plua a = new Action("Luna","HERO_LUNA_FORCE_TURNUNDEAD",{["RemoveFP"]=50})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Luna",a)
+End
 	
 ReadOnly String Caption3 = "Sonic Vision"
-ReadOnly Bool Allow3(); Return False; End
-ReadOnly Void Action3(); End
+Bool Allow3(); Return LFight>=5*gint.skill; End
+Void Action3()
+	plua a = new Action("Luna","HERO_LUNA_FORCE_SONICVISION",{["RemoveFP"]=75})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Luna",a)
+End
 
 ReadOnly String Caption4 = "Card Control"
-ReadOnly Bool Allow4(); Return False; End
-ReadOnly Void Action4(); End
+Bool Allow4(); Return gbool.FORTHFORCE_Luna; End
+Void Action4(); End
 
 Var VFIMI
 	
