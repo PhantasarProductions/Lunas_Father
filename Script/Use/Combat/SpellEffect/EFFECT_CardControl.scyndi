@@ -1,0 +1,71 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_CardControl.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.10.20 III
+// 
+// End License
+
+Module
+
+#use "Libs/SCI/Sys"
+
+#use "script/flow/flowcombat/Diamonds"
+
+Void WideEffect(Executor,Targets,String Param)
+End
+
+
+
+Bool Effect(Executor,Target,String Param)
+	Table NewD = {}
+	for i,D in pairs(Diamonds.Slots)
+		If Diamonds.Empty(i)
+			CSayF("- Diamond #%03d is empty and will therefore be ignored!",i)
+		ElIf D.FighterTag == "Luna"
+			CSayF("- Diamond #%03d already belongs to Luna and will therefore be ignored!",i)
+		ElIf D.Type == "JOKER"
+			CSayF("- Diamond #%03d is a Joker and will therefore be ignored!",i)
+		Else
+			CSayF("\x1b[32m - Diamond #%03d is occupied by anything else, and will be added to the \"collective\"",i)
+			D.Type="BACK"
+			NewD[Len(NewD)]=i
+		End
+	End
+	For i in Each(NewD)
+		Diamonds.NewPlayer(i,"Luna",false)
+	End
+	Return True
+End
