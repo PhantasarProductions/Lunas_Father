@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/AttackBonus/ATKBONUS_Attack_Hero.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,10 @@
 // 
 // **********************************************
 // 
-// version: 24.01.09
-// End License Information
+// 
+// version: 24.10.20
+// 
+// End License
 
 Module
 
@@ -97,7 +100,8 @@ End
 
 Int Luna(executor,target,Act,string param="") 
 	Int Ret;Ret = AtkBonus(executor,target,Act,Param)
-	If Dice.D100<30 / gint.skill
+	Bool Sonic;Sonic = param=="SONIC"
+	If Sonic || Dice.D100<30 / gint.skill
 		Ret = Ret * Dice.D20
 		CharMsg.Go(Target,"Critical",255,180,90)
 		Party.SkillExpUp("Luna",1,Dice.D6*Dice.D20)
@@ -115,7 +119,12 @@ Int Luna(executor,target,Act,string param="")
 		Mini.WriteLn("Double Power Strike")
 	End	
 	CSayF("Luna has done %d damage in total!",gint.Luna_DamageDone)
+	if Sonic;Ret=Ret*(Dice.D20+Dice.D20); End 
 	Return Ret
+End
+
+Int LunaSonic(executor,target,Act,string param="")
+	Return Luna(executor,target,Act,"SONIC")
 End
 
 Int Scyndi(executor,target,Act,string param="") 
