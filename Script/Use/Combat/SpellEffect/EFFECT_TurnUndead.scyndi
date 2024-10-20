@@ -49,7 +49,7 @@ End
 
 
 Bool Effect(Executor,Target,String Param)
-	Int LunaLevel = Party.SkillLvl("Luna",2)
+	Int LunaLevel = Party.SkillLvl(Executor.Tag,2)
 	if Target.Undead
 		If math.random(1,Target.HP)<LunaLevel
 			CharMsg.Put(Target,"Turned")
