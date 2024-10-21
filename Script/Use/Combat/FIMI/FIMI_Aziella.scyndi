@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Aziella.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,31 +33,48 @@
 // 
 // **********************************************
 // 
-// version: 23.12.21
-// End License Information
+// 
+// version: 24.10.21 VI
+// 
+// End License
+
+
 Module
 
+
+#use "Libs/SCI/InterVar"
+#use "Script/Use/Link/Party"
 #use "Script/Use/Combat/FIMI/FIMI_Class"
 
 
 ReadOnly String Caption1 = "Analyze"
-ReadOnly Bool Allow1(); Return True; End
-ReadOnly Void Action1(); End
+Bool Allow1(); Return True; End
+Void Action1()
+	plua a = new Action("Aziella","HERO_AZIELLA_FORCE_ANALYZE",{["RemoveFP"]=25})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Aziella",a)
+End
 	
-ReadOnly String Caption2 = "Prolonger"
-ReadOnly Bool Allow2(); Return False; End
-ReadOnly Void Action2(); End
+ReadOnly String Caption2 = "Invade"
+Bool Allow2(); Return gbool.DarkCavesDone; End
+Void Action2()
+	plua a = new Action("Aziella","ABL_INVADE",{["RemoveFP"]=50})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Aziella",a)
+End
 	
 ReadOnly String Caption3 = "Follow me"
-ReadOnly Bool Allow3(); Return False; End
-ReadOnly Void Action3(); End
+Bool Allow3(); Return gbool.Complete_Labyrinth; End
+Void Action3()
+	plua a = new Action("Aziella","HERO_AZIELLA_FORCE_FOLLOWME",{["RemoveFP"]=75})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Aziella",a)
+End
 
 ReadOnly String Caption4 = "I.D.D.Q.D."
 ReadOnly Bool Allow4(); Return False; End
 ReadOnly Void Action4(); End
 
+Var VFIMI
 	
 Init
 	Print "Init FIMI: Aziella"
-	NewFIMIMod(Lua.Scyndi.Class.FIMI_Aziella)
+	VFIMI = NewFIMIMod(Lua.Scyndi.Class.FIMI_Aziella)
 End
