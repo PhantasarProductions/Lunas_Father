@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH2_Dungeon_DarkCaves.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,11 @@
 // 
 // **********************************************
 // 
-// version: 24.01.20
-// End License Information
+// 
+// version: 24.10.21 I
+// 
+// End License
+
 Script
 
 #use "LIBS/SCI/SYS"
@@ -45,6 +49,7 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Textboxes"
 
 #use "Script/Use/General/Pop"
@@ -156,6 +161,9 @@ Global Void ZA_Apple()
 	Awarded.Voltooid_DarkCaves = true
 	gbool.DarkCavesDone = true
 	gstring.CampSituation = "0D_NEONOR"
+	Mini.Write("Aziella ",180,0,255)
+	Mini.Write("has learned the force ability ",255,180,0)
+	Mini.Writeln("Invade")
 End
 
 Global Void NPC_Apple()
