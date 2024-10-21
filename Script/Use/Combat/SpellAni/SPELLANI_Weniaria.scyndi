@@ -1,0 +1,83 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_Weniaria.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.10.20 III
+// 
+// End License
+
+Module
+
+#Use "Libs/SCI/Graphics"
+#use "Script/Use/Combat/SPELLANI/SPELLANI_Sparkle"
+
+plua Wen = LoadNewImage("GFX/Combat/SpellAni/Weniaria.png","SPELLANI_Weniaria")
+int WenAlpha = 0
+int WenStage = 1
+
+Init
+	Wen.HotCenter()
+End
+
+plua Ex
+plua Tr
+plua Pr
+Void Start(Executor,Targets,string Param)
+	WenAlpha = 0
+	WenStage = 1
+	Ex,Tr,Pr =Executor,Targets,Param
+	
+End
+
+Bool Cycle()
+	SetColor(255,255,255)
+	SetAlpha(WenAlpha)
+	Wen.Draw(Graphics.Width div 2,Graphics.Height div 2)
+	Switch WenStage
+		Case 1
+			WenAlpha++
+			if WenAlpha>=255; WenStage = 2; SpellAni_Sparkle.Start(Ex,Tr,PR); End
+		Case 2
+			If !SpellAni_Sparkle.Cycle()
+				WenStage=3
+			End
+		Case 3
+			WenAlpha--
+			Return WenAlpha>0
+		Default
+			Return False
+		End
+	Return True
+End

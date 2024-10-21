@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.20 II
+// version: 24.10.20 III
 // 
 // End License
 // License Information:
@@ -103,7 +103,10 @@ End
 
 ReadOnly String Caption4 = "Summon Weniaria"
 Bool Allow4(); Return gbool.FORTHFORCE_SCYNDI; End
-Void Action4(); End
+Void Action4() 
+	plua a = new Action("Scyndi","HERO_Scyndi_Force_Weniaria",{["RemoveFP"]=100})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Scyndi",a)
+End
 
 Var VFIMI
 	
