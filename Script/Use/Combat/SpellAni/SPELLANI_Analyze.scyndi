@@ -1,0 +1,105 @@
+// License:
+// 	  src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_Analyze.scyndi
+// 
+// 	  Version: 24.10.21 XVI
+// 	
+// 	  Copyright (C) 2024 Jeroen Petrus Broks
+// 	
+// 	  ===========================
+// 	  This file is part of a project related to the Phantasar Chronicles or another
+// 	  series or saga which is property of Jeroen P. Broks.
+// 	  This means that it may contain references to a story-line plus characters
+// 	  which are property of Jeroen Broks. These references may only be distributed
+// 	  along with an unmodified version of the game.
+// 
+// 	  As soon as you remove or replace ALL references to the storyline or character
+// 	  references, or any termology specifically set up for the Phantasar universe,
+// 	  or any other univers a story of Jeroen P. Broks is set up for,
+// 	  the restrictions of this file are removed and will automatically become
+// 	  zLib licensed (see below).
+// 
+// 	  Please note that doing so counts as a modification and must be marked as such
+// 	  in accordance to the zLib license.
+// 	  ===========================
+// 
+// 
+// 	  zLib license terms:
+// 	
+// 	  This software is provided 'as-is', without any express or implied
+// 	  warranty.  In no event will the authors be held liable for any damages
+// 	  arising from the use of this software.
+// 
+// 	  Permission is granted to anyone to use this software for any purpose,
+// 	  including commercial applications, and to alter it and redistribute it
+// 	  freely, subject to the following restrictions:
+// 	
+// 	  1. The origin of this software must not be misrepresented; you must not
+// 	     claim that you wrote the original software. If you use this software
+// 	     in a product, an acknowledgment in the product documentation would be
+// 	     appreciated but is not required.
+// 	  2. Altered source versions must be plainly marked as such, and must not be
+// 	     misrepresented as being the original software.
+// 	  3. This notice may not be removed or altered from any source distribution.
+// End License
+
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/SString"
+#Use "Libs/SCI/Graphics"
+
+Const Int TimeMax=10
+Int TimerStart
+Var Tar=NIL
+Get Var TarC; If !Tar; Return nil; End; Return Tar.Char; End
+Get Var TarRD; If !Tar; Return nil; End; Return Tar.RawData; End 
+Get Int TimeElapsed; Return math.abs(os.Time()-TimerStart); End
+Get Int TimeLeft; Return math.max(0,TimeMax-TimeElapsed); End
+Table Desc
+ReadOnly Var F = ObtainFont("BASE")
+ReadOnly Var M = ObtainFont("MINI")
+Const Table Elem = NewArray("Earth","Wood","Water","Frost","Wind","Lightning","Fire","Lava","Light","Darkness")
+
+Void Start(Executor,Targets,string Param)
+	TimerStart = os.time()
+	For _,t in pairs(Targets);Tar=t; End
+	Desc=XSplit(TarRD.Value("MetaData","Desc"),"<nl>")
+End
+
+Bool Cycle()
+	int Y
+	SetColor(0,0,0); SetAlpha(100)
+	Rect(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,180,0)
+	SetAlpha(255)
+	F.Text(TarC.Name,5,5)
+	SetColor(255,255,255)
+	For i,L in iPairs(Desc)
+		Y=40+(i*30)
+		F.Text(L,8,Y)
+	End
+	Y = Y + 40
+	
+	For i,E in ipairs(Elem)
+		Int Col; Col = i div 5
+		Int Row; Row = i % 5
+		Int EX;EX = Col * (Graphics.Width div 2)
+		Int EY;EY = Y + (Row*10)
+		Int EXD;EXD=EX+300
+		Int Res;Res = Tar.Resistance(E)
+		SetColor(255,255,255)
+		M.Text(E,EX,EY)
+		If Tar.Fatal(E); SetColor(255,  0,  0); M.Text("Fatal",EXD,EY)
+		ElIf Res==0;     SetColor(100,100,100); M.Text("--",EXD,EY)
+		Elif Res==100;   SetColor(255,255,255); M.Text("Immune",EXD,EY)
+		Elif Res<0;      SetColor(255,  0,  0); M.Text(sprintf("Weak   %3d%%",math.abs(Res)),EXD,EY)
+		Elif Res>100;    SetColor(180,255,  0); M.Text(sprintf("Absorb %3d%%",math.abs(Res-100)),EXD,EY)
+		Else;            SetColor(180,255,  0); M.Text(sprintf("Resist %3d%%",math.abs(Res)),EXD,EY); End
+	End
+	
+	SetColor(125,125,125)
+	Rect(0,Graphics.Height-25,Graphics.Width,25)
+	SetColor(  0,180,255)
+	Rect(0,Graphics.Height-25,math.floor( ( TimeLeft / TimeMax ) * Graphics.Width),25)
+	Return TimeLeft>0
+End
