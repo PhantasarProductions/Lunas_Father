@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.12 VIII
+// version: 24.10.21
 // 
 // End License
 
@@ -46,6 +46,7 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
 #use "Script/Use/Link/Worldmap"
 #use "Script/Use/Link/TextBoxes"
@@ -151,6 +152,9 @@ Global Void ZA_Eindstreep()
 		Return
 	End
 	TinkerIsland()
+	Mini.Write("Aziella ",180,0,255)
+	Mini.Write("has learned the force ability ",255,180,0)
+	Mini.Writeln("Follow Me")
 	gbool.Complete_Labyrinth = true
 End
 
