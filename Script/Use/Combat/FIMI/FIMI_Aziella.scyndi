@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.21 VI
+// version: 24.10.21 IX
 // 
 // End License
 
@@ -69,8 +69,11 @@ Void Action3()
 End
 
 ReadOnly String Caption4 = "I.D.D.Q.D."
-ReadOnly Bool Allow4(); Return False; End
-ReadOnly Void Action4(); End
+Bool Allow4(); Return gbool.FORTHFORCE_Aziella; End
+Void Action4()
+	plua a = new Action("Aziella","HERO_AZIELLA_FORCE_IDDQD",{["RemoveFP"]=100})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Aziella",a)
+End
 
 Var VFIMI
 	
