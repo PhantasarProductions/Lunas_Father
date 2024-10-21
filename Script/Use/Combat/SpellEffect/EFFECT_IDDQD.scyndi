@@ -54,6 +54,6 @@ End
 
 
 Bool Effect(Executor,Target,String Param)
-	If Target.Team=="Player"; Target.IDDQD=True; End
+	If Target.Team=="Hero"; Target.IDDQD=True; End
 	Return True
 End
