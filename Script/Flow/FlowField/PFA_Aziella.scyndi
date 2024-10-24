@@ -34,13 +34,14 @@
 // **********************************************
 // 
 // 
-// version: 24.10.19 VIII
+// version: 24.10.24
 // 
 // End License
 
 
 Module
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
@@ -82,8 +83,7 @@ End
 Bool PFA_Aziella_Action(String Wind="Irrelevant")
 	Mini.Write("Aziella ",255,180,0)
 	Mini.Writeln("raises her hand with the amethyst ring, looking for trouble!",180,0,255)
-	if SealNear
-		//Lua.error("Opening seals not yet set up!")
+	if SealNear		
 		Mini.WriteLn("The sealed monster answers her call and breaks the seal",140,0,200)
 		Map.Boss("Sealed")
 	elif Renc.MapHasEnc && Renc.NEnc[Kthura.CurrentLayer] && Renc.NEnc[Kthura.CurrentLayer]>0 
@@ -100,7 +100,6 @@ Bool PFA_Aziella_Cycle()
 End
 
 Init
-	//FField = Lua.Scyndi.Globals.FlowField
-	//FField.LMFuncs[len(FField.LMFuncs)] = LoadTargets	
+	CSay("PFA: Aziella") // .NET JCR6 merger is acting up on me. So this is just a void!
 	PFA_Reg("Aziella",PFA_Aziella_Allow,PFA_Aziella_Action,PFA_Aziella_Cycle,False)
 End
