@@ -1,0 +1,143 @@
+// License:
+// 	  src/Scripts/Script/Use/Combat/SpellAni/SPELLANI_AnythingButTheKitchenSink.scyndi
+// 
+// 	  Version: 24.10.23 VIII
+// 	
+// 	  Copyright (C) 2024 Jeroen Petrus Broks
+// 	
+// 	  ===========================
+// 	  This file is part of a project related to the Phantasar Chronicles or another
+// 	  series or saga which is property of Jeroen P. Broks.
+// 	  This means that it may contain references to a story-line plus characters
+// 	  which are property of Jeroen Broks. These references may only be distributed
+// 	  along with an unmodified version of the game.
+// 
+// 	  As soon as you remove or replace ALL references to the storyline or character
+// 	  references, or any termology specifically set up for the Phantasar universe,
+// 	  or any other univers a story of Jeroen P. Broks is set up for,
+// 	  the restrictions of this file are removed and will automatically become
+// 	  zLib licensed (see below).
+// 
+// 	  Please note that doing so counts as a modification and must be marked as such
+// 	  in accordance to the zLib license.
+// 	  ===========================
+// 
+// 
+// 	  zLib license terms:
+// 	
+// 	  This software is provided 'as-is', without any express or implied
+// 	  warranty.  In no event will the authors be held liable for any damages
+// 	  arising from the use of this software.
+// 
+// 	  Permission is granted to anyone to use this software for any purpose,
+// 	  including commercial applications, and to alter it and redistribute it
+// 	  freely, subject to the following restrictions:
+// 	
+// 	  1. The origin of this software must not be misrepresented; you must not
+// 	     claim that you wrote the original software. If you use this software
+// 	     in a product, an acknowledgment in the product documentation would be
+// 	     appreciated but is not required.
+// 	  2. Altered source versions must be plainly marked as such, and must not be
+// 	     misrepresented as being the original software.
+// 	  3. This notice may not be removed or altered from any source distribution.
+// End License
+
+Module
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+#use "Script/Use/Combat/SpellAni/LIJST_AnythingButTheKitchenSink"
+
+plua Images = LIJST_AnythingButTheKitchenSink.ABTKSLIJST
+
+Class ABTKSC
+	Static Int Cnt=0
+	Static Table Tab
+	ReadOnly Int ID
+	Number TrueX
+	Number TrueY
+	ReadOnly Number SpeedY
+	ReadOnly Number SpeedX
+	Get Int X;return math.floor(TrueX); End
+	Get Int Y;return math.floor(TrueY); End
+	Int Delay
+	Number Scale
+	ReadOnly Number ScaleSpeed
+	Number TrueDeg
+	ReadOnly Number RotSpeed
+	Get Int Deg;Return math.floor(TrueDeg);End	
+	ReadOnly Var Img
+	ReadOnly Bool StillHere = True
+	Int Alpha = 255
+	Int MaxTime = 10000
+		
+	Constructor(Exe,Int _Delay)
+		ID = Cnt
+		Cnt++
+		TrueX=Exe.X
+		TrueY=Exe.Y
+		Scale=0
+		SpeedX = math.random(1,2000) / 200
+		SpeedY = math.random(-2000,2000) / 800
+		RotSpeed = math.random(1000,1000) / 500
+		ScaleSpeed = math.random(1,1000) / 9500
+		TrueDeg=0
+		Delay = Delay
+		plua i2l;i2l=Images[math.random(0,Len(Images)-1)];
+		Img = LoadNewImage(i2l.Entry,i2l.Tag)
+		MaxTime=MaxTime+(_Delay*100)
+		Img.HotCenter()		
+		CSayF("Created Kitchen Sink projectile #%d: %s",ID,i2l.Tag)
+	End
+	
+	Destructor
+		CSayF("Destroyed Kitchen Sink projectile #%d",ID)
+	End
+	
+End
+
+Void Start(Executor,Targets,string Param)
+	ABTKSC.Tab = {}
+	Int T=math.random(100,1000)
+	For i=0,T
+		ABTKSC.Tab[i] = New ABTKSC(Executor,i)
+	End
+End
+
+Bool Cycle()
+	Bool KeepGoing = False
+	Table Kill = {}
+	For i,d in pairs(ABTKSC.Tab)	
+		KeepGoing = KeepGoing || d.Stillhere
+		if d.Delay>0
+			d.Delay--
+		Else
+			d.TrueX = d.TrueX - d.SpeedX
+			d.TrueY = d.TrueY + d.SpeedY
+			d.TrueDeg = d.TrueDeg + d.RotSpeed
+			If d.scale*d.Img.Width<250
+				d.Scale = d.Scale + d.ScaleSpeed
+			End
+			If d.X<-100 || d.Y<-250 || d.Y>Graphics.Height+250 || d.Alpha<=0
+				//CSayF("%03d: Scheduled project %d for termination -> Kill: %d",d.ID,d.x,Len(kill))
+				Kill[len(Kill)]=i
+			End
+			d.MaxTime--
+			if d.MaxTime<=0
+				d.Alpha = math.max(0,d.Alpha-1)
+			End
+			SetColor(255,255,255)
+			SetAlpha(d.Alpha)
+			SetScale(d.Scale,d.Scale)
+			d.Img.DrawR(d.x, d.y, d.deg,0)
+			//CSayF("Kitchen Sink Projectile #%d: (%d,%d)",d.ID,d.x,d.y)
+			SetScale(1,1)
+			SetAlpha(255)
+		End
+	End
+	For victim in Each(Kill)		
+		CSayF("Killing: %d",victim)
+		ABTKSC.Tab[victim] = nil
+	End
+	Return KeepGoing
+End
