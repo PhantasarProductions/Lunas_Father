@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.24
+// version: 24.10.24 I
 // 
 // End License
 
@@ -67,7 +67,10 @@ End
 	
 ReadOnly String Caption3 = "Backstab"
 ReadOnly Bool Allow3(); Return Party.SkillLvl("Rachel",2)>=gint.skill*6; End
-ReadOnly Void Action3(); End
+ReadOnly Void Action3(); 
+	plua a = new Action("Rachel","HERO_RACHEL_FORCE_BACKSTAB",{["RemoveFP"]=75})
+	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)	
+End
 
 ReadOnly String Caption4 = "Fury Shot"
 ReadOnly Bool Allow4(); Return gbool.FORTHFORCE_Rachel; End
