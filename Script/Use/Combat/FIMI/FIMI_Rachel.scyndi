@@ -1,4 +1,4 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Rachel.scyndi
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,12 @@
 // 
 // **********************************************
 // 
-// version: 24.01.18
-// End License Information
+// 
+// version: 24.10.24
+// 
+// End License
+
+
 Module
 
 #use "Libs/SCI/InterVar"
@@ -48,14 +53,14 @@ Module
 ReadOnly String Caption1 = "Lock-On"
 ReadOnly Bool Allow1(); Return True; End
 ReadOnly Void Action1() 
-	plua a = new Action("Rachel","HERO_Rachel_Shoot_LockOn")
+	plua a = new Action("Rachel","HERO_Rachel_Shoot_LockOn",{["RemoveFP"]=25})
 	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
 End
 	
-ReadOnly String Caption2 = "Anything but the kitchen sink"
+ReadOnly String Caption2 = "Anything but ..."
 ReadOnly Bool Allow2(); Return Party.SkillLvl("Rachel",1)>=gint.skill*6; End
 ReadOnly Void Action2()
-	plua a = new Action("Rachel","HERO_Rachel_Shoot_AnythingButTheKitchSink")
+	plua a = new Action("Rachel","HERO_Rachel_Shoot_AnythingButTheKitchenSink",{["RemoveFP"]=50})
 	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
 
 End
@@ -65,9 +70,9 @@ ReadOnly Bool Allow3(); Return Party.SkillLvl("Rachel",2)>=gint.skill*6; End
 ReadOnly Void Action3(); End
 
 ReadOnly String Caption4 = "Fury Shot"
-ReadOnly Bool Allow4(); Return False; End
+ReadOnly Bool Allow4(); Return gbool.FORTHFORCE_Rachel; End
 ReadOnly Void Action4()
-	plua a = new Action("Rachel","HERO_Rachel_Shoot_FuryShot")
+	plua a = new Action("Rachel","HERO_Rachel_Shoot_FuryShot",{["RemoveFP"]=100})
 	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
 End
 
