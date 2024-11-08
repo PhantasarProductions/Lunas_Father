@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.24
+// version: 24.11.08
 // 
 // End License
 Script
@@ -46,15 +46,50 @@ Script
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Party"
+#use "Script/Use/Link/Alchemy"
 #use "Script/Use/Link/TextBoxes"
 
+#use "Script/Use/General/Pop"
+
+Get Int MaxBonus
+	Return 10*(10^(9-(gint.skill*2)))
+End
+Get Int ExpBonus
+	return math.max(1,math.min(gint.FinalDungeon_ExpBonus,MaxBonus))
+End
+Set Int ExpBonus
+	gint.FinalDungeon_ExpBonus = math.min(value,MaxBonus)
+End
+Get Int IncBonus
+	Return math.max(1,ExpBonus div gint.skill)
+End
+
+Void PartyBonus(string t="")
+	If (t!="" && Done["QUAYARO_FINAL_BONUS_"..t])
+		Return
+	End
+	For i=0,5
+		string cht; cht = Party.Char(i)
+		Var    ch;  ch  = Party.GetChar(cht)
+		if Ch.Stat.Level<=gint.LevelCap
+			CSayF("%s gets %d experience points",cht,ExpBonus)
+			ch.Stat.Experience = ch.Stat.Experience + ExpBonus
+			ExpBonus = ExpBonus + IncBonus
+		Else
+			CSayF("%s has already reached to level cap, so no points for her!")
+		End
+	End
+End
+
 Global Void MapMusic()
-	if !gbool.Defeated_Nikkibasona
+	if (!gbool.Defeated_Nikkibasona) || (gbool.Reached_Quayaro)
 		Music.Play("Music/Sys/Silence.ogg")
 		CSay("Since Nikkibasona has NOT yet been defeated, don't start the music yet!")
 	else
 		CSay("Nikkibasona has been defeated, so let the music play!")
 		Music.Play("Music/Dungeon/FinalDungeon.mp3")
+		PartyBonus("Byebye_Nikki")
 	End
 End
 
@@ -74,3 +109,61 @@ Global Void Post_Nikkibasona()
 	gstring.CampSituation="21_NIKKI"
 End
 	
+Global Void RemoveBarrier()
+	Map.PermaKill("Barrier")
+	PartyBonus()
+End
+
+Global Void ZA_Bonus()
+	Map.PermaKill("ZA_Bonus")
+	PartyBonus()
+End
+
+void Niks()
+End
+
+QuickMeta ZA_BonusQM
+	index
+		Map.PermaKill(sprintf("ZA_GetBonux.%s",key))
+		PartyBonus()
+		return Niks
+	end
+	newindex
+		Lua.error("Huh?")
+	end
+end
+
+Global Get Var ZA_GetBonus 
+	Return ZA_BonusQM
+End
+
+Global Void ZA_Mercedes()
+	PartyBonus()
+	Player.StopWalking()
+	Pop.Pop("M","North")
+	MapText("MERCEDES_1")
+	Map.Boss("Mercedes")
+	Map.Schedule("PS_Mercedes")
+	Map.Permakill("Mercedes")
+	Map.PermaKill("ZA_Mercedes")
+End
+
+Global Void PS_Mercedes()
+	MapText("MERCEDES_2")
+	Pop.UnPop()
+	gstring.CampSituation="22_MERCEDES"
+End
+
+Const Global Delegate NPC_Cauldron = GoAlchemy
+
+Global Void ZA_Palesta()
+	Player.StopWalking()
+	gbool.Reached_Quayaro = True
+	MapMusic()
+	Pop.Pop("P","North")
+	MapText("Palesta")
+	Map.Permakill("ZA_Palesta")
+	PartyBonus()
+	Awarded.Scen_Palesta = True
+	Pop.Unpop()
+End
