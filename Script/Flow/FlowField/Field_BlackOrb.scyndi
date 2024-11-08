@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Flow/FlowField/Field_BlackOrb.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,11 @@
 // 
 // **********************************************
 // 
-// version: 23.11.19
-// End License Information
+// 
+// version: 24.10.29 I
+// 
+// End License
+
 Module
 
 #use "Libs/SCI/Audio"
@@ -52,4 +56,7 @@ Global Void GetBlackOrb(string T)
 	AudioOrb.Play()
 	Map.PermaKill(T)
 	// TO DO: Superboss: Juggernaut
+	If gint.BlackOrbs>=250
+		Lua.error("250 black orbs, but Juggernaut has not yet been implemented.\nThis error is a safety precaution!")
+	End
 End
