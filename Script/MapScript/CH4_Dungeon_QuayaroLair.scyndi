@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.11.08
+// version: 24.11.09
 // 
 // End License
 Script
@@ -166,4 +166,13 @@ Global Void ZA_Palesta()
 	PartyBonus()
 	Awarded.Scen_Palesta = True
 	Pop.Unpop()
+End
+
+Global Void ZA_FinalBoss()
+	PLayer.StopWalking()
+	Pop.Pop("Q","North")
+	MapText("QUAYARO_1")
+	PartyBonus()
+	Map.Boss("Quayaro")
+	Map.Schedule("PS_FINALBOSS")
 End
