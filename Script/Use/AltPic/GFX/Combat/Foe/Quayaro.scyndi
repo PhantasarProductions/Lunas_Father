@@ -1,0 +1,138 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/AltPic/GFX/Combat/Foe/Quayaro.scyndi
+// (c) Jeroen Broks, 2024, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 24.11.16 IV
+// 
+// End License
+Module
+#use "Libs/XMath"
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+
+Const Int Blobs = 100
+
+Var QImgQua = LoadNewImage("GFX/NPC/Befindos/Quayaro.png",        "BOSS_QUAYARO_QUAYARO")
+Var QImgBlb = LoadNewImage("GFX/Combat/Foe/Boss/Quayaro/Blob.png","BOSS_QUUYARO_BLOB")
+Var QImgEye = LoadNewImage("GFX/Combat/Foe/Boss/Quayaro/Eye.png", "BOSS_QUUYARO_EYE")
+Int QAlpQua = 255
+Number QScaEye = 0.50
+Number QTSCEye = 0
+
+Class QuayaroBubble
+	Static Int Cnt=0
+	Int Afteller
+	Int _RA=0
+	Number _RX=0
+	Number _RY=0
+	Number DX=math.random(-2,2)
+	Number DY=math.random(-2,2)
+	Bool AllowEye=False
+	get Int Alpha; return _RA; End
+	Set Int Alpha; _RA = math.min(255,value); End
+	Get Int X; Return math.floor(_RX); End
+	Get Int Y; Return math.floor(_RY); End
+	Static Get Int Ticks; return Sys.Ticks; End
+	ReadOnly Int Deler 
+	Get Number Scale
+		number s; s = xmath.sin(Ticks/Deler)
+		return 0.25+(s * 0.125)
+	End
+	Void Draw(Int AX,Int AY)
+		If Afteller>0
+			Afteller--
+			//CSayF("Countdown: %d",Afteller)
+		Else
+			Alpha++
+			_RX=_RX+DX
+			_RY=_RY+DY
+			//CSayF("Draw (%4d,%4d) Alpha: %3d Scale: %f",X,Y,Alpha,Scale)
+		End
+		If ((_RX<-150 && DX<=0) || (_RY<-150 && DY<=0) || (_RX>150 && DX>=0) || (_RY>150 && DY>=0)) && XMath.Pythagoras(0,0,_RX,_RY)>250
+			 DX=math.random(-2,2)
+			 DY=math.random(-2,2)
+		End
+		SetScale(Scale,Scale)
+		SetColor(255,255,255)
+		SetAlpha(Alpha)	
+		QImgBlb.Draw(AX+X,AY+Y)
+		SetAlpha(255)
+		SetScale(1,1)
+	End
+	Var Next = nil
+	Static Var First = nil
+	Constructor()
+		Afteller=Cnt*2
+		Cnt++
+		AllowEye = Cnt > Blobs div 2
+		Deler = math.random(1,10)
+	End
+End
+
+Init
+	QImgQua.HotBottomCenter()
+	QImgBlb.HotCenter()
+	QImgEye.HotCenter()
+	QuayaroBubble.Cnt = 0
+	QuayaroBubble.First = New QuayaroBubble()
+	plua cq = QuayaroBubble.First
+	Repeat
+		cq.Next = New QuayaroBubble()
+		cq=cq.Next
+		CSayF("Created Quayaro Blob #%03d/%03d",QuayaroBubble.Cnt,Blobs)
+	LoopWhile QuayaroBubble.Cnt<Blobs
+End
+
+Global Void DrawAltImage(Int PID,Int X,Int Y,Int F)
+	If QAlpQua>0
+		SetColor(255,255,255)
+		SetAlpha(QAlpQua)
+		QImgQua.Draw(X,Y)
+		If Sys.Ticks % 9 == 0; QAlpQua--; End
+	End
+	plua cq = QuayaroBubble.First
+	Bool Eye=False
+	Repeat
+		cq.Draw(x,Y-150)
+		Eye = Eye || (cq.AllowEye && cq.Afteller<=0)
+		cq=cq.Next
+	LoopWhile cq	
+	If Eye
+		QTSCEye = math.min(QTSCEye+0.01,QScaEye)
+		SetScale(QScaEye,QTSCEye)
+		QImgEye.Draw(X,Y-150)
+		SetScale(1,1)
+	End
+End

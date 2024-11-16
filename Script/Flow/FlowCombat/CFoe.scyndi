@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
 // 
-// 	  Version: 24.11.14 II
+// 	  Version: 24.11.16
 // 	
 // 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
 // 	
@@ -451,9 +451,19 @@ Class Foe
 		Char = FParty.Char[Tag]
 		plua StatTag=sprintf("STAT%d",gint.Skill)
 		For st in Each(Party.BaseStats)
-			Char.Stat[st] = RawData.IntValue(StatTag,st)
+			If RawData.Value("Special","StatSet")!=""
+				Char.Stat[st] = Lua.Scyndi.Class.FoeStatSet[RawData.Value("Special","StatSet")](self,st) || RawData.IntValue(StatTag,st)
+				
+			Else
+				Char.Stat[st] = RawData.IntValue(StatTag,st)
+				
+			End
 		End
-		Char.Stat.HP = RawData.IntValue(StatTag,"HP")
+		If RawData.Value("Special","StatSet")!=""
+			Char.Stat.HP  = Lua.Scyndi.Class.FoeStatSet[RawData.Value("Special","StatSet")](self,"HP") || RawData.IntValue(StatTag,"HP")
+		Else
+			Char.Stat.HP = RawData.IntValue(StatTag,"HP")
+		End
 		Stat = Char.Stat
 		Char.Points.HP.MaxCopy = "HP"
 		Char.Points.HP.Have = Char.Points.HP.Maximum
