@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Subs/SubParty.scyndi
 // 
-// 	  Version: 24.10.19 II
+// 	  Version: 25.09.23 I
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -172,8 +172,9 @@ Void SetLevel(string CharTag,int lvl)
 	Ch.Points.HP.Have    = Ch.Points.HP.Maximum
 	Ch.Points.VIT.Have   = Ch.Points.VIT.Maximum
 	Ch.Points.SP.Maximum = Lvl	
-	CSayF("%d: %d + %d = %d",Lvl,Ch.Stat.Exp ,NeedExp(lvl), Ch.Stat.Exp + NeedExp(lvl))
+	CSayF("Hitpoints -- %d: %d + %d = %d",Lvl,Ch.Stat.Exp ,NeedExp(lvl), Ch.Stat.Exp + NeedExp(lvl))
 	Ch.Stat.Exp = Ch.Stat.Exp + NeedExp(lvl)
+	CSayF("Set level for %s complete",CharTag)
 	
 End
 
@@ -267,8 +268,8 @@ Void ChkLevelUp(int i,Ch)
 		AudLvUp.Play()
 		_LvAlpha=255
 		_LvCD=255
-		For i=1,2 
-			Lua.Scyndi.Globals.CharSkillExpUp(_Party.Party[i],i,Ch.Stat.Level)
+		For j=1,2 
+			Lua.Scyndi.Globals.CharSkillExpUp(_Party.Party[i],j,Ch.Stat.Level)
 		End
 	End
 End
