@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CFoe_StatSet.scyndi
 // 
-// 	  Version: 24.11.16
+// 	  Version: 24.11.28
 // 	
 // 	  Copyright (C) 2024 Jeroen Petrus Broks
 // 	
@@ -55,7 +55,7 @@ Class FoeStatSet
 			Ret = Ret + ChD.Stat[Stat]
 		End
 		If Stat=="HP"
-			Return Ret*(10^gint.skill)
+			Return Ret*(3^gint.skill)
 		Else
 			Return Ret div (8-gint.skill)
 		End
