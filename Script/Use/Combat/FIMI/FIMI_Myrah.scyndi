@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/FIMI/FIMI_Myrah.scyndi
-// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.24
+// version: 25.09.24
 // 
 // End License
 
@@ -59,12 +59,12 @@ Bool Allow2()
 	Switch gint.Skill
 		Case 1
 			plua Myrah = Party.GetChar("Myrah")
-			return Myrah.Points.VIT.Have < Myrah.Points.VIT.Maximum && gint.Kills<100
+			return Myrah.Points.VIT.Have < Myrah.Points.VIT.Maximum && gint.Kills>100
 		case 2
 			plua Myrah = Party.GetChar("Myrah")
-			return Myrah.Points.VIT.Have <50 && gint.Kills<200
+			return Myrah.Points.VIT.Have <50 && gint.Kills>200
 		Default
-			// This includes the hardt mode.
+			// This includes the hard mode.
 			// After all the hard mode doesn't
 			// Feature vitality
 			Return False
