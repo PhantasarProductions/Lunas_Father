@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Stage_Execution.scyndi
 // 
-// 	  Version: 24.11.14
+// 	  Version: 25.09.24
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -180,6 +180,8 @@ Void ES_SpellAni()
 	End
 	If Act.Act.SpellAni_Script!=""
 		GoOn = !Scyndi.Class["SPELLANI_"..Act.Act.SpellAni_Script].Cycle(Executor,Act.Targets,Act.Act.SpellAni_Param)
+		SetColor(255,255,255)
+		SetAlpha(255)
 	End
 	If GoOn && OTSPA!=os.time()
 		OTSPA=0
