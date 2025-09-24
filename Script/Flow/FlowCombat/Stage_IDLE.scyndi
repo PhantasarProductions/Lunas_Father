@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
 // 
-// 	  Version: 24.10.21 I
+// 	  Version: 25.09.24
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -93,6 +93,9 @@ Void Cycle()
 			//print("\x1b[31mENEMY TURN, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); Diamonds.RemoveFirst()
 			plua __foe;__foe=Fighter.ByTag[Diamonds.Slots[0].FighterTag]
 			If __foe.HP==0
+				Diamonds.RemoveFirst()
+			ElIf __foe.Gone
+				CSayF("Foe %s gone! Remove diamond!",Diamonds.Slots[0].FighterTag)				
 				Diamonds.RemoveFirst()
 			ElIf Fighter.ByTag[Diamonds.Slots[0].FighterTag].UnableToMove
 				SkipTurn()
