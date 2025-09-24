@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowField/Field_Tome.scyndi
 // 
-// 	  Version: 24.11.08 I
+// 	  Version: 25.09.24
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -97,17 +97,18 @@ Global Void GetTome(string Tag)
 				Number Ratio
 				Switch gint.Skill
 					Case 1
-						Factor = 12
+						Factor = 24
 					case 2
-						Factor = 6
+						Factor = 12
 					case 3
-						Factor = 2
+						Factor = 6
 					Default
 						Factor = 0
 				End
 				MaxTotal = Factor*100
 				CSayF("Tome will allow %s to roll d%d x d100",Map.Leader,Factor)
-				For i=1,Dice["d"..Factor]
+				dfact:=Dice["d"..Factor]
+				For i=1,dfact
 					Int Roll = Dice.D100 + 1
 					Score = Score + Roll
 					CSayF("Roll #%d: %03d -> %03d",i,Roll,Score)
