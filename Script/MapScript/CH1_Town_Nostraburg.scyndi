@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH1_Town_Nostraburg.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,11 @@
 // 
 // **********************************************
 // 
-// version: 23.12.04
-// End License Information
+// 
+// version: 25.09.25 I
+// 
+// End License
+
 Script
 
 #use "Libs/SCI/Sys"
@@ -76,6 +80,9 @@ Global Void NPC_Yllabonja()
 		MapText("Yllabonya")
 	End
 End
+
+Global Void ZA_ENTER_INN(); Map.GoToLayer("INN","Start"); End
+Global Void ZA_Exit_Inn(); Map.GoToLayer("Town","Exit_Inn"); End
 
 Global Void ZA_Exit_Wands(); 	Map.GoToLayer("TOWN","exit_wands"); End
 Global Void NPC_Wands(); Map.GoToLayer("WANDS","Start"); End
