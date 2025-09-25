@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/AttackBonus/ATKBONUS_Attack_Hero.scyndi
-// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.10.20
+// version: 25.09.25
 // 
 // End License
 
@@ -151,4 +151,10 @@ Int Aziella(executor,target,Act,string param="")
 	FPUp(executor,target,Act,param)
 	Party.SkillExpUp("Aziella",1,Dice.D20+Dice.D12)
 	Return Ret
+End
+
+Int LUNA_DOUBLE_POWER_STRING(executor,target,Act,string param="")
+	executor.char.Points.FP.Have -= (gint.skill * 20)
+	return Luna(executor,target,Act,param)+Luna(executor,target,Act,param)
+	// No not x2. That would give you a different result!
 End
