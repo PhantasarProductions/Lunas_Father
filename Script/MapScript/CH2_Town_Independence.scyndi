@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH2_Town_Independence.scyndi
-// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,10 +33,14 @@
 // 
 // **********************************************
 // 
-// version: 24.01.16
-// End License Information
+// 
+// version: 25.09.25 I
+// 
+// End License
+
 Script
 
+#use "Libs/SCI/Events"
 #use "Libs/SCI/Kthura"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
@@ -127,6 +132,7 @@ Global Void ZA_RosettaNight()
 		Map.ScrollX = Kthura.Obj.PreVillage.X
 		Map.ScrollY = Y
 		Map.DrawScreenNoAuto()
+		Events.Poll()
 		Flip()
 	End
 	Kthura.HideByLabel("VP")
