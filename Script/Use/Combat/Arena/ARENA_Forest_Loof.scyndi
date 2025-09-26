@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/Arena/ARENA_Forest_Loof.scyndi
-// (c) Jeroen Broks, 2023, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2024, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,11 @@
 // 
 // **********************************************
 // 
-// version: 24.01.09
-// End License Information
+// 
+// version: 25.09.26
+// 
+// End License
+
 
 Module
 
@@ -51,7 +55,7 @@ init
 	ImgTree.Hot(ImgTree.Width div 2, ImgTree.Height)
 End
 
-Class ARENA_SPAR
+Class ARENA_Loofbomen
 	static int i
 	int X
 	int Y
@@ -67,11 +71,11 @@ Void StartCombat()
 	plua Temp = {}
 	plua NewTree
 	Trees = {}
-	ARENA_SPAR.i = -32
+	ARENA_Loofbomen.i = -32
 	Repeat
-		NewTree = New ARENA_SPAR()
+		NewTree = New ARENA_Loofbomen()
 		Temp[sprintf("%04d::%04d",NewTree.Y,NewTree.X)] = NewTree
-	LoopWhile ARENA_SPAR.i < Graphics.Width+32
+	LoopWhile ARENA_Loofbomen.i < Graphics.Width+32
 	for _,tree in spairs(Temp)
 		Trees[len(Trees)] = tree
 	end

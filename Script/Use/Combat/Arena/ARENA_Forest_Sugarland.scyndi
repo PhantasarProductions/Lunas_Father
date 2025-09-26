@@ -1,3 +1,42 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Use/Combat/Arena/ARENA_Forest_Sugarland.scyndi
+// (c) Jeroen Broks, 2023, 2025, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 25.09.26
+// 
+// End License
 // License Information:
 // **********************************************
 // 
@@ -51,7 +90,7 @@ init
 	ImgTree.Hot(ImgTree.Width div 2, ImgTree.Height)
 End
 
-Class ARENA_SPAR
+Class ARENA_De_Roze_Sparren_Van_Sugarland
 	static int i
 	int X
 	int Y
@@ -67,11 +106,11 @@ Void StartCombat()
 	plua Temp = {}
 	plua NewTree
 	Trees = {}
-	ARENA_SPAR.i = -32
+	ARENA_De_Roze_Sparren_Van_Sugarland.i = -32
 	Repeat
-		NewTree = New ARENA_SPAR()
+		NewTree = New ARENA_De_Roze_Sparren_Van_Sugarland()
 		Temp[sprintf("%04d::%04d",NewTree.Y,NewTree.X)] = NewTree
-	LoopWhile ARENA_SPAR.i < Graphics.Width+32
+	LoopWhile ARENA_De_Roze_Sparren_Van_Sugarland.i < Graphics.Width+32
 	for _,tree in spairs(Temp)
 		Trees[len(Trees)] = tree
 	end
