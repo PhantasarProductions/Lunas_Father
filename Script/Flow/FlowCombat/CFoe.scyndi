@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
 // 
-// 	  Version: 24.11.16
+// 	  Version: 25.09.28
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -435,8 +435,14 @@ Class Foe
 
 	Get Bool UnableToMove
 		If HP<=0; Return True; End
-		For _,s in pairs(_Status)
-			if s.SkipTurn; Return True; End
+		//For _,s in pairs(_Status)
+		//	if s.SkipTurn; Return True; End
+		//End
+		For s,b in pairs(_Status)
+			sd:=StatusChanges[s]
+			if sd && sd.SkipTurn
+				Return True
+			End
 		End
 		Return False
 	End
