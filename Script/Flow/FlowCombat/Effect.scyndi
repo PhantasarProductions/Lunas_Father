@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
 // 
-// 	  Version: 25.09.28 I
+// 	  Version: 25.09.28 II
 // 	
 // 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
@@ -250,7 +250,7 @@ Bool Effect_CureAilment(Executor,Target,Act)
 	Bool Hit = False
 	For ail In Each(Ailments)
 		//CSayF("Target: %s; Status ailmeint: %s; Value: %s",Target.Tag,ail,Target.StatusChanges["Ailment_"..ail])
-		If (Target.StatusChanges["Ailment_"..ail])
+		If (Target.StatusChanges["Ailment_"..ail]) && Act.Act["Cure"..ail]
 			Target.StatusChanges["Ailment_"..ail] = False
 			CharMsg.Put(Target,sprintf("Cure %s",ail),180,255,0);
 		End
