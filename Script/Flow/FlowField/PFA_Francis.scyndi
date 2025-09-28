@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Flow/FlowField/PFA_Francis.scyndi
-// (c) Jeroen Broks, 2023, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,14 +33,18 @@
 // 
 // **********************************************
 // 
-// version: 23.11.14
-// End License Information
+// 
+// version: 25.09.26
+// 
+// End License
+
 Module
 
 #use "Libs/SCI/Sys"
-#use "Libs/SCI/Audio"
 #use "Libs/SCI/JCR6"
-#use "Libs/SCI/Kthura" 
+#use "Libs/SCI/Audio"
+#use "Libs/SCI/Kthura"
+#use "Libs/SCI/Events"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Flow/FlowField/Field_PersonalAction"
@@ -59,6 +64,7 @@ Bool PFA_Francis_Allow(); return gbool.Allow_Field_Francis; End
 Bool PFA_Francis_Action()
 	AudEx.Play()
 	For otag,dat in pairs(Crystal[Kthura.CurrentLayer])
+		Events.Poll()
 		print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
 		If Kthura.HasObj(otag)
 			For X=Player.X-MaxRadius,Player.X+MaxRadius,1
