@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH4_Dungeon_QuayaroLair.scyndi
-// (c) Jeroen Broks, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2024, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 24.11.09
+// version: 25.09.28
 // 
 // End License
 Script
@@ -133,9 +133,11 @@ QuickMeta ZA_BonusQM
 	end
 end
 
-Global Get Var ZA_GetBonus 
-	Return ZA_BonusQM
-End
+//Global Get Var ZA_GetBonus 
+//	Return ZA_BonusQM
+//End
+Global Var ZA_GetBonus; Init; ZA_GetBonus=ZA_BonusQM; End
+	
 
 Global Void ZA_Mercedes()
 	PartyBonus()
