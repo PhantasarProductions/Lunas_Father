@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Subs/SubParty.scyndi
 // 
-// 	  Version: 25.09.28 II
+// 	  Version: 25.09.28 III
 // 	
 // 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
@@ -338,7 +338,7 @@ Global Void PartyBoxes(flashchar,incombat)
 				Lua.error("FP Skill Error!")
 			end
 			If Ch.Points.HP.Have<Ch.Points.HP.Maximum && Ch.Points.VIT.Have>0
-				HP1Percent:=math.ceil((Ch.Points.HP.Maximum / 100)+0.5)
+				HP1Percent:=math.ceil(Ch.Points.HP.Maximum / 100)
 				//Ch.Points.HP.Maximum Div 100
 				CSayF("%s heals %d (%d)",CH.Name,HP1Percent,Ch.Points.HP.Have)
 				Ch.Points.VIT.Have--				
