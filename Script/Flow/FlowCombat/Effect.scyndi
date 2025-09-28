@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Effect.scyndi
 // 
-// 	  Version: 24.10.21 I
+// 	  Version: 25.09.28 I
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -246,6 +246,19 @@ Bool Effect_CauseAilment(Executor,Target,Act)
 	Return Hit
 End
 
+Bool Effect_CureAilment(Executor,Target,Act)
+	Bool Hit = False
+	For ail In Each(Ailments)
+		//CSayF("Target: %s; Status ailmeint: %s; Value: %s",Target.Tag,ail,Target.StatusChanges["Ailment_"..ail])
+		If (Target.StatusChanges["Ailment_"..ail])
+			Target.StatusChanges["Ailment_"..ail] = False
+			CharMsg.Put(Target,sprintf("Cure %s",ail),180,255,0);
+		End
+		Hit = true
+	end
+	Return Hit
+End
+
 Bool Effect_Revive(Executor,Target,Act)
 	if Target.HP!=0; return False; End
 	if Act.Act.Revive; Target.HP=1; CharMsg.Put(Target,"Revive",180,255,0); Return True; End
@@ -264,6 +277,7 @@ Void Go(executor,target,act)
 	
 	if Effect_Hit(executor,target,act)
 		// Cure status if applicable (must be first)
+		Hit = Effect_CureAilment(Executor,target,act) || Hit
 		
 		// Revive
 		Hit = Effect_Revive(executor,target,act) || Hit
@@ -292,6 +306,7 @@ Void Go(executor,target,act)
 	
 	// When it's all done, but no effects took place show "miss"
 	If !Hit
+		CharMsg.Put(Target,"Miss",180,100,0)
 	End
 	
 	// All done!
