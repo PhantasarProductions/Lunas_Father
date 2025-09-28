@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH3_Dungeon_LavaRiver.scyndi
-// (c) Jeroen Broks, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2024, 2025, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,12 @@
 // 
 // **********************************************
 // 
-// version: 24.07.26
-// End License Information
+// 
+// version: 25.09.28
+// 
+// End License
+
+
 Script
 
 #use "Libs/SCI/Sys"
@@ -105,10 +110,15 @@ Global Void ZA_SecretSkillBonus()
 End
 
 Global Get Delegate ZA_SecretSkillBonus2; return ZA_SecretSkillBonus; End
-Global Get Delegate ZA_SecretBonus2; return ZA_SecretSkillBonus; End
+//Global Get Delegate ZA_SecretBonus2; return ZA_SecretSkillBonus; End
+
+
+Global Delegate ZA_SecretBonus2
+
 Global Table ZA_SecretSkillBonusMulti
 plua SSBM(); Return ZA_SecretSkillBonus; End
 Init
+	ZA_SecretBonus2 = ZA_SecretSkillBonus
 	ZA_SecretSkillBonusMulti = SetMetaTable({},{["__index"]=SSBM})
 	// I should have thought of this earlier. Would have saved me a lot of trouble!
 End
@@ -232,3 +242,4 @@ Init
 	For i=1,4; Append(Lava["#005"],sprintf("Lava_%d",i)); End
 	Map.AddCyclePre("Cycle")
 End
+
