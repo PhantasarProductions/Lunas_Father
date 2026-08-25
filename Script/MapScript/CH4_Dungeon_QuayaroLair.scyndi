@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH4_Dungeon_QuayaroLair.scyndi
-// (c) Jeroen Broks, 2024, 2025, All Rights Reserved.
+// (c) Jeroen Broks, 2024, 2025, 2026, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -34,12 +34,13 @@
 // **********************************************
 // 
 // 
-// version: 25.09.28
+// version: 26.08.25
 // 
 // End License
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Kthura"
 #use "Libs/SCI/InterVar"
 
 #use "Libs/Music"
@@ -178,3 +179,21 @@ Global Void ZA_FinalBoss()
 	Map.Boss("Quayaro")
 	Map.Schedule("PS_FINALBOSS")
 End
+
+Void Flits()
+	SetColorHSV(math.random(0,359),1,1)
+	Rect(0,0,Graphics.Width,Graphics.Height)
+	Flip()
+	SetColor(0,0,0)
+	Rect(0,0,Graphics.Width,Graphics.Height)
+	Flip()
+End
+	
+Global Void PS_FinalBoss()
+	MapText("QUYARO_2")
+	times:=math.random(3,6)
+	For i = 1,times
+		Flits()
+	End
+	Kthura.Obj.Pop_Luna.Texture="GFX/Combat/Heroes/Luna.dead.png"
+	
