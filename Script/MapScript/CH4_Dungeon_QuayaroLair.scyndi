@@ -34,13 +34,14 @@
 // **********************************************
 // 
 // 
-// version: 26.08.25
+// version: 26.08.25 II
 // 
 // End License
 Script
 
 #use "Libs/SCI/Sys"
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
 #use "Libs/Music"
@@ -196,4 +197,6 @@ Global Void PS_FinalBoss()
 		Flits()
 	End
 	Kthura.Obj.Pop_Luna.Texture="GFX/Combat/Heroes/Luna.dead.png"
-	
+	Map.PermaKill("Actor_Quayaro")
+	MapText("QUYARO_3")
+End	
