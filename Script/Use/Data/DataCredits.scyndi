@@ -34,17 +34,18 @@
 // **********************************************
 // 
 // 
-// version: 26.08.26 VI
+// version: 26.08.26 XXI
 // 
 // End License
 
 
 // Data for Credits Roll!
 
-// 26 Aug 2026; 10:28:17
+// 26 Aug 2026; 23:42:00
 
-Module CD_1787732897
+Module CD_1787780520
 
+#use "Libs/SCI/Sys"
 #use "Libs/SCI/Graphics"
 
 
@@ -70,13 +71,19 @@ Class DCC
 
 	Constructor(String Cap,Int RH=1,V1,V2,V3)
 		Caption=Cap
-		RGB_HSV=Ternary(RH==1 || RH==3,1,3)
+		RGB_HSV=Ternary(RH==2 || RH==3,RH,1)
+		CSayF("Adding: %d.%s",RGB_HSV,Cap)
 		Switch RGB_HSV
 			Case 1; R,G,B = V1 || 255,V2 || 255,V3 || 255
 			Case 2; Hue,Sat,Val = V1 || 0,V2 || 0,V3 || 1
-			Case 3; Img = Lua.Scyndi.Globals.LoadNewImage(Cap)
+			Case 3; Img = Lua.Scyndi.Globals.LoadNewImage(Cap,"CREDITS::"..Cap)
 		End
 		InitY = Graphics.Height+(Cnt*30); Y = InitY
+		Cnt++
+		If RGB_HSV==3
+			Cnt+=Img.Height Div 30
+			Img.HotCenter()
+		End
 	End
 End
 
@@ -88,29 +95,15 @@ Init
 
 	DC+=New DCC("GFX/Algemeen/Logo.png",3)
 	DC+=New DCC("A game developed by:")
-	DC+=New DCC("Jeroen P. Broks",255,180,0)
-	DC+=DCC("Audio",2,120,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("Data",2,121,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("Fonts",2,122,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("GFX",2,123,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("ID",2,124,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("Kthura",2,125,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("Languages",2,126,0.2,1)
-	DCC.Cnt++
-
-	DC+=DCC("Music",2,127,0.2,1)
+	DC+=New DCC("Jeroen P. Broks",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,120,0.2,1)
+	DC+=New DCC("Databases",2,121,0.2,1)
+	DC+=New DCC("Fonts",2,122,0.2,1)
+	DC+=New DCC("Graphics",2,123,0.2,1)
+	DC+=New DCC("Production",2,124,0.2,1)
+	DC+=New DCC("Map Design",2,125,0.2,1)
+	DC+=New DCC("Scenario",2,126,0.2,1)
+	DC+=New DCC("Music",2,127,0.2,1)
 	DCC.Cnt++
 
 
@@ -125,226 +118,222 @@ Init
 
 	DCC.Cnt+=3
 
-	DC+=New DCC("Aeris",255,180,0)
-	DC+=DCC("GFX",2,128,0.2,1)
+	DC+=New DCC("Aeris",1,255,180,0)
+	DC+=New DCC("Graphics",2,128,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Alfred Grupstra (Pixabay)",255,180,0)
-	DC+=DCC("Music",2,129,0.2,1)
+	DC+=New DCC("Alfred Grupstra (Pixabay)",1,255,180,0)
+	DC+=New DCC("Music",2,129,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("AMBROSE AND HIS ORCHESTRA",255,180,0)
-	DC+=DCC("Music",2,130,0.2,1)
+	DC+=New DCC("AMBROSE AND HIS ORCHESTRA",1,255,180,0)
+	DC+=New DCC("Music",2,130,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("anarres",255,180,0)
-	DC+=DCC("GFX",2,131,0.2,1)
+	DC+=New DCC("anarres",1,255,180,0)
+	DC+=New DCC("Graphics",2,131,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("barnheartowl",255,180,0)
-	DC+=DCC("GFX",2,132,0.2,1)
+	DC+=New DCC("barnheartowl",1,255,180,0)
+	DC+=New DCC("Graphics",2,132,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("benboncan",255,180,0)
-	DC+=DCC("Audio",2,133,0.2,1)
+	DC+=New DCC("benboncan",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,133,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("dear_theophilus",255,180,0)
-	DC+=DCC("gfx",2,134,0.2,1)
+	DC+=New DCC("dear_theophilus",1,255,180,0)
+	DC+=New DCC("Graphics",2,134,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Eric Matyas",255,180,0)
-	DC+=DCC("Audio",2,135,0.2,1)
+	DC+=New DCC("Eric Matyas",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,135,0.2,1)
+	DC+=New DCC("Music",2,136,0.2,1)
 	DCC.Cnt++
 
-	DC+=DCC("Music",2,136,0.2,1)
+	DC+=New DCC("Falco276",1,255,180,0)
+	DC+=New DCC("Graphics",2,137,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Falco276",255,180,0)
-	DC+=DCC("GFX",2,137,0.2,1)
+	DC+=New DCC("Firkin",1,255,180,0)
+	DC+=New DCC("Graphics",2,138,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Firkin",255,180,0)
-	DC+=DCC("gfx",2,138,0.2,1)
+	DC+=New DCC("FreeMusic109",1,255,180,0)
+	DC+=New DCC("Music",2,139,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("FreeMusic109",255,180,0)
-	DC+=DCC("Music",2,139,0.2,1)
+	DC+=New DCC("freesounds.co.uk",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,140,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("freesounds.co.uk",255,180,0)
-	DC+=DCC("Audio",2,140,0.2,1)
+	DC+=New DCC("GDJ",1,255,180,0)
+	DC+=New DCC("Graphics",2,141,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("GDJ",255,180,0)
-	DC+=DCC("GFX",2,141,0.2,1)
+	DC+=New DCC("geraintluff",1,255,180,0)
+	DC+=New DCC("Graphics",2,142,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("geraintluff",255,180,0)
-	DC+=DCC("GFX",2,142,0.2,1)
+	DC+=New DCC("ginkgo",1,255,180,0)
+	DC+=New DCC("Graphics",2,143,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("ginkgo",255,180,0)
-	DC+=DCC("gfx",2,143,0.2,1)
+	DC+=New DCC("glitch",1,255,180,0)
+	DC+=New DCC("Graphics",2,144,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("glitch",255,180,0)
-	DC+=DCC("GFX",2,144,0.2,1)
+	DC+=New DCC("GR-Sites",1,255,180,0)
+	DC+=New DCC("Graphics",2,145,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("GR-Sites",255,180,0)
-	DC+=DCC("GFX",2,145,0.2,1)
+	DC+=New DCC("gramzon",1,255,180,0)
+	DC+=New DCC("Graphics",2,146,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("gramzon",255,180,0)
-	DC+=DCC("GFX",2,146,0.2,1)
+	DC+=New DCC("Gribba",1,255,180,0)
+	DC+=New DCC("Graphics",2,147,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Gribba",255,180,0)
-	DC+=DCC("GFX",2,147,0.2,1)
+	DC+=New DCC("hatalar",1,255,180,0)
+	DC+=New DCC("Graphics",2,148,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("hatalar",255,180,0)
-	DC+=DCC("GFX",2,148,0.2,1)
+	DC+=New DCC("Igor Lisul",1,255,180,0)
+	DC+=New DCC("Music",2,149,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Igor Lisul",255,180,0)
-	DC+=DCC("Music",2,149,0.2,1)
+	DC+=New DCC("j4p4n",1,255,180,0)
+	DC+=New DCC("Graphics",2,150,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("j4p4n",255,180,0)
-	DC+=DCC("GFX",2,150,0.2,1)
+	DC+=New DCC("jarda",1,255,180,0)
+	DC+=New DCC("Graphics",2,151,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("jarda",255,180,0)
-	DC+=DCC("GFX",2,151,0.2,1)
+	DC+=New DCC("Kelly",1,255,180,0)
+	DC+=New DCC("Graphics",2,152,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Kelly",255,180,0)
-	DC+=DCC("GFX",2,152,0.2,1)
+	DC+=New DCC("Kevin McLeod",1,255,180,0)
+	DC+=New DCC("Music",2,153,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Kevin McLeod",255,180,0)
-	DC+=DCC("Music",2,153,0.2,1)
+	DC+=New DCC("liftarn",1,255,180,0)
+	DC+=New DCC("Graphics",2,154,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("liftarn",255,180,0)
-	DC+=DCC("GFX",2,154,0.2,1)
+	DC+=New DCC("Linvala",1,255,180,0)
+	DC+=New DCC("Graphics",2,155,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Linvala",255,180,0)
-	DC+=DCC("GFX",2,155,0.2,1)
+	DC+=New DCC("Man Of Steel",1,255,180,0)
+	DC+=New DCC("Graphics",2,156,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Man Of Steel",255,180,0)
-	DC+=DCC("GFX",2,156,0.2,1)
+	DC+=New DCC("Matt McFarland",1,255,180,0)
+	DC+=New DCC("Music",2,157,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Matt McFarland",255,180,0)
-	DC+=DCC("Music",2,157,0.2,1)
+	DC+=New DCC("Matthius Merian",1,255,180,0)
+	DC+=New DCC("Graphics",2,158,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Matthius Merian",255,180,0)
-	DC+=DCC("GFX",2,158,0.2,1)
+	DC+=New DCC("Merlin2525",1,255,180,0)
+	DC+=New DCC("Graphics",2,159,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Merlin2525",255,180,0)
-	DC+=DCC("GFX",2,159,0.2,1)
+	DC+=New DCC("Michael Frank",1,255,180,0)
+	DC+=New DCC("Graphics",2,160,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Michael Frank",255,180,0)
-	DC+=DCC("GFX",2,160,0.2,1)
+	DC+=New DCC("Mohammed Ibrahim",1,255,180,0)
+	DC+=New DCC("Graphics",2,161,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Mohammed Ibrahim",255,180,0)
-	DC+=DCC("GFX",2,161,0.2,1)
+	DC+=New DCC("mondspeer",1,255,180,0)
+	DC+=New DCC("Graphics",2,162,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("mondspeer",255,180,0)
-	DC+=DCC("GFX",2,162,0.2,1)
+	DC+=New DCC("MyFreeTextures.com",1,255,180,0)
+	DC+=New DCC("Graphics",2,163,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("MyFreeTextures.com",255,180,0)
-	DC+=DCC("GFX",2,163,0.2,1)
+	DC+=New DCC("NASA",1,255,180,0)
+	DC+=New DCC("Graphics",2,164,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("NASA",255,180,0)
-	DC+=DCC("GFX",2,164,0.2,1)
+	DC+=New DCC("netalloy",1,255,180,0)
+	DC+=New DCC("Graphics",2,165,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("netalloy",255,180,0)
-	DC+=DCC("GFX",2,165,0.2,1)
+	DC+=New DCC("Nihilore",1,255,180,0)
+	DC+=New DCC("Music",2,166,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Nihilore",255,180,0)
-	DC+=DCC("Music",2,166,0.2,1)
+	DC+=New DCC("Pixabay",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,167,0.2,1)
+	DC+=New DCC("Music",2,168,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Pixabay",255,180,0)
-	DC+=DCC("Audio",2,167,0.2,1)
+	DC+=New DCC("ProductionNow",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,169,0.2,1)
 	DCC.Cnt++
 
-	DC+=DCC("Music",2,168,0.2,1)
+	DC+=New DCC("Pruno",1,255,180,0)
+	DC+=New DCC("Music",2,170,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("ProductionNow",255,180,0)
-	DC+=DCC("Audio",2,169,0.2,1)
+	DC+=New DCC("Ray Larabie",1,255,180,0)
+	DC+=New DCC("Fonts",2,171,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Pruno",255,180,0)
-	DC+=DCC("Music",2,170,0.2,1)
+	DC+=New DCC("rfc1394",1,255,180,0)
+	DC+=New DCC("Graphics",2,172,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Ray Larabie",255,180,0)
-	DC+=DCC("Fonts",2,171,0.2,1)
+	DC+=New DCC("Sound Jay",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,173,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("rfc1394",255,180,0)
-	DC+=DCC("GFX",2,172,0.2,1)
+	DC+=New DCC("Ulrike",1,255,180,0)
+	DC+=New DCC("Graphics",2,174,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Sound Jay",255,180,0)
-	DC+=DCC("Audio",2,173,0.2,1)
+	DC+=New DCC("Varazuvi(TM)",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,175,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Ulrike",255,180,0)
-	DC+=DCC("GFX",2,174,0.2,1)
+	DC+=New DCC("Vicious Speed",1,255,180,0)
+	DC+=New DCC("Graphics",2,176,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Varazuvi(TM)",255,180,0)
-	DC+=DCC("Audio",2,175,0.2,1)
+	DC+=New DCC("wesd444",1,255,180,0)
+	DC+=New DCC("Graphics",2,177,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Vicious Speed",255,180,0)
-	DC+=DCC("GFX",2,176,0.2,1)
+	DC+=New DCC("Wicky77",1,255,180,0)
+	DC+=New DCC("Music",2,178,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("wesd444",255,180,0)
-	DC+=DCC("GFX",2,177,0.2,1)
+	DC+=New DCC("Wicky77 & Wout66",1,255,180,0)
+	DC+=New DCC("Music",2,179,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Wicky77",255,180,0)
-	DC+=DCC("Music",2,178,0.2,1)
+	DC+=New DCC("Widzy",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,180,0.2,1)
+	DC+=New DCC("Music",2,181,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Wicky77 & Wout66",255,180,0)
-	DC+=DCC("Music",2,179,0.2,1)
+	DC+=New DCC("www.pacdv.com",1,255,180,0)
+	DC+=New DCC("Audio Effects",2,182,0.2,1)
 	DCC.Cnt++
 
-	DC+=New DCC("Widzy",255,180,0)
-	DC+=DCC("Audio",2,180,0.2,1)
+	DC+=New DCC("Yves Guillou",1,255,180,0)
+	DC+=New DCC("Graphics",2,183,0.2,1)
 	DCC.Cnt++
 
-	DC+=DCC("Music",2,181,0.2,1)
-	DCC.Cnt++
-
-	DC+=New DCC("www.pacdv.com",255,180,0)
-	DC+=DCC("Audio",2,182,0.2,1)
-	DCC.Cnt++
-
-	DC+=New DCC("Yves Guillou",255,180,0)
-	DC+=DCC("GFX",2,183,0.2,1)
-	DCC.Cnt++
-
+	DCC.Cnt+=30
+	DC+=New DCC("|cc Jeroen P. Broks")
 End
 
