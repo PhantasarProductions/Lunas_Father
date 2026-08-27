@@ -1,0 +1,87 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/Flow/Flow_Credits.scyndi
+// (c) Jeroen Broks, 2026, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 26.08.26 IV
+// 
+// End License
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
+
+#use "Script/Use/Data/DataCredits"
+
+Plua Fnt = ObtainFont("BASE")
+plua DebugCall = False
+
+Global Void Reset()
+	For DC in EacH(DataCredits)
+		DC.Y=DC.InitY
+	End
+End
+
+Global Void CallDebug()
+	DebugCall = True
+End
+
+Global Void MainFlow()
+	Klaar:=true
+	For DC in Each(DataCredits)
+		Klaar = Klaar && DC.Y<-100
+		If DC.Y>-40 && DC.Y<Graphics.Height+40
+			Switch DC.RGB_HSV
+				Case 1
+					SetColor(DC.R,DC.G,DC.B)
+					Fnt.Text(DC.Caption,Graphics.Width div 2,DC.Y,2,2)
+				Case 2
+					SetColorHSV(DC.Hue,DC.Sat,DC.Val)
+					Fnt.Text(DC.Caption,Graphics.Width div 2,DC.Y,2,2)
+				Case 3
+					SetColor(255,255,255)
+					DC.Img.Draw(Graphics.Width div 2, DC.Y)
+			End
+		End
+		DC.Y--
+	End
+	If Klaar
+		if DebugCall
+			DebugCall = False
+			Sys.CurrentFlow = "FIELD"
+		Else
+			Lua.error("End of credits not yet scripted")
+		End
+	End
+End
