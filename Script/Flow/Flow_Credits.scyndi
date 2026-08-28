@@ -34,13 +34,17 @@
 // **********************************************
 // 
 // 
-// version: 26.08.26 IV
+// version: 26.08.28
 // 
 // End License
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Events"
 #use "Libs/SCI/Graphics"
+#use "Libs/SCI/InterVar"
+
+#use "Libs/Rosetta"
 
 #use "Script/Use/Data/DataCredits"
 
@@ -81,7 +85,12 @@ Global Void MainFlow()
 			DebugCall = False
 			Sys.CurrentFlow = "FIELD"
 		Else
-			Lua.error("End of credits not yet scripted")
+			//Lua.error("End of credits not yet scripted")
+			If !gBool.NewGamePlus
+				Events.Annoy(sprintf("%s\n\n%s\n%s",Rosetta.GetSTR("ENDGAME","NGP"),Rosetta.GetSTR("ENDGAME","NGP1"),Rosetta.GetSTR("ENDGAME","NGP2")))
+			End
+			Events.Annoy(Rosetta.GetStr("ENDGAME","Thanks"))
+			Sys.Exit(0)
 		End
 	End
 End
