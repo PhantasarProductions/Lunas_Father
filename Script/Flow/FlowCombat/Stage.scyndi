@@ -34,6 +34,7 @@
 // misrepresented as being the original software.
 // 3. This notice may not be removed or altered from any source distribution.
 // End License Information
+
 Module
 
 #use "libs/sci/sys"
@@ -70,6 +71,7 @@ end
 Set String CurrentTag
 	_currenttag = upper(Value)
 	_current=Stages[Value]
+	lua.assert(_current,sprintf("There is no combat stage named \"%s\"!"))
 	_current.Arrive()
 End
 
