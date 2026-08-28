@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
 // 
-// 	  Version: 25.09.28
+// 	  Version: 26.08.28
 // 	
-// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -310,6 +310,9 @@ Class Foe
 					Var h;h = Lua.Scyndi.Class.Fighter.ByTag[Party.Char(i)]
 					if i<3; h.irate++; end
 					Int e;e = Round(RawData.IntValue("Kill","Experience")*h.rate)
+					If gbool.NewGamePlus && gInt.Skill<3
+						e += math.random(0,e)
+					End
 					If h.stat.Level<gint.levelcap
 						h.stat.EXP = h.stat.EXP - e
 						If (i<3)
@@ -330,10 +333,13 @@ Class Foe
 				ElseIf Dice.D100<RawData.IntValue("DROP2","RATE")
 					Self.Drop(RawData.value("DROP2","ITEM"))
 				Elseif RawData.IntValue("KILL","CASH")>0
-					plua getcash;getcash=RawData.IntValue("KILL","CASH")
+					getcash:=RawData.IntValue("KILL","CASH")
 					Mini.Write(Name,255,0,0)
 					Mini.Write(" drops ",255,180,0)
 					Mini.Write(Lua.tostring(getcash),0,180,255)
+					If gbool.NewGamePlus && gInt.Skill<3
+						getcash += math.random(0,getcash)
+					End
 					if (getcash==1)
 						Mini.WriteLn(" Shilder",255,180,0)
 					Else
