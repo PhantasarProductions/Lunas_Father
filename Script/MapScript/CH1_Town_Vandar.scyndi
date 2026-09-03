@@ -1,3 +1,41 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/CH1_Town_Vandar.scyndi
+// (c) Jeroen Broks, 2023, 2026, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 26.09.03 III
+// 
 // License Information:
 // **********************************************
 // 
@@ -34,9 +72,12 @@
 // 
 // version: 23.12.15
 // End License Information
+// End License
+
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
@@ -151,3 +192,26 @@ Global Void NPC_Jaqen()
 	//Mini.WriteLn("See you later, alligator",180,255,0)
 	Menu.Shop()
 End
+
+
+// New Game Plus
+Global Void ZA_Melisandre()
+	If (!gbool.NewGamePlus)
+		Map.PermaKill("NPC_Melisandre")
+		Map.PermaKill("ZA_Melisandre")
+		CSay("This ain't the New Game+, so Melisandre and the trigger area have been removed permanently")
+		Return
+	ElIf (!gbool.TutorDone)
+		Map.Kill("NPC_Melisandre")
+		CSay("Removed Melisandre! Time's not yet right")
+	End
+	Map.Kill("ZA_Melisandre")
+End	
+
+Global Void NPC_Melisandre()
+	Lach:=Audio.LoadNew("Audio/wlaugh.mp3","HEKSENLACH")
+	MapText("MELISANDRE")
+	Lach.Play()
+	Map.GotoMap("NGP_DrumWorld","#000","Start")
+End	
+	
