@@ -34,13 +34,15 @@
 // **********************************************
 // 
 // 
-// version: 26.08.25 II
+// version: 26.08.27 V
 // 
 // End License
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/GINIE"
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/SString"
 #use "Libs/SCI/Graphics"
 #use "Libs/SCI/InterVar"
 
@@ -177,7 +179,7 @@ Global Void ZA_FinalBoss()
 	Pop.Pop("Q","North")
 	MapText("QUAYARO_1")
 	PartyBonus()
-	Map.Boss("Quayaro")
+	//Map.Boss("Quayaro")
 	Map.Schedule("PS_FINALBOSS")
 End
 
@@ -191,12 +193,19 @@ Void Flits()
 End
 	
 Global Void PS_FinalBoss()
-	MapText("QUYARO_2")
+	Awarded.Kill_Boss_Quayaro = True
+	CFG := GINIE.Obtain("GLOBALCONFIG")
+	CFG.Value("Chars","Myrah", MD5("New Game+"))
+	MapText("QUAYARO_2")
 	times:=math.random(3,6)
 	For i = 1,times
 		Flits()
 	End
 	Kthura.Obj.Pop_Luna.Texture="GFX/Combat/Heroes/Luna.dead.png"
 	Map.PermaKill("Actor_Quayaro")
-	MapText("QUYARO_3")
+	MapText("QUAYARO_3")
+	Sys.LoadNewFlow("CREDITS","Script/Flow/Flow_Credits.lbc")
+	Sys.Call("FLOW_Credits","Reset")
+	Music.Play("MUSIC/GENERAL/TITLE.MP3")
+	Sys.CurrentFlow="CREDITS"
 End	
