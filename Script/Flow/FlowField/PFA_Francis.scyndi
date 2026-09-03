@@ -2,7 +2,7 @@
 // **********************************************
 // 
 // src/Scripts/Script/Flow/FlowField/PFA_Francis.scyndi
-// (c) Jeroen Broks, 2023, 2025, All Rights Reserved.
+// (c) Jeroen Broks, 2023, 2025, 2026, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 25.09.26
+// version: 26.09.03 I
 // 
 // End License
 
@@ -55,6 +55,7 @@ Module
 
 const var AudEx = Audio.Obtain("ALCHEMY_EXTRACT")
 Const int MaxRadius = 70
+Const Int MaxRadius2 = MaxRadius^2
 
 plua Crystal
 plua FField
@@ -67,25 +68,32 @@ Bool PFA_Francis_Action()
 		Events.Poll()
 		print("Checking: ",otag,dat.Element,Kthura.HasObj(otag))
 		If Kthura.HasObj(otag)
-			For X=Player.X-MaxRadius,Player.X+MaxRadius,1
-				For Y=Player.Y-MaxRadius,Player.Y+MaxRadius,1
-					int RZ1;RZ1 = math.abs(X-Player.X)
-					int RZ2;RZ2 = math.abs(Y-Player.Y)
-					Number HYP;Hyp = math.sqrt((RZ1^2)+(RZ2^2))
-					If Hyp<=MaxRadius && Kthura.InObj(otag,x,y)
-						Map.PermaKill(otag)
-						Mana[dat.Element] = Mana[dat.Element] + dat.Num
-						Mini.Write("Francis ",180,0,255)
-						Mini.Write(sprintf("extacted %d ", dat.Num),255,180,0)
-						Mini.Write(dat.Element,Alchemy.ManaCol[dat.Element].r,Alchemy.ManaCol[dat.Element].g,Alchemy.ManaCol[dat.Element].b)
-						If dat.Num==1
-							mini.WriteLn(" manament",255,180,0)
-						Else
-							mini.WriteLn(" manaments",255,180,0)
-						End
-						Return True
-					End
-				End
+			Crystal:=Kthura.Obj[otag]
+			If math.abs(Player.X-Crystal.X)<=MaxRadius || math.abs(Player.Y-Crystal.Y)<=MaxRadius || math.abs(Player.X-(Crystal.X+Crystal.W))<=MaxRadius || math.abs(Player.Y-(Crystal.Y+Crystal.H))
+				For X=Player.X-MaxRadius,Player.X+MaxRadius,1
+					For Y=Player.Y-MaxRadius,Player.Y+MaxRadius,1
+						int RZ1;RZ1 = math.abs(X-Player.X)
+						int RZ2;RZ2 = math.abs(Y-Player.Y)
+						//Number HYP;Hyp = math.sqrt((RZ1^2)+(RZ2^2))
+						Number Hyp2 := (RZ1*RZ1)+(RZ2*RZ2)
+						//If Hyp<=MaxRadius && Kthura.InObj(otag,x,y)
+						if Hyp2<=MaxRadius2
+							Map.PermaKill(otag)
+							Mana[dat.Element] = Mana[dat.Element] + dat.Num
+							Mini.Write("Francis ",180,0,255)
+							Mini.Write(sprintf("extacted %d ", dat.Num),255,180,0)
+							Mini.Write(dat.Element,Alchemy.ManaCol[dat.Element].r,Alchemy.ManaCol[dat.Element].g,Alchemy.ManaCol[dat.Element].b)
+							If dat.Num==1
+								mini.WriteLn(" manament",255,180,0)
+							Else
+								mini.WriteLn(" manaments",255,180,0)
+							End
+							Return True
+						End // Hypcheck
+					End // For Y
+				End // For X
+			Else
+				CSayF("Not even checking %s as it's definitely too far away",otag)
 			End
 		End
 	End
