@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
 // 
-// 	  Version: 26.08.28 II
+// 	  Version: 26.09.03
 // 	
 // 	  Copyright (C) 2023, 2024, 2026 Jeroen Petrus Broks
 // 	
@@ -222,7 +222,7 @@ Void FieldStats()
 	FSD(Rosetta.GetStr("FieldStats","Location"),Map.Title)
 	FSD(Rosetta.GetStr("FieldStats","Time"),GameTime.FShow)
 	If gbool.NewGamePlus
-		SetColorHSV(os.time() div 3,1,1)
+		SetColorHSV((os.time() div 3) % 360,1,1)
 		MiniFnt.Text("New Game+",FSx2,fSY,1)
 	End
 End
