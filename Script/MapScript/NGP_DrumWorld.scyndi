@@ -34,12 +34,13 @@
 // **********************************************
 // 
 // 
-// version: 26.09.05 I
+// version: 26.09.05 III
 // 
 // End License
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
 #use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
@@ -57,7 +58,7 @@ Global Void ZA_Boss()
 End
 
 Global Void PS_Boss()
-	gint.LevelCap = gint.LevelCap + (3-gint.skill)
+	gint.LevelCap = gint.LevelCap + (3-gint.skill) + (6-gint.skill)
 	Map.PermaKill("ZA_Boss")
 	Map.PermaKill("ACT_Boss")
 End
