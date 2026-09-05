@@ -34,19 +34,39 @@
 // **********************************************
 // 
 // 
-// version: 26.09.03 II
+// version: 26.09.05 I
 // 
 // End License
 Script
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
 
 
 Global Void Open_Block()
 	CSay("Open Sesame")
 	Map.PermaKill("Block_Next")
+End
+
+Global Void ZA_Boss()
+	Map.Boss("Drum")
+	Map.Schedule("PS_Boss")
+End
+
+Global Void PS_Boss()
+	gint.LevelCap = gint.LevelCap + (3-gint.skill)
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill("ACT_Boss")
+End
+
+Global Void NPC_Heks()
+	Awarded.ZZ_NEWGAME_PLUS_DRUM = true
+	Map.GotoMap("CH1_Town_Vandar","TOWN","Drum_Return")
+	Lach:=Audio.LoadNew("Audio/wlaugh.mp3","HEKSENLACH")	
+	Lach.Play()
 End
 
 Init
