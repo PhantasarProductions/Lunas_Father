@@ -34,10 +34,20 @@
 // **********************************************
 // 
 // 
-// version: 26.09.03
+// version: 26.09.03 II
 // 
 // End License
 Script
+
+#use "Libs/SCI/Sys"
+
+#use "Script/Use/Link/Map"
+
+
+Global Void Open_Block()
+	CSay("Open Sesame")
+	Map.PermaKill("Block_Next")
+End
 
 Init
 	Print("The night is dark and full of terror!")
