@@ -34,7 +34,7 @@
 // **********************************************
 // 
 // 
-// version: 26.09.03 I
+// version: 26.09.04
 // 
 // End License
 
@@ -77,7 +77,7 @@ Bool PFA_Francis_Action()
 						//Number HYP;Hyp = math.sqrt((RZ1^2)+(RZ2^2))
 						Number Hyp2 := (RZ1*RZ1)+(RZ2*RZ2)
 						//If Hyp<=MaxRadius && Kthura.InObj(otag,x,y)
-						if Hyp2<=MaxRadius2
+						If Hyp2<=MaxRadius2 && Kthura.InObj(otag,x,y)
 							Map.PermaKill(otag)
 							Mana[dat.Element] = Mana[dat.Element] + dat.Num
 							Mini.Write("Francis ",180,0,255)
