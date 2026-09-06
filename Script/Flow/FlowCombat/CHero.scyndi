@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
 // 
-// 	  Version: 26.09.06 I
+// 	  Version: 26.09.06 IV
 // 	
 // 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
@@ -54,6 +54,8 @@ Module
 #use "script/use/link/party"
 
 #use "script/flow/flowcombat/status_change_manager"
+
+#accept Fighter
 
 const Int MidY = Graphics.Height div 2
 const Int OndH = MidY - 150
@@ -306,10 +308,11 @@ Class Hero
 	
 	
 	Static Void StatReset()
-		For FT,FCH in pairs(Team.Hero)
+		For FT,FDT in pairs(Fighter.Team.Hero)
+			FCH:=FDT.Chars
 			For bfstat In Each(Party.BaseStats)
-				If FCH.XStat[bfstat].Buff!=0
-					FCH.XStat[bfstat].Buff = 0
+				If FCH.XStat[bfstat].Buff.Buff!=0
+					FCH.XStat[bfstat].Buff.Buff = 0
 					CSayF("%s %s::%s has been undone",Ternary(FCH.XStat[bfstat].Buff>0,"Buff","Debuff"),FT,bfstat)
 				End
 			End

@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
 // 
-// 	  Version: 26.09.06 II
+// 	  Version: 26.09.06 VI
 // 	
 // 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
@@ -45,6 +45,7 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Intervar"
 
 #use "Script/Use/Link/Mini"
 #use "Script/Use/Link/Party"
@@ -138,10 +139,10 @@ Void Cycle()
 					bf = bf || {}
 					bf.Foe  = bf.Foe  || {[true]={[1]=4,[2]=8,[3]=100},[false]={[1]=100,[2]=8,[3]=2}}
 					bf.Hero = bf.Hero || {[true]={[1]=20,[2]=8,[3]=4},[false]={[1]=4,[2]=8,[3]=20}}
-					If CH.XStat[bfstat]>0 && math.random(1,bf[FData.Team][ch.xStat[bfstat].Buff>0])
+					If CH.XStat[bfstat].Buff.Buff>0 && math.random(1,bf[FData.Team][ch.xStat[bfstat].Buff.Buff>0][gint.skill])
 						Mini.Write(FData.Name,255,180,0)
 						Mini.Write(Ternary(Suffixed(FData.Name,"s"),"'","'s"),180,0,255)
-						If ch.xStat[bfstat].Buff>0
+						If ch.xStat[bfstat].Buff.Buff>0
 							Mini.Write(" buff ",180,255,0)
 						Else	
 							Mini.Write(" debuff ",255,95,95)

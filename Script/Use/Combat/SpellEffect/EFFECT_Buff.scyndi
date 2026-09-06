@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/SpellEffect/EFFECT_Buff.scyndi
 // 
-// 	  Version: 26.09.06 III
+// 	  Version: 26.09.06 IV
 // 	
 // 	  Copyright (C) 2026 Jeroen Petrus Broks
 // 	
@@ -66,16 +66,16 @@ Bool Effect(Executor,Target,String RawParam)
 	Int Procent:=lua.tonumber(Params[1]) || 25
 	Int Base:=Target.Char.Stat[BStat].Base
 	Int Buff:=math.ceil(math.abs(Base*(Procent*0.01)))
-	If Procent>0 && Buff>Target.Char.XStat[BStat].Buff
-		Target.Char.XStat[BStat].Buff = Buff
+	If Procent>0 && Buff>Target.Char.XStat[BStat].Buff.Buff
+		Target.Char.XStat[BStat].Buff.Buff = Buff
 		Mini.Write(Target.Name,255,180,0)
 		Mini.Write(Ternary(Suffixed(Upper(Target.Name),"s"),"' ","'s "),180,255,0)
 		Mini.Write(BStat,255,255,255)
 		Mini.Write(" has been increased by ",180,255,0)
 		Mini.WriteLn(sprintf("%d",Buff),0,180,255)
 		Return True
-	ElIf Procent<0 && (0-Buff)<Target.Char.XStat[BStat].Buff
-		Target.Char.XStat[BStat].Buff = 0-Buff
+	ElIf Procent<0 && (0-Buff)<Target.Char.XStat[BStat].Buff.Buff
+		Target.Char.XStat[BStat].Buff.Buff = 0-Buff
 		Mini.Write(Target.Name,255,75,75)
 		Mini.Write(Ternary(Suffixed(Upper(Target.Name),"s"),"' ","'s "),180,255,0)
 		Mini.Write(BStat,255,255,255)
