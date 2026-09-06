@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
 // 
-// 	  Version: 25.09.28
+// 	  Version: 26.09.06 I
 // 	
-// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -304,7 +304,19 @@ Class Hero
 		StatusChanges = StatusChangeManager(_Tag,Self,_Status) 
 	End
 	
-End
+	
+	Static Void StatReset()
+		For FT,FCH in pairs(Team.Hero)
+			For bfstat In Each(Party.BaseStats)
+				If FCH.XStat[bfstat].Buff!=0
+					FCH.XStat[bfstat].Buff = 0
+					CSayF("%s %s::%s has been undone",Ternary(FCH.XStat[bfstat].Buff>0,"Buff","Debuff"),FT,bfstat)
+				End
+			End
+		End
+	End		
+End	
+
 
 Void CompileHero(string Tag)
 	CSayF("Compiling hero: %s",Tag)

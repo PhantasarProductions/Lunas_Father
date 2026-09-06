@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Stage_IDLE.scyndi
 // 
-// 	  Version: 25.09.24
+// 	  Version: 26.09.06 II
 // 	
-// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -46,6 +46,8 @@ Module
 
 #use "Libs/SCI/Sys"
 
+#use "Script/Use/Link/Mini"
+#use "Script/Use/Link/Party"
 #use "Script/Use/General/UseIAA"
 
 #use "Script/Flow/FlowCombat/Action_Class"
@@ -102,7 +104,7 @@ Void Cycle()
 			Else
 				Scyndi.Class.AI.DoAI(__foe)
 			End
-		Case "JOKER"
+		Case "JOKER"			
 			For Tag,FData in pairs(Fighter.ByTag)
 				Switch FData.Team
 					Case "Foe"
@@ -128,6 +130,25 @@ Void Cycle()
 						Scyndi.Use(sprintf("Script/Use/Combat/StatusChanges/JOKER_%s",_stdat.Joker_Script))
 						Scyndi.Class["JOKER_".._stdat.Joker_Script].Joker(FData,_stdat.Joker_Param)
 					End
+				End
+				// Buff expiring
+				For bfstat In Each(Party.BaseStats)
+					LocExtern bf "Stage_IDLE_Joker_Buff_Die_Data"
+					Ch:=FData.Char
+					bf = bf || {}
+					bf.Foe  = bf.Foe  || {[true]={[1]=4,[2]=8,[3]=100},[false]={[1]=100,[2]=8,[3]=2}}
+					bf.Hero = bf.Hero || {[true]={[1]=20,[2]=8,[3]=4},[false]={[1]=4,[2]=8,[3]=20}}
+					If CH.XStat[bfstat]>0 && math.random(1,bf[FData.Team][ch.xStat[bfstat].Buff>0])
+						Mini.Write(FData.Name,255,180,0)
+						Mini.Write(Ternary(Suffixed(FData.Name,"s"),"'","'s"),180,0,255)
+						If ch.xStat[bfstat].Buff>0
+							Mini.Write(" buff ",180,255,0)
+						Else	
+							Mini.Write(" debuff ",255,95,95)
+						End
+						Mini.Writeln("has expired!",180,0,255)
+						ch.xStat[bfstat].Buff = 0
+					End	
 				End
 			End
 			//print("\x1b[31mJOKER, BUT THIS HAS NOT YET BEEN SCRIPTED!\x1b[0m"); 

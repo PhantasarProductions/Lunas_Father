@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Subs/SubParty.scyndi
 // 
-// 	  Version: 25.09.28 III
+// 	  Version: 26.09.06
 // 	
-// 	  Copyright (C) 2023, 2024, 2025 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -138,9 +138,9 @@ Void SetLevel(string CharTag,int lvl)
 	
 	CSayF("%s is now level %d",CharTag,lvl)
 	// General Stat
-	Var Ch
+	//Var Ch
 	//Ch = CHT[CharTag]
-	Ch = _Party.Char[CharTag]
+	Ch := _Party.Char[CharTag]
 	Ch.Stat.Level=lvl
 	For s in Each(BaseStats)		
 		number st
