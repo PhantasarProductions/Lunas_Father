@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
 // 
-// 	  Version: 26.09.06 IV
+// 	  Version: 26.09.06 V
 // 	
 // 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
@@ -309,7 +309,7 @@ Class Hero
 	
 	Static Void StatReset()
 		For FT,FDT in pairs(Fighter.Team.Hero)
-			FCH:=FDT.Chars
+			FCH:=FDT.Char
 			For bfstat In Each(Party.BaseStats)
 				If FCH.XStat[bfstat].Buff.Buff!=0
 					FCH.XStat[bfstat].Buff.Buff = 0
