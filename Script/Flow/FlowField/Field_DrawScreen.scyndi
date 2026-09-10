@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowField/Field_DrawScreen.scyndi
 // 
-// 	  Version: 26.09.03
+// 	  Version: 26.09.10
 // 	
 // 	  Copyright (C) 2023, 2024, 2026 Jeroen Petrus Broks
 // 	
@@ -212,13 +212,16 @@ Void FSD(String Fld,String Value)
 End
 			
 Void FieldStats()
+	LocExtern LayerTitle "Scyndi.Class.Field_Renc.LayerTitle"
 	fSY=Graphics.Height-185
 	FSC(Rosetta.GetStr("FieldStats","Cash"),Rosetta.GetStr("FieldStats","1shilder"),gint.cash==1)
 	FSC(Rosetta.GetStr("FieldStats","Cash"),sprintf(Rosetta.GetStr("FieldStats","moreshilders"),gint.cash),gint.cash>1)
 	FSD(Rosetta.GetStr("FieldStats","LevelCap"),Lua.tostring(gint.LevelCap),gint.LevelCap>0)
 	FSC(Rosetta.GetStr("FieldStats","BlackOrbs"),Lua.tostring(gint.BlackOrbs),gint.BlackOrbs>0)
 	//FSD(Rosetta.GetStr("FieldStats","REnc"),Lua.Scyndi.Class.Field_Renc.rOnOff,Map.AllowEncOff)
-	FSC(Rosetta.GetStr("FieldStats","Area"),Kthura.CurrentLayer,Left(Kthura.CurrentLayer,1,1)=="#")
+	FSC(Rosetta.GetStr("FieldStats","Area"),Kthura.CurrentLayer,Left(Kthura.CurrentLayer,1,1)=="#" && LayerTitle=="")
+	FSC(Rosetta.GetStr("FieldStats","Area"),LayerTitle,Left(Kthura.CurrentLayer,1,1)!="#" && LayerTitle!="")
+	FSC(Rosetta.GetStr("FieldStats","Area"),sprintf("%s - %s",Kthura.CurrentLayer,LayerTitle),Left(Kthura.CurrentLayer,1,1)=="#" && LayerTitle!="")
 	FSD(Rosetta.GetStr("FieldStats","Location"),Map.Title)
 	FSD(Rosetta.GetStr("FieldStats","Time"),GameTime.FShow)
 	If gbool.NewGamePlus
