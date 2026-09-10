@@ -1,0 +1,104 @@
+// License:
+// 	  src/Scripts/Script/Use/Combat/Arena/ARENA_GrassJungle.scyndi
+// 
+// 	  Version: 26.09.10
+// 	
+// 	  Copyright (C) 2026 Jeroen Petrus Broks
+// 	
+// 	  ===========================
+// 	  This file is part of a project related to the Phantasar Chronicles or another
+// 	  series or saga which is property of Jeroen P. Broks.
+// 	  This means that it may contain references to a story-line plus characters
+// 	  which are property of Jeroen Broks. These references may only be distributed
+// 	  along with an unmodified version of the game.
+// 
+// 	  As soon as you remove or replace ALL references to the storyline or character
+// 	  references, or any termology specifically set up for the Phantasar universe,
+// 	  or any other univers a story of Jeroen P. Broks is set up for,
+// 	  the restrictions of this file are removed and will automatically become
+// 	  zLib licensed (see below).
+// 
+// 	  Please note that doing so counts as a modification and must be marked as such
+// 	  in accordance to the zLib license.
+// 	  ===========================
+// 
+// 
+// 	  zLib license terms:
+// 	
+// 	  This software is provided 'as-is', without any express or implied
+// 	  warranty.  In no event will the authors be held liable for any damages
+// 	  arising from the use of this software.
+// 
+// 	  Permission is granted to anyone to use this software for any purpose,
+// 	  including commercial applications, and to alter it and redistribute it
+// 	  freely, subject to the following restrictions:
+// 	
+// 	  1. The origin of this software must not be misrepresented; you must not
+// 	     claim that you wrote the original software. If you use this software
+// 	     in a product, an acknowledgment in the product documentation would be
+// 	     appreciated but is not required.
+// 	  2. Altered source versions must be plainly marked as such, and must not be
+// 	     misrepresented as being the original software.
+// 	  3. This notice may not be removed or altered from any source distribution.
+// End License
+
+
+Module
+
+#use "libs/sci/sys"
+#use "libs/sci/graphics"
+
+#use "Script/Flow/FlowCombat/Quake"
+
+plua ImgTree  = LoadNewImage("gfx/textures/grassjungle/Animated grass.jpbf","ARENA_GrassJungle_Grass_ANIGRASS")
+plua ImgGrass = LoadNewImage("GFX/Textures/road/Dead Grass.png","ARENA_GrassJungle_Grass_FLOOR") 
+
+plua Trees
+
+init
+	ImgTree.Hot(ImgTree.Width div 2, ImgTree.Height)
+End
+
+Class ARENA_GrassJungle_Grass
+	static int i
+	int X
+	int Y
+	readonly int spd
+	int skip = 0
+	int frame = 0
+	Constructor
+		X = i
+		i = i + math.random(1,3)
+		Y = (Graphics.Height div 4) + math.random(-50,5)
+		spd = math.random(1,10)
+	end
+end
+
+
+Void StartCombat()
+	plua Temp = {}
+	plua NewTree
+	Trees = {}
+	ARENA_GrassJungle_Grass.i = -32
+	Repeat
+		NewTree = New ARENA_GrassJungle_Grass()
+		Temp[sprintf("%04d::%04d",NewTree.Y,NewTree.X)] = NewTree
+	LoopWhile ARENA_GrassJungle_Grass.i < Graphics.Width+32
+	for _,tree in spairs(Temp)
+		Trees[len(Trees)] = tree
+	end
+End
+
+Void Draw()
+	SetColor(0,180,255)
+	Rect(0,0,Graphics.Width,Graphics.Height)
+	SetColor(255,255,255)
+	ImgGrass.Tile(0,(graphics.height div 4)-55,graphics.width,(graphics.height div 2)+90)
+	For tree in Each(Trees)
+		ImgTree.Draw(tree.x+Quake.X,tree.y+Quake.Y,tree.frame)
+		tree.skip = (tree.skip + 1) % math.max(1,tree.spd)
+		If tree.skip==0
+			tree.frame = (tree.frame + 1) % 180
+		End
+	End
+End

@@ -1,0 +1,85 @@
+// License:
+// **********************************************
+// 
+// src/Scripts/Script/MapScript/NGP_Dungeon_GrassJungle.scyndi
+// (c) Jeroen Broks, 2026, All Rights Reserved.
+// 
+// This file contains material that is related
+// to a storyline that is which is strictly
+// copyrighted to Jeroen Broks.
+// 
+// This file may only be used in an unmodified
+// form with an unmodified version of the
+// software this file belongs to.
+// 
+// You may use this file for your study to see
+// how I solved certain things in the creation
+// of this project to see if you find valuable
+// leads for the creation of your own.
+// 
+// Mostly this file comes along with a project
+// that is for most part released under an
+// open source license and that means that if
+// you use that code with this file removed
+// from it, you can use it under that license.
+// Please check out the other files to find out
+// which license applies.
+// 
+// This file comes 'as-is' and in no possible
+// way the author can be held responsible of
+// any form of damages that may occur due to
+// the usage of this file
+// 
+// 
+// **********************************************
+// 
+// 
+// version: 26.09.10 IV
+// 
+// End License
+
+Script
+
+#use "Libs/SCI/Sys"
+#use "Libs/SCI/Audio"
+#use "Libs/SCI/Intervar"
+
+#use "Script/Use/Link/Map"
+#use "Script/Use/Link/Ach"
+#use "Script/Use/Link/Alchemy"
+
+Init
+	CSay("Groen is gras, groen is gras, onder mijne voeten")
+	CSay("'k Heb verloren, 'k heb verloren, waar zal ik 't zoeken")
+	CSay("Hee daar, plaats gemaakt, voor de jongedame")
+	CSay("Hoor de koekoek op 't dak")
+	CSay("Zingt zijn lied op zijn gemak")
+	CSay("O, mijn lieve Augustijn")
+	CSay("Deze dame zal 't zijn.")
+End
+
+
+Global Void Remove_Barrier()
+	Map.PermaKill("Barrier")
+End
+
+Const Global Delegate NPC_Cauldron = GoAlchemy
+
+
+Global Void ZA_Boss()
+	Map.Boss("Boss")
+	Map.Schedule("PS_Boss")
+End
+
+Global Void PS_Boss()
+	gint.LevelCap = gint.LevelCap + (3-gint.skill) + (6-gint.skill)
+	Map.PermaKill("ZA_Boss")
+	Map.PermaKill("Boss")
+End
+
+Global Void NPC_Heks()
+	Awarded.ZZ_NEWGAME_PLUS_DRUM = true
+	Map.GotoMap("CH2_Town_Independence","Beach","From_Grass")
+	Lach:=Audio.LoadNew("Audio/wlaugh.mp3","HEKSENLACH")	
+	Lach.Play()	
+End
