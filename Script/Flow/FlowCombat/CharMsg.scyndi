@@ -79,13 +79,14 @@ Class TCharMsg
 	End
 	
 	Constructor(Executor,String _Message,Byte _R,Byte _G,Byte _B)
+		_Y:=math.min(Executor.Y,Graphics.Height-120)
 		R = _R
 		G = _G
 		B = _B
 		Message = _Message
 		X = Executor.X
-		Y = Executor.Y - 10
-		StartY = Y
+		Y = _Y - 10
+		StartY = _Y
 		Tag = Executor.Tag
 	End
 	
