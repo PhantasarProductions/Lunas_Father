@@ -10,9 +10,12 @@ More info will be posted here, once it's available!
 
 
 # Repository notice
-This repository is at the current time available on [Github](https://github.com/PhantasarProductions/Lunas_Father), [Codeberg](https://codeberg.org/PhantasarProductions/Lunas_Father) and [BitBucket](https://Tricky1975@bitbucket.org/Tricky1975/lunasfahter.git).
+This game's main repository is on [Codeberg](https://codeberg.org/PhantasarProductions/Lunas_Father) now
+The [Github](https://github.com/PhantasarProductions/Lunas_Father) repository is the secondary repository. Still being maintained and updated, but not as frequently so it may be a few commits behind on CodeBerg.
+Please note the two repositories are clones of each other, so the commits are the same, it's just that CodeBerg is pushed more often.
+
+The BitBucket repository has been taken out of use. I had too much trouble on their website lately, not to mention they removed their WORKING password system with a token system that doesn't work at all.
+The BitBucket repository will therefore be far behind on commits and never receive new ones anymore.
 
 GitHub was up to now to main repository, but I am currently thinking about moving that to Codeberg, but even if Codeberg will be the main repository, the github repository will still be updated.
-
-BitBucket's future is most uncertain. The website is quite frequently acting up on me, and their new token system does not appear to work at all (my tokens are always rejected).
-As the WORKING password system is deprecated and will be taken out of use at June 9, 2026, this will mean that the BitBucket repository cannot be updated anymore after this date, anymore.
+As of June 9, this system came in, so all my repositories on BitBucket have come to a permanent standstill since that date.
