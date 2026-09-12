@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CFoe.scyndi
 // 
-// 	  Version: 26.08.28
+// 	  Version: 26.09.11
 // 	
 // 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
@@ -100,6 +100,8 @@ Class Foe
 	ReadOnly Var _Status 
 	ReadOnly Var StatusChanges
 	ReadOnly Var Permanenced = {}
+		
+	Bool StolenFrom = False		
 		
 	// Bunch of callbacks that could be run if a hero attacks a foe.
 	// Function should be:   Void StruckFunc(int damage,var attacker, var target) 
@@ -328,24 +330,28 @@ Class Foe
 				//For i=0,party.FullSize-1
 				//	CSay("Experience system not yet operational! So no points yet for "..Party.Char(i))
 				//End				
-				If Dice.D100<RawData.IntValue("DROP1","RATE") 
-					Self.Drop(RawData.value("DROP1","ITEM"))
-				ElseIf Dice.D100<RawData.IntValue("DROP2","RATE")
-					Self.Drop(RawData.value("DROP2","ITEM"))
-				Elseif RawData.IntValue("KILL","CASH")>0
-					getcash:=RawData.IntValue("KILL","CASH")
-					Mini.Write(Name,255,0,0)
-					Mini.Write(" drops ",255,180,0)
-					Mini.Write(Lua.tostring(getcash),0,180,255)
-					If gbool.NewGamePlus && gInt.Skill<3
-						getcash += math.random(0,getcash)
-					End
-					if (getcash==1)
-						Mini.WriteLn(" Shilder",255,180,0)
+				If (!StolenFrom) || gint.skill==1 
+					If Dice.D100<RawData.IntValue("DROP1","RATE") 
+						Self.Drop(RawData.value("DROP1","ITEM"))
+					ElIf Dice.D100<RawData.IntValue("DROP2","RATE")
+						Self.Drop(RawData.value("DROP2","ITEM"))
+					ElIf RawData.IntValue("KILL","CASH")>0
+						getcash:=RawData.IntValue("KILL","CASH")
+						Mini.Write(Name,255,0,0)
+						Mini.Write(" drops ",255,180,0)
+						Mini.Write(Lua.tostring(getcash),0,180,255)
+						If gbool.NewGamePlus && gInt.Skill<3
+							getcash += math.random(0,getcash)
+						End
+						if (getcash==1)
+							Mini.WriteLn(" Shilder",255,180,0)
+						Else
+							Mini.WriteLn(" Shilders",255,180,0)
+						End
+						Cash.Have = Cash.Have + GetCash
 					Else
-						Mini.WriteLn(" Shilders",255,180,0)
+						CSayF("%s (%s) has already been stolen from, so no drops!",Name,Tag)
 					End
-					Cash.Have = Cash.Have + GetCash
 				End
 			End
 			//KillSkip = (KillSkip+1)%KillSkipReset
