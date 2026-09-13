@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Subs/SubParty.scyndi
 // 
-// 	  Version: 26.09.06
+// 	  Version: 26.09.11
 // 	
 // 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
@@ -465,8 +465,8 @@ Global Void CharSkillExpUp(string chTag,int skill,int experience)
 	plua g = Lua.Scyndi.Globals
 	sk.have = sk.Have + experience
 	if sk.Have>=sk.Maximum
-		G.WriteMini(_Party.Char[chTag].Data.Name,180,0,255)
-		G.WriteMini(" has gained a skill level: ",255,180,0)
+		G.WriteMini(_Party.Char[chTag].Data.Name,255,180,0)
+		G.WriteMini(" has gained a skill level: ",180,0,255)
 		G.WriteMini(_Party.Char[chTag].Data["Skill"..skill],255,255,255)
 		G.PushMini()
 		sk.have = 0
