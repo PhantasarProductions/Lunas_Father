@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Use/Combat/Joker/JOKER_CardBonus.scyndi
 // 
-// 	  Version: 24.10.12
+// 	  Version: 26.09.13 III
 // 	
-// 	  Copyright (C) 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2024, 2026 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -45,6 +45,7 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/InterVar"
 
 #use "Script/Use/Link/Party"
 #use "Script/Use/Combat/Joker/JXP"
@@ -52,13 +53,29 @@ Module
 Void JAct(Ch)
 	CSay("Joker - Playing Card!")
 	JXP.RUP("Magic")
-	JXP.MyrahMagic++
-	JXP.MyrahMagic++
-	JXP.ScyndiMagic++
-	JXP.LunaMagic++
-	JXP.AziellaMagic++
-	JXP.RachelTinker++
-	JXP.FrancisAlchemy++
-	JXP.FrancisAlchemy++
-	CSayF("=> M:%d; F:%d",JXP.MyrahMagic,JXP.FrancisAlchemy)
+	if math.random(1*gint.skill^3)==1
+		JXP.RUP("Magic")
+		JXP.RUP("Melee")
+		JXP.RUP("Range")
+	End
+	int keer = 1
+	if gbool.newgameplus && gint.skill!=3
+		keer += (3-gint.skill)*2
+	end
+	if gint.skill==1
+		keer += 3
+	end
+	CSayF("And all front row girls will %dx extra points",keer)
+	for i=1,keer
+		CSayF("Joker Bonus Times: %d/%d",i,keer)
+		JXP.MyrahMagic++
+		JXP.MyrahMagic++
+		JXP.ScyndiMagic++
+		JXP.LunaMagic++
+		JXP.AziellaMagic++
+		JXP.RachelTinker++
+		JXP.FrancisAlchemy++
+		JXP.FrancisAlchemy++			
+		CSayF("=> M:%d; F:%d",JXP.MyrahMagic,JXP.FrancisAlchemy)
+	End
 End
