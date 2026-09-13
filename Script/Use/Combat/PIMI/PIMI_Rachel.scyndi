@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/Use/Combat/PIMI/PIMI_Rachel.scyndi
-// (c) Jeroen Broks, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2024, 2026, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,8 +33,11 @@
 // 
 // **********************************************
 // 
-// version: 24.01.18
-// End License Information
+// 
+// version: 26.09.12
+// 
+// End License
+
 Module
 
 #use "libs/sci/sys"
@@ -43,12 +47,15 @@ Module
 #use "Script/Flow/FlowCombat/Action_Class"
 
 Void Shoot()
-	plua a = new Action("Rachel","HERO_Rachel_SHOOT")
+	a := new Action("Rachel","HERO_Rachel_SHOOT")
 	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
 End
 
-Void Skill()
-	Lua.Scyndi.Globals.PlayerToUseAbility("Rachel")
+Void Steal()
+	//Lua.Scyndi.Globals.PlayerToUseAbility("Rachel")
+	//print("\x07Rachel cannot yet steal! Have a little patience on me!")
+	a := new Action("Rachel","ACT_STEAL")
+	Lua.Scyndi.Globals.PlayerSelectTarget("Rachel",a)
 End
 
 Void Force()
@@ -63,7 +70,7 @@ Init
 	plua _Rachel = CreatePIM("Rachel")
 	print("Shoot",Shoot)
 	_Rachel.Add("Shoot",Shoot)
-	_Rachel.Add("Ability",Skill,AllowSkill)
+	_Rachel.Add("Steal",Steal,AllowSkill)
 	_Rachel.Add("Force",Force,AllowForce)
 	_Rachel.ItemsGuard()
 End
