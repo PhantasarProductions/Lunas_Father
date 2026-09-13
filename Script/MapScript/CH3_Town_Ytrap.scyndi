@@ -1,8 +1,8 @@
-// License Information:
+// License:
 // **********************************************
 // 
 // src/Scripts/Script/MapScript/CH3_Town_Ytrap.scyndi
-// (c) Jeroen Broks, 2024, All Rights Reserved.
+// (c) Jeroen Broks, 2024, 2026, All Rights Reserved.
 // 
 // This file contains material that is related
 // to a storyline that is which is strictly
@@ -24,6 +24,7 @@
 // from it, you can use it under that license.
 // Please check out the other files to find out
 // which license applies.
+// 
 // This file comes 'as-is' and in no possible
 // way the author can be held responsible of
 // any form of damages that may occur due to
@@ -32,12 +33,16 @@
 // 
 // **********************************************
 // 
-// version: 24.04.06
-// End License Information
+// 
+// version: 26.09.13
+// 
+// End License
+
 Script
 
 #use "Libs/SCI/InterVar"
 #use "Libs/SCI/Kthura"
+#use "Libs/SCI/Audio"
 
 #use "Script/Use/Link/Map"
 #use "Script/Use/Link/Menu"
@@ -106,4 +111,19 @@ Global Void ZA_CheckGrape()
 		WM_Unlocked.Myr = True
 		gstring.CampSituation = "0F_MYR"
 	End
+End
+
+#region "Lelijke heks"
+
+Global Void ZA_Heks()
+	if !gbool.NewGamePlus;Map.Kill("NPC_Heks");End
+	Map.Kill("ZA_Heks")
+End
+
+
+Global Void NPC_Heks()
+	MapText("Heks")
+	Lach:=Audio.LoadNew("Audio/wlaugh.mp3","HEKSENLACH")
+	Lach.Play()
+	Map.GotoMap("NGP_Dungeon_ShandaDungeon","#001","Start")
 End
