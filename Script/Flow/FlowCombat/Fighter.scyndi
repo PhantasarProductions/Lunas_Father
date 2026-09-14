@@ -1,9 +1,9 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/Fighter.scyndi
 // 
-// 	  Version: 24.11.14
+// 	  Version: 26.09.14 I
 // 	
-// 	  Copyright (C) 2023, 2024 Jeroen Petrus Broks
+// 	  Copyright (C) 2023, 2024, 2026 Jeroen Petrus Broks
 // 	
 // 	  ===========================
 // 	  This file is part of a project related to the Phantasar Chronicles or another
@@ -46,14 +46,19 @@
 Module
 
 #use "Libs/SCI/Sys"
+#use "Libs/SCI/Graphics"
 #use "Libs/SCI/Statistician"
 
 #use "Script/Use/Link/Party"
 
 
+
 Var Team
 Var ByTag
 Var DrawOrder
+
+PLUA MFNT = ObtainFont("MINI")
+PLUA DefeatedX = {["Hero"]=5,["Foe"]=Graphics.W div 2}
 
 
 QuickMeta Defeated
@@ -62,9 +67,20 @@ QuickMeta Defeated
 	End
 	
 	Index
+		k:=key
+		locextern ShowDefeated "DEBUG_COMBAT_SHOWDEFATED"
+		locextern dbgx "DefeatedX[k]"
+		int dbgy:=1		
 		Bool ret = True
-		For _,f In Pairs(Team[Key])
-			ret = ret && f.Defeated
+		For t,f In Pairs(Team[Key])
+			if Key=="Foe" || Party.InFront(t)
+				ret = ret && f.Defeated
+				if ShowDefeated
+					SetColorHSV((dbgy*25) div 360,1,1)
+					MFNT.Text(sprintf("Defeated %s = %s -> %s",t,f.Defeated,ret),dbgx,dbgy*10)
+					dbgy++
+				end
+			end
 		End
 		Return ret
 	End
