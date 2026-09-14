@@ -150,5 +150,5 @@ End
 
 
 Init
-	Stage.Register("Wipe",Stage_Wipe)
+	Stage.Register("Wiped",Stage_Wipe)
 End
