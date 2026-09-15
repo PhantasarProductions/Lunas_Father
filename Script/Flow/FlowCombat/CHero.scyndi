@@ -1,7 +1,7 @@
 // License:
 // 	  src/Scripts/Script/Flow/FlowCombat/CHero.scyndi
 // 
-// 	  Version: 26.09.06 V
+// 	  Version: 26.09.15
 // 	
 // 	  Copyright (C) 2023, 2024, 2025, 2026 Jeroen Petrus Broks
 // 	
@@ -74,7 +74,15 @@ Class Hero
 	
 	Bool IDDQD = False
 		
-	String Pose = "IDLE"
+	String RealPose = "IDLE"
+	
+	Get String Pose
+		return Ternary(Char.Points.HP.Have<=0,"DEAD",RealPose)
+	End
+	Set String Pose
+		RealPose = Value
+	End
+	
 	Int Frame = 0
 	
 	Bool Guarding = False
